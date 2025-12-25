@@ -4,7 +4,6 @@
 
 import { Component, JSX, splitProps, Show } from 'solid-js';
 import type { Edge as EdgeType, Node, XYPosition } from '../../types';
-import { getAngle, getDistance } from '../../utils';
 
 export interface EdgeProps {
   /**
@@ -115,17 +114,17 @@ export const Edge: Component<EdgeProps> = (props) => {
               fill="none"
               stroke={local.edge.style?.stroke ?? '#b1b1b7'}
               stroke-width={local.edge.style?.strokeWidth ?? '2'}
-              style={edgeStyle()}
+              style={edgeStyle() as any}
               marker-end={local.edge.markerEnd ? 'url(#arrowhead)' : undefined}
             />
             <Show when={local.edge.label}>
               <text
-                x={(local.sourcePosition?.x ?? 0 + local.targetPosition?.x ?? 0) / 2}
-                y={(local.sourcePosition?.y ?? 0 + local.targetPosition?.y ?? 0) / 2}
+                 x={((local.sourcePosition?.x ?? 0) + (local.targetPosition?.x ?? 0)) / 2}
+                 y={((local.sourcePosition?.y ?? 0) + (local.targetPosition?.y ?? 0)) / 2}
                 text-anchor="middle"
                 dominant-baseline="middle"
                 fill={local.edge.labelStyle?.color ?? '#000'}
-                style={local.edge.labelStyle}
+                 style={local.edge.labelStyle as any}
               >
                 {local.edge.label}
               </text>

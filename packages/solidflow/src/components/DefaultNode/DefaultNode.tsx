@@ -12,7 +12,7 @@ export const DefaultNode: Component<NodeComponentProps> = (props) => {
       <Handle type="source" position="top" />
       <div>{props.node.data?.label ?? props.node.id}</div>
       <Handle type="target" position="bottom" />
-      <Handle type="source" position="left" />
+      <Handle type="target" position="left" />
       <Handle type="source" position="right" />
     </div>
   );

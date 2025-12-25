@@ -67,7 +67,6 @@ export const Controls: Component<ControlsProps> = (props) => {
 
   const showZoom = () => local.showZoom ?? true;
   const showFitView = () => local.showFitView ?? true;
-  const showInteractive = () => local.showInteractive ?? true;
   const position = () => local.position ?? 'bottom-left';
 
   const getPositionClasses = (pos: string) => {

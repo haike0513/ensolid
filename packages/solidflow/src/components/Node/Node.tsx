@@ -118,7 +118,7 @@ export const Node: Component<NodeProps> = (props) => {
           {} as Record<string, boolean>
         ) ?? {}),
       }}
-      style={nodeStyle()}
+      style={nodeStyle() as any}
       onClick={handleClick}
       onDblClick={handleDoubleClick}
       onMouseEnter={handleMouseEnter}

@@ -2,8 +2,8 @@
  * Handle 组件 - 节点连接点
  */
 
-import { Component, JSX, splitProps, createEffect, onCleanup } from 'solid-js';
-import type { Position, HandleElement } from '../../types';
+import { Component, JSX, splitProps } from 'solid-js';
+import type { Position } from '../../types';
 
 export interface HandleProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**

@@ -27,6 +27,9 @@ import {
   MenubarExample,
   ToolbarExample,
   NavigationMenuExample,
+  FlowExample,
+  FlowCustomNodeExample,
+  FlowInteractiveExample,
 } from "./examples";
 import { useI18n } from "./i18n";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
@@ -58,7 +61,10 @@ type ExampleType =
   | "aspect-ratio"
   | "menubar"
   | "toolbar"
-  | "navigation-menu";
+  | "navigation-menu"
+  | "flow"
+  | "flow-custom-node"
+  | "flow-interactive";
 
 const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
   { id: "button" as ExampleType, name: t().components.button, component: ButtonExample },
@@ -146,6 +152,21 @@ const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
     id: "navigation-menu" as ExampleType,
     name: t().components.navigationMenu,
     component: NavigationMenuExample,
+  },
+  {
+    id: "flow" as ExampleType,
+    name: "Flow 流程图",
+    component: FlowExample,
+  },
+  {
+    id: "flow-custom-node" as ExampleType,
+    name: "Flow 自定义节点",
+    component: FlowCustomNodeExample,
+  },
+  {
+    id: "flow-interactive" as ExampleType,
+    name: "Flow 交互式",
+    component: FlowInteractiveExample,
   },
 ];
 

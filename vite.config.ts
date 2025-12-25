@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       "@resolid/baseui": path.resolve(__dirname, "./packages/baseui/src"),
       "@resolid/radix": path.resolve(__dirname, "./packages/radix/src"),
+      "@resolid/solidflow": path.resolve(__dirname, "./packages/solidflow/src"),
       "@": path.resolve(__dirname, "./src"),
     },
   },

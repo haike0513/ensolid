@@ -88,7 +88,6 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
   const position = () => local.position ?? 'bottom-right';
   const pannable = () => local.pannable ?? true;
   const nodeStrokeWidth = () => local.nodeStrokeWidth ?? 2;
-  const maskColor = () => local.maskColor ?? 'rgb(240, 242, 243, 0.6)';
 
   const getPositionClasses = (pos: string) => {
     const classes: Record<string, string> = {
@@ -140,17 +139,6 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
   };
 
   const bounds = () => getBounds();
-
-  // 计算缩放比例
-  const getScale = () => {
-    const viewBox = bounds();
-    const miniMapSize = 200;
-    const scaleX = miniMapSize / viewBox.width;
-    const scaleY = miniMapSize / viewBox.height;
-    return Math.min(scaleX, scaleY, 1);
-  };
-
-  const scale = () => getScale();
 
   return (
     <div

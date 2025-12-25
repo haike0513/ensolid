@@ -14,6 +14,9 @@ importers:
       '@resolid/radix':
         specifier: workspace:*
         version: link:packages/radix
+      '@resolid/solidflow':
+        specifier: workspace:*
+        version: link:packages/solidflow
       '@tailwindcss/vite':
         specifier: ^4.1.18
         version: 4.1.18(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2))
