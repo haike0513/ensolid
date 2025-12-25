@@ -1,14 +1,56 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: oklch(100% 0 0);
+  --color-foreground: oklch(9% 0 0);
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: oklch(9% 0 0);
+  --color-popover: oklch(100% 0 0);
+  --color-popover-foreground: oklch(9% 0 0);
+  --color-primary: oklch(47% 0.2 250);
+  --color-primary-foreground: oklch(98% 0 0);
+  --color-secondary: oklch(96% 0 0);
+  --color-secondary-foreground: oklch(9% 0 0);
+  --color-muted: oklch(96% 0 0);
+  --color-muted-foreground: oklch(45% 0 0);
+  --color-accent: oklch(96% 0 0);
+  --color-accent-foreground: oklch(9% 0 0);
+  --color-destructive: oklch(55% 0.22 25);
+  --color-destructive-foreground: oklch(98% 0 0);
+  --color-border: oklch(89% 0 0);
+  --color-input: oklch(89% 0 0);
+  --color-ring: oklch(47% 0.2 250);
+  --radius: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  @theme {
+    --color-background: oklch(9% 0 0);
+    --color-foreground: oklch(98% 0 0);
+    --color-card: oklch(9% 0 0);
+    --color-card-foreground: oklch(98% 0 0);
+    --color-popover: oklch(9% 0 0);
+    --color-popover-foreground: oklch(98% 0 0);
+    --color-primary: oklch(70% 0.2 250);
+    --color-primary-foreground: oklch(9% 0 0);
+    --color-secondary: oklch(15% 0 0);
+    --color-secondary-foreground: oklch(98% 0 0);
+    --color-muted: oklch(15% 0 0);
+    --color-muted-foreground: oklch(64% 0 0);
+    --color-accent: oklch(15% 0 0);
+    --color-accent-foreground: oklch(98% 0 0);
+    --color-destructive: oklch(60% 0.22 25);
+    --color-destructive-foreground: oklch(98% 0 0);
+    --color-border: oklch(27% 0 0);
+    --color-input: oklch(27% 0 0);
+    --color-ring: oklch(70% 0.2 250);
+  }
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -26,10 +68,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--color-background);
+  color: var(--color-foreground);
 }
 
 h1 {
