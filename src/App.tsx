@@ -1,22 +1,22 @@
 import type { Component } from "solid-js";
-import { createSignal } from "solid-js";
+import { createSignal, For } from "solid-js";
 import {
+  AccordionExample,
+  AlertDialogExample,
   ButtonExample,
   CardExample,
-  DialogExample,
   CheckboxExample,
+  DialogExample,
+  DropdownMenuExample,
+  PopoverExample,
+  ProgressExample,
+  SelectExample,
+  SeparatorExample,
+  SliderExample,
   SwitchExample,
   TabsExample,
-  AccordionExample,
-  SeparatorExample,
-  AlertDialogExample,
-  PopoverExample,
-  DropdownMenuExample,
-  TooltipExample,
-  SelectExample,
-  SliderExample,
-  ProgressExample,
   ToggleExample,
+  TooltipExample,
 } from "./examples";
 import "./App.css";
 
@@ -38,33 +38,53 @@ type ExampleType =
   | "progress"
   | "toggle";
 
+const examples = [
+  { id: "button" as ExampleType, name: "Button", component: ButtonExample },
+  { id: "card" as ExampleType, name: "Card", component: CardExample },
+  { id: "dialog" as ExampleType, name: "Dialog", component: DialogExample },
+  {
+    id: "checkbox" as ExampleType,
+    name: "Checkbox",
+    component: CheckboxExample,
+  },
+  { id: "switch" as ExampleType, name: "Switch", component: SwitchExample },
+  { id: "tabs" as ExampleType, name: "Tabs", component: TabsExample },
+  {
+    id: "accordion" as ExampleType,
+    name: "Accordion",
+    component: AccordionExample,
+  },
+  {
+    id: "separator" as ExampleType,
+    name: "Separator",
+    component: SeparatorExample,
+  },
+  {
+    id: "alert-dialog" as ExampleType,
+    name: "AlertDialog",
+    component: AlertDialogExample,
+  },
+  { id: "popover" as ExampleType, name: "Popover", component: PopoverExample },
+  {
+    id: "dropdown-menu" as ExampleType,
+    name: "DropdownMenu",
+    component: DropdownMenuExample,
+  },
+  { id: "tooltip" as ExampleType, name: "Tooltip", component: TooltipExample },
+  { id: "select" as ExampleType, name: "Select", component: SelectExample },
+  { id: "slider" as ExampleType, name: "Slider", component: SliderExample },
+  {
+    id: "progress" as ExampleType,
+    name: "Progress",
+    component: ProgressExample,
+  },
+  { id: "toggle" as ExampleType, name: "Toggle", component: ToggleExample },
+];
+
 const App: Component = () => {
-  const [currentExample, setCurrentExample] = createSignal<ExampleType>("button");
-
-  const examples = [
-    { id: "button" as ExampleType, name: "Button", component: ButtonExample },
-    { id: "card" as ExampleType, name: "Card", component: CardExample },
-    { id: "dialog" as ExampleType, name: "Dialog", component: DialogExample },
-    { id: "checkbox" as ExampleType, name: "Checkbox", component: CheckboxExample },
-    { id: "switch" as ExampleType, name: "Switch", component: SwitchExample },
-    { id: "tabs" as ExampleType, name: "Tabs", component: TabsExample },
-    { id: "accordion" as ExampleType, name: "Accordion", component: AccordionExample },
-    { id: "separator" as ExampleType, name: "Separator", component: SeparatorExample },
-    { id: "alert-dialog" as ExampleType, name: "AlertDialog", component: AlertDialogExample },
-    { id: "popover" as ExampleType, name: "Popover", component: PopoverExample },
-    { id: "dropdown-menu" as ExampleType, name: "DropdownMenu", component: DropdownMenuExample },
-    { id: "tooltip" as ExampleType, name: "Tooltip", component: TooltipExample },
-    { id: "select" as ExampleType, name: "Select", component: SelectExample },
-    { id: "slider" as ExampleType, name: "Slider", component: SliderExample },
-    { id: "progress" as ExampleType, name: "Progress", component: ProgressExample },
-    { id: "toggle" as ExampleType, name: "Toggle", component: ToggleExample },
-  ];
-
-  const CurrentComponent = () => {
-    const example = examples.find((e) => e.id === currentExample());
-    const Component = example ? example.component : ButtonExample;
-    return <Component />;
-  };
+  const [currentExample, setCurrentExample] = createSignal<ExampleType>(
+    "button",
+  );
 
   return (
     <div class="min-h-screen bg-background">
@@ -82,25 +102,33 @@ const App: Component = () => {
           <nav class="w-64 border-r pr-4">
             <h2 class="text-lg font-semibold mb-4">组件列表</h2>
             <ul class="space-y-2">
-              {examples.map((example) => (
-                <li>
-                  <button
-                    onClick={() => setCurrentExample(example.id)}
-                    class={`w-full text-left px-3 py-2 rounded-md transition-colors ${
-                      currentExample() === example.id
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-accent"
-                    }`}
-                  >
-                    {example.name}
-                  </button>
-                </li>
-              ))}
+              <For each={examples}>
+                {(example) => (
+                  <li>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentExample(example.id)}
+                      class={`w-full text-left px-3 py-2 rounded-md transition-colors ${
+                        currentExample() === example.id
+                          ? "bg-primary text-primary-foreground"
+                          : "hover:bg-accent"
+                      }`}
+                    >
+                      {example.name}
+                    </button>
+                  </li>
+                )}
+              </For>
             </ul>
           </nav>
 
           <main class="flex-1">
-            <CurrentComponent />
+            {(() => {
+              const selectedId = currentExample();
+              const example = examples.find((e) => e.id === selectedId);
+              const Component = example ? example.component : ButtonExample;
+              return <Component />;
+            })()}
           </main>
         </div>
       </div>
