@@ -1,11 +1,24 @@
-import { Component, splitProps, createSignal, createContext, useContext, Show, onMount, onCleanup, createEffect } from 'solid-js';
-import { Portal } from 'solid-js/web';
-import { isServer } from 'solid-js/web';
-import type { JSX } from 'solid-js';
+import {
+  Component,
+  createContext,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { Portal } from "solid-js/web";
+import { isServer } from "solid-js/web";
+import type { JSX } from "solid-js";
 
 interface PopoverContextValue {
   open: () => boolean;
   setOpen: (open: boolean) => void;
+  triggerRef: () => HTMLElement | undefined;
+  setTriggerRef: (ref: HTMLElement | undefined) => void;
+  setContentElement: (el: HTMLElement | undefined) => void;
 }
 
 const PopoverContext = createContext<PopoverContextValue>();
@@ -13,7 +26,7 @@ const PopoverContext = createContext<PopoverContextValue>();
 export const usePopoverContext = () => {
   const context = useContext(PopoverContext);
   if (!context) {
-    throw new Error('Popover components must be used within Popover');
+    throw new Error("Popover components must be used within Popover");
   }
   return context;
 };
@@ -39,15 +52,16 @@ export interface PopoverProps extends JSX.HTMLAttributes<HTMLDivElement> {
 
 export const Popover: Component<PopoverProps> = (props) => {
   const [local] = splitProps(props, [
-    'open',
-    'defaultOpen',
-    'onOpenChange',
-    'children',
+    "open",
+    "defaultOpen",
+    "onOpenChange",
+    "children",
   ]);
 
   const [internalOpen, setInternalOpen] = createSignal(
-    local.open ?? local.defaultOpen ?? false
+    local.open ?? local.defaultOpen ?? false,
   );
+  const [triggerRef, setTriggerRef] = createSignal<HTMLElement | undefined>();
 
   const isControlled = () => local.open !== undefined;
   const open = () => (isControlled() ? local.open! : internalOpen());
@@ -60,38 +74,49 @@ export const Popover: Component<PopoverProps> = (props) => {
   };
 
   // 点击外部关闭
-  const handleClickOutside = () => {
-    if (open() && !isServer) {
-      // 这里需要检查点击是否在 Popover 外部
-      // 简化实现，实际需要更复杂的逻辑
-    }
+  let contentElement: HTMLElement | undefined;
+  const setContentElement = (el: HTMLElement | undefined) => {
+    contentElement = el;
   };
 
-  onMount(() => {
-    if (!isServer && open()) {
-      document.addEventListener('mousedown', handleClickOutside);
+  const handleClickOutside = (e: MouseEvent) => {
+    if (open() && !isServer) {
+      const target = e.target as HTMLElement;
+      const trigger = triggerRef();
+
+      if (trigger && contentElement) {
+        if (!trigger.contains(target) && !contentElement.contains(target)) {
+          handleOpenChange(false);
+        }
+      }
     }
-  });
+  };
 
   createEffect(() => {
     if (!isServer) {
       if (open()) {
-        document.addEventListener('mousedown', handleClickOutside);
+        // 延迟添加事件监听器，确保 DOM 已更新
+        setTimeout(() => {
+          document.addEventListener("mousedown", handleClickOutside);
+        }, 0);
       } else {
-        document.removeEventListener('mousedown', handleClickOutside);
+        document.removeEventListener("mousedown", handleClickOutside);
       }
     }
   });
 
   onCleanup(() => {
     if (!isServer) {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     }
   });
 
   const contextValue: PopoverContextValue = {
     open,
     setOpen: handleOpenChange,
+    triggerRef,
+    setTriggerRef,
+    setContentElement,
   };
 
   return (
@@ -101,7 +126,8 @@ export const Popover: Component<PopoverProps> = (props) => {
   );
 };
 
-export interface PopoverTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface PopoverTriggerProps
+  extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * 子元素
    */
@@ -113,24 +139,43 @@ export interface PopoverTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButton
 }
 
 export const PopoverTrigger: Component<PopoverTriggerProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'asChild', 'class', 'onClick']);
+  const [local, others] = splitProps(props, [
+    "children",
+    "asChild",
+    "class",
+    "onClick",
+  ]);
   const context = usePopoverContext();
+  let triggerElement: HTMLButtonElement | undefined;
 
   const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
-    if (typeof local.onClick === 'function') {
+    if (typeof local.onClick === "function") {
       local.onClick(e);
     }
     context.setOpen(!context.open());
   };
 
+  onMount(() => {
+    if (triggerElement) {
+      context.setTriggerRef(triggerElement);
+    }
+  });
+
   return (
-    <button type="button" class={local.class} onClick={handleClick} {...others}>
+    <button
+      type="button"
+      ref={triggerElement}
+      class={local.class}
+      onClick={handleClick}
+      {...others}
+    >
       {local.children}
     </button>
   );
 };
 
-export interface PopoverContentProps extends JSX.HTMLAttributes<HTMLDivElement> {
+export interface PopoverContentProps
+  extends JSX.HTMLAttributes<HTMLDivElement> {
   /**
    * 子元素
    */
@@ -138,16 +183,66 @@ export interface PopoverContentProps extends JSX.HTMLAttributes<HTMLDivElement> 
 }
 
 export const PopoverContent: Component<PopoverContentProps> = (props) => {
-  const [local, others] = splitProps(props, ['class', 'children'] as const);
+  const [local, others] = splitProps(props, ["class", "children"] as const);
   const context = usePopoverContext();
+  let contentElement: HTMLDivElement | undefined;
+
+  const updatePosition = () => {
+    if (!isServer && contentElement && context.triggerRef()) {
+      const trigger = context.triggerRef()!;
+      const rect = trigger.getBoundingClientRect();
+      const contentRect = contentElement.getBoundingClientRect();
+
+      // 默认在触发元素下方显示
+      const top = rect.bottom + 8;
+      const left = rect.left;
+
+      // 检查是否会超出视口
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      let finalTop = top;
+      let finalLeft = left;
+
+      // 如果右侧超出，则左对齐
+      if (left + contentRect.width > viewportWidth) {
+        finalLeft = viewportWidth - contentRect.width - 16;
+      }
+
+      // 如果下方超出，则在上方显示
+      if (top + contentRect.height > viewportHeight) {
+        finalTop = rect.top - contentRect.height - 8;
+      }
+
+      contentElement.style.top = `${finalTop}px`;
+      contentElement.style.left = `${finalLeft}px`;
+    }
+  };
+
+  onMount(() => {
+    if (contentElement) {
+      context.setContentElement(contentElement);
+    }
+  });
+
+  createEffect(() => {
+    if (context.open() && !isServer) {
+      // 延迟一帧确保 DOM 已渲染
+      requestAnimationFrame(() => {
+        updatePosition();
+      });
+    }
+  });
 
   return (
     <Show when={context.open()}>
       <Portal mount={!isServer ? document.body : undefined}>
         <div
+          ref={contentElement}
           role="dialog"
-          class={local.class}
-          data-state={context.open() ? 'open' : 'closed'}
+          class={`fixed z-50 ${local.class || ""}`}
+          data-state={context.open() ? "open" : "closed"}
+          style={{ top: "0px", left: "0px" }}
           {...others}
         >
           {local.children}
@@ -159,4 +254,3 @@ export const PopoverContent: Component<PopoverContentProps> = (props) => {
 
 (Popover as any).Trigger = PopoverTrigger;
 (Popover as any).Content = PopoverContent;
-

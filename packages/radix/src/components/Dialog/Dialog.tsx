@@ -150,6 +150,39 @@ export interface DialogContentProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
+export interface DialogOverlayProps extends JSX.HTMLAttributes<HTMLDivElement> {
+  /**
+   * 子元素
+   */
+  children?: JSX.Element;
+}
+
+export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
+  const [local, others] = splitProps(props, ['children', 'class', 'onClick']);
+  const context = useDialogContext();
+
+  const handleClick: JSX.EventHandler<HTMLDivElement, MouseEvent> = (e) => {
+    if (typeof local.onClick === 'function') {
+      local.onClick(e);
+    }
+    // 点击遮罩层关闭对话框
+    if (e.target === e.currentTarget && context.modal) {
+      context.setOpen(false);
+    }
+  };
+
+  return (
+    <div
+      class={local.class}
+      data-state={context.open() ? 'open' : 'closed'}
+      onClick={handleClick}
+      {...others}
+    >
+      {local.children}
+    </div>
+  );
+};
+
 export const DialogContent: Component<DialogContentProps> = (props) => {
   const [local, others] = splitProps(props, ['children', 'class']);
   const context = useDialogContext();
@@ -157,6 +190,9 @@ export const DialogContent: Component<DialogContentProps> = (props) => {
   return (
     <Show when={context.open()}>
       <Portal mount={!isServer ? document.body : undefined}>
+        <DialogOverlay
+          class="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+        />
         <div
           class={local.class}
           role="dialog"
@@ -231,6 +267,7 @@ export const DialogClose: Component<DialogCloseProps> = (props) => {
 };
 
 (Dialog as any).Trigger = DialogTrigger;
+(Dialog as any).Overlay = DialogOverlay;
 (Dialog as any).Content = DialogContent;
 (Dialog as any).Title = DialogTitle;
 (Dialog as any).Description = DialogDescription;

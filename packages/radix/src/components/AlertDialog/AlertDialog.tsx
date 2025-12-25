@@ -140,6 +140,36 @@ export interface AlertDialogContentProps extends JSX.HTMLAttributes<HTMLDivEleme
   children?: JSX.Element;
 }
 
+export interface AlertDialogOverlayProps extends JSX.HTMLAttributes<HTMLDivElement> {
+  /**
+   * 子元素
+   */
+  children?: JSX.Element;
+}
+
+export const AlertDialogOverlay: Component<AlertDialogOverlayProps> = (props) => {
+  const [local, others] = splitProps(props, ['children', 'class', 'onClick']);
+  const context = useAlertDialogContext();
+
+  const handleClick: JSX.EventHandler<HTMLDivElement, MouseEvent> = (e) => {
+    if (typeof local.onClick === 'function') {
+      local.onClick(e);
+    }
+    // AlertDialog 不允许点击遮罩层关闭
+  };
+
+  return (
+    <div
+      class={local.class}
+      data-state={context.open() ? 'open' : 'closed'}
+      onClick={handleClick}
+      {...others}
+    >
+      {local.children}
+    </div>
+  );
+};
+
 export const AlertDialogContent: Component<AlertDialogContentProps> = (props) => {
   const [local, others] = splitProps(props, ['class', 'children'] as const);
   const context = useAlertDialogContext();
@@ -147,6 +177,9 @@ export const AlertDialogContent: Component<AlertDialogContentProps> = (props) =>
   return (
     <Show when={context.open()}>
       <Portal mount={!isServer ? document.body : undefined}>
+        <AlertDialogOverlay
+          class="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+        />
         <div
           class={local.class}
           role="alertdialog"
@@ -246,6 +279,7 @@ export const AlertDialogCancel: Component<AlertDialogCancelProps> = (props) => {
 };
 
 (AlertDialog as any).Trigger = AlertDialogTrigger;
+(AlertDialog as any).Overlay = AlertDialogOverlay;
 (AlertDialog as any).Content = AlertDialogContent;
 (AlertDialog as any).Title = AlertDialogTitle;
 (AlertDialog as any).Description = AlertDialogDescription;
