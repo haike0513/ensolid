@@ -9,6 +9,70 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./Separator": {
+      "import": "./dist/components/Separator/Separator.js",
+      "types": "./dist/components/Separator/index.d.ts"
+    },
+    "./Label": {
+      "import": "./dist/components/Label/Label.js",
+      "types": "./dist/components/Label/index.d.ts"
+    },
+    "./Checkbox": {
+      "import": "./dist/components/Checkbox/Checkbox.js",
+      "types": "./dist/components/Checkbox/index.d.ts"
+    },
+    "./Switch": {
+      "import": "./dist/components/Switch/Switch.js",
+      "types": "./dist/components/Switch/index.d.ts"
+    },
+    "./RadioGroup": {
+      "import": "./dist/components/RadioGroup/RadioGroup.js",
+      "types": "./dist/components/RadioGroup/index.d.ts"
+    },
+    "./Dialog": {
+      "import": "./dist/components/Dialog/Dialog.js",
+      "types": "./dist/components/Dialog/index.d.ts"
+    },
+    "./Tabs": {
+      "import": "./dist/components/Tabs/Tabs.js",
+      "types": "./dist/components/Tabs/index.d.ts"
+    },
+    "./Accordion": {
+      "import": "./dist/components/Accordion/Accordion.js",
+      "types": "./dist/components/Accordion/index.d.ts"
+    },
+    "./AlertDialog": {
+      "import": "./dist/components/AlertDialog/AlertDialog.js",
+      "types": "./dist/components/AlertDialog/index.d.ts"
+    },
+    "./Popover": {
+      "import": "./dist/components/Popover/Popover.js",
+      "types": "./dist/components/Popover/index.d.ts"
+    },
+    "./DropdownMenu": {
+      "import": "./dist/components/DropdownMenu/DropdownMenu.js",
+      "types": "./dist/components/DropdownMenu/index.d.ts"
+    },
+    "./Tooltip": {
+      "import": "./dist/components/Tooltip/Tooltip.js",
+      "types": "./dist/components/Tooltip/index.d.ts"
+    },
+    "./Select": {
+      "import": "./dist/components/Select/Select.js",
+      "types": "./dist/components/Select/index.d.ts"
+    },
+    "./Slider": {
+      "import": "./dist/components/Slider/Slider.js",
+      "types": "./dist/components/Slider/index.d.ts"
+    },
+    "./Progress": {
+      "import": "./dist/components/Progress/Progress.js",
+      "types": "./dist/components/Progress/index.d.ts"
+    },
+    "./Toggle": {
+      "import": "./dist/components/Toggle/Toggle.js",
+      "types": "./dist/components/Toggle/index.d.ts"
     }
   },
   "files": [

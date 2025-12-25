@@ -20,11 +20,15 @@ export default defineConfig({
     rollupOptions: {
       external: ['solid-js', 'solid-js/web'],
       output: {
-        preserveModules: false,
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        entryFileNames: '[name].js',
+        chunkFileNames: '[name].js',
       },
     },
     sourcemap: true,
     target: 'es2020',
+    minify: false, // 保持代码可读性，便于 tree shaking
   },
 });
 
