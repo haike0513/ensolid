@@ -7,7 +7,14 @@ export interface TooltipProps extends TooltipPrimitive.TooltipProps {
     children?: JSX.Element;
 }
 
-export const Tooltip = TooltipPrimitive.Tooltip;
+const TooltipBase: Component<TooltipProps> = (props) => {
+    return <TooltipPrimitive.Tooltip {...props} />;
+};
+
+export const Tooltip = Object.assign(TooltipBase, {
+    Trigger: null as any,
+    Content: null as any,
+});
 
 export interface TooltipTriggerProps extends TooltipPrimitive.TooltipTriggerProps {
     children?: JSX.Element;
@@ -50,6 +57,6 @@ export const TooltipContent: Component<TooltipContentProps> = (props) => {
     );
 };
 
-(Tooltip as any).Trigger = TooltipTrigger;
-(Tooltip as any).Content = TooltipContent;
+Tooltip.Trigger = TooltipTrigger;
+Tooltip.Content = TooltipContent;
 

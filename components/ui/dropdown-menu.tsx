@@ -7,7 +7,17 @@ export interface DropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuPro
     children?: JSX.Element;
 }
 
-export const DropdownMenu = DropdownMenuPrimitive.DropdownMenu;
+const DropdownMenuBase: Component<DropdownMenuProps> = (props) => {
+    return <DropdownMenuPrimitive.DropdownMenu {...props} />;
+};
+
+export const DropdownMenu = Object.assign(DropdownMenuBase, {
+    Trigger: null as any,
+    Content: null as any,
+    Item: null as any,
+    Label: null as any,
+    Separator: null as any,
+});
 
 export interface DropdownMenuTriggerProps
     extends DropdownMenuPrimitive.DropdownMenuTriggerProps {
@@ -123,9 +133,9 @@ export const DropdownMenuSeparator: Component<DropdownMenuSeparatorProps> = (
     );
 };
 
-(DropdownMenu as any).Trigger = DropdownMenuTrigger;
-(DropdownMenu as any).Content = DropdownMenuContent;
-(DropdownMenu as any).Item = DropdownMenuItem;
-(DropdownMenu as any).Label = DropdownMenuLabel;
-(DropdownMenu as any).Separator = DropdownMenuSeparator;
+DropdownMenu.Trigger = DropdownMenuTrigger;
+DropdownMenu.Content = DropdownMenuContent;
+DropdownMenu.Item = DropdownMenuItem;
+DropdownMenu.Label = DropdownMenuLabel;
+DropdownMenu.Separator = DropdownMenuSeparator;
 

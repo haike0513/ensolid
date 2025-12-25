@@ -7,7 +7,15 @@ export interface TabsProps extends TabsPrimitive.TabsProps {
   children?: JSX.Element;
 }
 
-export const Tabs = TabsPrimitive.Tabs;
+const TabsBase: Component<TabsProps> = (props) => {
+  return <TabsPrimitive.Tabs {...props} />;
+};
+
+export const Tabs = Object.assign(TabsBase, {
+  List: null as any,
+  Trigger: null as any,
+  Content: null as any,
+});
 
 export interface TabsListProps extends TabsPrimitive.TabsListProps {
   children?: JSX.Element;
@@ -70,7 +78,7 @@ export const TabsContent: Component<TabsContentProps> = (props) => {
 };
 
 // 导出子组件
-(Tabs as any).List = TabsList;
-(Tabs as any).Trigger = TabsTrigger;
-(Tabs as any).Content = TabsContent;
+Tabs.List = TabsList;
+Tabs.Trigger = TabsTrigger;
+Tabs.Content = TabsContent;
 

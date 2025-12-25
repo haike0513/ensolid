@@ -7,7 +7,14 @@ export interface PopoverProps extends PopoverPrimitive.PopoverProps {
     children?: JSX.Element;
 }
 
-export const Popover = PopoverPrimitive.Popover;
+const PopoverBase: Component<PopoverProps> = (props) => {
+    return <PopoverPrimitive.Popover {...props} />;
+};
+
+export const Popover = Object.assign(PopoverBase, {
+    Trigger: null as any,
+    Content: null as any,
+});
 
 export interface PopoverTriggerProps extends PopoverPrimitive.PopoverTriggerProps {
     children?: JSX.Element;
@@ -51,6 +58,6 @@ export const PopoverContent: Component<PopoverContentProps> = (props) => {
     );
 };
 
-(Popover as any).Trigger = PopoverTrigger;
-(Popover as any).Content = PopoverContent;
+Popover.Trigger = PopoverTrigger;
+Popover.Content = PopoverContent;
 

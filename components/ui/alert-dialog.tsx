@@ -3,11 +3,25 @@ import { splitProps } from "solid-js";
 import * as AlertDialogPrimitive from "@resolid/radix";
 import { cn } from "./utils";
 
-export interface AlertDialogProps extends AlertDialogPrimitive.AlertDialogProps {
+export interface AlertDialogProps
+    extends AlertDialogPrimitive.AlertDialogProps {
     children?: JSX.Element;
 }
 
-export const AlertDialog = AlertDialogPrimitive.AlertDialog;
+// 确保 AlertDialog 是一个对象，可以添加属性
+const AlertDialogBase: Component<AlertDialogProps> = (props) => {
+    return <AlertDialogPrimitive.AlertDialog {...props} />;
+};
+
+export const AlertDialog = Object.assign(AlertDialogBase, {
+    Trigger: null as any,
+    Content: null as any,
+    Header: null as any,
+    Title: null as any,
+    Description: null as any,
+    Action: null as any,
+    Cancel: null as any,
+});
 
 export interface AlertDialogTriggerProps
     extends AlertDialogPrimitive.AlertDialogTriggerProps {
@@ -167,11 +181,10 @@ export const AlertDialogCancel: Component<AlertDialogCancelProps> = (
     );
 };
 
-(AlertDialog as any).Trigger = AlertDialogTrigger;
-(AlertDialog as any).Content = AlertDialogContent;
-(AlertDialog as any).Header = AlertDialogHeader;
-(AlertDialog as any).Title = AlertDialogTitle;
-(AlertDialog as any).Description = AlertDialogDescription;
-(AlertDialog as any).Action = AlertDialogAction;
-(AlertDialog as any).Cancel = AlertDialogCancel;
-
+AlertDialog.Trigger = AlertDialogTrigger;
+AlertDialog.Content = AlertDialogContent;
+AlertDialog.Header = AlertDialogHeader;
+AlertDialog.Title = AlertDialogTitle;
+AlertDialog.Description = AlertDialogDescription;
+AlertDialog.Action = AlertDialogAction;
+AlertDialog.Cancel = AlertDialogCancel;

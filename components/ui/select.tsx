@@ -7,7 +7,16 @@ export interface SelectProps extends SelectPrimitive.SelectProps {
     children?: JSX.Element;
 }
 
-export const Select = SelectPrimitive.Select;
+const SelectBase: Component<SelectProps> = (props) => {
+    return <SelectPrimitive.Select {...props} />;
+};
+
+export const Select = Object.assign(SelectBase, {
+    Trigger: null as any,
+    Value: null as any,
+    Content: null as any,
+    Item: null as any,
+});
 
 export interface SelectTriggerProps extends SelectPrimitive.SelectTriggerProps {
     children?: JSX.Element;
@@ -83,8 +92,8 @@ export const SelectItem: Component<SelectItemProps> = (props) => {
     );
 };
 
-(Select as any).Trigger = SelectTrigger;
-(Select as any).Value = SelectValue;
-(Select as any).Content = SelectContent;
-(Select as any).Item = SelectItem;
+Select.Trigger = SelectTrigger;
+Select.Value = SelectValue;
+Select.Content = SelectContent;
+Select.Item = SelectItem;
 

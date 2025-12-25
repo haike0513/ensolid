@@ -7,7 +7,15 @@ export interface AccordionProps extends AccordionPrimitive.AccordionProps {
     children?: JSX.Element;
 }
 
-export const Accordion = AccordionPrimitive.Accordion;
+const AccordionBase: Component<AccordionProps> = (props) => {
+    return <AccordionPrimitive.Accordion {...props} />;
+};
+
+export const Accordion = Object.assign(AccordionBase, {
+    Item: null as any,
+    Trigger: null as any,
+    Content: null as any,
+});
 
 export interface AccordionItemProps
     extends AccordionPrimitive.AccordionItemProps {
@@ -70,6 +78,6 @@ export const AccordionContent: Component<AccordionContentProps> = (props) => {
 };
 
 // 导出子组件
-(Accordion as any).Item = AccordionItem;
-(Accordion as any).Trigger = AccordionTrigger;
-(Accordion as any).Content = AccordionContent;
+Accordion.Item = AccordionItem;
+Accordion.Trigger = AccordionTrigger;
+Accordion.Content = AccordionContent;

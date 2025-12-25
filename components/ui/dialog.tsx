@@ -7,7 +7,18 @@ export interface DialogProps extends DialogPrimitive.DialogProps {
     children?: JSX.Element;
 }
 
-export const Dialog = DialogPrimitive.Dialog;
+const DialogBase: Component<DialogProps> = (props) => {
+    return <DialogPrimitive.Dialog {...props} />;
+};
+
+export const Dialog = Object.assign(DialogBase, {
+    Trigger: null as any,
+    Content: null as any,
+    Header: null as any,
+    Title: null as any,
+    Description: null as any,
+    Close: null as any,
+});
 
 export interface DialogTriggerProps extends DialogPrimitive.DialogTriggerProps {
     children?: JSX.Element;
@@ -133,9 +144,9 @@ export const DialogClose: Component<DialogCloseProps> = (props) => {
 };
 
 // 导出子组件
-(Dialog as any).Trigger = DialogTrigger;
-(Dialog as any).Content = DialogContent;
-(Dialog as any).Header = DialogHeader;
-(Dialog as any).Title = DialogTitle;
-(Dialog as any).Description = DialogDescription;
-(Dialog as any).Close = DialogClose;
+Dialog.Trigger = DialogTrigger;
+Dialog.Content = DialogContent;
+Dialog.Header = DialogHeader;
+Dialog.Title = DialogTitle;
+Dialog.Description = DialogDescription;
+Dialog.Close = DialogClose;
