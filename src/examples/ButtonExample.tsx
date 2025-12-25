@@ -1,11 +1,11 @@
-import { Component } from "solid-js";
+import type { Component } from "solid-js";
 import { Button } from "@/components/ui/button";
 
 export const ButtonExample: Component = () => {
   return (
     <div class="space-y-4 p-6">
       <h2 class="text-2xl font-bold mb-4">Button 组件示例</h2>
-      
+
       <div class="space-y-2">
         <h3 class="text-lg font-semibold">变体 (Variants)</h3>
         <div class="flex flex-wrap gap-2">
@@ -38,4 +38,3 @@ export const ButtonExample: Component = () => {
     </div>
   );
 };
-

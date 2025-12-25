@@ -1,4 +1,5 @@
-import { Component, createSignal } from "solid-js";
+import type { Component } from "solid-js";
+import { createSignal } from "solid-js";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";

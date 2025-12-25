@@ -1,4 +1,4 @@
-import { Component, createSignal } from "solid-js";
+import type { Component } from "solid-js";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 export const TabsExample: Component = () => {
