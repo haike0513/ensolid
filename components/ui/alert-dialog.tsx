@@ -8,20 +8,29 @@ export interface AlertDialogProps
     children?: JSX.Element;
 }
 
-// 确保 AlertDialog 是一个对象，可以添加属性
 const AlertDialogBase: Component<AlertDialogProps> = (props) => {
     return <AlertDialogPrimitive.AlertDialog {...props} />;
 };
 
+export interface AlertDialogComponent extends Component<AlertDialogProps> {
+    Trigger: Component<AlertDialogTriggerProps>;
+    Content: Component<AlertDialogContentProps>;
+    Header: Component<AlertDialogHeaderProps>;
+    Title: Component<AlertDialogTitleProps>;
+    Description: Component<AlertDialogDescriptionProps>;
+    Action: Component<AlertDialogActionProps>;
+    Cancel: Component<AlertDialogCancelProps>;
+}
+
 export const AlertDialog = Object.assign(AlertDialogBase, {
-    Trigger: null as any,
-    Content: null as any,
-    Header: null as any,
-    Title: null as any,
-    Description: null as any,
-    Action: null as any,
-    Cancel: null as any,
-});
+    Trigger: null as unknown as Component<AlertDialogTriggerProps>,
+    Content: null as unknown as Component<AlertDialogContentProps>,
+    Header: null as unknown as Component<AlertDialogHeaderProps>,
+    Title: null as unknown as Component<AlertDialogTitleProps>,
+    Description: null as unknown as Component<AlertDialogDescriptionProps>,
+    Action: null as unknown as Component<AlertDialogActionProps>,
+    Cancel: null as unknown as Component<AlertDialogCancelProps>,
+}) as AlertDialogComponent;
 
 export interface AlertDialogTriggerProps
     extends AlertDialogPrimitive.AlertDialogTriggerProps {

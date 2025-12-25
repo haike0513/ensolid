@@ -174,7 +174,6 @@ export const TooltipContent: Component<TooltipContentProps> = (props) => {
 
       // 检查是否会超出视口
       const viewportWidth = window.innerWidth;
-      const viewportHeight = window.innerHeight;
 
       let finalTop = top;
       let finalLeft = left;
