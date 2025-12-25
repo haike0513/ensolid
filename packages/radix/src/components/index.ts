@@ -26,3 +26,5 @@ export * from './ToggleGroup';
 export * from './AspectRatio';
 export * from './VisuallyHidden';
 export * from './Menubar';
+export * from './Toolbar';
+export * from './NavigationMenu';

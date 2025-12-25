@@ -24,4 +24,6 @@ export * from "./scroll-area";
 export * from "./toggle-group";
 export * from "./aspect-ratio";
 export * from "./menubar";
+export * from "./toolbar";
+export * from "./navigation-menu";
 export * from "./utils";

@@ -22,4 +22,6 @@ export { ScrollAreaExample } from "./ScrollAreaExample";
 export { ToggleGroupExample } from "./ToggleGroupExample";
 export { AspectRatioExample } from "./AspectRatioExample";
 export { MenubarExample } from "./MenubarExample";
+export { ToolbarExample } from "./ToolbarExample";
+export { NavigationMenuExample } from "./NavigationMenuExample";
 
