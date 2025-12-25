@@ -1,133 +1,114 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@theme {
-  --color-background: oklch(100% 0 0);
-  --color-foreground: oklch(9% 0 0);
-  --color-card: oklch(100% 0 0);
-  --color-card-foreground: oklch(9% 0 0);
-  --color-popover: oklch(100% 0 0);
-  --color-popover-foreground: oklch(9% 0 0);
-  --color-primary: oklch(47% 0.2 250);
-  --color-primary-foreground: oklch(98% 0 0);
-  --color-secondary: oklch(96% 0 0);
-  --color-secondary-foreground: oklch(9% 0 0);
-  --color-muted: oklch(96% 0 0);
-  --color-muted-foreground: oklch(45% 0 0);
-  --color-accent: oklch(96% 0 0);
-  --color-accent-foreground: oklch(9% 0 0);
-  --color-destructive: oklch(55% 0.22 25);
-  --color-destructive-foreground: oklch(98% 0 0);
-  --color-border: oklch(89% 0 0);
-  --color-input: oklch(89% 0 0);
-  --color-ring: oklch(47% 0.2 250);
-  --radius: 0.5rem;
-}
-
-@media (prefers-color-scheme: dark) {
-  @theme {
-    --color-background: oklch(9% 0 0);
-    --color-foreground: oklch(98% 0 0);
-    --color-card: oklch(9% 0 0);
-    --color-card-foreground: oklch(98% 0 0);
-    --color-popover: oklch(9% 0 0);
-    --color-popover-foreground: oklch(98% 0 0);
-    --color-primary: oklch(70% 0.2 250);
-    --color-primary-foreground: oklch(9% 0 0);
-    --color-secondary: oklch(15% 0 0);
-    --color-secondary-foreground: oklch(98% 0 0);
-    --color-muted: oklch(15% 0 0);
-    --color-muted-foreground: oklch(64% 0 0);
-    --color-accent: oklch(15% 0 0);
-    --color-accent-foreground: oklch(98% 0 0);
-    --color-destructive: oklch(60% 0.22 25);
-    --color-destructive-foreground: oklch(98% 0 0);
-    --color-border: oklch(27% 0 0);
-    --color-input: oklch(27% 0 0);
-    --color-ring: oklch(70% 0.2 250);
-  }
-}
 
 @custom-variant dark (&:is(.dark *));
 
-/* Step Start 线条动画 */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
-}
+/* ============================================
+   shadcn/ui CSS 变量定义
+   ============================================ */
 
-button:hover {
-  @apply cursor-pointer;
-}
-
-@theme inline {
+@theme {
+  /* 基础颜色变量 */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "Geist Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  /* 圆角变量 */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  
+  /* 字体变量 */
+  --font-sans: "Geist Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Geist Mono", "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Consolas, "Courier New", monospace;
+  
+  /* 图表颜色 */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  
+  /* 侧边栏颜色 */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
+
+/* ============================================
+   亮色主题变量
+   ============================================ */
 
 :root {
   --radius: 0.625rem;
+  
+  /* 基础颜色 */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
+  
+  /* 卡片 */
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
+  
+  /* 弹出层 */
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
+  
+  /* 主色 */
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
+  
+  /* 次要色 */
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
+  
+  /* 静音色 */
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0);
+  
+  /* 强调色 */
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
+  
+  /* 危险色 */
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  
+  /* 边框和输入 */
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
+  
+  /* 图表颜色 */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+  
+  /* 侧边栏颜色 */
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -138,30 +119,45 @@ button:hover {
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ============================================
+   暗色主题变量
+   ============================================ */
+
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
+  
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
+  
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
+  
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
+  
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
+  
   --muted: oklch(0.269 0 0);
   --muted-foreground: oklch(0.708 0 0);
+  
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
+  
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
+  
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
+  
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
+  
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -172,19 +168,513 @@ button:hover {
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* ============================================
+   基础样式重置
+   ============================================ */
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* 滚动条样式 */
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-md;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted;
   }
 }
 
-/* 背景网格图案 */
-.bg-grid-pattern {
-  background-image: 
-    linear-gradient(to right, currentColor 1px, transparent 1px),
-    linear-gradient(to bottom, currentColor 1px, transparent 1px);
-  background-size: 20px 20px;
+/* ============================================
+   动画定义
+   ============================================ */
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-in-from-top {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-from-bottom {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-out-to-top {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@keyframes slide-out-to-bottom {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slide-out-to-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@keyframes slide-out-to-right {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes zoom-in {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-out {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================
+   工具类
+   ============================================ */
+
+@layer utilities {
+  /* 动画工具类 */
+  .animate-in {
+    animation: fade-in 0.2s ease-in-out;
+  }
+  
+  .animate-out {
+    animation: fade-out 0.2s ease-in-out;
+  }
+  
+  .animate-accordion-down {
+    animation: accordion-down 0.2s ease-out;
+  }
+  
+  .animate-accordion-up {
+    animation: accordion-up 0.2s ease-out;
+  }
+  
+  .animate-shimmer {
+    animation: shimmer 2s linear infinite;
+  }
+  
+  .animate-spin {
+    animation: spin 1s linear infinite;
+  }
+  
+  /* 淡入淡出 */
+  .fade-in-0 {
+    animation: fade-in 0.2s ease-in-out;
+  }
+  
+  .fade-out-0 {
+    animation: fade-out 0.2s ease-in-out;
+  }
+  
+  /* 缩放 */
+  .zoom-in-95 {
+    animation: zoom-in 0.2s ease-in-out;
+  }
+  
+  .zoom-out-95 {
+    animation: zoom-out 0.2s ease-in-out;
+  }
+  
+  /* 滑动 */
+  .slide-in-from-top-2 {
+    animation: slide-in-from-top 0.2s ease-out;
+  }
+  
+  .slide-in-from-bottom-2 {
+    animation: slide-in-from-bottom 0.2s ease-out;
+  }
+  
+  .slide-in-from-left-2 {
+    animation: slide-in-from-left 0.2s ease-out;
+  }
+  
+  .slide-in-from-right-2 {
+    animation: slide-in-from-right 0.2s ease-out;
+  }
+  
+  .slide-out-to-top-2 {
+    animation: slide-out-to-top 0.2s ease-out;
+  }
+  
+  .slide-out-to-bottom-2 {
+    animation: slide-out-to-bottom 0.2s ease-out;
+  }
+  
+  .slide-out-to-left-2 {
+    animation: slide-out-to-left 0.2s ease-out;
+  }
+  
+  .slide-out-to-right-2 {
+    animation: slide-out-to-right 0.2s ease-out;
+  }
+  
+  /* 特殊位置滑动 */
+  .slide-in-from-left-1\/2 {
+    animation: slide-in-from-left 0.2s ease-out;
+  }
+  
+  .slide-in-from-top-\[48\%\] {
+    animation: slide-in-from-top 0.2s ease-out;
+  }
+  
+  .slide-out-to-left-1\/2 {
+    animation: slide-out-to-left 0.2s ease-out;
+  }
+  
+  .slide-out-to-top-\[48\%\] {
+    animation: slide-out-to-top 0.2s ease-out;
+  }
+  
+  /* 背景网格图案 */
+  .bg-grid-pattern {
+    background-image: 
+      linear-gradient(to right, currentColor 1px, transparent 1px),
+      linear-gradient(to bottom, currentColor 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.1;
+  }
+  
+  /* 文本选择样式 */
+  .select-none {
+    user-select: none;
+  }
+  
+  .select-text {
+    user-select: text;
+  }
+  
+  .select-all {
+    user-select: all;
+  }
+  
+  /* 光标样式 */
+  .cursor-pointer {
+    cursor: pointer;
+  }
+  
+  .cursor-not-allowed {
+    cursor: not-allowed;
+  }
+  
+  .cursor-default {
+    cursor: default;
+  }
+  
+  /* 过渡效果 */
+  .transition-colors {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+  
+  /* 焦点样式 */
+  .focus-visible\:outline-none:focus-visible {
+    outline: none;
+  }
+  
+  .focus-visible\:ring-2:focus-visible {
+    box-shadow: 0 0 0 2px var(--ring);
+  }
+  
+  .focus-visible\:ring-offset-2:focus-visible {
+    box-shadow: 0 0 0 2px var(--ring), 0 0 0 4px var(--background);
+  }
+  
+  /* 禁用状态 */
+  .disabled\:pointer-events-none:disabled {
+    pointer-events: none;
+  }
+  
+  .disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+  
+  /* 数据状态样式 */
+  [data-state="open"] {
+    --state-open: 1;
+  }
+  
+  [data-state="closed"] {
+    --state-closed: 1;
+  }
+  
+  [data-state="checked"] {
+    --state-checked: 1;
+  }
+  
+  [data-state="unchecked"] {
+    --state-unchecked: 1;
+  }
+  
+  [data-state="on"] {
+    --state-on: 1;
+  }
+  
+  [data-state="off"] {
+    --state-off: 1;
+  }
+  
+  [data-disabled] {
+    --state-disabled: 1;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  
+  /* 方向数据属性 */
+  [data-orientation="horizontal"] {
+    --orientation: horizontal;
+  }
+  
+  [data-orientation="vertical"] {
+    --orientation: vertical;
+  }
+  
+  /* 侧边数据属性 */
+  [data-side="top"] {
+    --side: top;
+  }
+  
+  [data-side="bottom"] {
+    --side: bottom;
+  }
+  
+  [data-side="left"] {
+    --side: left;
+  }
+  
+  [data-side="right"] {
+    --side: right;
+  }
+}
+
+/* ============================================
+   组件特定样式
+   ============================================ */
+
+@layer components {
+  /* Button 组件相关 */
+  button {
+    @apply cursor-pointer;
+  }
+  
+  /* Input 组件相关 */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="number"],
+  input[type="search"],
+  textarea,
+  select {
+    @apply border-input bg-background text-foreground;
+  }
+  
+  /* 链接样式 */
+  a {
+    @apply text-primary underline-offset-4 hover:underline;
+  }
+  
+  /* 代码块样式 */
+  code {
+    @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm;
+  }
+  
+  pre {
+    @apply overflow-x-auto rounded-lg bg-muted p-4;
+  }
+  
+  pre code {
+    @apply relative bg-transparent p-0;
+  }
+  
+  /* 表格样式 */
+  table {
+    @apply w-full border-collapse;
+  }
+  
+  th {
+    @apply border-b border-border p-4 text-left font-medium;
+  }
+  
+  td {
+    @apply border-b border-border p-4;
+  }
+  
+  /* 列表样式 */
+  ul, ol {
+    @apply my-4 ml-6;
+  }
+  
+  ul {
+    @apply list-disc;
+  }
+  
+  ol {
+    @apply list-decimal;
+  }
+  
+  li {
+    @apply my-2;
+  }
+  
+  /* 引用样式 */
+  blockquote {
+    @apply border-l-4 border-border pl-4 italic;
+  }
+  
+  /* 水平线 */
+  hr {
+    @apply my-8 border-border;
+  }
+}
+
+/* ============================================
+   响应式工具类
+   ============================================ */
+
+@layer utilities {
+  /* 容器查询 */
+  @container (min-width: 640px) {
+    .sm\:rounded-lg {
+      border-radius: var(--radius-lg);
+    }
+  }
+  
+  /* 打印样式 */
+  @media print {
+    * {
+      @apply text-black bg-white;
+    }
+  }
 }
