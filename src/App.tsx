@@ -92,52 +92,60 @@ const App: Component = () => {
 
   return (
     <div class="min-h-screen bg-background">
-      <header class="border-b">
+      <header class="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div class="container mx-auto px-4 py-4">
           <div class="flex items-center justify-between">
-            <div>
-              <h1 class="text-3xl font-bold">{t().app.title}</h1>
-              <p class="text-muted-foreground mt-2">
+            <div class="flex-1">
+              <h1 class="text-2xl font-bold tracking-tight">{t().app.title}</h1>
+              <p class="text-sm text-muted-foreground mt-1">
                 {t().app.description}
               </p>
             </div>
-            <LanguageSwitcher />
+            <div class="flex items-center gap-4">
+              <LanguageSwitcher />
+            </div>
           </div>
         </div>
       </header>
 
       <div class="container mx-auto px-4 py-6">
-        <div class="flex gap-4 mb-6">
-          <nav class="w-64 border-r pr-4">
-            <h2 class="text-lg font-semibold mb-4">{t().app.componentList}</h2>
-            <ul class="space-y-2">
-              <For each={examples()}>
-                {(example) => (
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => setCurrentExample(example.id)}
-                      class={`w-full text-left px-3 py-2 rounded-md transition-colors ${
-                        currentExample() === example.id
-                          ? "bg-primary text-primary-foreground"
-                          : "hover:bg-accent"
-                      }`}
-                    >
-                      {example.name}
-                    </button>
-                  </li>
-                )}
-              </For>
-            </ul>
-          </nav>
+        <div class="flex gap-6">
+          <aside class="w-64 shrink-0">
+            <nav class="sticky top-20 space-y-1">
+              <h2 class="mb-4 px-2 text-sm font-semibold tracking-tight">
+                {t().app.componentList}
+              </h2>
+              <ul class="space-y-1">
+                <For each={examples()}>
+                  {(example) => (
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => setCurrentExample(example.id)}
+                        class={`w-full text-left px-3 py-2 rounded-md text-sm transition-colors ${
+                          currentExample() === example.id
+                            ? "bg-primary text-primary-foreground font-medium"
+                            : "hover:bg-accent hover:text-accent-foreground"
+                        }`}
+                      >
+                        {example.name}
+                      </button>
+                    </li>
+                  )}
+                </For>
+              </ul>
+            </nav>
+          </aside>
 
-          <main class="flex-1">
-            {(() => {
-              const selectedId = currentExample();
-              const example = examples().find((e) => e.id === selectedId);
-              const Component = example ? example.component : ButtonExample;
-              return <Component />;
-            })()}
+          <main class="flex-1 min-w-0">
+            <div class="rounded-lg border bg-card p-6 shadow-sm">
+              {(() => {
+                const selectedId = currentExample();
+                const example = examples().find((e) => e.id === selectedId);
+                const Component = example ? example.component : ButtonExample;
+                return <Component />;
+              })()}
+            </div>
           </main>
         </div>
       </div>

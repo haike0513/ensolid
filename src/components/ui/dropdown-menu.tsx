@@ -1,6 +1,7 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
 import * as DropdownMenuPrimitive from "@resolid/radix";
+import { useDropdownMenuContext } from "@resolid/radix";
 import { cn } from "./utils";
 
 export interface DropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuProps {
@@ -79,6 +80,19 @@ export const DropdownMenuItem: Component<DropdownMenuItemProps> = (props) => {
         "class",
         "onClick",
     ]);
+    const context = useDropdownMenuContext();
+
+    const handleClick: JSX.EventHandler<HTMLDivElement, MouseEvent> = (e) => {
+        if (local.disabled) {
+            e.preventDefault();
+            return;
+        }
+        if (typeof local.onClick === "function") {
+            local.onClick(e);
+        }
+        // 点击后自动关闭菜单
+        context.setOpen(false);
+    };
 
     return (
         <DropdownMenuPrimitive.DropdownMenuItem
@@ -86,6 +100,7 @@ export const DropdownMenuItem: Component<DropdownMenuItemProps> = (props) => {
                 "relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
                 local.class,
             )}
+            onClick={handleClick}
             {...others}
         >
             {local.children}
