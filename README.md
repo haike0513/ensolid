@@ -112,11 +112,13 @@ resolid/
 
 基于 [Radix UI Primitives](https://www.radix-ui.com/primitives) 移植的 SolidJS 版本，提供无样式、可访问的基础组件。
 
-#### 已移植组件（16个）
+#### 已移植组件（25个）
 
 **基础组件**
 - ✅ Separator - 分隔线
 - ✅ Label - 标签
+- ✅ AspectRatio - 宽高比
+- ✅ VisuallyHidden - 视觉隐藏（辅助功能）
 
 **表单组件**
 - ✅ Checkbox - 复选框
@@ -125,10 +127,13 @@ resolid/
 - ✅ Select - 选择器
 - ✅ Slider - 滑块
 - ✅ Toggle - 切换按钮
+- ✅ ToggleGroup - 切换组
 
 **布局组件**
 - ✅ Tabs - 标签页
 - ✅ Accordion - 手风琴
+- ✅ Collapsible - 可折叠
+- ✅ ScrollArea - 滚动区域
 
 **弹出层组件**
 - ✅ Dialog - 对话框
@@ -136,20 +141,26 @@ resolid/
 - ✅ Popover - 弹出框
 - ✅ DropdownMenu - 下拉菜单
 - ✅ Tooltip - 工具提示
+- ✅ HoverCard - 悬停卡片
+- ✅ ContextMenu - 上下文菜单
+- ✅ Menubar - 菜单栏
 
 **其他组件**
 - ✅ Progress - 进度条
+- ✅ Avatar - 头像
 
 ### components/ui
 
 基于 `@resolid/radix` 实现的 shadcn/ui 风格组件库，提供开箱即用的样式化组件。
 
-#### 可用组件（17个）
+#### 可用组件（26个）
 
 所有 Radix 组件都有对应的 shadcn/ui 风格包装，包括：
-- Button, Card, Dialog, Checkbox, Switch, Tabs, Accordion
-- Label, Separator, AlertDialog, Popover, DropdownMenu
-- Tooltip, Select, Slider, Progress, Toggle
+- **基础组件**: Button, Card, Label, Separator, AspectRatio
+- **表单组件**: Checkbox, Switch, RadioGroup, Select, Slider, Toggle, ToggleGroup
+- **布局组件**: Tabs, Accordion, Collapsible, ScrollArea
+- **弹出层组件**: Dialog, AlertDialog, Popover, DropdownMenu, Tooltip, HoverCard, ContextMenu, Menubar
+- **其他组件**: Progress, Avatar
 
 ## 🎯 使用示例
 
@@ -203,23 +214,35 @@ function App() {
    - 参考现有组件实现
    - 遵循 SolidJS 响应式模式
    - 确保 SSR 兼容
+   - 使用 `splitProps` 分离 Props
+   - 使用 `createSignal` 管理状态
+   - 使用 `createContext` 和 `useContext` 实现组件通信
 
 2. **在 `components/ui/` 创建 shadcn/ui 包装**
    - 基于 Radix 组件
    - 添加 Tailwind CSS 样式
    - 使用 `cn()` 合并类名
+   - 保持 API 一致性
 
 3. **在 `src/examples/` 创建示例**
    - 展示基本用法
-   - 展示不同配置
-   - 添加到导航列表
+   - 展示不同配置和变体
+   - 展示交互功能
 
-4. **测试和验证**
+4. **更新相关文件**
+   - 在 `packages/radix/src/components/index.ts` 中导出
+   - 在 `src/components/ui/index.ts` 中导出
+   - 在 `src/examples/index.ts` 中导出示例
+   - 在 `src/App.tsx` 中添加示例到导航
+   - 在 `src/i18n/locales/` 中添加翻译
+
+5. **测试和验证**
    - 运行 `pnpm build:radix` 检查编译
+   - 运行 `pnpm build` 检查完整构建
    - 运行 `pnpm dev` 查看示例
-   - 修复所有错误
+   - 修复所有错误和警告
 
-详细移植指南请参考 [agents.md](./agents.md) 中的"实际移植案例：Radix UI Primitives"章节。
+详细移植指南、规则和最佳实践请参考 [agents.md](./agents.md) 中的"实际移植案例：Radix UI Primitives"章节。
 
 ## 🤝 贡献
 

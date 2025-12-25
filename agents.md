@@ -841,25 +841,45 @@ const Component: Component<Props> = (props) => {
 
 移植组件时，请确保：
 
+### 基础转换
 - [ ] 所有 `useState` 转换为 `createSignal`
 - [ ] 所有 `useEffect` 转换为 `createEffect` 或 `onMount`
 - [ ] 所有 `useMemo` 转换为 `createMemo`
 - [ ] 所有 `useRef` 转换为变量引用
 - [ ] 所有 `className` 转换为 `class`
-- [ ] 所有响应式值通过函数调用访问
-- [ ] Props 不解构，通过 `props.xxx` 访问
+- [ ] 所有响应式值通过函数调用访问（如 `value()`）
+- [ ] Props 不解构，通过 `props.xxx` 或 `splitProps` 访问
 - [ ] 组件类型使用 `Component<Props>` 定义
+
+### 渲染优化
 - [ ] 条件渲染使用 `<Show>` 组件
 - [ ] 列表渲染使用 `<For>` 组件
+- [ ] 避免在渲染函数中直接调用副作用
+
+### 配置和导出
 - [ ] TypeScript 配置正确（`jsxImportSource: "solid-js"`）
 - [ ] Package.json 配置正确（导出、依赖等）
 - [ ] 所有组件在 `components/index.ts` 中导出
 - [ ] 包入口在 `src/index.ts` 中导出所有组件
+- [ ] shadcn/ui 包装在 `components/ui/index.ts` 中导出
+
+### SSR 兼容性
 - [ ] 组件适配 SSR 或提供 SSR 配置选项
 - [ ] 所有浏览器 API 调用在 `onMount` 中或使用 `isServer` 检查
 - [ ] 事件监听器在 `onMount` 中注册并在 `onCleanup` 中清理
-- [ ] Portal 组件正确处理 SSR 场景
+- [ ] Portal 组件正确处理 SSR 场景（`mount={!isServer ? document.body : undefined}`）
 - [ ] localStorage/sessionStorage 等存储 API 仅在客户端使用
+
+### 样式和类型
+- [ ] 样式对象使用字符串形式避免 TypeScript 类型问题
+- [ ] 使用 `cn()` 函数合并 Tailwind CSS 类名
+- [ ] 事件处理函数使用 `JSX.EventHandler` 类型
+
+### 示例和文档
+- [ ] 创建示例组件展示基本用法
+- [ ] 在 `examples/index.ts` 中导出示例
+- [ ] 在 `App.tsx` 中添加示例到导航
+- [ ] 在 `i18n/locales` 中添加翻译文本
 
 ---
 
@@ -869,33 +889,63 @@ const Component: Component<Props> = (props) => {
 
 本项目成功将 Radix UI Primitives 从 React 移植到 SolidJS，创建了 `@resolid/radix` 包，并在此基础上实现了 shadcn/ui 风格的组件库。
 
-### 已移植的组件列表
+### 当前项目状态（2024年更新）
+
+#### 移植进度
+- ✅ **已完成**: 25 个 Radix UI Primitives 组件
+- ✅ **shadcn/ui 包装**: 所有组件都有对应的 shadcn/ui 风格包装
+- ✅ **示例代码**: 所有组件都有完整的示例展示
+- ✅ **国际化支持**: 中英文双语支持
+- ✅ **构建系统**: 完整的 TypeScript 类型定义和构建配置
+
+#### 组件分类统计
+- **基础组件**: 4 个（Separator, Label, AspectRatio, VisuallyHidden）
+- **表单组件**: 7 个（Checkbox, Switch, RadioGroup, Select, Slider, Toggle, ToggleGroup）
+- **布局组件**: 4 个（Tabs, Accordion, Collapsible, ScrollArea）
+- **弹出层组件**: 8 个（Dialog, AlertDialog, Popover, DropdownMenu, Tooltip, HoverCard, ContextMenu, Menubar）
+- **其他组件**: 2 个（Progress, Avatar）
+
+#### 待移植组件
+- ⏳ **Navigation Menu** - 导航菜单组件（复杂组件，需要更多时间实现）
+- ⏳ **Toast** - 提示消息组件（需要 Provider 支持）
+- ⏳ **Form** - 表单组件（需要表单验证集成）
+
+### 已移植的组件列表（25个）
 
 #### 基础组件
 1. **Separator** - 分隔线组件
 2. **Label** - 标签组件
+3. **AspectRatio** - 宽高比组件（用于保持元素宽高比）
+4. **VisuallyHidden** - 视觉隐藏组件（辅助功能，屏幕阅读器可见）
 
 #### 表单组件
-3. **Checkbox** - 复选框组件
-4. **Switch** - 开关组件
-5. **RadioGroup** - 单选组组件（包含 RadioGroup.Item）
-6. **Select** - 选择器组件（包含 Select.Trigger, Select.Value, Select.Content, Select.Item）
-7. **Slider** - 滑块组件
-8. **Toggle** - 切换按钮组件
+5. **Checkbox** - 复选框组件
+6. **Switch** - 开关组件
+7. **RadioGroup** - 单选组组件（包含 RadioGroup.Item）
+8. **Select** - 选择器组件（包含 Select.Trigger, Select.Value, Select.Content, Select.Item）
+9. **Slider** - 滑块组件
+10. **Toggle** - 切换按钮组件
+11. **ToggleGroup** - 切换组组件（包含 ToggleGroup.Item，支持单选和多选模式）
 
 #### 布局组件
-9. **Tabs** - 标签页组件（包含 Tabs.List, Tabs.Trigger, Tabs.Content）
-10. **Accordion** - 手风琴组件（包含 Accordion.Item, Accordion.Trigger, Accordion.Content）
+12. **Tabs** - 标签页组件（包含 Tabs.List, Tabs.Trigger, Tabs.Content）
+13. **Accordion** - 手风琴组件（包含 Accordion.Item, Accordion.Trigger, Accordion.Content）
+14. **Collapsible** - 可折叠组件（包含 Collapsible.Trigger, Collapsible.Content）
+15. **ScrollArea** - 滚动区域组件（包含 ScrollArea.Viewport, ScrollArea.Scrollbar, ScrollArea.Thumb, ScrollArea.Corner）
 
 #### 弹出层组件
-11. **Dialog** - 对话框组件（包含 Dialog.Trigger, Dialog.Content, Dialog.Title, Dialog.Description, Dialog.Close）
-12. **AlertDialog** - 警告对话框组件（包含 AlertDialog.Trigger, AlertDialog.Content, AlertDialog.Title, AlertDialog.Description, AlertDialog.Action, AlertDialog.Cancel）
-13. **Popover** - 弹出框组件（包含 Popover.Trigger, Popover.Content）
-14. **DropdownMenu** - 下拉菜单组件（包含 DropdownMenu.Trigger, DropdownMenu.Content, DropdownMenu.Item, DropdownMenu.Label, DropdownMenu.Separator）
-15. **Tooltip** - 工具提示组件（包含 Tooltip.Trigger, Tooltip.Content）
+16. **Dialog** - 对话框组件（包含 Dialog.Trigger, Dialog.Content, Dialog.Title, Dialog.Description, Dialog.Close）
+17. **AlertDialog** - 警告对话框组件（包含 AlertDialog.Trigger, AlertDialog.Content, AlertDialog.Title, AlertDialog.Description, AlertDialog.Action, AlertDialog.Cancel）
+18. **Popover** - 弹出框组件（包含 Popover.Trigger, Popover.Content）
+19. **DropdownMenu** - 下拉菜单组件（包含 DropdownMenu.Trigger, DropdownMenu.Content, DropdownMenu.Item, DropdownMenu.Label, DropdownMenu.Separator）
+20. **Tooltip** - 工具提示组件（包含 Tooltip.Trigger, Tooltip.Content）
+21. **HoverCard** - 悬停卡片组件（包含 HoverCard.Trigger, HoverCard.Content）
+22. **ContextMenu** - 上下文菜单组件（包含 ContextMenu.Trigger, ContextMenu.Content, ContextMenu.Item, ContextMenu.Label, ContextMenu.Separator）
+23. **Menubar** - 菜单栏组件（包含 Menubar.Menu, Menubar.Trigger, Menubar.Content, Menubar.Item, Menubar.Separator）
 
 #### 其他组件
-16. **Progress** - 进度条组件
+24. **Progress** - 进度条组件
+25. **Avatar** - 头像组件（包含 Avatar.Image, Avatar.Fallback）
 
 ### 移植步骤总结
 
@@ -1215,6 +1265,40 @@ resolid/
         └── index.ts
 ```
 
+### 移植规则总结
+
+#### 核心转换规则
+1. **状态管理**: `useState` → `createSignal`
+2. **副作用**: `useEffect` → `createEffect` / `onMount` / `onCleanup`
+3. **计算值**: `useMemo` → `createMemo`
+4. **引用**: `useRef` → 变量引用
+5. **Context**: `createContext` / `useContext` 保持不变
+6. **条件渲染**: `{condition && <Component />}` → `<Show when={condition()}>`
+7. **列表渲染**: `items.map()` → `<For each={items()}>`
+8. **Props 访问**: 不解构，使用 `props.xxx` 或 `splitProps`
+9. **样式属性**: `className` → `class`
+10. **样式对象**: 使用字符串形式避免 TypeScript 类型问题
+
+#### 组件结构规范
+1. **目录结构**: `packages/radix/src/components/ComponentName/`
+2. **文件命名**: `ComponentName.tsx` 和 `index.ts`
+3. **导出规范**: 组件目录 → `components/index.ts` → `src/index.ts`
+4. **类型定义**: 使用 `Component<Props>` 类型
+5. **子组件**: 使用 `Object.assign` 或类型断言添加
+
+#### shadcn/ui 包装规范
+1. **文件位置**: `src/components/ui/component-name.tsx`
+2. **导入方式**: `import * as ComponentPrimitive from "@resolid/radix"`
+3. **样式合并**: 使用 `cn()` 函数合并 Tailwind CSS 类名
+4. **Props 传递**: 使用 `splitProps` 分离样式和功能 Props
+5. **子组件导出**: 在 `components/ui/index.ts` 统一导出
+
+#### 示例代码规范
+1. **文件位置**: `src/examples/ComponentExample.tsx`
+2. **导出方式**: 在 `examples/index.ts` 中导出
+3. **导航集成**: 在 `App.tsx` 中添加示例到导航列表
+4. **国际化**: 使用 `useI18n()` Hook 获取翻译文本
+
 ### 最佳实践
 
 1. **从简单到复杂**：先移植基础组件（如 Separator、Label），再移植复杂组件（如 Dialog、DropdownMenu）
@@ -1223,11 +1307,19 @@ resolid/
 
 3. **类型安全**：充分利用 TypeScript 类型系统，提供完整的类型定义
 
-4. **SSR 优先**：所有组件都应考虑 SSR 兼容性
+4. **SSR 优先**：所有组件都应考虑 SSR 兼容性，使用 `isServer` 检查浏览器 API
 
 5. **测试驱动**：每移植一个组件，立即创建示例验证功能
 
 6. **渐进式增强**：先实现核心功能，再添加高级特性
+
+7. **样式处理**：使用字符串形式的 style 属性避免 TypeScript 类型问题
+
+8. **事件处理**：使用 `JSX.EventHandler` 类型定义事件处理函数
+
+9. **Portal 使用**：弹出层组件使用 `Portal` 并检查 `isServer`
+
+10. **清理资源**：所有事件监听器和定时器在 `onCleanup` 中清理
 
 ---
 
