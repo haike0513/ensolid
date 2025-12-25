@@ -21,17 +21,17 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
     /* Path Aliases */
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./*"],
+      "@/*": ["./src/*"],
       "@resolid/radix": ["./packages/radix/src"],
       "@resolid/baseui": ["./packages/baseui/src"]
     }
   },
-  "include": ["src", "components"]
+  "include": ["src"]
 }

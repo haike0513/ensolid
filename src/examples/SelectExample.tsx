@@ -8,20 +8,22 @@ import {
     SelectItem,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { useI18n } from "@/i18n";
 
 export const SelectExample: Component = () => {
     const [value, setValue] = createSignal<string>();
+    const { t } = useI18n();
 
     return (
         <div class="space-y-4 p-6">
-            <h2 class="text-2xl font-bold mb-4">Select 组件示例</h2>
+            <h2 class="text-2xl font-bold mb-4">{t().select.title}</h2>
 
             <div class="space-y-4">
                 <div class="space-y-2">
-                    <Label>选择框架</Label>
+                    <Label>{t().select.selectFramework}</Label>
                     <Select value={value()} onValueChange={setValue}>
                         <SelectTrigger class="w-[180px]">
-                            <SelectValue placeholder="选择一个框架" />
+                            <SelectValue placeholder={t().select.selectFrameworkPlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="react">React</SelectItem>
@@ -32,36 +34,36 @@ export const SelectExample: Component = () => {
                     </Select>
                     {value() && (
                         <p class="text-sm text-muted-foreground">
-                            已选择: {value()}
+                            {t().select.selected}: {value()}
                         </p>
                     )}
                 </div>
 
                 <div class="space-y-2">
-                    <Label>选择主题</Label>
+                    <Label>{t().common.selectTheme}</Label>
                     <Select>
                         <SelectTrigger class="w-[180px]">
-                            <SelectValue placeholder="选择主题" />
+                            <SelectValue placeholder={t().select.selectThemePlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="light">浅色</SelectItem>
-                            <SelectItem value="dark">深色</SelectItem>
-                            <SelectItem value="system">系统</SelectItem>
+                            <SelectItem value="light">{t().common.light}</SelectItem>
+                            <SelectItem value="dark">{t().common.dark}</SelectItem>
+                            <SelectItem value="system">{t().common.system}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
 
                 <div class="space-y-2">
-                    <Label>选择语言</Label>
+                    <Label>{t().common.selectLanguage}</Label>
                     <Select>
                         <SelectTrigger class="w-[180px]">
-                            <SelectValue placeholder="选择语言" />
+                            <SelectValue placeholder={t().select.selectLanguagePlaceholder} />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="zh">中文</SelectItem>
-                            <SelectItem value="en">English</SelectItem>
-                            <SelectItem value="ja">日本語</SelectItem>
-                            <SelectItem value="ko">한국어</SelectItem>
+                            <SelectItem value="zh">{t().common.chinese}</SelectItem>
+                            <SelectItem value="en">{t().common.english}</SelectItem>
+                            <SelectItem value="ja">{t().common.japanese}</SelectItem>
+                            <SelectItem value="ko">{t().common.korean}</SelectItem>
                         </SelectContent>
                     </Select>
                 </div>
