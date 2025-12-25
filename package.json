@@ -10,7 +10,9 @@
     "build:baseui": "pnpm --filter @resolid/baseui build",
     "dev:baseui": "pnpm --filter @resolid/baseui dev",
     "build:solidflow": "pnpm --filter @resolid/solidflow build",
-    "dev:solidflow": "pnpm --filter @resolid/solidflow dev"
+    "dev:solidflow": "pnpm --filter @resolid/solidflow dev",
+    "build:radix": "pnpm --filter @resolid/radix build",
+    "dev:radix": "pnpm --filter @resolid/radix dev"
   },
   "dependencies": {
     "@resolid/baseui": "workspace:*",
