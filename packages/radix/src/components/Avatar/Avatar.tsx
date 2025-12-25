@@ -1,4 +1,4 @@
-import { splitProps, Show, createSignal, createContext, useContext } from 'solid-js';
+import { splitProps, Show, createSignal, createContext, useContext, createEffect, onCleanup } from 'solid-js';
 import type { Component, JSX } from 'solid-js';
 
 interface AvatarContextValue {
@@ -80,6 +80,13 @@ export const AvatarImage: Component<AvatarImageProps> = (props) => {
   ]);
   const context = useAvatarContext();
 
+  // 当 src 变化时，重置加载状态
+  createEffect(() => {
+    if (local.src) {
+      context.setImageLoadingStatus('loading');
+    }
+  });
+
   const handleLoad: JSX.EventHandler<HTMLImageElement, Event> = (e) => {
     if (typeof local.onLoad === 'function') {
       local.onLoad(e);
@@ -125,15 +132,52 @@ export interface AvatarFallbackProps extends JSX.HTMLAttributes<HTMLDivElement> 
 export const AvatarFallback: Component<AvatarFallbackProps> = (props) => {
   const [local, others] = splitProps(props, ['delayMs', 'class', 'children']);
   const context = useAvatarContext();
+  const [showFallback, setShowFallback] = createSignal(false);
+  let timeoutId: number | undefined;
 
-  // 如果图片加载失败，或者没有图片源，或者延迟时间后仍然在加载，显示 fallback
-  const shouldShow = () => {
+  // 根据加载状态和延迟时间决定是否显示 fallback
+  createEffect(() => {
     const status = context.imageLoadingStatus();
-    return status === 'error' || status === 'loading';
-  };
+    const delayMs = local.delayMs ?? 0;
+
+    if (status === 'error') {
+      // 如果加载失败，立即显示
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = undefined;
+      }
+      setShowFallback(true);
+    } else if (status === 'loading') {
+      // 如果正在加载，根据延迟时间决定
+      if (delayMs === 0) {
+        setShowFallback(true);
+      } else if (delayMs > 0) {
+        setShowFallback(false);
+        timeoutId = setTimeout(() => {
+          // 延迟后如果仍在加载，显示 fallback
+          if (context.imageLoadingStatus() === 'loading') {
+            setShowFallback(true);
+          }
+        }, delayMs) as unknown as number;
+      }
+    } else if (status === 'loaded') {
+      // 如果已加载，隐藏 fallback
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = undefined;
+      }
+      setShowFallback(false);
+    }
+  });
+
+  onCleanup(() => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  });
 
   return (
-    <Show when={shouldShow()}>
+    <Show when={showFallback()}>
       <div
         class={local.class}
         {...others}

@@ -29,7 +29,7 @@ export interface ToggleGroupItemProps extends ToggleGroupPrimitive.ToggleGroupIt
 }
 
 export const ToggleGroupItem: Component<ToggleGroupItemProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children", "value", "disabled", "asChild", "onClick"]);
+    const [local, others] = splitProps(props, ["class", "children"]);
 
     return (
         <ToggleGroupPrimitive.ToggleGroupItem

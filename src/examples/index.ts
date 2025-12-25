@@ -14,4 +14,10 @@ export { SelectExample } from "./SelectExample";
 export { SliderExample } from "./SliderExample";
 export { ProgressExample } from "./ProgressExample";
 export { ToggleExample } from "./ToggleExample";
+export { AvatarExample } from "./AvatarExample";
+export { CollapsibleExample } from "./CollapsibleExample";
+export { ContextMenuExample } from "./ContextMenuExample";
+export { HoverCardExample } from "./HoverCardExample";
+export { ScrollAreaExample } from "./ScrollAreaExample";
+export { ToggleGroupExample } from "./ToggleGroupExample";
 

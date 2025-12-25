@@ -1,5 +1,5 @@
 import type { Component, JSX } from "solid-js";
-import { splitProps, Show, createSignal } from "solid-js";
+import { splitProps } from "solid-js";
 import * as AvatarPrimitive from "@resolid/radix";
 import { cn } from "./utils";
 

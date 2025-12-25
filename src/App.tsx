@@ -3,19 +3,25 @@ import { createSignal, For } from "solid-js";
 import {
   AccordionExample,
   AlertDialogExample,
+  AvatarExample,
   ButtonExample,
   CardExample,
   CheckboxExample,
+  CollapsibleExample,
+  ContextMenuExample,
   DialogExample,
   DropdownMenuExample,
+  HoverCardExample,
   PopoverExample,
   ProgressExample,
+  ScrollAreaExample,
   SelectExample,
   SeparatorExample,
   SliderExample,
   SwitchExample,
   TabsExample,
   ToggleExample,
+  ToggleGroupExample,
   TooltipExample,
 } from "./examples";
 import { useI18n } from "./i18n";
@@ -38,7 +44,13 @@ type ExampleType =
   | "select"
   | "slider"
   | "progress"
-  | "toggle";
+  | "toggle"
+  | "avatar"
+  | "collapsible"
+  | "context-menu"
+  | "hover-card"
+  | "scroll-area"
+  | "toggle-group";
 
 const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
   { id: "button" as ExampleType, name: t().components.button, component: ButtonExample },
@@ -81,6 +93,32 @@ const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
     component: ProgressExample,
   },
   { id: "toggle" as ExampleType, name: t().components.toggle, component: ToggleExample },
+  { id: "avatar" as ExampleType, name: t().components.avatar, component: AvatarExample },
+  {
+    id: "collapsible" as ExampleType,
+    name: t().components.collapsible,
+    component: CollapsibleExample,
+  },
+  {
+    id: "context-menu" as ExampleType,
+    name: t().components.contextMenu,
+    component: ContextMenuExample,
+  },
+  {
+    id: "hover-card" as ExampleType,
+    name: t().components.hoverCard,
+    component: HoverCardExample,
+  },
+  {
+    id: "scroll-area" as ExampleType,
+    name: t().components.scrollArea,
+    component: ScrollAreaExample,
+  },
+  {
+    id: "toggle-group" as ExampleType,
+    name: t().components.toggleGroup,
+    component: ToggleGroupExample,
+  },
 ];
 
 const App: Component = () => {
