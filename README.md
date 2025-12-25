@@ -80,13 +80,146 @@ pnpm preview
 
 ```
 resolid/
-├── src/              # 源代码目录
-│   ├── App.tsx       # 主应用组件
-│   └── ...
-├── public/           # 静态资源
-├── package.json      # 项目配置
-└── vite.config.ts    # Vite 配置
+├── packages/                    # Monorepo 包目录
+│   ├── radix/                  # Radix UI Primitives 移植
+│   │   ├── src/
+│   │   │   ├── components/    # 所有 Radix 组件
+│   │   │   └── index.ts
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   ├── baseui/                 # BaseUI 组件库
+│   └── solidflow/              # SolidFlow 组件库
+├── components/
+│   └── ui/                     # shadcn/ui 风格组件
+│       ├── button.tsx
+│       ├── card.tsx
+│       ├── dialog.tsx
+│       └── ...                 # 更多组件
+├── src/                        # 源代码目录
+│   ├── examples/               # 组件示例
+│   │   ├── ButtonExample.tsx
+│   │   └── ...
+│   ├── App.tsx                 # 主应用组件
+│   └── index.tsx
+├── public/                     # 静态资源
+├── package.json                # 项目配置
+└── vite.config.ts              # Vite 配置
 ```
+
+## 📦 已移植的组件库
+
+### @resolid/radix
+
+基于 [Radix UI Primitives](https://www.radix-ui.com/primitives) 移植的 SolidJS 版本，提供无样式、可访问的基础组件。
+
+#### 已移植组件（16个）
+
+**基础组件**
+- ✅ Separator - 分隔线
+- ✅ Label - 标签
+
+**表单组件**
+- ✅ Checkbox - 复选框
+- ✅ Switch - 开关
+- ✅ RadioGroup - 单选组
+- ✅ Select - 选择器
+- ✅ Slider - 滑块
+- ✅ Toggle - 切换按钮
+
+**布局组件**
+- ✅ Tabs - 标签页
+- ✅ Accordion - 手风琴
+
+**弹出层组件**
+- ✅ Dialog - 对话框
+- ✅ AlertDialog - 警告对话框
+- ✅ Popover - 弹出框
+- ✅ DropdownMenu - 下拉菜单
+- ✅ Tooltip - 工具提示
+
+**其他组件**
+- ✅ Progress - 进度条
+
+### components/ui
+
+基于 `@resolid/radix` 实现的 shadcn/ui 风格组件库，提供开箱即用的样式化组件。
+
+#### 可用组件（17个）
+
+所有 Radix 组件都有对应的 shadcn/ui 风格包装，包括：
+- Button, Card, Dialog, Checkbox, Switch, Tabs, Accordion
+- Label, Separator, AlertDialog, Popover, DropdownMenu
+- Tooltip, Select, Slider, Progress, Toggle
+
+## 🎯 使用示例
+
+### 使用 Radix 基础组件
+
+```tsx
+import { Button, Dialog } from "@resolid/radix";
+
+function App() {
+  return (
+    <Dialog>
+      <Dialog.Trigger>打开对话框</Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Title>标题</Dialog.Title>
+        <Dialog.Description>描述</Dialog.Description>
+      </Dialog.Content>
+    </Dialog>
+  );
+}
+```
+
+### 使用 shadcn/ui 风格组件
+
+```tsx
+import { Button, Dialog } from "@/components/ui";
+
+function App() {
+  return (
+    <Dialog>
+      <Dialog.Trigger asChild>
+        <Button>打开对话框</Button>
+      </Dialog.Trigger>
+      <Dialog.Content>
+        <Dialog.Header>
+          <Dialog.Title>标题</Dialog.Title>
+          <Dialog.Description>描述</Dialog.Description>
+        </Dialog.Header>
+      </Dialog.Content>
+    </Dialog>
+  );
+}
+```
+
+## 🔄 移植工作流程
+
+本项目使用标准化的移植流程，详见 [agents.md](./agents.md)。
+
+### 快速开始移植新组件
+
+1. **在 `packages/radix/src/components/` 创建组件**
+   - 参考现有组件实现
+   - 遵循 SolidJS 响应式模式
+   - 确保 SSR 兼容
+
+2. **在 `components/ui/` 创建 shadcn/ui 包装**
+   - 基于 Radix 组件
+   - 添加 Tailwind CSS 样式
+   - 使用 `cn()` 合并类名
+
+3. **在 `src/examples/` 创建示例**
+   - 展示基本用法
+   - 展示不同配置
+   - 添加到导航列表
+
+4. **测试和验证**
+   - 运行 `pnpm build:radix` 检查编译
+   - 运行 `pnpm dev` 查看示例
+   - 修复所有错误
+
+详细移植指南请参考 [agents.md](./agents.md) 中的"实际移植案例：Radix UI Primitives"章节。
 
 ## 🤝 贡献
 

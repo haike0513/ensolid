@@ -863,6 +863,374 @@ const Component: Component<Props> = (props) => {
 
 ---
 
+## 实际移植案例：Radix UI Primitives
+
+### 移植概述
+
+本项目成功将 Radix UI Primitives 从 React 移植到 SolidJS，创建了 `@resolid/radix` 包，并在此基础上实现了 shadcn/ui 风格的组件库。
+
+### 已移植的组件列表
+
+#### 基础组件
+1. **Separator** - 分隔线组件
+2. **Label** - 标签组件
+
+#### 表单组件
+3. **Checkbox** - 复选框组件
+4. **Switch** - 开关组件
+5. **RadioGroup** - 单选组组件（包含 RadioGroup.Item）
+6. **Select** - 选择器组件（包含 Select.Trigger, Select.Value, Select.Content, Select.Item）
+7. **Slider** - 滑块组件
+8. **Toggle** - 切换按钮组件
+
+#### 布局组件
+9. **Tabs** - 标签页组件（包含 Tabs.List, Tabs.Trigger, Tabs.Content）
+10. **Accordion** - 手风琴组件（包含 Accordion.Item, Accordion.Trigger, Accordion.Content）
+
+#### 弹出层组件
+11. **Dialog** - 对话框组件（包含 Dialog.Trigger, Dialog.Content, Dialog.Title, Dialog.Description, Dialog.Close）
+12. **AlertDialog** - 警告对话框组件（包含 AlertDialog.Trigger, AlertDialog.Content, AlertDialog.Title, AlertDialog.Description, AlertDialog.Action, AlertDialog.Cancel）
+13. **Popover** - 弹出框组件（包含 Popover.Trigger, Popover.Content）
+14. **DropdownMenu** - 下拉菜单组件（包含 DropdownMenu.Trigger, DropdownMenu.Content, DropdownMenu.Item, DropdownMenu.Label, DropdownMenu.Separator）
+15. **Tooltip** - 工具提示组件（包含 Tooltip.Trigger, Tooltip.Content）
+
+#### 其他组件
+16. **Progress** - 进度条组件
+
+### 移植步骤总结
+
+#### 第一步：创建基础组件（packages/radix）
+
+1. **创建组件目录结构**
+   ```
+   packages/radix/src/components/
+   └── ComponentName/
+       ├── ComponentName.tsx
+       └── index.ts
+   ```
+
+2. **实现组件逻辑**
+   - 将 React 的 `useState` 转换为 `createSignal`
+   - 将 React 的 `useEffect` 转换为 `createEffect` 或 `onMount`
+   - 将 React 的 `useContext` 转换为 SolidJS 的 `useContext`
+   - 使用 `createContext` 和 `useContext` 实现组件间通信
+   - 使用 `Portal` 实现弹出层组件
+   - 使用 `isServer` 检查实现 SSR 适配
+
+3. **处理受控/非受控模式**
+   ```tsx
+   const isControlled = () => local.value !== undefined;
+   const value = () => (isControlled() ? local.value! : internalValue());
+   ```
+
+4. **实现事件处理**
+   ```tsx
+   const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
+     if (typeof local.onClick === 'function') {
+       local.onClick(e);
+     }
+     // 其他逻辑
+   };
+   ```
+
+5. **导出组件**
+   - 在 `ComponentName/index.ts` 中导出
+   - 在 `components/index.ts` 中统一导出
+   - 在 `src/index.ts` 中导出所有组件
+
+#### 第二步：创建 shadcn/ui 风格包装（components/ui）
+
+1. **创建包装组件**
+   ```tsx
+   import * as ComponentPrimitive from "@resolid/radix";
+   import { cn } from "./utils";
+   
+   export const Component: Component<ComponentProps> = (props) => {
+     const [local, others] = splitProps(props, ["class", "children"]);
+     return (
+       <ComponentPrimitive.Component
+         class={cn("shadcn-ui-style-classes", local.class)}
+         {...others}
+       />
+     );
+   };
+   ```
+
+2. **添加样式类名**
+   - 使用 Tailwind CSS 类名
+   - 使用 `cn()` 函数合并类名
+   - 遵循 shadcn/ui 的设计规范
+
+3. **处理子组件**
+   ```tsx
+   (Component as any).SubComponent = SubComponent;
+   ```
+
+#### 第三步：创建示例代码（src/examples）
+
+1. **创建示例组件**
+   - 展示组件的基本用法
+   - 展示不同变体和配置
+   - 展示状态管理
+   - 展示交互功能
+
+2. **更新导航**
+   - 在 `App.tsx` 中添加示例到导航列表
+   - 在 `examples/index.ts` 中导出所有示例
+
+### 关键移植模式
+
+#### 模式 1：带 Context 的复合组件
+
+```tsx
+// 1. 定义 Context
+interface ComponentContextValue {
+  value: () => string | undefined;
+  setValue: (value: string) => void;
+}
+
+const ComponentContext = createContext<ComponentContextValue>();
+
+// 2. 创建 Hook
+export const useComponentContext = () => {
+  const context = useContext(ComponentContext);
+  if (!context) {
+    throw new Error('Component must be used within Component');
+  }
+  return context;
+};
+
+// 3. 在父组件中提供 Context
+export const Component: Component<ComponentProps> = (props) => {
+  const contextValue: ComponentContextValue = {
+    value,
+    setValue: handleValueChange,
+  };
+  return (
+    <ComponentContext.Provider value={contextValue}>
+      {local.children}
+    </ComponentContext.Provider>
+  );
+};
+
+// 4. 在子组件中使用 Context
+export const ComponentItem: Component<ComponentItemProps> = (props) => {
+  const context = useComponentContext();
+  // 使用 context.value(), context.setValue()
+};
+```
+
+#### 模式 2：Portal 弹出层组件
+
+```tsx
+import { Portal } from 'solid-js/web';
+import { isServer } from 'solid-js/web';
+
+export const PopupComponent: Component<PopupProps> = (props) => {
+  return (
+    <Show when={open()}>
+      <Portal mount={!isServer ? document.body : undefined}>
+        <div class={local.class}>
+          {local.children}
+        </div>
+      </Portal>
+    </Show>
+  );
+};
+```
+
+#### 模式 3：受控/非受控组件
+
+```tsx
+export const ControlledComponent: Component<Props> = (props) => {
+  const [local, others] = splitProps(props, ['value', 'defaultValue', 'onValueChange']);
+  
+  const [internalValue, setInternalValue] = createSignal(
+    local.value ?? local.defaultValue ?? defaultValue
+  );
+  
+  const isControlled = () => local.value !== undefined;
+  const value = () => (isControlled() ? local.value! : internalValue());
+  
+  const handleChange = (newValue: T) => {
+    if (!isControlled()) {
+      setInternalValue(newValue);
+    }
+    local.onValueChange?.(newValue);
+  };
+  
+  return (
+    <input
+      value={value()}
+      onInput={(e) => handleChange(e.currentTarget.value)}
+      {...others}
+    />
+  );
+};
+```
+
+#### 模式 4：事件处理和清理
+
+```tsx
+export const ComponentWithEvents: Component<Props> = (props) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      // 处理逻辑
+    }
+  };
+  
+  onMount(() => {
+    if (!isServer) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+  });
+  
+  createEffect(() => {
+    if (!isServer && open()) {
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  });
+  
+  onCleanup(() => {
+    if (!isServer) {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+  });
+};
+```
+
+### 常见问题和解决方案
+
+#### 问题 1：类型导入错误
+**错误**: `The requested module does not provide an export named 'Component'`
+**解决**: 使用 `import type { Component } from "solid-js"` 而不是 `import { Component } from "solid-js"`
+
+#### 问题 2：子组件类型错误
+**错误**: `Property 'Item' does not exist on type 'Component<Props>'`
+**解决**: 使用类型断言 `(Component as any).Item = ComponentItem`
+
+#### 问题 3：事件处理器类型错误
+**错误**: `This expression is not callable`
+**解决**: 使用 `JSX.EventHandler<HTMLElement, Event>` 类型，并检查函数类型：
+```tsx
+const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
+  if (typeof local.onClick === 'function') {
+    local.onClick(e);
+  }
+};
+```
+
+#### 问题 4：splitProps 类型错误
+**错误**: `Type '"class"' is not assignable to type 'keyof Props'`
+**解决**: 使用 `as const` 断言：
+```tsx
+const [local, others] = splitProps(props, ["class", "children"] as const);
+```
+
+### 移植检查清单（基于实际经验）
+
+移植组件时，按以下顺序检查：
+
+1. **基础结构**
+   - [ ] 创建组件目录和文件
+   - [ ] 使用 `Component<Props>` 类型定义
+   - [ ] 使用 `splitProps` 分离 props
+   - [ ] 正确导入类型（使用 `import type`）
+
+2. **状态管理**
+   - [ ] `useState` → `createSignal`
+   - [ ] 实现受控/非受控模式
+   - [ ] 使用 `createMemo` 处理计算值
+
+3. **Context 和复合组件**
+   - [ ] 定义 Context 接口
+   - [ ] 创建 `useContext` Hook
+   - [ ] 在父组件中提供 Context
+   - [ ] 在子组件中使用 Context
+   - [ ] 使用类型断言添加子组件
+
+4. **事件处理**
+   - [ ] 使用 `JSX.EventHandler` 类型
+   - [ ] 检查函数类型后再调用
+   - [ ] 正确处理事件对象
+
+5. **生命周期和副作用**
+   - [ ] 使用 `onMount` 处理挂载逻辑
+   - [ ] 使用 `onCleanup` 清理资源
+   - [ ] 使用 `createEffect` 处理响应式副作用
+   - [ ] 检查 `isServer` 避免 SSR 错误
+
+6. **Portal 和弹出层**
+   - [ ] 使用 `Portal` 渲染到指定容器
+   - [ ] 使用 `isServer` 检查
+   - [ ] 使用 `Show` 控制显示/隐藏
+
+7. **类型和导出**
+   - [ ] 所有接口正确扩展 JSX 类型
+   - [ ] 在组件目录的 `index.ts` 中导出
+   - [ ] 在 `components/index.ts` 中导出
+   - [ ] 在包的 `src/index.ts` 中导出
+
+8. **构建和测试**
+   - [ ] 运行 `pnpm build:radix` 检查编译
+   - [ ] 修复所有 TypeScript 错误
+   - [ ] 创建示例代码验证功能
+
+9. **shadcn/ui 包装**
+   - [ ] 创建包装组件
+   - [ ] 添加样式类名
+   - [ ] 使用 `cn()` 合并类名
+   - [ ] 导出到 `components/ui/index.ts`
+
+10. **文档和示例**
+    - [ ] 创建示例组件
+    - [ ] 添加到导航列表
+    - [ ] 更新 README（如需要）
+
+### 项目结构参考
+
+```
+resolid/
+├── packages/
+│   └── radix/                    # Radix UI Primitives 移植
+│       ├── src/
+│       │   ├── components/
+│       │   │   ├── ComponentName/
+│       │   │   │   ├── ComponentName.tsx
+│       │   │   │   └── index.ts
+│       │   │   └── index.ts
+│       │   └── index.ts
+│       ├── package.json
+│       └── tsconfig.json
+├── components/
+│   └── ui/                       # shadcn/ui 风格组件
+│       ├── component-name.tsx
+│       ├── utils.ts
+│       └── index.ts
+└── src/
+    └── examples/                  # 组件示例
+        ├── ComponentExample.tsx
+        └── index.ts
+```
+
+### 最佳实践
+
+1. **从简单到复杂**：先移植基础组件（如 Separator、Label），再移植复杂组件（如 Dialog、DropdownMenu）
+
+2. **保持 API 一致性**：尽量保持与原库 API 一致，减少学习成本
+
+3. **类型安全**：充分利用 TypeScript 类型系统，提供完整的类型定义
+
+4. **SSR 优先**：所有组件都应考虑 SSR 兼容性
+
+5. **测试驱动**：每移植一个组件，立即创建示例验证功能
+
+6. **渐进式增强**：先实现核心功能，再添加高级特性
+
+---
+
 ## 参考资料
 
 - [SolidJS 官方文档](https://www.solidjs.com/)
@@ -870,4 +1238,6 @@ const Component: Component<Props> = (props) => {
 - [SolidJS JSX 指南](https://www.solidjs.com/docs/latest/guides/jsx)
 - [SolidJS SSR 指南](https://www.solidjs.com/docs/latest/guides/server)
 - [SolidStart 文档](https://start.solidjs.com/) (SSR 框架)
+- [Radix UI Primitives](https://www.radix-ui.com/primitives) (原始 React 实现)
+- [shadcn/ui](https://ui.shadcn.com/) (设计参考)
 
