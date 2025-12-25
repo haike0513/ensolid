@@ -15,8 +15,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch"
+    "build": "vite build",
+    "dev": "vite build --watch"
   },
   "dependencies": {
     "solid-js": "^1.9.9"
