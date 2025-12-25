@@ -791,6 +791,10 @@ const Component: Component<ComponentProps> = (props) => {
 <div>{count()}</div>
 ```
 
+**特殊情况：**
+- 在 JSX 属性中，如果 prop 是响应式的，也需要使用函数调用：`class={props.class?.() ?? ''}`
+- 在条件判断中，使用 `Show` 组件而不是直接访问：`<Show when={condition()}>`
+
 ### Props 解构
 
 ⚠️ **避免解构 props**，因为这会破坏响应式：
@@ -804,6 +808,15 @@ const Component = ({ title }: Props) => {
 // ✅ 正确
 const Component: Component<Props> = (props) => {
   return <div>{props.title}</div>;
+};
+```
+
+**使用 splitProps 分离 props：**
+```tsx
+// ✅ 推荐方式 - 使用 splitProps 分离需要特殊处理的 props
+const Component: Component<Props> = (props) => {
+  const [local, others] = splitProps(props, ['class', 'style', 'children']);
+  return <div class={local.class} {...others}>{local.children}</div>;
 };
 ```
 
@@ -833,6 +846,235 @@ const Component: Component<Props> = (props) => {
 
 // ⚠️ 可用但不推荐
 {items().map(item => <Item {...item} />)}
+```
+
+### 类型导入规范
+
+⚠️ **重要**: 使用 `import type` 导入类型，避免运行时导入：
+
+```tsx
+// ✅ 正确 - 类型导入
+import type { Component } from 'solid-js';
+import { createSignal } from 'solid-js';
+
+// ❌ 错误 - 可能导致运行时错误
+import { Component, createSignal } from 'solid-js';
+```
+
+### 子组件导出规范
+
+当组件有子组件时，使用类型断言或 Object.assign：
+
+```tsx
+// 方式 1: 类型断言（推荐）
+(Component as any).SubComponent = SubComponent;
+
+// 方式 2: Object.assign
+Object.assign(Component, {
+  SubComponent,
+});
+
+// 使用
+<Component>
+  <Component.SubComponent />
+</Component>
+```
+
+### 事件处理器类型规范
+
+使用 `JSX.EventHandler` 类型定义事件处理器：
+
+```tsx
+// ✅ 正确
+const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
+  e.preventDefault();
+  // 处理逻辑
+};
+
+// 在 props 中定义
+interface ButtonProps {
+  onClick?: JSX.EventHandler<HTMLButtonElement, MouseEvent>;
+}
+```
+
+### 样式处理规范
+
+⚠️ **避免使用对象形式的 style**，使用字符串形式：
+
+```tsx
+// ❌ 可能导致类型错误
+<div style={{ color: 'red', fontSize: '14px' }} />
+
+// ✅ 推荐使用字符串
+<div style="color: red; font-size: 14px;" />
+
+// ✅ 或者使用动态字符串
+<div style={`color: ${color()}; font-size: ${size()}px;`} />
+```
+
+### splitProps 使用规范
+
+使用 `as const` 断言确保类型安全：
+
+```tsx
+// ✅ 正确
+const [local, others] = splitProps(props, ['class', 'children'] as const);
+
+// ❌ 可能导致类型错误
+const [local, others] = splitProps(props, ['class', 'children']);
+```
+
+### 受控/非受控组件模式
+
+实现受控和非受控两种模式：
+
+```tsx
+interface ComponentProps {
+  value?: string;
+  defaultValue?: string;
+  onValueChange?: (value: string) => void;
+}
+
+const Component: Component<ComponentProps> = (props) => {
+  const [local, others] = splitProps(props, ['value', 'defaultValue', 'onValueChange']);
+  
+  const [internalValue, setInternalValue] = createSignal(
+    local.value ?? local.defaultValue ?? ''
+  );
+  
+  const isControlled = () => local.value !== undefined;
+  const value = () => (isControlled() ? local.value! : internalValue());
+  
+  const handleChange = (newValue: string) => {
+    if (!isControlled()) {
+      setInternalValue(newValue);
+    }
+    local.onValueChange?.(newValue);
+  };
+  
+  return (
+    <input
+      value={value()}
+      onInput={(e) => handleChange(e.currentTarget.value)}
+      {...others}
+    />
+  );
+};
+```
+
+### Context 使用规范
+
+创建和使用 Context 的标准模式：
+
+```tsx
+// 1. 定义 Context 接口
+interface ComponentContextValue {
+  value: () => string;
+  setValue: (value: string) => void;
+}
+
+// 2. 创建 Context
+const ComponentContext = createContext<ComponentContextValue>();
+
+// 3. 创建 Hook（可选，但推荐）
+export const useComponentContext = () => {
+  const context = useContext(ComponentContext);
+  if (!context) {
+    throw new Error('Component must be used within Component');
+  }
+  return context;
+};
+
+// 4. 在父组件中提供 Context
+export const Component: Component<ComponentProps> = (props) => {
+  const [value, setValue] = createSignal('');
+  
+  const contextValue: ComponentContextValue = {
+    value,
+    setValue,
+  };
+  
+  return (
+    <ComponentContext.Provider value={contextValue}>
+      {props.children}
+    </ComponentContext.Provider>
+  );
+};
+
+// 5. 在子组件中使用 Context
+export const ComponentItem: Component<ComponentItemProps> = (props) => {
+  const context = useComponentContext();
+  // 使用 context.value(), context.setValue()
+};
+```
+
+### Portal 使用规范
+
+Portal 必须检查 `isServer`：
+
+```tsx
+import { Portal } from 'solid-js/web';
+import { isServer } from 'solid-js/web';
+import { Show } from 'solid-js';
+
+const Modal: Component<ModalProps> = (props) => {
+  return (
+    <Show when={props.open}>
+      <Portal mount={!isServer ? document.body : undefined}>
+        <div class="modal">{props.children}</div>
+      </Portal>
+    </Show>
+  );
+};
+```
+
+### 事件监听器清理规范
+
+所有事件监听器必须在 `onMount` 中注册，在 `onCleanup` 中清理：
+
+```tsx
+import { onMount, onCleanup } from 'solid-js';
+import { isServer } from 'solid-js/web';
+
+const Component: Component<Props> = (props) => {
+  onMount(() => {
+    if (!isServer) {
+      const handleResize = () => {
+        // 处理逻辑
+      };
+      
+      window.addEventListener('resize', handleResize);
+      
+      onCleanup(() => {
+        window.removeEventListener('resize', handleResize);
+      });
+    }
+  });
+  
+  return <div>{props.children}</div>;
+};
+```
+
+### 动态导入规范
+
+对于仅在客户端需要的功能，使用动态导入：
+
+```tsx
+import { lazy, Show } from 'solid-js';
+import { isServer } from 'solid-js/web';
+
+// 仅在客户端加载
+const ClientOnlyComponent = lazy(() => 
+  import('./ClientOnlyComponent').then(m => ({ default: m.ClientOnlyComponent }))
+);
+
+const Component: Component<Props> = (props) => {
+  return (
+    <Show when={!isServer} fallback={<div>Loading...</div>}>
+      <ClientOnlyComponent {...props} />
+    </Show>
+  );
+};
 ```
 
 ---
@@ -874,6 +1116,8 @@ const Component: Component<Props> = (props) => {
 - [ ] 样式对象使用字符串形式避免 TypeScript 类型问题
 - [ ] 使用 `cn()` 函数合并 Tailwind CSS 类名
 - [ ] 事件处理函数使用 `JSX.EventHandler` 类型
+- [ ] 使用 `import type` 导入类型定义
+- [ ] 子组件使用类型断言或 Object.assign 导出
 
 ### 示例和文档
 - [ ] 创建示例组件展示基本用法
@@ -1321,7 +1565,216 @@ resolid/
 
 10. **清理资源**：所有事件监听器和定时器在 `onCleanup` 中清理
 
+11. **类型导入分离**：使用 `import type` 导入类型，避免运行时导入
+
+12. **Props 分离**：使用 `splitProps` 分离需要特殊处理的 props
+
+13. **受控/非受控模式**：实现两种模式以提供更好的灵活性
+
+14. **Context 模式**：对于复合组件，使用 Context 实现组件间通信
+
+15. **错误处理**：在 Context Hook 中添加错误检查，提供清晰的错误信息
+
+16. **性能优化**：使用 `createMemo` 缓存计算结果，避免不必要的重新计算
+
+17. **代码复用**：提取公共逻辑到工具函数或自定义 Hook
+
+18. **文档完善**：为每个组件添加 JSDoc 注释，说明用法和参数
+
+19. **示例代码**：创建完整的示例代码，展示各种使用场景
+
+20. **构建验证**：每次修改后运行构建命令，确保没有类型错误和编译错误
+
 ---
+
+## 常见错误和解决方案
+
+### 错误 1: 响应式值未使用函数调用
+
+**错误信息**: `Type 'Accessor<T>' is not assignable to type 'T'`
+
+**原因**: 在需要值的地方使用了 Accessor（函数）
+
+**解决方案**: 使用函数调用获取值
+
+```tsx
+// ❌ 错误
+const value = count; // count 是 Accessor<number>
+
+// ✅ 正确
+const value = count(); // 调用函数获取值
+```
+
+### 错误 2: Props 解构导致响应式丢失
+
+**错误信息**: 组件不响应 props 变化
+
+**原因**: 解构 props 会破坏响应式
+
+**解决方案**: 使用 `props.xxx` 或 `splitProps`
+
+```tsx
+// ❌ 错误
+const Component = ({ title }: Props) => {
+  return <div>{title}</div>; // title 不会响应变化
+};
+
+// ✅ 正确
+const Component: Component<Props> = (props) => {
+  return <div>{props.title}</div>; // 响应式访问
+};
+```
+
+### 错误 3: 类型导入错误
+
+**错误信息**: `The requested module does not provide an export named 'Component'`
+
+**原因**: 类型应该使用 `import type` 导入
+
+**解决方案**: 分离类型导入和值导入
+
+```tsx
+// ❌ 错误
+import { Component, createSignal } from 'solid-js';
+
+// ✅ 正确
+import type { Component } from 'solid-js';
+import { createSignal } from 'solid-js';
+```
+
+### 错误 4: 子组件类型错误
+
+**错误信息**: `Property 'Item' does not exist on type 'Component<Props>'`
+
+**原因**: TypeScript 无法识别动态添加的子组件
+
+**解决方案**: 使用类型断言
+
+```tsx
+// ✅ 正确
+(Component as any).Item = ComponentItem;
+```
+
+### 错误 5: SSR 中访问浏览器 API
+
+**错误信息**: `window is not defined` 或 `document is not defined`
+
+**原因**: 在服务端渲染时访问了浏览器 API
+
+**解决方案**: 使用 `isServer` 检查或 `onMount`
+
+```tsx
+// ❌ 错误
+const width = window.innerWidth;
+
+// ✅ 正确
+onMount(() => {
+  if (!isServer) {
+    const width = window.innerWidth;
+  }
+});
+```
+
+### 错误 6: 事件处理器类型错误
+
+**错误信息**: `This expression is not callable`
+
+**原因**: 事件处理器类型定义不正确
+
+**解决方案**: 使用 `JSX.EventHandler` 类型
+
+```tsx
+// ❌ 错误
+const handleClick = (e: MouseEvent) => { ... };
+
+// ✅ 正确
+const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
+  // 处理逻辑
+};
+```
+
+### 错误 7: splitProps 类型错误
+
+**错误信息**: `Type '"class"' is not assignable to type 'keyof Props'`
+
+**原因**: TypeScript 无法推断 props 键
+
+**解决方案**: 使用 `as const` 断言
+
+```tsx
+// ❌ 错误
+const [local, others] = splitProps(props, ['class', 'children']);
+
+// ✅ 正确
+const [local, others] = splitProps(props, ['class', 'children'] as const);
+```
+
+### 错误 8: Portal 在 SSR 中报错
+
+**错误信息**: `Cannot read property 'body' of undefined`
+
+**原因**: 在服务端访问 `document.body`
+
+**解决方案**: 使用 `isServer` 检查
+
+```tsx
+// ❌ 错误
+<Portal mount={document.body}>{children}</Portal>
+
+// ✅ 正确
+<Portal mount={!isServer ? document.body : undefined}>
+  {children}
+</Portal>
+```
+
+## 调试技巧
+
+### 1. 检查响应式值
+
+使用 `console.log` 检查响应式值：
+
+```tsx
+createEffect(() => {
+  console.log('Value changed:', value());
+});
+```
+
+### 2. 检查组件渲染
+
+使用 `onMount` 和 `onCleanup` 检查组件生命周期：
+
+```tsx
+onMount(() => {
+  console.log('Component mounted');
+});
+
+onCleanup(() => {
+  console.log('Component cleaned up');
+});
+```
+
+### 3. 类型检查
+
+使用 TypeScript 的严格模式检查类型错误：
+
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  }
+}
+```
+
+### 4. 构建验证
+
+每次修改后运行构建命令：
+
+```bash
+pnpm build:radix  # 构建特定包
+pnpm build        # 构建所有包
+```
 
 ## 参考资料
 
@@ -1332,4 +1785,6 @@ resolid/
 - [SolidStart 文档](https://start.solidjs.com/) (SSR 框架)
 - [Radix UI Primitives](https://www.radix-ui.com/primitives) (原始 React 实现)
 - [shadcn/ui](https://ui.shadcn.com/) (设计参考)
+- [BaseUI](https://baseui.org/) (BaseUI 原始实现)
+- [React Flow](https://reactflow.dev/) (React Flow 原始实现)
 
