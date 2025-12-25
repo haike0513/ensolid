@@ -20,4 +20,6 @@ export { ContextMenuExample } from "./ContextMenuExample";
 export { HoverCardExample } from "./HoverCardExample";
 export { ScrollAreaExample } from "./ScrollAreaExample";
 export { ToggleGroupExample } from "./ToggleGroupExample";
+export { AspectRatioExample } from "./AspectRatioExample";
+export { MenubarExample } from "./MenubarExample";
 

@@ -23,6 +23,8 @@ import {
   ToggleExample,
   ToggleGroupExample,
   TooltipExample,
+  AspectRatioExample,
+  MenubarExample,
 } from "./examples";
 import { useI18n } from "./i18n";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
@@ -50,7 +52,9 @@ type ExampleType =
   | "context-menu"
   | "hover-card"
   | "scroll-area"
-  | "toggle-group";
+  | "toggle-group"
+  | "aspect-ratio"
+  | "menubar";
 
 const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
   { id: "button" as ExampleType, name: t().components.button, component: ButtonExample },
@@ -118,6 +122,16 @@ const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
     id: "toggle-group" as ExampleType,
     name: t().components.toggleGroup,
     component: ToggleGroupExample,
+  },
+  {
+    id: "aspect-ratio" as ExampleType,
+    name: t().components.aspectRatio,
+    component: AspectRatioExample,
+  },
+  {
+    id: "menubar" as ExampleType,
+    name: t().components.menubar,
+    component: MenubarExample,
   },
 ];
 

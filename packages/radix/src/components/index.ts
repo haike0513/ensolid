@@ -23,3 +23,6 @@ export * from './ContextMenu';
 export * from './HoverCard';
 export * from './ScrollArea';
 export * from './ToggleGroup';
+export * from './AspectRatio';
+export * from './VisuallyHidden';
+export * from './Menubar';
