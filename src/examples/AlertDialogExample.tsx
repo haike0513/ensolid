@@ -32,11 +32,11 @@ export const AlertDialogExample: Component = () => {
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <div class="flex justify-end gap-2 mt-4">
-                            <AlertDialogCancel asChild>
-                                <Button variant="outline">取消</Button>
+                            <AlertDialogCancel class="px-4 py-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground">
+                                取消
                             </AlertDialogCancel>
-                            <AlertDialogAction asChild>
-                                <Button variant="destructive">删除</Button>
+                            <AlertDialogAction class="px-4 py-2 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90">
+                                删除
                             </AlertDialogAction>
                         </div>
                     </AlertDialogContent>

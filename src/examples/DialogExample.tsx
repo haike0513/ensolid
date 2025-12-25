@@ -34,11 +34,11 @@ export const DialogExample: Component = () => {
               <p>这是对话框的主要内容区域。</p>
             </div>
             <div class="flex justify-end gap-2">
-              <DialogClose asChild>
-                <Button variant="outline">取消</Button>
+              <DialogClose class="px-4 py-2 rounded-md border border-input bg-background hover:bg-accent hover:text-accent-foreground">
+                取消
               </DialogClose>
-              <DialogClose asChild>
-                <Button>确认</Button>
+              <DialogClose class="px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90">
+                确认
               </DialogClose>
             </div>
           </DialogContent>

@@ -1,4 +1,5 @@
-import { Component, splitProps, createSignal } from 'solid-js';
+import { splitProps, createSignal } from 'solid-js';
+import type { Component } from 'solid-js';
 import type { JSX } from 'solid-js';
 
 export interface ToggleProps extends Omit<JSX.ButtonHTMLAttributes<HTMLButtonElement>, 'onChange'> {

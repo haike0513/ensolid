@@ -1,5 +1,5 @@
-import { Component, splitProps } from 'solid-js';
-import type { JSX } from 'solid-js';
+import { splitProps } from 'solid-js';
+import type { Component, JSX } from 'solid-js';
 
 export interface SeparatorProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**

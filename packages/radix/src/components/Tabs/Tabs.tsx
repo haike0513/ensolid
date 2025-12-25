@@ -1,11 +1,5 @@
-import {
-  Component,
-  createContext,
-  createSignal,
-  splitProps,
-  useContext,
-} from "solid-js";
-import type { JSX } from "solid-js";
+import { createContext, createSignal, splitProps, useContext } from "solid-js";
+import type { Component, JSX } from "solid-js";
 
 interface TabsContextValue {
   value: () => string | undefined;

@@ -1,5 +1,5 @@
-import { Component, splitProps, createSignal, createContext, useContext } from 'solid-js';
-import type { JSX } from 'solid-js';
+import { splitProps, createSignal, createContext, useContext } from 'solid-js';
+import type { Component, JSX } from 'solid-js';
 
 interface AccordionContextValue {
   value: () => string | string[] | undefined;

@@ -1,5 +1,4 @@
 import {
-  Component,
   createContext,
   createEffect,
   createSignal,
@@ -11,7 +10,7 @@ import {
 } from "solid-js";
 import { Portal } from "solid-js/web";
 import { isServer } from "solid-js/web";
-import type { JSX } from "solid-js";
+import type { Component, JSX } from "solid-js";
 
 interface DialogContextValue {
   open: () => boolean;

@@ -1,4 +1,5 @@
-import { Component, createSignal, splitProps } from "solid-js";
+import { createSignal, splitProps } from "solid-js";
+import type { Component } from "solid-js";
 import type { JSX } from "solid-js";
 
 export interface CheckboxProps

@@ -127,9 +127,7 @@ export const DropdownMenuSeparator: Component<DropdownMenuSeparatorProps> = (
         <DropdownMenuPrimitive.DropdownMenuSeparator
             class={cn("-mx-1 my-1 h-px bg-muted", local.class)}
             {...others}
-        >
-            {local.children}
-        </DropdownMenuPrimitive.DropdownMenuSeparator>
+        />
     );
 };
 
