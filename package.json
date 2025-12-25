@@ -22,6 +22,7 @@
     "@resolid/baseui": "workspace:*",
     "@resolid/radix": "workspace:*",
     "@resolid/solidflow": "workspace:*",
+    "@solidjs/router": "^0.15.4",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^25.0.3",
     "@xyflow/system": "^0.0.74",
