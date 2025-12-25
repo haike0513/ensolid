@@ -4,7 +4,8 @@ import * as DropdownMenuPrimitive from "@resolid/radix";
 import { useDropdownMenuContext } from "@resolid/radix";
 import { cn } from "./utils";
 
-export interface DropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuProps {
+export interface DropdownMenuProps
+    extends DropdownMenuPrimitive.DropdownMenuProps {
     children?: JSX.Element;
 }
 
@@ -151,4 +152,3 @@ DropdownMenu.Content = DropdownMenuContent;
 DropdownMenu.Item = DropdownMenuItem;
 DropdownMenu.Label = DropdownMenuLabel;
 DropdownMenu.Separator = DropdownMenuSeparator;
-

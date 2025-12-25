@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="resolidGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#61DAFB;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5aa0;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圆形 -->
+  <circle cx="32" cy="32" r="28" fill="url(#resolidGradient)" opacity="0.12"/>
+  
+  <!-- R 字母主体 -->
+  <path d="M 16 20 L 16 44 L 24 44 L 24 34 L 28 34 L 32 44 L 40 44 L 34 30 L 38 20 L 28 20 L 24 26 L 24 20 Z" 
+        fill="url(#resolidGradient)"/>
+  
+  <!-- S 字母（融合设计）-->
+  <path d="M 28 26 Q 24 26 24 30 Q 24 32 26 32 L 32 32 Q 36 32 36 36 Q 36 40 32 40 L 26 40 Q 22 40 22 44" 
+        fill="none" 
+        stroke="url(#resolidGradient)" 
+        stroke-width="3" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+  
+  <!-- 转换箭头 -->
+  <path d="M 42 28 L 48 32 L 42 36" 
+        fill="none" 
+        stroke="url(#resolidGradient)" 
+        stroke-width="2.5" 
+        stroke-linecap="round" 
+        stroke-linejoin="round"/>
+</svg>
+

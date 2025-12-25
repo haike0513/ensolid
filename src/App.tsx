@@ -95,11 +95,18 @@ const App: Component = () => {
       <header class="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div class="container mx-auto px-4 py-4">
           <div class="flex items-center justify-between">
-            <div class="flex-1">
-              <h1 class="text-2xl font-bold tracking-tight">{t().app.title}</h1>
-              <p class="text-sm text-muted-foreground mt-1">
-                {t().app.description}
-              </p>
+            <div class="flex-1 flex items-center gap-3">
+              <img 
+                src="/resolid-logo.svg" 
+                alt="Resolid Logo" 
+                class="w-10 h-10 shrink-0"
+              />
+              <div>
+                <h1 class="text-2xl font-bold tracking-tight">{t().app.title}</h1>
+                <p class="text-sm text-muted-foreground mt-1">
+                  {t().app.description}
+                </p>
+              </div>
             </div>
             <div class="flex items-center gap-4">
               <LanguageSwitcher />
