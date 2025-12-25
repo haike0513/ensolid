@@ -85,7 +85,7 @@ export const Slider: Component<SliderProps> = (props) => {
         onInput={handleInput}
         class="w-full"
         style={`--value: ${percentage()}%`}
-        {...(others as any)}
+        {...others}
       />
     </div>
   );

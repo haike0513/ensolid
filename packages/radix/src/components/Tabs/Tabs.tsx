@@ -1,10 +1,16 @@
-import { Component, splitProps, createSignal, createContext, useContext } from 'solid-js';
-import type { JSX } from 'solid-js';
+import {
+  Component,
+  createContext,
+  createSignal,
+  splitProps,
+  useContext,
+} from "solid-js";
+import type { JSX } from "solid-js";
 
 interface TabsContextValue {
   value: () => string | undefined;
   setValue: (value: string) => void;
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
 }
 
 const TabsContext = createContext<TabsContextValue>();
@@ -12,7 +18,7 @@ const TabsContext = createContext<TabsContextValue>();
 export const useTabsContext = () => {
   const context = useContext(TabsContext);
   if (!context) {
-    throw new Error('Tabs components must be used within Tabs');
+    throw new Error("Tabs components must be used within Tabs");
   }
   return context;
 };
@@ -34,25 +40,25 @@ export interface TabsProps extends JSX.HTMLAttributes<HTMLDivElement> {
    * 标签页方向
    * @default 'horizontal'
    */
-  orientation?: 'horizontal' | 'vertical';
+  orientation?: "horizontal" | "vertical";
   /**
    * 子元素
    */
   children?: JSX.Element;
 }
 
-export const Tabs: Component<TabsProps> = (props) => {
+const TabsBase: Component<TabsProps> = (props) => {
   const [local, others] = splitProps(props, [
-    'value',
-    'defaultValue',
-    'onValueChange',
-    'orientation',
-    'class',
-    'children',
+    "value",
+    "defaultValue",
+    "onValueChange",
+    "orientation",
+    "class",
+    "children",
   ]);
 
   const [internalValue, setInternalValue] = createSignal<string | undefined>(
-    local.value ?? local.defaultValue
+    local.value ?? local.defaultValue,
   );
 
   const isControlled = () => local.value !== undefined;
@@ -68,7 +74,7 @@ export const Tabs: Component<TabsProps> = (props) => {
   const contextValue: TabsContextValue = {
     value,
     setValue: handleValueChange,
-    orientation: local.orientation ?? 'horizontal',
+    orientation: local.orientation ?? "horizontal",
   };
 
   return (
@@ -84,6 +90,18 @@ export const Tabs: Component<TabsProps> = (props) => {
   );
 };
 
+export interface TabsComponent extends Component<TabsProps> {
+  List: Component<TabsListProps>;
+  Trigger: Component<TabsTriggerProps>;
+  Content: Component<TabsContentProps>;
+}
+
+export const Tabs = Object.assign(TabsBase, {
+  List: null as unknown as Component<TabsListProps>,
+  Trigger: null as unknown as Component<TabsTriggerProps>,
+  Content: null as unknown as Component<TabsContentProps>,
+}) as TabsComponent;
+
 export interface TabsListProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**
    * 子元素
@@ -92,7 +110,7 @@ export interface TabsListProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 export const TabsList: Component<TabsListProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'class']);
+  const [local, others] = splitProps(props, ["children", "class"]);
   const context = useTabsContext();
 
   return (
@@ -108,7 +126,8 @@ export const TabsList: Component<TabsListProps> = (props) => {
   );
 };
 
-export interface TabsTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface TabsTriggerProps
+  extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * 标签页的值
    */
@@ -125,13 +144,19 @@ export interface TabsTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonEle
 }
 
 export const TabsTrigger: Component<TabsTriggerProps> = (props) => {
-  const [local, others] = splitProps(props, ['value', 'disabled', 'children', 'class', 'onClick']);
+  const [local, others] = splitProps(props, [
+    "value",
+    "disabled",
+    "children",
+    "class",
+    "onClick",
+  ]);
   const context = useTabsContext();
 
   const isActive = () => context.value() === local.value;
 
   const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
-    if (typeof local.onClick === 'function') {
+    if (typeof local.onClick === "function") {
       local.onClick(e);
     }
     if (!local.disabled) {
@@ -147,8 +172,8 @@ export const TabsTrigger: Component<TabsTriggerProps> = (props) => {
       disabled={local.disabled}
       aria-selected={isActive()}
       aria-controls={`tabpanel-${local.value}`}
-      data-state={isActive() ? 'active' : 'inactive'}
-      data-disabled={local.disabled ? '' : undefined}
+      data-state={isActive() ? "active" : "inactive"}
+      data-disabled={local.disabled ? "" : undefined}
       onClick={handleClick}
       {...others}
     >
@@ -169,7 +194,7 @@ export interface TabsContentProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 export const TabsContent: Component<TabsContentProps> = (props) => {
-  const [local, others] = splitProps(props, ['value', 'children', 'class']);
+  const [local, others] = splitProps(props, ["value", "children", "class"]);
   const context = useTabsContext();
 
   const isActive = () => context.value() === local.value;
@@ -181,7 +206,7 @@ export const TabsContent: Component<TabsContentProps> = (props) => {
       class={local.class}
       aria-labelledby={`tab-${local.value}`}
       hidden={!isActive()}
-      data-state={isActive() ? 'active' : 'inactive'}
+      data-state={isActive() ? "active" : "inactive"}
       {...others}
     >
       {isActive() && local.children}
@@ -189,7 +214,6 @@ export const TabsContent: Component<TabsContentProps> = (props) => {
   );
 };
 
-(Tabs as any).List = TabsList;
-(Tabs as any).Trigger = TabsTrigger;
-(Tabs as any).Content = TabsContent;
-
+Tabs.List = TabsList;
+Tabs.Trigger = TabsTrigger;
+Tabs.Content = TabsContent;

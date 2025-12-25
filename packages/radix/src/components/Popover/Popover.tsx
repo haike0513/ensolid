@@ -50,7 +50,7 @@ export interface PopoverProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
-export const Popover: Component<PopoverProps> = (props) => {
+const PopoverBase: Component<PopoverProps> = (props) => {
   const [local] = splitProps(props, [
     "open",
     "defaultOpen",
@@ -125,6 +125,16 @@ export const Popover: Component<PopoverProps> = (props) => {
     </PopoverContext.Provider>
   );
 };
+
+export interface PopoverComponent extends Component<PopoverProps> {
+  Trigger: Component<PopoverTriggerProps>;
+  Content: Component<PopoverContentProps>;
+}
+
+export const Popover = Object.assign(PopoverBase, {
+  Trigger: null as unknown as Component<PopoverTriggerProps>,
+  Content: null as unknown as Component<PopoverContentProps>,
+}) as PopoverComponent;
 
 export interface PopoverTriggerProps
   extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -252,5 +262,5 @@ export const PopoverContent: Component<PopoverContentProps> = (props) => {
   );
 };
 
-(Popover as any).Trigger = PopoverTrigger;
-(Popover as any).Content = PopoverContent;
+Popover.Trigger = PopoverTrigger;
+Popover.Content = PopoverContent;

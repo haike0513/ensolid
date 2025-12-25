@@ -47,7 +47,7 @@ export interface SelectProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
-export const Select: Component<SelectProps> = (props) => {
+const SelectBase: Component<SelectProps> = (props) => {
   const [local] = splitProps(props, [
     'value',
     'defaultValue',
@@ -127,6 +127,20 @@ export const Select: Component<SelectProps> = (props) => {
     </SelectContext.Provider>
   );
 };
+
+export interface SelectComponent extends Component<SelectProps> {
+  Trigger: Component<SelectTriggerProps>;
+  Value: Component<SelectValueProps>;
+  Content: Component<SelectContentProps>;
+  Item: Component<SelectItemProps>;
+}
+
+export const Select = Object.assign(SelectBase, {
+  Trigger: null as unknown as Component<SelectTriggerProps>,
+  Value: null as unknown as Component<SelectValueProps>,
+  Content: null as unknown as Component<SelectContentProps>,
+  Item: null as unknown as Component<SelectItemProps>,
+}) as SelectComponent;
 
 export interface SelectTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -313,8 +327,8 @@ export const SelectItem: Component<SelectItemProps> = (props) => {
   );
 };
 
-(Select as any).Trigger = SelectTrigger;
-(Select as any).Value = SelectValue;
-(Select as any).Content = SelectContent;
-(Select as any).Item = SelectItem;
+Select.Trigger = SelectTrigger;
+Select.Value = SelectValue;
+Select.Content = SelectContent;
+Select.Item = SelectItem;
 

@@ -1,7 +1,17 @@
-import { Component, splitProps, createSignal, Show, onMount, onCleanup, createEffect, createContext, useContext } from 'solid-js';
-import { Portal } from 'solid-js/web';
-import { isServer } from 'solid-js/web';
-import type { JSX } from 'solid-js';
+import {
+  Component,
+  createContext,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
+import { Portal } from "solid-js/web";
+import { isServer } from "solid-js/web";
+import type { JSX } from "solid-js";
 
 interface DialogContextValue {
   open: () => boolean;
@@ -14,7 +24,7 @@ const DialogContext = createContext<DialogContextValue>();
 export const useDialogContext = () => {
   const context = useContext(DialogContext);
   if (!context) {
-    throw new Error('Dialog components must be used within Dialog');
+    throw new Error("Dialog components must be used within Dialog");
   }
   return context;
 };
@@ -43,18 +53,18 @@ export interface DialogProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
-export const Dialog: Component<DialogProps> = (props) => {
+const DialogBase: Component<DialogProps> = (props) => {
   const [local] = splitProps(props, [
-    'open',
-    'defaultOpen',
-    'onOpenChange',
-    'modal',
-    'class',
-    'children',
+    "open",
+    "defaultOpen",
+    "onOpenChange",
+    "modal",
+    "class",
+    "children",
   ]);
 
   const [internalOpen, setInternalOpen] = createSignal(
-    local.open ?? local.defaultOpen ?? false
+    local.open ?? local.defaultOpen ?? false,
   );
 
   const isControlled = () => local.open !== undefined;
@@ -69,35 +79,35 @@ export const Dialog: Component<DialogProps> = (props) => {
 
   // ESC 键关闭
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && open()) {
+    if (e.key === "Escape" && open()) {
       handleOpenChange(false);
     }
   };
 
   onMount(() => {
     if (!isServer && open()) {
-      document.addEventListener('keydown', handleKeyDown);
+      document.addEventListener("keydown", handleKeyDown);
       // 防止背景滚动
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     }
   });
 
   createEffect(() => {
     if (!isServer) {
       if (open()) {
-        document.addEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = 'hidden';
+        document.addEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = "hidden";
       } else {
-        document.removeEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = '';
+        document.removeEventListener("keydown", handleKeyDown);
+        document.body.style.overflow = "";
       }
     }
   });
 
   onCleanup(() => {
     if (!isServer) {
-      document.removeEventListener('keydown', handleKeyDown);
-      document.body.style.overflow = '';
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
     }
   });
 
@@ -114,7 +124,26 @@ export const Dialog: Component<DialogProps> = (props) => {
   );
 };
 
-export interface DialogTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DialogComponent extends Component<DialogProps> {
+  Trigger: Component<DialogTriggerProps>;
+  Overlay: Component<DialogOverlayProps>;
+  Content: Component<DialogContentProps>;
+  Title: Component<DialogTitleProps>;
+  Description: Component<DialogDescriptionProps>;
+  Close: Component<DialogCloseProps>;
+}
+
+export const Dialog = Object.assign(DialogBase, {
+  Trigger: null as unknown as Component<DialogTriggerProps>,
+  Overlay: null as unknown as Component<DialogOverlayProps>,
+  Content: null as unknown as Component<DialogContentProps>,
+  Title: null as unknown as Component<DialogTitleProps>,
+  Description: null as unknown as Component<DialogDescriptionProps>,
+  Close: null as unknown as Component<DialogCloseProps>,
+}) as DialogComponent;
+
+export interface DialogTriggerProps
+  extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * 子元素
    */
@@ -126,11 +155,16 @@ export interface DialogTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonE
 }
 
 export const DialogTrigger: Component<DialogTriggerProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'asChild', 'class', 'onClick']);
+  const [local, others] = splitProps(props, [
+    "children",
+    "asChild",
+    "class",
+    "onClick",
+  ]);
   const context = useDialogContext();
 
   const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
-    if (typeof local.onClick === 'function') {
+    if (typeof local.onClick === "function") {
       local.onClick(e);
     }
     context.setOpen(true);
@@ -158,11 +192,11 @@ export interface DialogOverlayProps extends JSX.HTMLAttributes<HTMLDivElement> {
 }
 
 export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'class', 'onClick']);
+  const [local, others] = splitProps(props, ["children", "class", "onClick"]);
   const context = useDialogContext();
 
   const handleClick: JSX.EventHandler<HTMLDivElement, MouseEvent> = (e) => {
-    if (typeof local.onClick === 'function') {
+    if (typeof local.onClick === "function") {
       local.onClick(e);
     }
     // 点击遮罩层关闭对话框
@@ -174,7 +208,7 @@ export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
   return (
     <div
       class={local.class}
-      data-state={context.open() ? 'open' : 'closed'}
+      data-state={context.open() ? "open" : "closed"}
       onClick={handleClick}
       {...others}
     >
@@ -184,20 +218,18 @@ export const DialogOverlay: Component<DialogOverlayProps> = (props) => {
 };
 
 export const DialogContent: Component<DialogContentProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'class']);
+  const [local, others] = splitProps(props, ["children", "class"]);
   const context = useDialogContext();
 
   return (
     <Show when={context.open()}>
       <Portal mount={!isServer ? document.body : undefined}>
-        <DialogOverlay
-          class="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
-        />
+        <DialogOverlay class="fixed inset-0 z-50 bg-black/50 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
         <div
           class={local.class}
           role="dialog"
           aria-modal={context.modal}
-          data-state={context.open() ? 'open' : 'closed'}
+          data-state={context.open() ? "open" : "closed"}
           {...others}
         >
           {local.children}
@@ -207,7 +239,8 @@ export const DialogContent: Component<DialogContentProps> = (props) => {
   );
 };
 
-export interface DialogTitleProps extends JSX.HTMLAttributes<HTMLHeadingElement> {
+export interface DialogTitleProps
+  extends JSX.HTMLAttributes<HTMLHeadingElement> {
   /**
    * 标题文本
    */
@@ -215,7 +248,7 @@ export interface DialogTitleProps extends JSX.HTMLAttributes<HTMLHeadingElement>
 }
 
 export const DialogTitle: Component<DialogTitleProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'class']);
+  const [local, others] = splitProps(props, ["children", "class"]);
 
   return (
     <h2 class={local.class} {...others}>
@@ -224,7 +257,8 @@ export const DialogTitle: Component<DialogTitleProps> = (props) => {
   );
 };
 
-export interface DialogDescriptionProps extends JSX.HTMLAttributes<HTMLParagraphElement> {
+export interface DialogDescriptionProps
+  extends JSX.HTMLAttributes<HTMLParagraphElement> {
   /**
    * 描述文本
    */
@@ -232,7 +266,7 @@ export interface DialogDescriptionProps extends JSX.HTMLAttributes<HTMLParagraph
 }
 
 export const DialogDescription: Component<DialogDescriptionProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'class']);
+  const [local, others] = splitProps(props, ["children", "class"]);
 
   return (
     <p class={local.class} {...others}>
@@ -241,7 +275,8 @@ export const DialogDescription: Component<DialogDescriptionProps> = (props) => {
   );
 };
 
-export interface DialogCloseProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DialogCloseProps
+  extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
    * 子元素
    */
@@ -249,11 +284,11 @@ export interface DialogCloseProps extends JSX.ButtonHTMLAttributes<HTMLButtonEle
 }
 
 export const DialogClose: Component<DialogCloseProps> = (props) => {
-  const [local, others] = splitProps(props, ['children', 'class', 'onClick']);
+  const [local, others] = splitProps(props, ["children", "class", "onClick"]);
   const context = useDialogContext();
 
   const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
-    if (typeof local.onClick === 'function') {
+    if (typeof local.onClick === "function") {
       local.onClick(e);
     }
     context.setOpen(false);
@@ -266,10 +301,9 @@ export const DialogClose: Component<DialogCloseProps> = (props) => {
   );
 };
 
-(Dialog as any).Trigger = DialogTrigger;
-(Dialog as any).Overlay = DialogOverlay;
-(Dialog as any).Content = DialogContent;
-(Dialog as any).Title = DialogTitle;
-(Dialog as any).Description = DialogDescription;
-(Dialog as any).Close = DialogClose;
-
+Dialog.Trigger = DialogTrigger;
+Dialog.Overlay = DialogOverlay;
+Dialog.Content = DialogContent;
+Dialog.Title = DialogTitle;
+Dialog.Description = DialogDescription;
+Dialog.Close = DialogClose;

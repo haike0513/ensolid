@@ -47,7 +47,7 @@ export interface RadioGroupProps extends JSXTypes.HTMLAttributes<HTMLDivElement>
   required?: boolean;
 }
 
-export const RadioGroup: Component<RadioGroupProps> = (props) => {
+const RadioGroupBase: Component<RadioGroupProps> = (props) => {
   const [local, others] = splitProps(props, [
     'value',
     'defaultValue',
@@ -95,6 +95,14 @@ export const RadioGroup: Component<RadioGroupProps> = (props) => {
   );
 };
 
+export interface RadioGroupComponent extends Component<RadioGroupProps> {
+  Item: Component<RadioGroupItemProps>;
+}
+
+export const RadioGroup = Object.assign(RadioGroupBase, {
+  Item: null as unknown as Component<RadioGroupItemProps>,
+}) as RadioGroupComponent;
+
 export interface RadioGroupItemProps extends JSXTypes.InputHTMLAttributes<HTMLInputElement> {
   /**
    * 选项的值
@@ -137,5 +145,5 @@ export const RadioGroupItem: Component<RadioGroupItemProps> = (props) => {
   );
 };
 
-(RadioGroup as any).Item = RadioGroupItem;
+RadioGroup.Item = RadioGroupItem;
 

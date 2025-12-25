@@ -39,7 +39,7 @@ export interface DropdownMenuProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
-export const DropdownMenu: Component<DropdownMenuProps> = (props) => {
+const DropdownMenuBase: Component<DropdownMenuProps> = (props) => {
   const [local] = splitProps(props, [
     'open',
     'defaultOpen',
@@ -124,6 +124,22 @@ export const DropdownMenu: Component<DropdownMenuProps> = (props) => {
     </DropdownMenuContext.Provider>
   );
 };
+
+export interface DropdownMenuComponent extends Component<DropdownMenuProps> {
+  Trigger: Component<DropdownMenuTriggerProps>;
+  Content: Component<DropdownMenuContentProps>;
+  Item: Component<DropdownMenuItemProps>;
+  Label: Component<DropdownMenuLabelProps>;
+  Separator: Component<DropdownMenuSeparatorProps>;
+}
+
+export const DropdownMenu = Object.assign(DropdownMenuBase, {
+  Trigger: null as unknown as Component<DropdownMenuTriggerProps>,
+  Content: null as unknown as Component<DropdownMenuContentProps>,
+  Item: null as unknown as Component<DropdownMenuItemProps>,
+  Label: null as unknown as Component<DropdownMenuLabelProps>,
+  Separator: null as unknown as Component<DropdownMenuSeparatorProps>,
+}) as DropdownMenuComponent;
 
 export interface DropdownMenuTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   /**
@@ -318,9 +334,9 @@ export const DropdownMenuSeparator: Component<DropdownMenuSeparatorProps> = (pro
   );
 };
 
-(DropdownMenu as any).Trigger = DropdownMenuTrigger;
-(DropdownMenu as any).Content = DropdownMenuContent;
-(DropdownMenu as any).Item = DropdownMenuItem;
-(DropdownMenu as any).Label = DropdownMenuLabel;
-(DropdownMenu as any).Separator = DropdownMenuSeparator;
+DropdownMenu.Trigger = DropdownMenuTrigger;
+DropdownMenu.Content = DropdownMenuContent;
+DropdownMenu.Item = DropdownMenuItem;
+DropdownMenu.Label = DropdownMenuLabel;
+DropdownMenu.Separator = DropdownMenuSeparator;
 

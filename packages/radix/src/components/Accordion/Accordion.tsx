@@ -6,6 +6,7 @@ interface AccordionContextValue {
   setValue: (value: string) => void;
   type: 'single' | 'multiple';
   collapsible: boolean;
+  isItemOpen: (itemValue: string) => boolean;
 }
 
 const AccordionContext = createContext<AccordionContextValue>();
@@ -56,7 +57,7 @@ export interface AccordionProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
-export const Accordion: Component<AccordionProps> = (props) => {
+const AccordionBase: Component<AccordionProps> = (props) => {
   const [local, others] = splitProps(props, [
     'value',
     'defaultValue',
@@ -120,10 +121,8 @@ export const Accordion: Component<AccordionProps> = (props) => {
     setValue: handleValueChange,
     type: type(),
     collapsible: collapsible(),
+    isItemOpen,
   };
-
-  // 为了在子组件中访问 isItemOpen，我们需要扩展 context
-  (contextValue as any).isItemOpen = isItemOpen;
 
   return (
     <AccordionContext.Provider value={contextValue}>
@@ -133,6 +132,18 @@ export const Accordion: Component<AccordionProps> = (props) => {
     </AccordionContext.Provider>
   );
 };
+
+export interface AccordionComponent extends Component<AccordionProps> {
+  Item: Component<AccordionItemProps>;
+  Trigger: Component<AccordionTriggerProps>;
+  Content: Component<AccordionContentProps>;
+}
+
+export const Accordion = Object.assign(AccordionBase, {
+  Item: null as unknown as Component<AccordionItemProps>,
+  Trigger: null as unknown as Component<AccordionTriggerProps>,
+  Content: null as unknown as Component<AccordionContentProps>,
+}) as AccordionComponent;
 
 export interface AccordionItemProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**
@@ -154,7 +165,7 @@ export const AccordionItem: Component<AccordionItemProps> = (props) => {
   const [local, others] = splitProps(props, ['value', 'disabled', 'children', 'class']);
   const context = useAccordionContext();
 
-  const isOpen = () => (context as any).isItemOpen(local.value);
+  const isOpen = () => context.isItemOpen(local.value);
 
   const itemContext = {
     value: local.value,
@@ -187,7 +198,7 @@ export const AccordionTrigger: Component<AccordionTriggerProps> = (props) => {
   const context = useAccordionContext();
   const itemContext = useAccordionItemContext();
 
-  const isOpen = () => (context as any).isItemOpen(itemContext.value);
+  const isOpen = () => context.isItemOpen(itemContext.value);
 
   const handleClick: JSX.EventHandler<HTMLButtonElement, MouseEvent> = (e) => {
     if (typeof local.onClick === 'function') {
@@ -227,7 +238,7 @@ export const AccordionContent: Component<AccordionContentProps> = (props) => {
   const context = useAccordionContext();
   const itemContext = useAccordionItemContext();
 
-  const isOpen = () => (context as any).isItemOpen(itemContext.value);
+  const isOpen = () => context.isItemOpen(itemContext.value);
 
   return (
     <div
@@ -242,7 +253,7 @@ export const AccordionContent: Component<AccordionContentProps> = (props) => {
   );
 };
 
-(Accordion as any).Item = AccordionItem;
-(Accordion as any).Trigger = AccordionTrigger;
-(Accordion as any).Content = AccordionContent;
+Accordion.Item = AccordionItem;
+Accordion.Trigger = AccordionTrigger;
+Accordion.Content = AccordionContent;
 

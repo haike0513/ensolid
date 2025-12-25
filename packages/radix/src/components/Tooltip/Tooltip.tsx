@@ -44,7 +44,7 @@ export interface TooltipProps extends JSX.HTMLAttributes<HTMLDivElement> {
   children?: JSX.Element;
 }
 
-export const Tooltip: Component<TooltipProps> = (props) => {
+const TooltipBase: Component<TooltipProps> = (props) => {
   const [local] = splitProps(props, [
     'open',
     'defaultOpen',
@@ -81,6 +81,16 @@ export const Tooltip: Component<TooltipProps> = (props) => {
     </TooltipContext.Provider>
   );
 };
+
+export interface TooltipComponent extends Component<TooltipProps> {
+  Trigger: Component<TooltipTriggerProps>;
+  Content: Component<TooltipContentProps>;
+}
+
+export const Tooltip = Object.assign(TooltipBase, {
+  Trigger: null as unknown as Component<TooltipTriggerProps>,
+  Content: null as unknown as Component<TooltipContentProps>,
+}) as TooltipComponent;
 
 export interface TooltipTriggerProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**
@@ -216,6 +226,6 @@ export const TooltipContent: Component<TooltipContentProps> = (props) => {
   );
 };
 
-(Tooltip as any).Trigger = TooltipTrigger;
-(Tooltip as any).Content = TooltipContent;
+Tooltip.Trigger = TooltipTrigger;
+Tooltip.Content = TooltipContent;
 
