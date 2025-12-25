@@ -1,0 +1,137 @@
+/**
+ * Node 组件 - 流程节点
+ */
+
+import { Component, JSX, splitProps, Show } from 'solid-js';
+import type { Node as NodeType } from '../../types';
+
+export interface NodeProps {
+  /**
+   * 节点数据
+   */
+  node: NodeType;
+  /**
+   * 是否选中
+   */
+  selected?: boolean;
+  /**
+   * 是否正在拖拽
+   */
+  dragging?: boolean;
+  /**
+   * 连接点组件
+   */
+  children?: JSX.Element;
+  /**
+   * 自定义节点渲染
+   */
+  renderNode?: (node: NodeType) => JSX.Element;
+  /**
+   * 节点点击事件
+   */
+  onClick?: (event: MouseEvent, node: NodeType) => void;
+  /**
+   * 节点双击事件
+   */
+  onDoubleClick?: (event: MouseEvent, node: NodeType) => void;
+  /**
+   * 节点鼠标进入事件
+   */
+  onMouseEnter?: (event: MouseEvent, node: NodeType) => void;
+  /**
+   * 节点鼠标离开事件
+   */
+  onMouseLeave?: (event: MouseEvent, node: NodeType) => void;
+  /**
+   * 节点鼠标按下事件
+   */
+  onMouseDown?: (event: MouseEvent, node: NodeType) => void;
+  /**
+   * 节点鼠标抬起事件
+   */
+  onMouseUp?: (event: MouseEvent, node: NodeType) => void;
+}
+
+export const Node: Component<NodeProps> = (props) => {
+  const [local, others] = splitProps(props, [
+    'node',
+    'selected',
+    'dragging',
+    'children',
+    'renderNode',
+    'onClick',
+    'onDoubleClick',
+    'onMouseEnter',
+    'onMouseLeave',
+    'onMouseDown',
+    'onMouseUp',
+  ]);
+
+  const handleClick = (event: MouseEvent) => {
+    local.onClick?.(event, local.node);
+  };
+
+  const handleDoubleClick = (event: MouseEvent) => {
+    local.onDoubleClick?.(event, local.node);
+  };
+
+  const handleMouseEnter = (event: MouseEvent) => {
+    local.onMouseEnter?.(event, local.node);
+  };
+
+  const handleMouseLeave = (event: MouseEvent) => {
+    local.onMouseLeave?.(event, local.node);
+  };
+
+  const handleMouseDown = (event: MouseEvent) => {
+    local.onMouseDown?.(event, local.node);
+  };
+
+  const handleMouseUp = (event: MouseEvent) => {
+    local.onMouseUp?.(event, local.node);
+  };
+
+  const nodeStyle = () => ({
+    position: 'absolute' as const,
+    left: `${local.node.position.x}px`,
+    top: `${local.node.position.y}px`,
+    width: local.node.width ? `${local.node.width}px` : 'auto',
+    height: local.node.height ? `${local.node.height}px` : 'auto',
+    zIndex: local.node.zIndex ?? (local.selected ? 1000 : 1),
+    ...local.node.style,
+  });
+
+  return (
+    <div
+      {...others}
+      data-id={local.node.id}
+      data-type={local.node.type}
+      data-selected={local.selected}
+      data-dragging={local.dragging}
+      class={local.node.className}
+      classList={{
+        'solidflow-node': true,
+        'solidflow-node-selected': local.selected,
+        'solidflow-node-dragging': local.dragging,
+        ...(local.node.classList?.reduce(
+          (acc, cls) => ({ ...acc, [cls]: true }),
+          {} as Record<string, boolean>
+        ) ?? {}),
+      }}
+      style={nodeStyle()}
+      onClick={handleClick}
+      onDblClick={handleDoubleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
+      <Show when={local.renderNode} fallback={<div>{local.node.data?.label ?? local.node.id}</div>}>
+        {local.renderNode?.(local.node)}
+      </Show>
+      {local.children}
+    </div>
+  );
+};
+
+
