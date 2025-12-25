@@ -12,7 +12,11 @@
     "build:solidflow": "pnpm --filter @resolid/solidflow build",
     "dev:solidflow": "pnpm --filter @resolid/solidflow dev",
     "build:radix": "pnpm --filter @resolid/radix build",
-    "dev:radix": "pnpm --filter @resolid/radix dev"
+    "dev:radix": "pnpm --filter @resolid/radix dev",
+    "publish": "pnpm -r --filter './packages/*' publish",
+    "publish:baseui": "pnpm --filter @resolid/baseui publish",
+    "publish:radix": "pnpm --filter @resolid/radix publish",
+    "publish:solidflow": "pnpm --filter @resolid/solidflow publish"
   },
   "dependencies": {
     "@resolid/baseui": "workspace:*",
