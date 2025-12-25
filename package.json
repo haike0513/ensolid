@@ -16,9 +16,11 @@
   },
   "dependencies": {
     "@resolid/baseui": "workspace:*",
+    "@resolid/radix": "workspace:*",
     "solid-js": "^1.9.9"
   },
   "devDependencies": {
+    "clsx": "^2.1.1",
     "typescript": "~5.8.3",
     "vite": "^7.1.7",
     "vite-plugin-solid": "^2.11.8"

@@ -11,10 +11,16 @@ importers:
       '@resolid/baseui':
         specifier: workspace:*
         version: link:packages/baseui
+      '@resolid/radix':
+        specifier: workspace:*
+        version: link:packages/radix
       solid-js:
         specifier: ^1.9.9
         version: 1.9.10
     devDependencies:
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
@@ -26,6 +32,26 @@ importers:
         version: 2.11.10(solid-js@1.9.10)(vite@7.3.0)
 
   packages/baseui:
+    dependencies:
+      solid-js:
+        specifier: ^1.9.9
+        version: 1.9.10
+    devDependencies:
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+
+  packages/radix:
+    dependencies:
+      solid-js:
+        specifier: ^1.9.9
+        version: 1.9.10
+    devDependencies:
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+
+  packages/solidflow:
     dependencies:
       solid-js:
         specifier: ^1.9.9
@@ -440,6 +466,10 @@ packages:
 
   caniuse-lite@1.0.30001761:
     resolution: {integrity: sha512-JF9ptu1vP2coz98+5051jZ4PwQgd2ni8A+gYSN7EA7dPKIMf0pDlSUxhdmVOaV3/fYK5uWBkgSXJaRLr4+3A6g==}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
@@ -975,6 +1005,8 @@ snapshots:
       update-browserslist-db: 1.2.3(browserslist@4.28.1)
 
   caniuse-lite@1.0.30001761: {}
+
+  clsx@2.1.1: {}
 
   convert-source-map@2.0.0: {}
 

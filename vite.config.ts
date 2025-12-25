@@ -7,6 +7,8 @@ export default defineConfig({
   resolve: {
     alias: {
       '@resolid/baseui': path.resolve(__dirname, './packages/baseui/src'),
+      '@resolid/radix': path.resolve(__dirname, './packages/radix/src'),
+      '@': path.resolve(__dirname, './'),
     },
   },
 })

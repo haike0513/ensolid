@@ -23,7 +23,15 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Path Aliases */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"],
+      "@resolid/radix": ["./packages/radix/src"],
+      "@resolid/baseui": ["./packages/baseui/src"]
+    }
   },
-  "include": ["src"]
+  "include": ["src", "components"]
 }
