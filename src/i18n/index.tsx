@@ -20,7 +20,7 @@ interface I18nContextValue {
 
 const I18nContext = createContext<I18nContextValue>();
 
-// 从 localStorage 获取初始语言，如果没有则使用浏览器语言或默认中文
+// 从 localStorage 获取初始语言，如果没有则使用浏览器语言或默认英语
 function getInitialLocale(): Locale {
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem("locale") as Locale | null;
@@ -29,11 +29,11 @@ function getInitialLocale(): Locale {
     }
     // 检查浏览器语言
     const browserLang = navigator.language.toLowerCase();
-    if (browserLang.startsWith("en")) {
-      return "en";
+    if (browserLang.startsWith("zh")) {
+      return "zh";
     }
   }
-  return "zh";
+  return "en";
 }
 
 export const I18nProvider: ParentComponent = (props) => {

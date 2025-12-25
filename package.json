@@ -23,9 +23,11 @@
     "@resolid/radix": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^25.0.3",
+    "ai": "^6.0.3",
     "solid-js": "^1.9.9",
     "tailwindcss": "^4.1.18",
-    "tw-animate-css": "^1.4.0"
+    "tw-animate-css": "^1.4.0",
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "clsx": "^2.1.1",
