@@ -11,6 +11,7 @@ import {
     splitProps,
 } from "solid-js";
 import type {
+    EdgeChange,
     FlowProps,
     Node,
     NodeChange,
@@ -70,8 +71,12 @@ export const Flow: Component<FlowProps> = (props) => {
     const [draggedNodeId, setDraggedNodeId] = createSignal<string | null>(null);
 
     // 选择状态
-    const [selectedNodes] = createSignal<Set<string>>(new Set());
-    const [selectedEdges] = createSignal<Set<string>>(new Set());
+    const [selectedNodes, setSelectedNodes] = createSignal<Set<string>>(
+        new Set(),
+    );
+    const [selectedEdges, setSelectedEdges] = createSignal<Set<string>>(
+        new Set(),
+    );
 
     let containerRef: HTMLDivElement | undefined;
     let svgRef: SVGSVGElement | undefined;
@@ -89,6 +94,43 @@ export const Flow: Component<FlowProps> = (props) => {
             }
             return newViewport;
         });
+    };
+
+    // 处理节点点击
+    const handleNodeClick = (event: MouseEvent, node: Node) => {
+        if (!(local.elementsSelectable ?? true)) return;
+        event.stopPropagation();
+
+        setSelectedNodes((prev) => {
+            const newSet = new Set(prev);
+            if (event.ctrlKey || event.metaKey) {
+                // 按住 Ctrl/Cmd 多选
+                if (newSet.has(node.id)) {
+                    newSet.delete(node.id);
+                } else {
+                    newSet.add(node.id);
+                }
+            } else {
+                // 单选
+                newSet.clear();
+                newSet.add(node.id);
+            }
+            local.onSelectionChange?.({
+                nodes: local.nodes.filter((n) => newSet.has(n.id)),
+                edges: (local.edges ?? []).filter((e) =>
+                    selectedEdges().has(e.id)
+                ),
+            });
+            return newSet;
+        });
+
+        local.onNodesChange?.([
+            {
+                id: node.id,
+                type: "select",
+                selected: !selectedNodes().has(node.id),
+            } as NodeChange,
+        ]);
     };
 
     // 处理节点拖拽
@@ -140,6 +182,18 @@ export const Flow: Component<FlowProps> = (props) => {
                 setDragStart({ x: event.clientX, y: event.clientY });
             }
         }
+    };
+
+    // 处理画布点击（取消选择）
+    const handlePaneClick = (event: MouseEvent) => {
+        if ((event.target as HTMLElement).closest(".solidflow-node")) return;
+        if ((event.target as HTMLElement).closest(".solidflow-edge")) return;
+
+        const newNodesSet = new Set<string>();
+        const newEdgesSet = new Set<string>();
+        setSelectedNodes(newNodesSet);
+        setSelectedEdges(newEdgesSet);
+        local.onSelectionChange?.({ nodes: [], edges: [] });
     };
 
     // 处理鼠标抬起
@@ -284,6 +338,7 @@ export const Flow: Component<FlowProps> = (props) => {
                 ) ?? {}),
             }}
             style={local.style as any}
+            onClick={handlePaneClick}
         >
             {/* 背景 */}
             <Background />
@@ -313,6 +368,43 @@ export const Flow: Component<FlowProps> = (props) => {
                                 sourceNode={sourceNode}
                                 targetNode={targetNode}
                                 selected={selectedEdges().has(edge.id)}
+                                onClick={(e, ed) => {
+                                    if (!(local.elementsSelectable ?? true)) {
+                                        return;
+                                    }
+                                    e.stopPropagation();
+                                    setSelectedEdges((prev) => {
+                                        const newSet = new Set(prev);
+                                        if (e.ctrlKey || e.metaKey) {
+                                            if (newSet.has(ed.id)) {
+                                                newSet.delete(ed.id);
+                                            } else {
+                                                newSet.add(ed.id);
+                                            }
+                                        } else {
+                                            newSet.clear();
+                                            newSet.add(ed.id);
+                                        }
+                                        local.onSelectionChange?.({
+                                            nodes: local.nodes.filter((n) =>
+                                                selectedNodes().has(n.id)
+                                            ),
+                                            edges: (local.edges ?? []).filter((
+                                                e,
+                                            ) => newSet.has(e.id)),
+                                        });
+                                        return newSet;
+                                    });
+                                    local.onEdgesChange?.([
+                                        {
+                                            id: ed.id,
+                                            type: "select",
+                                            selected: !selectedEdges().has(
+                                                ed.id,
+                                            ),
+                                        } as EdgeChange,
+                                    ]);
+                                }}
                             />
                         );
                     }}
@@ -337,6 +429,7 @@ export const Flow: Component<FlowProps> = (props) => {
                                     node={node}
                                     selected={selectedNodes().has(node.id)}
                                     dragging={draggedNodeId() === node.id}
+                                    onClick={(e, n) => handleNodeClick(e, n)}
                                     onMouseDown={(e, n) =>
                                         handleNodeMouseDown(e, n)}
                                     renderNode={NodeType

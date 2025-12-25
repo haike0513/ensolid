@@ -30,6 +30,7 @@ import {
   FlowExample,
   FlowCustomNodeExample,
   FlowInteractiveExample,
+  FlowEditorExample,
 } from "./examples";
 import { useI18n } from "./i18n";
 import { LanguageSwitcher } from "./components/LanguageSwitcher";
@@ -64,7 +65,8 @@ type ExampleType =
   | "navigation-menu"
   | "flow"
   | "flow-custom-node"
-  | "flow-interactive";
+  | "flow-interactive"
+  | "flow-editor";
 
 const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
   { id: "button" as ExampleType, name: t().components.button, component: ButtonExample },
@@ -167,6 +169,11 @@ const getExamples = (t: () => typeof import("./i18n/locales/zh").zh) => [
     id: "flow-interactive" as ExampleType,
     name: "Flow 交互式",
     component: FlowInteractiveExample,
+  },
+  {
+    id: "flow-editor" as ExampleType,
+    name: "Flow 编辑器",
+    component: FlowEditorExample,
   },
 ];
 

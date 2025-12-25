@@ -27,4 +27,5 @@ export { NavigationMenuExample } from "./NavigationMenuExample";
 export { FlowExample } from "./FlowExample";
 export { FlowCustomNodeExample } from "./FlowCustomNodeExample";
 export { FlowInteractiveExample } from "./FlowInteractiveExample";
+export { FlowEditorExample } from "./FlowEditorExample";
 
