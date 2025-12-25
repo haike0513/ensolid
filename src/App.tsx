@@ -9,6 +9,14 @@ import {
   TabsExample,
   AccordionExample,
   SeparatorExample,
+  AlertDialogExample,
+  PopoverExample,
+  DropdownMenuExample,
+  TooltipExample,
+  SelectExample,
+  SliderExample,
+  ProgressExample,
+  ToggleExample,
 } from "./examples";
 import "./App.css";
 
@@ -20,7 +28,15 @@ type ExampleType =
   | "switch"
   | "tabs"
   | "accordion"
-  | "separator";
+  | "separator"
+  | "alert-dialog"
+  | "popover"
+  | "dropdown-menu"
+  | "tooltip"
+  | "select"
+  | "slider"
+  | "progress"
+  | "toggle";
 
 const App: Component = () => {
   const [currentExample, setCurrentExample] = createSignal<ExampleType>("button");
@@ -34,6 +50,14 @@ const App: Component = () => {
     { id: "tabs" as ExampleType, name: "Tabs", component: TabsExample },
     { id: "accordion" as ExampleType, name: "Accordion", component: AccordionExample },
     { id: "separator" as ExampleType, name: "Separator", component: SeparatorExample },
+    { id: "alert-dialog" as ExampleType, name: "AlertDialog", component: AlertDialogExample },
+    { id: "popover" as ExampleType, name: "Popover", component: PopoverExample },
+    { id: "dropdown-menu" as ExampleType, name: "DropdownMenu", component: DropdownMenuExample },
+    { id: "tooltip" as ExampleType, name: "Tooltip", component: TooltipExample },
+    { id: "select" as ExampleType, name: "Select", component: SelectExample },
+    { id: "slider" as ExampleType, name: "Slider", component: SliderExample },
+    { id: "progress" as ExampleType, name: "Progress", component: ProgressExample },
+    { id: "toggle" as ExampleType, name: "Toggle", component: ToggleExample },
   ];
 
   const CurrentComponent = () => {
