@@ -1,0 +1,43 @@
+{
+  "name": "@ensolid/visx",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "d3-array": "^3.2.4",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
+    "d3-format": "^3.1.0",
+    "d3-time-format": "^4.1.0",
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@types/d3-array": "^3.2.1",
+    "@types/d3-scale": "^4.0.8",
+    "@types/d3-shape": "^3.1.6",
+    "@types/d3-format": "^3.0.4",
+    "@types/d3-time-format": "^4.0.3",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.7",
+    "vite-plugin-dts": "^4.5.4",
+    "vite-plugin-solid": "^2.11.8"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.9.9"
+  }
+}
