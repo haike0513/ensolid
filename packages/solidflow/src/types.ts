@@ -65,6 +65,7 @@ export interface Edge<T = any> {
   markerEnd?: EdgeMarkerType;
   zIndex?: number;
   ariaLabel?: string;
+  selected?: boolean;
 }
 
 export type EdgeMarkerType = string | { type: MarkerType; color?: string; width?: number; height?: number };

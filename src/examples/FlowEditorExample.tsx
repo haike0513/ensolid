@@ -4,13 +4,20 @@
 
 import type { Component } from "solid-js";
 import { createSignal, For } from "solid-js";
-import { Flow, DefaultNode, Handle, applyNodeChanges, applyEdgeChanges, addEdge } from "@resolid/solidflow";
+import {
+    addEdge,
+    applyEdgeChanges,
+    applyNodeChanges,
+    DefaultNode,
+    Flow,
+    Handle,
+} from "@resolid/solidflow";
 import type {
-    Node,
-    Edge,
-    NodeChange,
-    EdgeChange,
     Connection,
+    Edge,
+    EdgeChange,
+    Node,
+    NodeChange,
     NodeComponentProps,
 } from "@resolid/solidflow";
 import { Button } from "@/components/ui/button";
@@ -19,9 +26,16 @@ import { Button } from "@/components/ui/button";
 const InputNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-blue-50 border-2 border-blue-400 rounded-lg p-3 min-w-[120px] shadow-md">
-            <Handle type="source" position="right" id="output" nodeId={props.node.id} />
+            <Handle
+                type="source"
+                position="right"
+                id="output"
+                nodeId={props.node.id}
+            />
             <div class="text-xs text-blue-600 font-semibold mb-1">输入</div>
-            <div class="text-sm text-blue-800">{props.node.data?.label ?? props.node.id}</div>
+            <div class="text-sm text-blue-800">
+                {props.node.data?.label ?? props.node.id}
+            </div>
         </div>
     );
 };
@@ -30,10 +44,22 @@ const InputNode: Component<NodeComponentProps> = (props) => {
 const ProcessNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-green-50 border-2 border-green-400 rounded-lg p-3 min-w-[120px] shadow-md">
-            <Handle type="target" position="left" id="input" nodeId={props.node.id} />
-            <Handle type="source" position="right" id="output" nodeId={props.node.id} />
+            <Handle
+                type="target"
+                position="left"
+                id="input"
+                nodeId={props.node.id}
+            />
+            <Handle
+                type="source"
+                position="right"
+                id="output"
+                nodeId={props.node.id}
+            />
             <div class="text-xs text-green-600 font-semibold mb-1">处理</div>
-            <div class="text-sm text-green-800">{props.node.data?.label ?? props.node.id}</div>
+            <div class="text-sm text-green-800">
+                {props.node.data?.label ?? props.node.id}
+            </div>
         </div>
     );
 };
@@ -42,9 +68,16 @@ const ProcessNode: Component<NodeComponentProps> = (props) => {
 const OutputNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-purple-50 border-2 border-purple-400 rounded-lg p-3 min-w-[120px] shadow-md">
-            <Handle type="target" position="left" id="input" nodeId={props.node.id} />
+            <Handle
+                type="target"
+                position="left"
+                id="input"
+                nodeId={props.node.id}
+            />
             <div class="text-xs text-purple-600 font-semibold mb-1">输出</div>
-            <div class="text-sm text-purple-800">{props.node.data?.label ?? props.node.id}</div>
+            <div class="text-sm text-purple-800">
+                {props.node.data?.label ?? props.node.id}
+            </div>
         </div>
     );
 };
@@ -54,9 +87,24 @@ const DecisionNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-3 min-w-[100px] min-h-[100px] shadow-md flex items-center justify-center transform rotate-45">
             <div class="transform -rotate-45">
-                <Handle type="target" position="top" id="input" nodeId={props.node.id} />
-                <Handle type="source" position="right" id="yes" nodeId={props.node.id} />
-                <Handle type="source" position="bottom" id="no" nodeId={props.node.id} />
+                <Handle
+                    type="target"
+                    position="top"
+                    id="input"
+                    nodeId={props.node.id}
+                />
+                <Handle
+                    type="source"
+                    position="right"
+                    id="yes"
+                    nodeId={props.node.id}
+                />
+                <Handle
+                    type="source"
+                    position="bottom"
+                    id="no"
+                    nodeId={props.node.id}
+                />
                 <div class="text-xs text-yellow-600 font-semibold text-center">
                     判断
                 </div>
@@ -140,8 +188,12 @@ export const FlowEditorExample: Component = () => {
         },
     ]);
 
-    const [selectedNodeIds, setSelectedNodeIds] = createSignal<Set<string>>(new Set());
-    const [selectedEdgeIds, setSelectedEdgeIds] = createSignal<Set<string>>(new Set());
+    const [selectedNodeIds, setSelectedNodeIds] = createSignal<Set<string>>(
+        new Set(),
+    );
+    const [selectedEdgeIds, setSelectedEdgeIds] = createSignal<Set<string>>(
+        new Set(),
+    );
     const [nodeIdCounter, setNodeIdCounter] = createSignal(7);
 
     // 处理节点变化
@@ -168,7 +220,7 @@ export const FlowEditorExample: Component = () => {
                 setEdges((prevEdges) =>
                     prevEdges.filter(
                         (e) => e.source !== change.id && e.target !== change.id,
-                    ),
+                    )
                 );
             }
         }
@@ -203,9 +255,11 @@ export const FlowEditorExample: Component = () => {
     // 处理连接
     const handleConnect = (connection: Connection) => {
         if (connection.source && connection.target) {
-            setEdges((prev) => addEdge(connection, prev, {
-                animated: false,
-            }));
+            setEdges((prev) =>
+                addEdge(connection, prev, {
+                    animated: false,
+                })
+            );
         }
     };
 
@@ -236,7 +290,7 @@ export const FlowEditorExample: Component = () => {
             setEdges((prev) =>
                 prev.filter(
                     (e) => !selected.has(e.source) && !selected.has(e.target),
-                ),
+                )
             );
             setSelectedNodeIds(new Set<string>());
         }
@@ -255,8 +309,8 @@ export const FlowEditorExample: Component = () => {
     const toggleEdgeAnimation = (edgeId: string) => {
         setEdges((prev) =>
             prev.map((e) =>
-                e.id === edgeId ? { ...e, animated: !e.animated } : e,
-            ),
+                e.id === edgeId ? { ...e, animated: !e.animated } : e
+            )
         );
     };
 
@@ -270,8 +324,10 @@ export const FlowEditorExample: Component = () => {
     };
 
     // 获取选中节点
-    const selectedNodes = () => nodes().filter((n) => selectedNodeIds().has(n.id));
-    const selectedEdges = () => edges().filter((e) => selectedEdgeIds().has(e.id));
+    const selectedNodes = () =>
+        nodes().filter((n) => selectedNodeIds().has(n.id));
+    const selectedEdges = () =>
+        edges().filter((e) => selectedEdgeIds().has(e.id));
 
     return (
         <div class="space-y-4 p-6">
@@ -288,19 +344,39 @@ export const FlowEditorExample: Component = () => {
             <div class="border rounded-lg p-4 bg-gray-50">
                 <div class="flex flex-wrap gap-2 items-center">
                     <span class="text-sm font-semibold mr-2">添加节点:</span>
-                    <Button onClick={() => addNode("input")} size="sm" variant="outline">
+                    <Button
+                        onClick={() => addNode("input")}
+                        size="sm"
+                        variant="outline"
+                    >
                         + 输入节点
                     </Button>
-                    <Button onClick={() => addNode("process")} size="sm" variant="outline">
+                    <Button
+                        onClick={() => addNode("process")}
+                        size="sm"
+                        variant="outline"
+                    >
                         + 处理节点
                     </Button>
-                    <Button onClick={() => addNode("decision")} size="sm" variant="outline">
+                    <Button
+                        onClick={() => addNode("decision")}
+                        size="sm"
+                        variant="outline"
+                    >
                         + 决策节点
                     </Button>
-                    <Button onClick={() => addNode("output")} size="sm" variant="outline">
+                    <Button
+                        onClick={() => addNode("output")}
+                        size="sm"
+                        variant="outline"
+                    >
                         + 输出节点
                     </Button>
-                    <Button onClick={() => addNode("default")} size="sm" variant="outline">
+                    <Button
+                        onClick={() => addNode("default")}
+                        size="sm"
+                        variant="outline"
+                    >
                         + 默认节点
                     </Button>
                     <div class="ml-4 border-l pl-4">
@@ -326,7 +402,10 @@ export const FlowEditorExample: Component = () => {
             </div>
 
             {/* Flow 画布 */}
-            <div class="border rounded-lg overflow-hidden bg-white" style="height: 700px;">
+            <div
+                class="border rounded-lg overflow-hidden bg-white"
+                style="height: 700px;"
+            >
                 <Flow
                     nodes={nodes()}
                     edges={edges()}
@@ -363,7 +442,8 @@ export const FlowEditorExample: Component = () => {
                                     <For each={selectedNodes()}>
                                         {(node) => (
                                             <li>
-                                                {node.id} ({node.type}) - {node.data?.label}
+                                                {node.id} ({node.type}) -{" "}
+                                                {node.data?.label}
                                             </li>
                                         )}
                                     </For>
@@ -386,16 +466,22 @@ export const FlowEditorExample: Component = () => {
                                         {(edge) => (
                                             <li class="flex items-center justify-between">
                                                 <span>
-                                                    {edge.source} → {edge.target}
+                                                    {edge.source} →{" "}
+                                                    {edge.target}
                                                     {edge.animated && " (动画)"}
                                                 </span>
                                                 <Button
-                                                    onClick={() => toggleEdgeAnimation(edge.id)}
+                                                    onClick={() =>
+                                                        toggleEdgeAnimation(
+                                                            edge.id,
+                                                        )}
                                                     size="sm"
                                                     variant="outline"
                                                     class="ml-2 h-6 text-xs"
                                                 >
-                                                    {edge.animated ? "停止动画" : "开始动画"}
+                                                    {edge.animated
+                                                        ? "停止动画"
+                                                        : "开始动画"}
                                                 </Button>
                                             </li>
                                         )}
@@ -413,28 +499,35 @@ export const FlowEditorExample: Component = () => {
                 <div class="text-sm text-blue-800 space-y-1">
                     <ul class="list-disc list-inside space-y-1">
                         <li>
-                            <strong>添加节点:</strong> 点击工具栏中的按钮添加不同类型的节点
+                            <strong>添加节点:</strong>{" "}
+                            点击工具栏中的按钮添加不同类型的节点
                         </li>
                         <li>
-                            <strong>连接节点:</strong> 从一个节点的连接点（Handle）拖拽到另一个节点的连接点
+                            <strong>连接节点:</strong>{" "}
+                            从一个节点的连接点（Handle）拖拽到另一个节点的连接点
                         </li>
                         <li>
                             <strong>移动节点:</strong> 左键拖拽节点可以移动位置
                         </li>
                         <li>
-                            <strong>平移画布:</strong> 使用鼠标中键或右键拖拽，或使用控制按钮
+                            <strong>平移画布:</strong>{" "}
+                            使用鼠标中键或右键拖拽，或使用控制按钮
                         </li>
                         <li>
-                            <strong>缩放:</strong> 使用鼠标滚轮缩放，或使用控制按钮
+                            <strong>缩放:</strong>{" "}
+                            使用鼠标滚轮缩放，或使用控制按钮
                         </li>
                         <li>
-                            <strong>选择:</strong> 点击节点或边进行选择，选中的边可以切换动画效果
+                            <strong>选择:</strong>{" "}
+                            点击节点或边进行选择，选中的边可以切换动画效果
                         </li>
                         <li>
-                            <strong>删除:</strong> 选中节点或边后，点击删除按钮删除
+                            <strong>删除:</strong>{" "}
+                            选中节点或边后，点击删除按钮删除
                         </li>
                         <li>
-                            <strong>小地图:</strong> 右下角显示整个流程图的小地图
+                            <strong>小地图:</strong>{" "}
+                            右下角显示整个流程图的小地图
                         </li>
                     </ul>
                 </div>
@@ -442,4 +535,3 @@ export const FlowEditorExample: Component = () => {
         </div>
     );
 };
-

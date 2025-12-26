@@ -7,7 +7,6 @@ import type {
     Viewport,
     XYPosition,
     Position,
-    HandleElement,
     NodeChange,
     EdgeChange,
     Edge,
@@ -171,7 +170,7 @@ export function getHandlePosition(
  */
 export function getNodeHandlePosition(
     node: Node,
-    handleId: string | null,
+    _handleId: string | null,
     handlePosition: Position,
 ): XYPosition {
     const nodePos = node.position;
@@ -242,7 +241,6 @@ export function getSimpleBezierPath(
     }
 
     const dx = targetX - sourceX;
-    const dy = targetY - sourceY;
     const cp1x = sourceX + dx * 0.25;
     const cp1y = sourceY;
     const cp2x = sourceX + dx * 0.75;
@@ -308,7 +306,6 @@ export function getSmoothStepPath(
     targetPos: XYPosition,
     sourcePosition: Position = "right",
     targetPosition: Position = "left",
-    borderRadius: number = 5,
 ): string {
     const offset = 25;
     let sourceX = sourcePos.x;
@@ -352,10 +349,6 @@ export function getSmoothStepPath(
             break;
     }
 
-    // 计算中间连接点
-    const dx = Math.abs(targetX - sourceX);
-    const dy = Math.abs(targetY - sourceY);
-    
     // 确定中间点的位置
     let midX: number;
     let midY: number;

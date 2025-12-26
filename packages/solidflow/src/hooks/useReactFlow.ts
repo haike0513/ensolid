@@ -5,8 +5,7 @@
 
 import { Accessor } from 'solid-js';
 import { useFlowContext } from '../components/FlowProvider';
-import type { Viewport, Connection, Node, Edge } from '../types';
-import { addEdge } from '../utils';
+import type { Viewport, Node, Edge } from '../types';
 
 export interface ReactFlowInstance {
     viewport: Accessor<Viewport>;
@@ -34,7 +33,6 @@ export function useReactFlow(): ReactFlowInstance {
     const viewport = context.viewport;
     const nodes = context.nodes;
     const edges = context.edges;
-    const onNodesChange = context.onNodesChange;
     const onEdgesChange = context.onEdgesChange;
 
     return {

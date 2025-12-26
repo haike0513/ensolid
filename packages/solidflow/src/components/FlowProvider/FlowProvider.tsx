@@ -14,7 +14,6 @@ import type {
     OnEdgesChange,
     OnConnect,
 } from '../../types';
-import { applyNodeChanges, applyEdgeChanges, addEdge } from '../../utils';
 
 export interface FlowProviderContextValue {
     nodes: () => Node[];

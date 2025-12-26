@@ -5,7 +5,6 @@
 import { Accessor } from 'solid-js';
 import { useFlowContext } from '../components/FlowProvider';
 import type { Node, NodeChange } from '../types';
-import { applyNodeChanges } from '../utils';
 
 /**
  * 返回节点的访问器和更新函数

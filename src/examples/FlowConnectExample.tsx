@@ -64,11 +64,11 @@ export const FlowConnectExample: Component = () => {
     setEdges((prevEdges) => addEdge(connection, prevEdges));
   };
 
-  const handleConnectStart = (event: MouseEvent | TouchEvent, params: { nodeId: string | null; handleId: string | null; handleType: 'source' | 'target' | null }) => {
+  const handleConnectStart = (_event: MouseEvent | TouchEvent, params: { nodeId: string | null; handleId: string | null; handleType: 'source' | 'target' | null }) => {
     console.log("连接开始:", params);
   };
 
-  const handleConnectEnd = (event: MouseEvent | TouchEvent) => {
+  const handleConnectEnd = (_event: MouseEvent | TouchEvent) => {
     console.log("连接结束");
   };
 

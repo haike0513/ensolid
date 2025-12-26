@@ -5,7 +5,6 @@
 import { Accessor } from 'solid-js';
 import { useFlowContext } from '../components/FlowProvider';
 import type { Edge, EdgeChange } from '../types';
-import { applyEdgeChanges } from '../utils';
 
 /**
  * 返回边的访问器和更新函数
