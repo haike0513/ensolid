@@ -31,7 +31,9 @@
       "@/*": ["./src/*"],
       "@ensolid/radix": ["./packages/radix/src"],
       "@ensolid/baseui": ["./packages/baseui/src"],
-      "@ensolid/solidflow": ["./packages/solidflow/src"]
+      "@ensolid/solidflow": ["./packages/solidflow/src"],
+      "@ensolid/visx": ["./packages/visx/src"],
+      "@ensolid/fiber": ["./packages/fiber/src"]
     }
   },
   "include": ["src"]

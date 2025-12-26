@@ -23,6 +23,7 @@
     "@ensolid/radix": "workspace:*",
     "@ensolid/solidflow": "workspace:*",
     "@ensolid/visx": "workspace:*",
+    "@ensolid/fiber": "workspace:*",
     "@solidjs/router": "^0.15.4",
     "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^25.0.3",

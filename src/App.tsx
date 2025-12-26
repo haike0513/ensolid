@@ -11,6 +11,7 @@ import { DocsPage } from "./pages/Docs";
 import { BlocksPage } from "./pages/Blocks";
 import { ChartsPage } from "./pages/Charts";
 import { WorkflowPage } from "./pages/Workflow";
+import { FiberPage } from "./pages/Fiber";
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
       <Route path="/blocks" component={BlocksPage} />
       <Route path="/charts" component={ChartsPage} />
       <Route path="/workflow" component={WorkflowPage} />
+      <Route path="/fiber" component={FiberPage} />
     </Router>
   );
 };
