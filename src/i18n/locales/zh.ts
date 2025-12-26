@@ -168,4 +168,84 @@ export const zh = {
         japanese: "日本語",
         korean: "한국어",
     },
+    home: {
+        badge: "专业的 SolidJS UI 组件库生态系统",
+        title: "Resolid",
+        subtitle: "为 SolidJS 生态提供专业级的 UI 组件与工具库",
+        description: "致力于将 React 生态系统中优秀的库和 UI 组件移植到 SolidJS 生态中，为开发者提供更多可用的工具和组件选择。采用 Monorepo 架构，包含多个独立的组件库包，每个包都可以独立使用和发布。",
+        viewComponents: "查看组件",
+        viewFlow: "Flow 流程图",
+        stats: {
+            libraries: "组件库",
+            components: "组件数量",
+            typescript: "TypeScript",
+            ssr: "SSR",
+            librariesDesc: "独立组件库包",
+            componentsDesc: "高质量组件",
+            typescriptDesc: "类型覆盖",
+            ssrDesc: "完全支持",
+        },
+        advantages: {
+            title: "项目优势与特点",
+            subtitle: "我们致力于为 SolidJS 开发者提供最专业、最完善的组件库解决方案",
+            completeEcosystem: {
+                title: "完整的组件生态",
+                description: "提供 100+ 个高质量组件，涵盖基础组件、表单、布局、数据展示等各个场景",
+            },
+            typescript: {
+                title: "TypeScript 支持",
+                description: "完整的 TypeScript 类型定义，提供智能提示和类型安全保障",
+            },
+            ssr: {
+                title: "SSR 兼容",
+                description: "所有组件都支持服务端渲染，完美适配 Next.js、SolidStart 等框架",
+            },
+            accessibility: {
+                title: "可访问性优先",
+                description: "基于 Radix UI Primitives，内置完整的 ARIA 属性支持，符合 WCAG 标准",
+            },
+            customizable: {
+                title: "完全可定制",
+                description: "无样式设计理念，支持主题定制和样式覆盖，轻松适配您的设计系统",
+            },
+            performance: {
+                title: "高性能",
+                description: "基于 SolidJS 的细粒度响应式系统，提供卓越的性能和用户体验",
+            },
+        },
+        libraries: {
+            title: "核心组件库",
+            subtitle: "三个独立的组件库包，满足不同场景的开发需求",
+            radix: {
+                name: "@resolid/radix",
+                title: "Radix UI Primitives",
+                description: "无样式、可访问的基础组件库，提供 25+ 个高质量组件",
+            },
+            baseui: {
+                name: "@resolid/baseui",
+                title: "BaseUI 组件库",
+                description: "企业级 UI 组件库，提供 59+ 个 Material Design 风格组件",
+            },
+            solidflow: {
+                name: "@resolid/solidflow",
+                title: "SolidFlow",
+                description: "高性能流程图和节点编辑器，支持复杂的工作流编辑",
+            },
+            viewDetails: "查看详情",
+        },
+        techStack: {
+            title: "技术栈",
+            subtitle: "基于现代技术栈构建，提供最佳开发体验",
+            solidjs: "响应式框架",
+            typescript: "类型安全",
+            vite: "构建工具",
+            pnpm: "包管理",
+        },
+        cta: {
+            title: "开始使用 Resolid",
+            subtitle: "探索我们的组件库，为您的 SolidJS 项目选择最合适的组件",
+            browseComponents: "浏览组件",
+            viewDocs: "查看文档",
+        },
+    },
 };

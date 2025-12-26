@@ -353,6 +353,39 @@
   }
 }
 
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 /* ============================================
    工具类
    ============================================ */
@@ -381,6 +414,21 @@
   
   .animate-spin {
     animation: spin 1s linear infinite;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .animate-fade-in-down {
+    animation: fade-in-down 0.6s ease-out forwards;
+    opacity: 0;
+  }
+  
+  .animate-scale-in {
+    animation: scale-in 0.5s ease-out forwards;
+    opacity: 0;
   }
   
   /* 淡入淡出 */
@@ -589,74 +637,6 @@
     @apply cursor-pointer;
   }
   
-  /* Input 组件相关 */
-  input[type="text"],
-  input[type="email"],
-  input[type="password"],
-  input[type="number"],
-  input[type="search"],
-  textarea,
-  select {
-    @apply border-input bg-background text-foreground;
-  }
-  
-  /* 链接样式 */
-  a {
-    @apply text-primary underline-offset-4 hover:underline;
-  }
-  
-  /* 代码块样式 */
-  code {
-    @apply relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm;
-  }
-  
-  pre {
-    @apply overflow-x-auto rounded-lg bg-muted p-4;
-  }
-  
-  pre code {
-    @apply relative bg-transparent p-0;
-  }
-  
-  /* 表格样式 */
-  table {
-    @apply w-full border-collapse;
-  }
-  
-  th {
-    @apply border-b border-border p-4 text-left font-medium;
-  }
-  
-  td {
-    @apply border-b border-border p-4;
-  }
-  
-  /* 列表样式 */
-  ul, ol {
-    @apply my-4 ml-6;
-  }
-  
-  ul {
-    @apply list-disc;
-  }
-  
-  ol {
-    @apply list-decimal;
-  }
-  
-  li {
-    @apply my-2;
-  }
-  
-  /* 引用样式 */
-  blockquote {
-    @apply border-l-4 border-border pl-4 italic;
-  }
-  
-  /* 水平线 */
-  hr {
-    @apply my-8 border-border;
-  }
 }
 
 /* ============================================

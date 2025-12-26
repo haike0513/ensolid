@@ -168,5 +168,85 @@ export const en = {
     japanese: "Japanese",
     korean: "Korean",
   },
+  home: {
+    badge: "Professional SolidJS UI Component Library Ecosystem",
+    title: "Resolid",
+    subtitle: "Providing professional-grade UI components and tool libraries for the SolidJS ecosystem",
+    description: "Dedicated to porting excellent libraries and UI components from the React ecosystem to SolidJS, providing developers with more available tools and component choices. Adopting a Monorepo architecture with multiple independent component library packages, each package can be used and published independently.",
+    viewComponents: "View Components",
+    viewFlow: "Flow Diagram",
+    stats: {
+      libraries: "Libraries",
+      components: "Components",
+      typescript: "TypeScript",
+      ssr: "SSR",
+      librariesDesc: "Independent packages",
+      componentsDesc: "High-quality components",
+      typescriptDesc: "Type coverage",
+      ssrDesc: "Fully supported",
+    },
+    advantages: {
+      title: "Project Advantages & Features",
+      subtitle: "We are committed to providing the most professional and comprehensive component library solutions for SolidJS developers",
+      completeEcosystem: {
+        title: "Complete Component Ecosystem",
+        description: "Provides 100+ high-quality components covering basic components, forms, layouts, data display, and various scenarios",
+      },
+      typescript: {
+        title: "TypeScript Support",
+        description: "Complete TypeScript type definitions providing intelligent hints and type safety guarantees",
+      },
+      ssr: {
+        title: "SSR Compatible",
+        description: "All components support server-side rendering, perfectly compatible with Next.js, SolidStart, and other frameworks",
+      },
+      accessibility: {
+        title: "Accessibility First",
+        description: "Based on Radix UI Primitives with built-in complete ARIA attribute support, compliant with WCAG standards",
+      },
+      customizable: {
+        title: "Fully Customizable",
+        description: "Unstyled design philosophy, supports theme customization and style overrides, easily adapts to your design system",
+      },
+      performance: {
+        title: "High Performance",
+        description: "Based on SolidJS's fine-grained reactive system, providing excellent performance and user experience",
+      },
+    },
+    libraries: {
+      title: "Core Component Libraries",
+      subtitle: "Three independent component library packages to meet different development needs",
+      radix: {
+        name: "@resolid/radix",
+        title: "Radix UI Primitives",
+        description: "Unstyled, accessible base component library providing 25+ high-quality components",
+      },
+      baseui: {
+        name: "@resolid/baseui",
+        title: "BaseUI Component Library",
+        description: "Enterprise-grade UI component library providing 59+ Material Design style components",
+      },
+      solidflow: {
+        name: "@resolid/solidflow",
+        title: "SolidFlow",
+        description: "High-performance flow diagram and node editor supporting complex workflow editing",
+      },
+      viewDetails: "View Details",
+    },
+    techStack: {
+      title: "Tech Stack",
+      subtitle: "Built on modern tech stack, providing the best development experience",
+      solidjs: "Reactive Framework",
+      typescript: "Type Safety",
+      vite: "Build Tool",
+      pnpm: "Package Manager",
+    },
+    cta: {
+      title: "Get Started with Resolid",
+      subtitle: "Explore our component library and choose the most suitable components for your SolidJS project",
+      browseComponents: "Browse Components",
+      viewDocs: "View Documentation",
+    },
+  },
 };
 
