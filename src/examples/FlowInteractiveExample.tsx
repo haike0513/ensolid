@@ -4,8 +4,8 @@
 
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { Flow, DefaultNode, applyNodeChanges } from "@resolid/solidflow";
-import type { Node, Edge, NodeChange } from "@resolid/solidflow";
+import { Flow, DefaultNode, applyNodeChanges } from "@ensolid/solidflow";
+import type { Node, Edge, NodeChange } from "@ensolid/solidflow";
 import { Button } from "@/components/ui/button";
 
 export const FlowInteractiveExample: Component = () => {

@@ -363,7 +363,7 @@ export * from './components';
 
 ### 命名规范
 
-- 包名：`@resolid/[original-name]` 或 `@resolid/[solid-name]`
+- 包名：`@ensolid/[original-name]` 或 `@ensolid/[solid-name]`
 - 组件名：使用 PascalCase
 - 文件名：与组件名保持一致
 
@@ -399,7 +399,7 @@ export * from './components';
 
 ```json
 {
-  "name": "@resolid/[package-name]",
+  "name": "@ensolid/[package-name]",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
@@ -1213,7 +1213,7 @@ export const Trigger: Component<TriggerProps> = (props) => {
 
 ### 移植概述
 
-本项目成功将 Radix UI Primitives 从 React 移植到 SolidJS，创建了 `@resolid/radix` 包，并在此基础上实现了 shadcn/ui 风格的组件库。
+本项目成功将 Radix UI Primitives 从 React 移植到 SolidJS，创建了 `@ensolid/radix` 包，并在此基础上实现了 shadcn/ui 风格的组件库。
 
 ### 当前项目状态（2024年更新）
 
@@ -1318,7 +1318,7 @@ export const Trigger: Component<TriggerProps> = (props) => {
 
 1. **创建包装组件**
    ```tsx
-   import * as ComponentPrimitive from "@resolid/radix";
+   import * as ComponentPrimitive from "@ensolid/radix";
    import { cn } from "./utils";
    
    export const Component: Component<ComponentProps> = (props) => {
@@ -1614,7 +1614,7 @@ resolid/
 
 #### shadcn/ui 包装规范
 1. **文件位置**: `src/components/ui/component-name.tsx`
-2. **导入方式**: `import * as ComponentPrimitive from "@resolid/radix"`
+2. **导入方式**: `import * as ComponentPrimitive from "@ensolid/radix"`
 3. **样式合并**: 使用 `cn()` 函数合并 Tailwind CSS 类名
 4. **Props 传递**: 使用 `splitProps` 分离样式和功能 Props
 5. **子组件导出**: 在 `components/ui/index.ts` 统一导出

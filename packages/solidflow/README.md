@@ -1,17 +1,17 @@
-# @resolid/solidflow
+# @ensolid/solidflow
 
 SolidJS 版本的流程图组件库，移植自 [xyflow/react](https://github.com/xyflow/xyflow)。
 
 ## 安装
 
 ```bash
-pnpm add @resolid/solidflow
+pnpm add @ensolid/solidflow
 ```
 
 ## 使用
 
 ```tsx
-import { Flow, DefaultNode } from '@resolid/solidflow';
+import { Flow, DefaultNode } from '@ensolid/solidflow';
 import { createSignal } from 'solid-js';
 
 function App() {

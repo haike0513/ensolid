@@ -1,7 +1,7 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as DropdownMenuPrimitive from "@resolid/radix";
-import { useDropdownMenuContext } from "@resolid/radix";
+import * as DropdownMenuPrimitive from "@ensolid/radix";
+import { useDropdownMenuContext } from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface DropdownMenuProps

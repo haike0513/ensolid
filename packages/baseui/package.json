@@ -1,5 +1,5 @@
 {
-  "name": "@resolid/baseui",
+  "name": "@ensolid/baseui",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",

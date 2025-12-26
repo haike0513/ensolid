@@ -4,14 +4,14 @@
 
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { Flow, applyNodeChanges } from "@resolid/solidflow";
+import { Flow, applyNodeChanges } from "@ensolid/solidflow";
 import type {
   Node,
   Edge,
   NodeChange,
   NodeComponentProps,
-} from "@resolid/solidflow";
-import { Handle } from "@resolid/solidflow";
+} from "@ensolid/solidflow";
+import { Handle } from "@ensolid/solidflow";
 
 // 自定义输入节点
 const InputNode: Component<NodeComponentProps> = (props) => {

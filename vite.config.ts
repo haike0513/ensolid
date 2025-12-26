@@ -10,9 +10,9 @@ export default defineConfig({
   plugins: [solid(), tailwindcss()],
   resolve: {
     alias: {
-      "@resolid/baseui": path.resolve(__dirname, "./packages/baseui/src"),
-      "@resolid/radix": path.resolve(__dirname, "./packages/radix/src"),
-      "@resolid/solidflow": path.resolve(__dirname, "./packages/solidflow/src"),
+      "@ensolid/baseui": path.resolve(__dirname, "./packages/baseui/src"),
+      "@ensolid/radix": path.resolve(__dirname, "./packages/radix/src"),
+      "@ensolid/solidflow": path.resolve(__dirname, "./packages/solidflow/src"),
       "@": path.resolve(__dirname, "./src"),
     },
   },

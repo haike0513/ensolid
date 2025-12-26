@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as TabsPrimitive from "@resolid/radix";
+import * as TabsPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface TabsProps extends TabsPrimitive.TabsProps {

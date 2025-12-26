@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as TogglePrimitive from "@resolid/radix";
+import * as TogglePrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface ToggleProps extends TogglePrimitive.ToggleProps {

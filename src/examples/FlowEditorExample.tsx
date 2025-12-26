@@ -11,7 +11,7 @@ import {
   DefaultNode,
   Flow,
   Handle,
-} from "@resolid/solidflow";
+} from "@ensolid/solidflow";
 import type {
   Connection,
   Edge,
@@ -20,7 +20,7 @@ import type {
   NodeChange,
   NodeComponentProps,
   FlowInstance,
-} from "@resolid/solidflow";
+} from "@ensolid/solidflow";
 import { Button } from "@/components/ui/button";
 
 // 自定义输入节点

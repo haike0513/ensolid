@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as ProgressPrimitive from "@resolid/radix";
+import * as ProgressPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface ProgressProps extends ProgressPrimitive.ProgressProps {

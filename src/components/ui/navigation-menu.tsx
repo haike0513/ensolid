@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as NavigationMenuPrimitive from "@resolid/radix";
+import * as NavigationMenuPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface NavigationMenuProps extends NavigationMenuPrimitive.NavigationMenuProps {

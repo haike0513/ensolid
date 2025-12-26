@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as CollapsiblePrimitive from "@resolid/radix";
+import * as CollapsiblePrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface CollapsibleProps extends CollapsiblePrimitive.CollapsibleProps {

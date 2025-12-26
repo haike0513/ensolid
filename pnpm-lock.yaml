@@ -8,13 +8,13 @@ importers:
 
   .:
     dependencies:
-      '@resolid/baseui':
+      '@ensolid/baseui':
         specifier: workspace:*
         version: link:packages/baseui
-      '@resolid/radix':
+      '@ensolid/radix':
         specifier: workspace:*
         version: link:packages/radix
-      '@resolid/solidflow':
+      '@ensolid/solidflow':
         specifier: workspace:*
         version: link:packages/solidflow
       '@solidjs/router':

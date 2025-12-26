@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps, createMemo } from "solid-js";
-import * as SwitchPrimitive from "@resolid/radix";
+import * as SwitchPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface SwitchProps extends SwitchPrimitive.SwitchProps {

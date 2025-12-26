@@ -12,7 +12,7 @@ import {
   Flow,
   Handle,
   Panel,
-} from "@resolid/solidflow";
+} from "@ensolid/solidflow";
 import type {
   Connection,
   Edge,
@@ -21,7 +21,7 @@ import type {
   NodeChange,
   NodeComponentProps,
   FlowInstance,
-} from "@resolid/solidflow";
+} from "@ensolid/solidflow";
 import { Button } from "../components/ui/button";
 
 // --- Node Components ---

@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as HoverCardPrimitive from "@resolid/radix";
+import * as HoverCardPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface HoverCardProps extends HoverCardPrimitive.HoverCardProps {

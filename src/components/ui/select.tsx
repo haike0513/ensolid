@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as SelectPrimitive from "@resolid/radix";
+import * as SelectPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface SelectProps extends SelectPrimitive.SelectProps {

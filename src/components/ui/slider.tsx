@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as SliderPrimitive from "@resolid/radix";
+import * as SliderPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface SliderProps extends SliderPrimitive.SliderProps {

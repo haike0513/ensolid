@@ -1,7 +1,7 @@
 export const en = {
   app: {
     title: "Resolid UI Component Examples",
-    description: "shadcn/ui style components based on @resolid/radix",
+    description: "shadcn/ui style components based on @ensolid/radix",
     componentList: "Component List",
   },
   components: {
@@ -217,17 +217,17 @@ export const en = {
       title: "Core Component Libraries",
       subtitle: "Three independent component library packages to meet different development needs",
       radix: {
-        name: "@resolid/radix",
+        name: "@ensolid/radix",
         title: "Radix UI Primitives",
         description: "Unstyled, accessible base component library providing 25+ high-quality components",
       },
       baseui: {
-        name: "@resolid/baseui",
+        name: "@ensolid/baseui",
         title: "BaseUI Component Library",
         description: "Enterprise-grade UI component library providing 59+ Material Design style components",
       },
       solidflow: {
-        name: "@resolid/solidflow",
+        name: "@ensolid/solidflow",
         title: "SolidFlow",
         description: "High-performance flow diagram and node editor supporting complex workflow editing",
       },

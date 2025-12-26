@@ -4,8 +4,8 @@
 
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { Flow, DefaultNode, applyNodeChanges } from "@resolid/solidflow";
-import type { Node, Edge, NodeChange, EdgeChange } from "@resolid/solidflow";
+import { Flow, DefaultNode, applyNodeChanges } from "@ensolid/solidflow";
+import type { Node, Edge, NodeChange, EdgeChange } from "@ensolid/solidflow";
 
 export const FlowExample: Component = () => {
   const [nodes, setNodes] = createSignal<Node[]>([

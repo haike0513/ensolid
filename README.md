@@ -112,7 +112,7 @@ resolid/
 
 本项目包含三个主要的组件库包：
 
-### 1. @resolid/radix
+### 1. @ensolid/radix
 
 基于 [Radix UI Primitives](https://www.radix-ui.com/primitives) 移植的 SolidJS 版本，提供无样式、可访问的基础组件。
 
@@ -160,7 +160,7 @@ resolid/
 - ✅ Progress - 进度条
 - ✅ Avatar - 头像
 
-### 2. @resolid/baseui
+### 2. @ensolid/baseui
 
 基于 [BaseUI](https://baseui.org/) 移植的 SolidJS 版本，提供企业级 UI 组件库。
 
@@ -181,7 +181,7 @@ resolid/
 - **导航组件**: Breadcrumbs, Menu, Pagination, Stepper
 - **其他组件**: Tooltip, Popover, Popper, Portal, FocusTrap, ClickAwayListener
 
-### 3. @resolid/solidflow
+### 3. @ensolid/solidflow
 
 基于 [React Flow](https://reactflow.dev/) 移植的 SolidJS 版本，提供流程图和节点编辑器功能。
 
@@ -202,7 +202,7 @@ resolid/
 
 ### 4. components/ui
 
-基于 `@resolid/radix` 实现的 shadcn/ui 风格组件库，提供开箱即用的样式化组件。
+基于 `@ensolid/radix` 实现的 shadcn/ui 风格组件库，提供开箱即用的样式化组件。
 
 **特点：**
 - ✅ 基于 Tailwind CSS 的现代设计
@@ -224,7 +224,7 @@ resolid/
 ### 使用 Radix 基础组件
 
 ```tsx
-import { Button, Dialog } from "@resolid/radix";
+import { Button, Dialog } from "@ensolid/radix";
 
 function App() {
   return (
@@ -354,9 +354,9 @@ function App() {
 
 ### 组件数量统计
 
-- **@resolid/radix**: 25 个基础组件
-- **@resolid/baseui**: 59+ 个企业级组件
-- **@resolid/solidflow**: 5 个流程图核心组件
+- **@ensolid/radix**: 25 个基础组件
+- **@ensolid/baseui**: 59+ 个企业级组件
+- **@ensolid/solidflow**: 5 个流程图核心组件
 - **components/ui**: 26 个 shadcn/ui 风格组件
 
 ### 技术特性

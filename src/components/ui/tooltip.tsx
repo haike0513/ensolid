@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as TooltipPrimitive from "@resolid/radix";
+import * as TooltipPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface TooltipProps extends TooltipPrimitive.TooltipProps {

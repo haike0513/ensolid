@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as CheckboxPrimitive from "@resolid/radix";
+import * as CheckboxPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface CheckboxProps extends CheckboxPrimitive.CheckboxProps {

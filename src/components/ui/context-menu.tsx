@@ -1,6 +1,6 @@
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import * as ContextMenuPrimitive from "@resolid/radix";
+import * as ContextMenuPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface ContextMenuProps extends ContextMenuPrimitive.ContextMenuProps {

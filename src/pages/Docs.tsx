@@ -11,9 +11,9 @@ export const DocsPage: Component = () => {
   const sections = [
     { id: "overview", title: "项目概述" },
     { id: "installation", title: "安装指南" },
-    { id: "radix", title: "@resolid/radix" },
-    { id: "baseui", title: "@resolid/baseui" },
-    { id: "solidflow", title: "@resolid/solidflow" },
+    { id: "radix", title: "@ensolid/radix" },
+    { id: "baseui", title: "@ensolid/baseui" },
+    { id: "solidflow", title: "@ensolid/solidflow" },
     { id: "ui-components", title: "UI 组件" },
     { id: "development", title: "开发指南" },
   ];
@@ -76,19 +76,19 @@ export const DocsPage: Component = () => {
                     <h3 class="text-2xl font-semibold mt-8">包含的库</h3>
                     <div class="grid gap-4 md:grid-cols-3 mt-4">
                       <div class="p-4 border rounded-lg">
-                        <h4 class="font-semibold mb-2">@resolid/radix</h4>
+                        <h4 class="font-semibold mb-2">@ensolid/radix</h4>
                         <p class="text-sm text-muted-foreground">
                           基于 Radix UI Primitives 移植，提供无样式、可访问的基础组件
                         </p>
                       </div>
                       <div class="p-4 border rounded-lg">
-                        <h4 class="font-semibold mb-2">@resolid/baseui</h4>
+                        <h4 class="font-semibold mb-2">@ensolid/baseui</h4>
                         <p class="text-sm text-muted-foreground">
                           基于 BaseUI 移植，提供企业级 UI 组件库
                         </p>
                       </div>
                       <div class="p-4 border rounded-lg">
-                        <h4 class="font-semibold mb-2">@resolid/solidflow</h4>
+                        <h4 class="font-semibold mb-2">@ensolid/solidflow</h4>
                         <p class="text-sm text-muted-foreground">
                           基于 React Flow 移植，提供流程图和节点编辑器功能
                         </p>
@@ -163,14 +163,14 @@ pnpm build:solidflow</code>
                 </section>
               )}
 
-              {/* @resolid/radix */}
+              {/* @ensolid/radix */}
               {activeSection() === "radix" && (
                 <section class="space-y-6">
-                  <h2 class="text-3xl font-bold">@resolid/radix</h2>
+                  <h2 class="text-3xl font-bold">@ensolid/radix</h2>
                   <div class="space-y-6">
                     <div>
                       <p>
-                        <code class="bg-muted px-2 py-1 rounded">@resolid/radix</code> 是基于{" "}
+                        <code class="bg-muted px-2 py-1 rounded">@ensolid/radix</code> 是基于{" "}
                         <a
                           href="https://www.radix-ui.com/primitives"
                           target="_blank"
@@ -186,7 +186,7 @@ pnpm build:solidflow</code>
                     <div>
                       <h3 class="text-2xl font-semibold mb-4">安装</h3>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>pnpm add @resolid/radix</code>
+                        <code>pnpm add @ensolid/radix</code>
                       </pre>
                     </div>
 
@@ -194,11 +194,11 @@ pnpm build:solidflow</code>
                       <h3 class="text-2xl font-semibold mb-4">基本使用</h3>
                       <p class="mb-2">导入组件：</p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>{`import { Dialog, Button } from "@resolid/radix";`}</code>
+                        <code>{`import { Dialog, Button } from "@ensolid/radix";`}</code>
                       </pre>
                       <p class="mt-4 mb-2">使用示例：</p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>{`import { Dialog } from "@resolid/radix";
+                        <code>{`import { Dialog } from "@ensolid/radix";
 
 function App() {
   return (
@@ -220,8 +220,8 @@ function App() {
                         支持按需导入，减少打包体积。可以使用子路径导入：
                       </p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>{`import { Dialog } from "@resolid/radix/Dialog";
-import { Checkbox } from "@resolid/radix/Checkbox";`}</code>
+                        <code>{`import { Dialog } from "@ensolid/radix/Dialog";
+import { Checkbox } from "@ensolid/radix/Checkbox";`}</code>
                       </pre>
                     </div>
 
@@ -260,14 +260,14 @@ import { Checkbox } from "@resolid/radix/Checkbox";`}</code>
                 </section>
               )}
 
-              {/* @resolid/baseui */}
+              {/* @ensolid/baseui */}
               {activeSection() === "baseui" && (
                 <section class="space-y-6">
-                  <h2 class="text-3xl font-bold">@resolid/baseui</h2>
+                  <h2 class="text-3xl font-bold">@ensolid/baseui</h2>
                   <div class="space-y-6">
                     <div>
                       <p>
-                        <code class="bg-muted px-2 py-1 rounded">@resolid/baseui</code> 是基于{" "}
+                        <code class="bg-muted px-2 py-1 rounded">@ensolid/baseui</code> 是基于{" "}
                         <a
                           href="https://baseui.org/"
                           target="_blank"
@@ -283,7 +283,7 @@ import { Checkbox } from "@resolid/radix/Checkbox";`}</code>
                     <div>
                       <h3 class="text-2xl font-semibold mb-4">安装</h3>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>pnpm add @resolid/baseui</code>
+                        <code>pnpm add @ensolid/baseui</code>
                       </pre>
                     </div>
 
@@ -291,11 +291,11 @@ import { Checkbox } from "@resolid/radix/Checkbox";`}</code>
                       <h3 class="text-2xl font-semibold mb-4">基本使用</h3>
                       <p class="mb-2">导入组件：</p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>{`import { Button, Input, Card } from "@resolid/baseui";`}</code>
+                        <code>{`import { Button, Input, Card } from "@ensolid/baseui";`}</code>
                       </pre>
                       <p class="mt-4 mb-2">使用示例：</p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>{`import { Button, Card, CardContent } from "@resolid/baseui";
+                        <code>{`import { Button, Card, CardContent } from "@ensolid/baseui";
 
 function App() {
   return (
@@ -347,14 +347,14 @@ function App() {
                 </section>
               )}
 
-              {/* @resolid/solidflow */}
+              {/* @ensolid/solidflow */}
               {activeSection() === "solidflow" && (
                 <section class="space-y-6">
-                  <h2 class="text-3xl font-bold">@resolid/solidflow</h2>
+                  <h2 class="text-3xl font-bold">@ensolid/solidflow</h2>
                   <div class="space-y-6">
                     <div>
                       <p>
-                        <code class="bg-muted px-2 py-1 rounded">@resolid/solidflow</code> 是基于{" "}
+                        <code class="bg-muted px-2 py-1 rounded">@ensolid/solidflow</code> 是基于{" "}
                         <a
                           href="https://reactflow.dev/"
                           target="_blank"
@@ -370,7 +370,7 @@ function App() {
                     <div>
                       <h3 class="text-2xl font-semibold mb-4">安装</h3>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>pnpm add @resolid/solidflow</code>
+                        <code>pnpm add @ensolid/solidflow</code>
                       </pre>
                     </div>
 
@@ -378,12 +378,12 @@ function App() {
                       <h3 class="text-2xl font-semibold mb-4">基本使用</h3>
                       <p class="mb-2">导入组件：</p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>{`import { Flow, Node, Edge } from "@resolid/solidflow";`}</code>
+                        <code>{`import { Flow, Node, Edge } from "@ensolid/solidflow";`}</code>
                       </pre>
                       <p class="mt-4 mb-2">使用示例：</p>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
                         <code>{`import { createSignal } from "solid-js";
-import { Flow, Node, Edge } from "@resolid/solidflow";
+import { Flow, Node, Edge } from "@ensolid/solidflow";
 
 function App() {
   const [nodes, setNodes] = createSignal([
@@ -437,7 +437,7 @@ function App() {
                   <div class="space-y-6">
                     <div>
                       <p>
-                        本项目还提供了基于 <code class="bg-muted px-2 py-1 rounded">@resolid/radix</code> 实现的
+                        本项目还提供了基于 <code class="bg-muted px-2 py-1 rounded">@ensolid/radix</code> 实现的
                         shadcn/ui 风格组件库，提供开箱即用的样式化组件。
                       </p>
                     </div>
@@ -546,15 +546,15 @@ function App() {
                         </div>
                         <div>
                           <code class="bg-muted px-2 py-1 rounded">pnpm build:radix</code>
-                          <span class="ml-2 text-muted-foreground">构建 @resolid/radix</span>
+                          <span class="ml-2 text-muted-foreground">构建 @ensolid/radix</span>
                         </div>
                         <div>
                           <code class="bg-muted px-2 py-1 rounded">pnpm build:baseui</code>
-                          <span class="ml-2 text-muted-foreground">构建 @resolid/baseui</span>
+                          <span class="ml-2 text-muted-foreground">构建 @ensolid/baseui</span>
                         </div>
                         <div>
                           <code class="bg-muted px-2 py-1 rounded">pnpm build:solidflow</code>
-                          <span class="ml-2 text-muted-foreground">构建 @resolid/solidflow</span>
+                          <span class="ml-2 text-muted-foreground">构建 @ensolid/solidflow</span>
                         </div>
                       </div>
                     </div>

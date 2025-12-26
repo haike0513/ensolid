@@ -1,6 +1,6 @@
 # shadcn/ui 风格组件
 
-本目录包含基于 `@resolid/radix` 实现的 shadcn/ui 风格组件。
+本目录包含基于 `@ensolid/radix` 实现的 shadcn/ui 风格组件。
 
 ## 可用组件
 

@@ -1,7 +1,7 @@
 export const zh = {
     app: {
         title: "Resolid UI 组件示例",
-        description: "基于 @resolid/radix 的 shadcn/ui 风格组件展示",
+        description: "基于 @ensolid/radix 的 shadcn/ui 风格组件展示",
         componentList: "组件列表",
     },
     components: {
@@ -217,17 +217,17 @@ export const zh = {
             title: "核心组件库",
             subtitle: "三个独立的组件库包，满足不同场景的开发需求",
             radix: {
-                name: "@resolid/radix",
+                name: "@ensolid/radix",
                 title: "Radix UI Primitives",
                 description: "无样式、可访问的基础组件库，提供 25+ 个高质量组件",
             },
             baseui: {
-                name: "@resolid/baseui",
+                name: "@ensolid/baseui",
                 title: "BaseUI 组件库",
                 description: "企业级 UI 组件库，提供 59+ 个 Material Design 风格组件",
             },
             solidflow: {
-                name: "@resolid/solidflow",
+                name: "@ensolid/solidflow",
                 title: "SolidFlow",
                 description: "高性能流程图和节点编辑器，支持复杂的工作流编辑",
             },

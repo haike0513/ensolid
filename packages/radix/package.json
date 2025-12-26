@@ -1,5 +1,5 @@
 {
-  "name": "@resolid/radix",
+  "name": "@ensolid/radix",
   "version": "0.0.0",
   "type": "module",
   "main": "./dist/index.js",
