@@ -241,6 +241,8 @@ export interface FlowProps {
   classList?: string[];
   id?: string;
   children?: any;
+  onDragOver?: (event: DragEvent) => void;
+  onDrop?: (event: DragEvent) => void;
 }
 
 export interface FitViewOptions {
