@@ -1,9 +1,5 @@
-/**
- * Node 组件 - 流程节点
- */
-
-import { Component, JSX, splitProps, Show } from 'solid-js';
-import type { Node as NodeType } from '../../types';
+import { Component, JSX, splitProps, Show, onMount, onCleanup } from "solid-js";
+import type { Node as NodeType } from "../../types";
 
 export interface NodeProps {
   /**
@@ -50,22 +46,56 @@ export interface NodeProps {
    * 节点鼠标抬起事件
    */
   onMouseUp?: (event: MouseEvent, node: NodeType) => void;
+  /**
+   * 节点尺寸变化事件
+   */
+  onDimensionsChange?: (
+    id: string,
+    dimensions: { width: number; height: number; x: number; y: number }
+  ) => void;
 }
 
 export const Node: Component<NodeProps> = (props) => {
   const [local, others] = splitProps(props, [
-    'node',
-    'selected',
-    'dragging',
-    'children',
-    'renderNode',
-    'onClick',
-    'onDoubleClick',
-    'onMouseEnter',
-    'onMouseLeave',
-    'onMouseDown',
-    'onMouseUp',
+    "node",
+    "selected",
+    "dragging",
+    "children",
+    "renderNode",
+    "onClick",
+    "onDoubleClick",
+    "onMouseEnter",
+    "onMouseLeave",
+    "onMouseDown",
+    "onMouseUp",
+    "onDimensionsChange",
   ]);
+
+  let nodeRef: HTMLDivElement | undefined;
+
+  onMount(() => {
+    if (nodeRef) {
+      const observer = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (local.onDimensionsChange) {
+            local.onDimensionsChange(local.node.id, {
+              width:
+                entry.borderBoxSize?.[0]?.inlineSize ?? entry.contentRect.width,
+              height:
+                entry.borderBoxSize?.[0]?.blockSize ?? entry.contentRect.height,
+              x: local.node.position.x,
+              y: local.node.position.y,
+            });
+          }
+        }
+      });
+      observer.observe(nodeRef);
+
+      onCleanup(() => {
+        observer.disconnect();
+      });
+    }
+  });
 
   const handleClick = (event: MouseEvent) => {
     local.onClick?.(event, local.node);
@@ -92,17 +122,18 @@ export const Node: Component<NodeProps> = (props) => {
   };
 
   const nodeStyle = () => ({
-    position: 'absolute' as const,
+    position: "absolute" as const,
     left: `${local.node.position.x}px`,
     top: `${local.node.position.y}px`,
-    width: local.node.width ? `${local.node.width}px` : 'auto',
-    height: local.node.height ? `${local.node.height}px` : 'auto',
+    width: local.node.width ? `${local.node.width}px` : "auto",
+    height: local.node.height ? `${local.node.height}px` : "auto",
     zIndex: local.node.zIndex ?? (local.selected ? 1000 : 1),
     ...local.node.style,
   });
 
   return (
     <div
+      ref={nodeRef}
       {...others}
       data-id={local.node.id}
       data-type={local.node.type}
@@ -110,9 +141,9 @@ export const Node: Component<NodeProps> = (props) => {
       data-dragging={local.dragging}
       class={local.node.className}
       classList={{
-        'solidflow-node': true,
-        'solidflow-node-selected': local.selected,
-        'solidflow-node-dragging': local.dragging,
+        "solidflow-node": true,
+        "solidflow-node-selected": local.selected,
+        "solidflow-node-dragging": local.dragging,
         ...(local.node.classList?.reduce(
           (acc, cls) => ({ ...acc, [cls]: true }),
           {} as Record<string, boolean>
@@ -126,12 +157,13 @@ export const Node: Component<NodeProps> = (props) => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      <Show when={local.renderNode} fallback={<div>{local.node.data?.label ?? local.node.id}</div>}>
+      <Show
+        when={local.renderNode}
+        fallback={<div>{local.node.data?.label ?? local.node.id}</div>}
+      >
         {local.renderNode?.(local.node)}
       </Show>
       {local.children}
     </div>
   );
 };
-
-

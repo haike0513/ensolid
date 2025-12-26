@@ -1,8 +1,5 @@
-/**
- * Background 组件 - 流程图画布背景
- */
-
-import { Component, JSX, splitProps } from 'solid-js';
+import { Component, JSX, splitProps } from "solid-js";
+import type { Viewport } from "../../types";
 
 export interface BackgroundProps {
   /**
@@ -29,7 +26,7 @@ export interface BackgroundProps {
    * 背景变体
    * @default 'dots'
    */
-  variant?: 'dots' | 'lines' | 'cross';
+  variant?: "dots" | "lines" | "cross";
   /**
    * 背景大小
    */
@@ -42,68 +39,88 @@ export interface BackgroundProps {
    * 样式
    */
   style?: JSX.CSSProperties;
+  /**
+   * 视口信息
+   */
+  viewport?: Viewport;
 }
 
 export const Background: Component<BackgroundProps> = (props) => {
   const [local, others] = splitProps(props, [
-    'color',
-    'gap',
-    'lineWidth',
-    'lineColor',
-    'variant',
-    'size',
-    'className',
-    'style',
+    "color",
+    "gap",
+    "lineWidth",
+    "lineColor",
+    "variant",
+    "size",
+    "className",
+    "style",
+    "viewport",
   ]);
 
-  const color = () => local.color ?? '#ffffff';
+  const color = () => local.color ?? "#ffffff";
   const gap = () => local.gap ?? 20;
   const lineWidth = () => local.lineWidth ?? 1;
-  const lineColor = () => local.lineColor ?? '#e2e8f0';
-  const variant = () => local.variant ?? 'dots';
+  const lineColor = () => local.lineColor ?? "#e2e8f0";
+  const variant = () => local.variant ?? "dots";
   const size = () => local.size ?? gap();
+  const viewport = () => local.viewport ?? { x: 0, y: 0, zoom: 1 };
 
-  const patternId = () => `solidflow-background-${variant()}-${gap()}-${size()}`;
+  const patternId = () =>
+    `solidflow-background-${variant()}-${gap()}-${size()}`;
+
+  // 计算偏移量和缩放
+  const scaledGap = () => gap() * viewport().zoom;
+  const xOffset = () => viewport().x % scaledGap();
+  const yOffset = () => viewport().y % scaledGap();
+
+  // 确保圆形/点的大小也稍微跟缩放有关，或者保持固定（ReactFlow 默认是 scaledGap，但 dot radius 可能是固定的 visually?）
+  // ReactFlow: gap 缩放，dot radius 好像不缩放或者有单独逻辑。
+  // 通常我们希望网格随 zoom 变大变小。
 
   const createPattern = () => {
-    if (variant() === 'dots') {
+    const sGap = scaledGap();
+    const radius = (local.size || 1) * viewport().zoom;
+    const strokeWidth = lineWidth() * viewport().zoom;
+
+    if (variant() === "dots") {
       return (
         <pattern
           id={patternId()}
-          x="0"
-          y="0"
-          width={gap()}
-          height={gap()}
+          x={xOffset()}
+          y={yOffset()}
+          width={sGap}
+          height={sGap}
           patternUnits="userSpaceOnUse"
         >
-          <circle cx={size() / 2} cy={size() / 2} r="1" fill={lineColor()} />
+          <circle cx={sGap / 2} cy={sGap / 2} r={radius} fill={lineColor()} />
         </pattern>
       );
-    } else if (variant() === 'lines') {
+    } else if (variant() === "lines") {
       return (
         <pattern
           id={patternId()}
-          x="0"
-          y="0"
-          width={gap()}
-          height={gap()}
+          x={xOffset()}
+          y={yOffset()}
+          width={sGap}
+          height={sGap}
           patternUnits="userSpaceOnUse"
         >
           <line
             x1="0"
-            y1={gap()}
-            x2={gap()}
-            y2={gap()}
+            y1={sGap}
+            x2={sGap}
+            y2={sGap}
             stroke={lineColor()}
-            stroke-width={lineWidth()}
+            stroke-width={strokeWidth}
           />
           <line
-            x1={gap()}
+            x1={sGap}
             y1="0"
-            x2={gap()}
-            y2={gap()}
+            x2={sGap}
+            y2={sGap}
             stroke={lineColor()}
-            stroke-width={lineWidth()}
+            stroke-width={strokeWidth}
           />
         </pattern>
       );
@@ -112,42 +129,34 @@ export const Background: Component<BackgroundProps> = (props) => {
       return (
         <pattern
           id={patternId()}
-          x="0"
-          y="0"
-          width={gap()}
-          height={gap()}
+          x={xOffset()}
+          y={yOffset()}
+          width={sGap}
+          height={sGap}
           patternUnits="userSpaceOnUse"
         >
-          <line
-            x1="0"
-            y1={gap()}
-            x2={gap()}
-            y2={gap()}
+          <path
+            d={`M ${sGap / 2} 0 V ${sGap} M 0 ${sGap / 2} H ${sGap}`}
             stroke={lineColor()}
-            stroke-width={lineWidth()}
-          />
-          <line
-            x1={gap()}
-            y1="0"
-            x2={gap()}
-            y2={gap()}
-            stroke={lineColor()}
-            stroke-width={lineWidth()}
+            stroke-width={strokeWidth}
           />
         </pattern>
       );
     }
   };
 
+  // 注意：当 variant 改变时 patternId 改变，会自动更新。
+  // xOffset 和 yOffset 改变会更新 pattern 的 x, y。
+
   return (
     <div
       {...others}
       class={local.className}
       classList={{
-        'absolute inset-0 pointer-events-none': true,
+        "absolute inset-0 pointer-events-none": true,
       }}
       style={{
-        'background-color': color(),
+        "background-color": color(),
         ...local.style,
       }}
     >
@@ -158,4 +167,3 @@ export const Background: Component<BackgroundProps> = (props) => {
     </div>
   );
 };
-

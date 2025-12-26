@@ -2,8 +2,8 @@
  * MiniMap 组件 - 流程图画布小地图
  */
 
-import { Component, JSX, splitProps } from 'solid-js';
-import type { Node, Edge, Viewport } from '../../types';
+import { Component, JSX, splitProps, Show } from "solid-js";
+import type { Node, Edge, Viewport } from "../../types";
 
 export interface MiniMapProps {
   /**
@@ -46,7 +46,7 @@ export interface MiniMapProps {
    * 位置
    * @default 'bottom-right'
    */
-  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
   /**
    * 是否可点击平移
    * @default true
@@ -65,52 +65,63 @@ export interface MiniMapProps {
    * 点击节点回调
    */
   onNodeClick?: (event: MouseEvent, node: Node) => void;
+  /**
+   * 容器宽度
+   */
+  containerWidth?: number;
+  /**
+   * 容器高度
+   */
+  containerHeight?: number;
 }
 
 export const MiniMap: Component<MiniMapProps> = (props) => {
   const [local, others] = splitProps(props, [
-    'nodes',
-    'edges',
-    'viewport',
-    'nodeColor',
-    'nodeStrokeColor',
-    'nodeStrokeWidth',
-    'maskColor',
-    'className',
-    'style',
-    'position',
-    'pannable',
-    'zoomable',
-    'onClick',
-    'onNodeClick',
+    "nodes",
+    "edges",
+    "viewport",
+    "nodeColor",
+    "nodeStrokeColor",
+    "nodeStrokeWidth",
+    "maskColor",
+    "className",
+    "style",
+    "position",
+    "pannable",
+    "zoomable",
+    "onClick",
+    "onNodeClick",
+    "containerWidth",
+    "containerHeight",
   ]);
 
-  const position = () => local.position ?? 'bottom-right';
+  const position = () => local.position ?? "bottom-right";
   const pannable = () => local.pannable ?? true;
   const nodeStrokeWidth = () => local.nodeStrokeWidth ?? 2;
+  const maskColor = () => local.maskColor ?? "rgba(235, 235, 235, 0.6)";
 
   const getPositionClasses = (pos: string) => {
     const classes: Record<string, string> = {
-      'top-left': 'top-4 left-4',
-      'top-right': 'top-4 right-4',
-      'bottom-left': 'bottom-4 left-4',
-      'bottom-right': 'bottom-4 right-4',
+      "top-left": "top-4 left-4",
+      "top-right": "top-4 right-4",
+      "bottom-left": "bottom-4 left-4",
+      "bottom-right": "bottom-4 right-4",
     };
     return classes[pos];
   };
 
   const getNodeColor = (node: Node): string => {
-    if (typeof local.nodeColor === 'function') {
+    if (typeof local.nodeColor === "function") {
       return local.nodeColor(node);
     }
-    return local.nodeColor ?? (node.selected ? '#ff0072' : '#1a192b');
+    return local.nodeColor ?? (node.selected ? "#ff0072" : "#1a192b");
   };
 
   const getNodeStrokeColor = (node: Node): string => {
-    if (typeof local.nodeStrokeColor === 'function') {
+    if (typeof local.nodeStrokeColor === "function") {
       return local.nodeStrokeColor(node);
     }
-    return local.nodeStrokeColor ?? '#fff';
+    return local.nodeStrokeColor ?? "#fff";
   };
 
   // 计算节点边界
@@ -140,22 +151,46 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
 
   const bounds = () => getBounds();
 
+  const getViewportRect = () => {
+    const vp = local.viewport;
+    const width = local.containerWidth ?? 0;
+    const height = local.containerHeight ?? 0;
+
+    if (width === 0 || height === 0 || vp.zoom === 0) return null;
+
+    return {
+      x: -vp.x / vp.zoom,
+      y: -vp.y / vp.zoom,
+      width: width / vp.zoom,
+      height: height / vp.zoom,
+    };
+  };
+
+  const viewRect = () => getViewportRect();
+
   return (
     <div
       {...others}
       class={local.className}
       classList={{
-        'absolute z-10 bg-white border border-gray-300 rounded shadow-lg overflow-hidden': true,
+        "absolute z-10 bg-white border border-gray-300 rounded shadow-lg overflow-hidden":
+          true,
         [getPositionClasses(position())]: true,
       }}
       style={{
-        width: '200px',
-        height: '200px',
+        width: "200px",
+        height: "200px",
         ...local.style,
       }}
       onClick={local.onClick}
     >
-      <svg width="200" height="200" viewBox={`${bounds().x} ${bounds().y} ${bounds().width} ${bounds().height}`}>
+      <svg
+        width="200"
+        height="200"
+        viewBox={`${bounds().x} ${bounds().y} ${bounds().width} ${
+          bounds().height
+        }`}
+      >
         {local.nodes.map((node) => (
           <rect
             x={node.position.x}
@@ -167,11 +202,24 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
             stroke-width={nodeStrokeWidth()}
             rx="4"
             onClick={(e) => local.onNodeClick?.(e, node)}
-            style={{ cursor: pannable() ? 'pointer' : 'default' }}
+            style={{ cursor: pannable() ? "pointer" : "default" }}
           />
         ))}
+        <Show when={viewRect()}>
+          {(rect) => (
+            <rect
+              x={rect().x}
+              y={rect().y}
+              width={rect().width}
+              height={rect().height}
+              fill={maskColor()}
+              fill-opacity="0.2"
+              stroke={maskColor()}
+              stroke-width="1"
+            />
+          )}
+        </Show>
       </svg>
     </div>
   );
 };
-

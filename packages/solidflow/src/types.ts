@@ -3,7 +3,7 @@
  * 移植自 xyflow/react
  */
 
-import type { Component } from 'solid-js';
+import type { Component } from "solid-js";
 
 export type NodeId = string;
 export type EdgeId = string;
@@ -13,7 +13,7 @@ export type XYPosition = {
   y: number;
 };
 
-export type Position = 'top' | 'bottom' | 'left' | 'right';
+export type Position = "top" | "bottom" | "left" | "right";
 
 export interface Node<T = any> {
   id: NodeId;
@@ -28,7 +28,7 @@ export interface Node<T = any> {
   width?: number;
   height?: number;
   parentNode?: NodeId;
-  extent?: 'parent' | [[number, number], [number, number]];
+  extent?: "parent" | [[number, number], [number, number]];
   expandParent?: boolean;
   positionAbsolute?: XYPosition;
   ariaLabel?: string;
@@ -68,8 +68,13 @@ export interface Edge<T = any> {
   selected?: boolean;
 }
 
-export type EdgeMarkerType = string | { type: MarkerType; color?: string; width?: number; height?: number };
-export type MarkerType = 'arrow' | 'arrowclosed';
+export type EdgeMarkerType = string | {
+  type: MarkerType;
+  color?: string;
+  width?: number;
+  height?: number;
+};
+export type MarkerType = "arrow" | "arrowclosed";
 
 export interface Viewport {
   x: number;
@@ -96,7 +101,7 @@ export interface NodeDimensions extends Dimensions {
 
 export interface HandleElement {
   id?: string | null;
-  type: 'source' | 'target';
+  type: "source" | "target";
   position: Position;
   nodeId: NodeId;
   x?: number;
@@ -121,65 +126,85 @@ export type EdgeTypes = Record<string, Component<EdgeComponentProps>>;
 export type OnNodesChange = (changes: NodeChange[]) => void;
 export type OnEdgesChange = (changes: EdgeChange[]) => void;
 export type OnConnect = (connection: Connection) => void;
-export type OnConnectStart = (event: MouseEvent | TouchEvent, params: { nodeId: NodeId | null; handleId: string | null; handleType: 'source' | 'target' | null }) => void;
+export type OnConnectStart = (
+  event: MouseEvent | TouchEvent,
+  params: {
+    nodeId: NodeId | null;
+    handleId: string | null;
+    handleType: "source" | "target" | null;
+  },
+) => void;
 export type OnConnectEnd = (event: MouseEvent | TouchEvent) => void;
 export type OnNodesDelete = (nodes: Node[]) => void;
 export type OnEdgesDelete = (edges: Edge[]) => void;
-export type OnSelectionChange = (params: { nodes: Node[]; edges: Edge[] }) => void;
+export type OnSelectionChange = (
+  params: { nodes: Node[]; edges: Edge[] },
+) => void;
 
 export type NodeChange =
   | {
-      id: NodeId;
-      type: 'position';
-      position?: XYPosition;
-      positionAbsolute?: XYPosition;
-      dragging?: boolean;
-    }
+    id: NodeId;
+    type: "position";
+    position?: XYPosition;
+    positionAbsolute?: XYPosition;
+    dragging?: boolean;
+  }
   | {
-      id: NodeId;
-      type: 'dimensions';
-      dimensions?: NodeDimensions;
-    }
+    id: NodeId;
+    type: "dimensions";
+    dimensions?: NodeDimensions;
+  }
   | {
-      id: NodeId;
-      type: 'select';
-      selected: boolean;
-    }
+    id: NodeId;
+    type: "select";
+    selected: boolean;
+  }
   | {
-      id: NodeId;
-      type: 'remove';
-    }
+    id: NodeId;
+    type: "remove";
+  }
   | {
-      id: NodeId;
-      type: 'add';
-      item: Node;
-    }
+    id: NodeId;
+    type: "add";
+    item: Node;
+  }
   | {
-      id: NodeId;
-      type: 'reset';
-      item: Node;
-    };
+    id: NodeId;
+    type: "reset";
+    item: Node;
+  };
 
 export type EdgeChange =
   | {
-      id: EdgeId;
-      type: 'select';
-      selected: boolean;
-    }
+    id: EdgeId;
+    type: "select";
+    selected: boolean;
+  }
   | {
-      id: EdgeId;
-      type: 'remove';
-    }
+    id: EdgeId;
+    type: "remove";
+  }
   | {
-      id: EdgeId;
-      type: 'add';
-      item: Edge;
-    }
+    id: EdgeId;
+    type: "add";
+    item: Edge;
+  }
   | {
-      id: EdgeId;
-      type: 'reset';
-      item: Edge;
-    };
+    id: EdgeId;
+    type: "reset";
+    item: Edge;
+  };
+
+export interface FlowInstance {
+  zoomIn: () => void;
+  zoomOut: () => void;
+  zoomTo: (zoom: number) => void;
+  fitView: (options?: FitViewOptions) => void;
+  setViewport: (viewport: Viewport) => void;
+  getViewport: () => Viewport;
+  project: (position: XYPosition) => XYPosition;
+  toObject: () => { nodes: Node[]; edges: Edge[]; viewport: Viewport };
+}
 
 export interface FlowProps {
   nodes: Node[];
@@ -192,6 +217,7 @@ export interface FlowProps {
   onNodesDelete?: OnNodesDelete;
   onEdgesDelete?: OnEdgesDelete;
   onSelectionChange?: OnSelectionChange;
+  onInit?: (instance: FlowInstance) => void;
   nodeTypes?: NodeTypes;
   edgeTypes?: EdgeTypes;
   defaultViewport?: Viewport;
@@ -214,6 +240,7 @@ export interface FlowProps {
   className?: string;
   classList?: string[];
   id?: string;
+  children?: any;
 }
 
 export interface FitViewOptions {

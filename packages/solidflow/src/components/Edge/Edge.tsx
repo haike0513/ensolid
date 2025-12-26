@@ -2,15 +2,15 @@
  * Edge 组件 - 流程边/连接线
  */
 
-import { Component, JSX, splitProps, Show } from 'solid-js';
-import type { Edge as EdgeType, Node, XYPosition, Position } from '../../types';
+import { Component, JSX, Show, splitProps } from "solid-js";
+import type { Edge as EdgeType, Node, Position, XYPosition } from "../../types";
 import {
-    getStraightPath,
-    getBezierPath,
-    getSimpleBezierPath,
-    getSmoothStepPath,
-    getNodeHandlePosition,
-} from '../../utils';
+  getBezierPath,
+  getNodeHandlePosition,
+  getSimpleBezierPath,
+  getSmoothStepPath,
+  getStraightPath,
+} from "../../utils";
 
 export interface EdgeProps {
   /**
@@ -53,15 +53,15 @@ export interface EdgeProps {
 
 export const Edge: Component<EdgeProps> = (props) => {
   const [local, others] = splitProps(props, [
-    'edge',
-    'sourceNode',
-    'targetNode',
-    'selected',
-    'sourcePosition',
-    'targetPosition',
-    'onClick',
-    'onDoubleClick',
-    'renderEdge',
+    "edge",
+    "sourceNode",
+    "targetNode",
+    "selected",
+    "sourcePosition",
+    "targetPosition",
+    "onClick",
+    "onDoubleClick",
+    "renderEdge",
   ]);
 
   const handleClick = (event: MouseEvent) => {
@@ -81,10 +81,14 @@ export const Edge: Component<EdgeProps> = (props) => {
       // 如果指定了 sourceHandle，尝试找到对应的 Handle 位置
       const handleId = local.edge.sourceHandle;
       const sourceNode = local.sourceNode;
-      
+
       // 默认使用 right 位置（输出）
-      const defaultPosition: Position = 'right';
-      return getNodeHandlePosition(sourceNode, handleId ?? null, defaultPosition);
+      const defaultPosition: Position = "right";
+      return getNodeHandlePosition(
+        sourceNode,
+        handleId ?? null,
+        defaultPosition,
+      );
     }
     return { x: 0, y: 0 };
   };
@@ -98,10 +102,14 @@ export const Edge: Component<EdgeProps> = (props) => {
       // 如果指定了 targetHandle，尝试找到对应的 Handle 位置
       const handleId = local.edge.targetHandle;
       const targetNode = local.targetNode;
-      
+
       // 默认使用 left 位置（输入）
-      const defaultPosition: Position = 'left';
-      return getNodeHandlePosition(targetNode, handleId ?? null, defaultPosition);
+      const defaultPosition: Position = "left";
+      return getNodeHandlePosition(
+        targetNode,
+        handleId ?? null,
+        defaultPosition,
+      );
     }
     return { x: 0, y: 0 };
   };
@@ -110,29 +118,44 @@ export const Edge: Component<EdgeProps> = (props) => {
   const getEdgePath = (): string => {
     const sourcePos = getSourcePosition();
     const targetPos = getTargetPosition();
-    
-    // 确定源和目标的位置（用于路径计算）
-    const sourcePosition: Position = local.edge.sourceHandle 
-      ? 'right' // 可以根据实际 Handle 位置确定
-      : 'right';
-    const targetPosition: Position = local.edge.targetHandle
-      ? 'left' // 可以根据实际 Handle 位置确定
-      : 'left';
 
-    const edgeType = local.edge.type ?? 'default';
+    // 确定源和目标的位置（用于路径计算）
+    const sourcePosition: Position = local.edge.sourceHandle
+      ? "right" // 可以根据实际 Handle 位置确定
+      : "right";
+    const targetPosition: Position = local.edge.targetHandle
+      ? "left" // 可以根据实际 Handle 位置确定
+      : "left";
+
+    const edgeType = local.edge.type ?? "default";
 
     switch (edgeType) {
-      case 'straight':
+      case "straight":
         return getStraightPath(sourcePos, targetPos);
-      case 'step':
-      case 'smoothstep':
-        return getSmoothStepPath(sourcePos, targetPos, sourcePosition, targetPosition);
-      case 'bezier':
-        return getBezierPath(sourcePos, targetPos, sourcePosition, targetPosition);
-      case 'simplebezier':
-      case 'default':
+      case "step":
+      case "smoothstep":
+        return getSmoothStepPath(
+          sourcePos,
+          targetPos,
+          sourcePosition,
+          targetPosition,
+        );
+      case "bezier":
+        return getBezierPath(
+          sourcePos,
+          targetPos,
+          sourcePosition,
+          targetPosition,
+        );
+      case "simplebezier":
+      case "default":
       default:
-        return getSimpleBezierPath(sourcePos, targetPos, sourcePosition, targetPosition);
+        return getSimpleBezierPath(
+          sourcePos,
+          targetPos,
+          sourcePosition,
+          targetPosition,
+        );
     }
   };
 
@@ -149,14 +172,16 @@ export const Edge: Component<EdgeProps> = (props) => {
   const getMarkerEnd = (): string | undefined => {
     if (!local.edge.markerEnd && !local.edge.markerStart) {
       // 默认添加箭头标记
-      return local.selected ? 'url(#arrowhead-selected)' : 'url(#arrowhead)';
+      return local.selected ? "url(#arrowhead-selected)" : "url(#arrowhead)";
     }
 
     if (local.edge.markerEnd) {
-      if (typeof local.edge.markerEnd === 'string') {
+      if (typeof local.edge.markerEnd === "string") {
         return `url(#${local.edge.markerEnd})`;
       } else {
-        const markerType = local.edge.markerEnd.type === 'arrowclosed' ? 'arrowclosed' : 'arrowhead';
+        const markerType = local.edge.markerEnd.type === "arrowclosed"
+          ? "arrowclosed"
+          : "arrowhead";
         const markerId = local.selected ? `${markerType}-selected` : markerType;
         return `url(#${markerId})`;
       }
@@ -167,10 +192,12 @@ export const Edge: Component<EdgeProps> = (props) => {
 
   const getMarkerStart = (): string | undefined => {
     if (local.edge.markerStart) {
-      if (typeof local.edge.markerStart === 'string') {
+      if (typeof local.edge.markerStart === "string") {
         return `url(#${local.edge.markerStart})`;
       } else {
-        const markerType = local.edge.markerStart.type === 'arrowclosed' ? 'arrowclosed' : 'arrowhead';
+        const markerType = local.edge.markerStart.type === "arrowclosed"
+          ? "arrowclosed"
+          : "arrowhead";
         const markerId = local.selected ? `${markerType}-selected` : markerType;
         return `url(#${markerId})`;
       }
@@ -186,12 +213,12 @@ export const Edge: Component<EdgeProps> = (props) => {
       data-selected={local.selected}
       class={local.edge.className}
       classList={{
-        'solidflow-edge': true,
-        'solidflow-edge-selected': local.selected,
-        'solidflow-edge-animated': local.edge.animated,
+        "solidflow-edge": true,
+        "solidflow-edge-selected": local.selected,
+        "solidflow-edge-animated": local.edge.animated,
         ...(local.edge.classList?.reduce(
           (acc, cls) => ({ ...acc, [cls]: true }),
-          {} as Record<string, boolean>
+          {} as Record<string, boolean>,
         ) ?? {}),
       }}
       style={{
@@ -207,8 +234,10 @@ export const Edge: Component<EdgeProps> = (props) => {
             <path
               d={path()}
               fill="none"
-              stroke={local.edge.style?.stroke ?? (local.selected ? '#3b82f6' : '#b1b1b7')}
-              stroke-width={local.edge.style?.strokeWidth ?? (local.selected ? '3' : '2')}
+              stroke={local.edge.style?.stroke ??
+                (local.selected ? "#3b82f6" : "#b1b1b7")}
+              stroke-width={local.edge.style?.strokeWidth ??
+                (local.selected ? "3" : "2")}
               style={{
                 ...edgeStyle(),
                 "pointer-events": "stroke",
@@ -223,7 +252,7 @@ export const Edge: Component<EdgeProps> = (props) => {
                 y={(sourcePos().y + targetPos().y) / 2}
                 text-anchor="middle"
                 dominant-baseline="middle"
-                fill={local.edge.labelStyle?.color ?? '#000'}
+                fill={local.edge.labelStyle?.color ?? "#000"}
                 style={local.edge.labelStyle as any}
                 class="solidflow-edge-label"
               >
@@ -238,5 +267,3 @@ export const Edge: Component<EdgeProps> = (props) => {
     </g>
   );
 };
-
-
