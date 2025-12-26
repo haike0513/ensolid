@@ -4,7 +4,7 @@
 
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { Flow } from "@resolid/solidflow";
+import { Flow, applyNodeChanges } from "@resolid/solidflow";
 import type { Node, Edge, NodeChange, NodeComponentProps } from "@resolid/solidflow";
 import { Handle } from "@resolid/solidflow";
 
@@ -12,7 +12,7 @@ import { Handle } from "@resolid/solidflow";
 const InputNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-blue-100 border-2 border-blue-500 rounded-lg p-4 min-w-[150px] min-h-[60px] shadow-lg">
-      <Handle type="source" position="bottom" />
+      <Handle type="source" position="bottom" nodeId={props.node.id} />
       <div class="font-semibold text-blue-800">输入节点</div>
       <div class="text-sm text-blue-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
     </div>
@@ -23,8 +23,8 @@ const InputNode: Component<NodeComponentProps> = (props) => {
 const ProcessNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-green-100 border-2 border-green-500 rounded-lg p-4 min-w-[150px] min-h-[60px] shadow-lg">
-      <Handle type="target" position="top" />
-      <Handle type="source" position="bottom" />
+      <Handle type="target" position="top" nodeId={props.node.id} />
+      <Handle type="source" position="bottom" nodeId={props.node.id} />
       <div class="font-semibold text-green-800">处理节点</div>
       <div class="text-sm text-green-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
     </div>
@@ -35,7 +35,7 @@ const ProcessNode: Component<NodeComponentProps> = (props) => {
 const OutputNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-red-100 border-2 border-red-500 rounded-lg p-4 min-w-[150px] min-h-[60px] shadow-lg">
-      <Handle type="target" position="top" />
+      <Handle type="target" position="top" nodeId={props.node.id} />
       <div class="font-semibold text-red-800">输出节点</div>
       <div class="text-sm text-red-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
     </div>
@@ -47,9 +47,9 @@ const DecisionNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-yellow-100 border-2 border-yellow-500 rounded-lg p-4 min-w-[150px] min-h-[80px] shadow-lg transform rotate-45">
       <div class="transform -rotate-45">
-        <Handle type="target" position="top" />
-        <Handle type="source" position="right" />
-        <Handle type="source" position="bottom" />
+        <Handle type="target" position="top" nodeId={props.node.id} />
+        <Handle type="source" position="right" nodeId={props.node.id} />
+        <Handle type="source" position="bottom" nodeId={props.node.id} />
         <div class="font-semibold text-yellow-800">决策节点</div>
         <div class="text-sm text-yellow-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
       </div>
@@ -115,22 +115,7 @@ export const FlowCustomNodeExample: Component = () => {
   ]);
 
   const handleNodesChange = (changes: NodeChange[]) => {
-    setNodes((prevNodes) => {
-      const newNodes = [...prevNodes];
-      for (const change of changes) {
-        if (change.type === "position") {
-          const index = newNodes.findIndex((n) => n.id === change.id);
-          if (index !== -1) {
-            newNodes[index] = {
-              ...newNodes[index],
-              position: change.position ?? newNodes[index].position,
-              dragging: change.dragging,
-            };
-          }
-        }
-      }
-      return newNodes;
-    });
+    setNodes((prevNodes) => applyNodeChanges(changes, prevNodes));
   };
 
   return (

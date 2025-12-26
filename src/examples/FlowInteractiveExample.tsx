@@ -4,7 +4,7 @@
 
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { Flow, DefaultNode } from "@resolid/solidflow";
+import { Flow, DefaultNode, applyNodeChanges } from "@resolid/solidflow";
 import type { Node, Edge, NodeChange } from "@resolid/solidflow";
 import { Button } from "@/components/ui/button";
 
@@ -35,27 +35,7 @@ export const FlowInteractiveExample: Component = () => {
   const [nodeIdCounter, setNodeIdCounter] = createSignal(3);
 
   const handleNodesChange = (changes: NodeChange[]) => {
-    setNodes((prevNodes) => {
-      const newNodes = [...prevNodes];
-      for (const change of changes) {
-        if (change.type === "position") {
-          const index = newNodes.findIndex((n) => n.id === change.id);
-          if (index !== -1) {
-            newNodes[index] = {
-              ...newNodes[index],
-              position: change.position ?? newNodes[index].position,
-              dragging: change.dragging,
-            };
-          }
-        } else if (change.type === "remove") {
-          const index = newNodes.findIndex((n) => n.id === change.id);
-          if (index !== -1) {
-            newNodes.splice(index, 1);
-          }
-        }
-      }
-      return newNodes;
-    });
+    setNodes((prevNodes) => applyNodeChanges(changes, prevNodes));
   };
 
   const addNode = () => {

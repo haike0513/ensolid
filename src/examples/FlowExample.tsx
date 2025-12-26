@@ -4,7 +4,7 @@
 
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
-import { Flow, DefaultNode } from "@resolid/solidflow";
+import { Flow, DefaultNode, applyNodeChanges, applyEdgeChanges } from "@resolid/solidflow";
 import type { Node, Edge, NodeChange, EdgeChange } from "@resolid/solidflow";
 
 export const FlowExample: Component = () => {
@@ -65,22 +65,7 @@ export const FlowExample: Component = () => {
   ]);
 
   const handleNodesChange = (changes: NodeChange[]) => {
-    setNodes((prevNodes) => {
-      const newNodes = [...prevNodes];
-      for (const change of changes) {
-        if (change.type === "position") {
-          const index = newNodes.findIndex((n) => n.id === change.id);
-          if (index !== -1) {
-            newNodes[index] = {
-              ...newNodes[index],
-              position: change.position ?? newNodes[index].position,
-              dragging: change.dragging,
-            };
-          }
-        }
-      }
-      return newNodes;
-    });
+    setNodes((prevNodes) => applyNodeChanges(changes, prevNodes));
   };
 
   const handleEdgesChange = (changes: EdgeChange[]) => {

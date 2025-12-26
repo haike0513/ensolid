@@ -4,7 +4,7 @@
 
 import type { Component } from "solid-js";
 import { createSignal, For } from "solid-js";
-import { Flow, DefaultNode, Handle } from "@resolid/solidflow";
+import { Flow, DefaultNode, Handle, applyNodeChanges, applyEdgeChanges, addEdge } from "@resolid/solidflow";
 import type {
     Node,
     Edge,
@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 const InputNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-blue-50 border-2 border-blue-400 rounded-lg p-3 min-w-[120px] shadow-md">
-            <Handle type="source" position="right" id="output" />
+            <Handle type="source" position="right" id="output" nodeId={props.node.id} />
             <div class="text-xs text-blue-600 font-semibold mb-1">输入</div>
             <div class="text-sm text-blue-800">{props.node.data?.label ?? props.node.id}</div>
         </div>
@@ -30,8 +30,8 @@ const InputNode: Component<NodeComponentProps> = (props) => {
 const ProcessNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-green-50 border-2 border-green-400 rounded-lg p-3 min-w-[120px] shadow-md">
-            <Handle type="target" position="left" id="input" />
-            <Handle type="source" position="right" id="output" />
+            <Handle type="target" position="left" id="input" nodeId={props.node.id} />
+            <Handle type="source" position="right" id="output" nodeId={props.node.id} />
             <div class="text-xs text-green-600 font-semibold mb-1">处理</div>
             <div class="text-sm text-green-800">{props.node.data?.label ?? props.node.id}</div>
         </div>
@@ -42,7 +42,7 @@ const ProcessNode: Component<NodeComponentProps> = (props) => {
 const OutputNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-purple-50 border-2 border-purple-400 rounded-lg p-3 min-w-[120px] shadow-md">
-            <Handle type="target" position="left" id="input" />
+            <Handle type="target" position="left" id="input" nodeId={props.node.id} />
             <div class="text-xs text-purple-600 font-semibold mb-1">输出</div>
             <div class="text-sm text-purple-800">{props.node.data?.label ?? props.node.id}</div>
         </div>
@@ -50,13 +50,13 @@ const OutputNode: Component<NodeComponentProps> = (props) => {
 };
 
 // 自定义决策节点（菱形）
-const DecisionNode: Component<NodeComponentProps> = (_props) => {
+const DecisionNode: Component<NodeComponentProps> = (props) => {
     return (
         <div class="bg-yellow-50 border-2 border-yellow-400 rounded-lg p-3 min-w-[100px] min-h-[100px] shadow-md flex items-center justify-center transform rotate-45">
             <div class="transform -rotate-45">
-                <Handle type="target" position="top" id="input" />
-                <Handle type="source" position="right" id="yes" />
-                <Handle type="source" position="bottom" id="no" />
+                <Handle type="target" position="top" id="input" nodeId={props.node.id} />
+                <Handle type="source" position="right" id="yes" nodeId={props.node.id} />
+                <Handle type="source" position="bottom" id="no" nodeId={props.node.id} />
                 <div class="text-xs text-yellow-600 font-semibold text-center">
                     判断
                 </div>
@@ -146,94 +146,66 @@ export const FlowEditorExample: Component = () => {
 
     // 处理节点变化
     const handleNodesChange = (changes: NodeChange[]) => {
-        setNodes((prevNodes) => {
-            const newNodes = [...prevNodes];
-            for (const change of changes) {
-                const index = newNodes.findIndex((n) => n.id === change.id);
-
-                if (change.type === "position") {
-                    if (index !== -1) {
-                        newNodes[index] = {
-                            ...newNodes[index],
-                            position: change.position ?? newNodes[index].position,
-                            dragging: change.dragging,
-                        };
-                    }
-                } else if (change.type === "select") {
-                    setSelectedNodeIds((prev) => {
-                        const newSet = new Set(prev);
-                        if (change.selected) {
-                            newSet.add(change.id);
-                        } else {
-                            newSet.delete(change.id);
-                        }
-                        return newSet;
-                    });
-                } else if (change.type === "remove") {
-                    if (index !== -1) {
-                        newNodes.splice(index, 1);
-                    }
-                    setSelectedNodeIds((prev) => {
-                        const newSet = new Set(prev);
+        // 处理选择状态
+        for (const change of changes) {
+            if (change.type === "select") {
+                setSelectedNodeIds((prev) => {
+                    const newSet = new Set(prev);
+                    if (change.selected) {
+                        newSet.add(change.id);
+                    } else {
                         newSet.delete(change.id);
-                        return newSet;
-                    });
-                    // 同时删除相关的边
-                    setEdges((prevEdges) =>
-                        prevEdges.filter(
-                            (e) => e.source !== change.id && e.target !== change.id,
-                        ),
-                    );
-                }
+                    }
+                    return newSet;
+                });
+            } else if (change.type === "remove") {
+                setSelectedNodeIds((prev) => {
+                    const newSet = new Set(prev);
+                    newSet.delete(change.id);
+                    return newSet;
+                });
+                // 同时删除相关的边
+                setEdges((prevEdges) =>
+                    prevEdges.filter(
+                        (e) => e.source !== change.id && e.target !== change.id,
+                    ),
+                );
             }
-            return newNodes;
-        });
+        }
+        setNodes((prevNodes) => applyNodeChanges(changes, prevNodes));
     };
 
     // 处理边变化
     const handleEdgesChange = (changes: EdgeChange[]) => {
-        setEdges((prevEdges) => {
-            const newEdges = [...prevEdges];
-            for (const change of changes) {
-                const index = newEdges.findIndex((e) => e.id === change.id);
-
-                if (change.type === "select") {
-                    setSelectedEdgeIds((prev) => {
-                        const newSet = new Set(prev);
-                        if (change.selected) {
-                            newSet.add(change.id);
-                        } else {
-                            newSet.delete(change.id);
-                        }
-                        return newSet;
-                    });
-                } else if (change.type === "remove") {
-                    if (index !== -1) {
-                        newEdges.splice(index, 1);
-                    }
-                    setSelectedEdgeIds((prev) => {
-                        const newSet = new Set(prev);
+        // 处理选择状态
+        for (const change of changes) {
+            if (change.type === "select") {
+                setSelectedEdgeIds((prev) => {
+                    const newSet = new Set(prev);
+                    if (change.selected) {
+                        newSet.add(change.id);
+                    } else {
                         newSet.delete(change.id);
-                        return newSet;
-                    });
-                }
+                    }
+                    return newSet;
+                });
+            } else if (change.type === "remove") {
+                setSelectedEdgeIds((prev) => {
+                    const newSet = new Set(prev);
+                    newSet.delete(change.id);
+                    return newSet;
+                });
             }
-            return newEdges;
-        });
+        }
+        setEdges((prevEdges) => applyEdgeChanges(changes, prevEdges));
     };
 
     // 处理连接
     const handleConnect = (connection: Connection) => {
         if (connection.source && connection.target) {
-            const newEdge: Edge = {
-                id: `e${connection.source}-${connection.target}-${Date.now()}`,
-                source: connection.source,
-                target: connection.target,
-                sourceHandle: connection.sourceHandle,
-                targetHandle: connection.targetHandle,
+            setEdges((prev) => addEdge(connection, prev, {
                 animated: false,
-            };
-            setEdges((prev) => [...prev, newEdge]);
+            }));
         }
     };
 
