@@ -3,14 +3,14 @@
  */
 
 import type {
+    Connection,
+    Edge,
+    EdgeChange,
     Node,
+    NodeChange,
+    Position,
     Viewport,
     XYPosition,
-    Position,
-    NodeChange,
-    EdgeChange,
-    Edge,
-    Connection,
 } from "../types";
 
 /**
@@ -170,13 +170,19 @@ export function getHandlePosition(
  */
 export function getNodeHandlePosition(
     node: Node,
-    _handleId: string | null,
+    handleId: string | null,
     handlePosition: Position,
 ): XYPosition {
     const nodePos = node.position;
     const nodeWidth = node.width ?? 150;
     const nodeHeight = node.height ?? 40;
-    const handleRelativePos = getHandlePosition(handlePosition, nodeWidth, nodeHeight);
+
+    let pos = handlePosition;
+    if (handleId && ["top", "bottom", "left", "right"].includes(handleId)) {
+        pos = handleId as Position;
+    }
+
+    const handleRelativePos = getHandlePosition(pos, nodeWidth, nodeHeight);
 
     return {
         x: nodePos.x + handleRelativePos.x,
@@ -352,7 +358,7 @@ export function getSmoothStepPath(
     // 确定中间点的位置
     let midX: number;
     let midY: number;
-    
+
     if (sourcePosition === "right" || sourcePosition === "left") {
         // 从左右开始，先水平再垂直
         midX = secondX;

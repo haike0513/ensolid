@@ -21,6 +21,7 @@ import type {
   Connection,
   Dimensions,
   FitViewOptions,
+  Position,
 } from "../../types";
 import {
   clampZoom,
@@ -201,7 +202,7 @@ export const Flow: Component<FlowProps> = (props) => {
           event.clientY
         );
         const targetHandle = targetElement?.closest(
-          "[data-handleid]"
+          "[data-handletype]"
         ) as HTMLElement;
         if (targetHandle) {
           const targetNodeElement = targetHandle.closest(
@@ -326,7 +327,7 @@ export const Flow: Component<FlowProps> = (props) => {
           event.clientY
         ) as HTMLElement;
         const targetHandle = targetElement?.closest(
-          "[data-handleid]"
+          "[data-handletype]"
         ) as HTMLElement;
 
         if (targetHandle) {
@@ -399,7 +400,8 @@ export const Flow: Component<FlowProps> = (props) => {
     event: MouseEvent,
     nodeId: string,
     handleId: string | null,
-    handleType: "source" | "target"
+    handleType: "source" | "target",
+    handlePosArg?: Position
   ) => {
     event.stopPropagation();
     if (!(local.nodesConnectable ?? true)) return;
@@ -411,7 +413,8 @@ export const Flow: Component<FlowProps> = (props) => {
     // 获取 Handle 的初始位置
     const node = local.nodes.find((n) => n.id === nodeId);
     if (node && containerRef) {
-      const handlePosition = handleType === "source" ? "right" : "left";
+      const handlePosition =
+        handlePosArg ?? (handleType === "source" ? "right" : "left");
       const handlePos = getNodeHandlePosition(node, handleId, handlePosition);
       setConnectingPosition(handlePos);
     } else if (containerRef) {
@@ -430,7 +433,7 @@ export const Flow: Component<FlowProps> = (props) => {
   const handleHandleMouseDown = (event: MouseEvent) => {
     // 检查是否点击了 Handle
     const handleElement = (event.target as HTMLElement).closest(
-      "[data-handleid]"
+      "[data-handletype]"
     ) as HTMLElement;
     if (!handleElement) return;
 
@@ -450,10 +453,15 @@ export const Flow: Component<FlowProps> = (props) => {
       | "target"
       | null;
 
+    const handlePos = handleElement.getAttribute(
+      "data-handlepos"
+    ) as Position | null;
+    const position = handlePos ?? undefined;
+
     if (handleType && nodeId) {
       // 阻止事件冒泡到节点，避免触发节点的拖拽
       event.stopPropagation();
-      handleConnectStart(event, nodeId, handleId, handleType);
+      handleConnectStart(event, nodeId, handleId, handleType, position);
     }
   };
 
