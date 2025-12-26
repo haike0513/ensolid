@@ -74,13 +74,17 @@ export const Handle: Component<HandleProps> = (props) => {
   const position = () => local.position ?? 'top';
   const connectable = () => local.connectable ?? true;
 
-  // Handle 的鼠标按下事件会通过事件委托在 Flow 组件中处理
-  // 这里保留以支持直接使用 Handle 的场景
+  // Handle 的鼠标按下事件
   const handleMouseDown = (event: MouseEvent) => {
-    if (connectable() && local.nodeId && local.onConnectStart) {
+    if (!connectable() || !local.nodeId) return;
+    
+    // 如果提供了 onConnectStart 回调，直接调用并阻止冒泡
+    if (local.onConnectStart) {
       event.stopPropagation();
       local.onConnectStart(event, local.nodeId, local.id ?? null, type());
     }
+    // 否则让事件冒泡到 Flow 组件的事件委托处理
+    // 不调用 stopPropagation，让 Flow 的事件委托可以捕获
   };
 
   const getPositionClasses = (pos: Position) => {
@@ -107,6 +111,10 @@ export const Handle: Component<HandleProps> = (props) => {
         'w-3 h-3 rounded-full bg-blue-500 border-2 border-white cursor-crosshair': true,
         'pointer-events-auto': true,
         'z-10': true,
+        'hover:bg-blue-600': true,
+        'hover:scale-125': true,
+        'transition-all': true,
+        'duration-150': true,
       }}
       style={{
         ...local.style,

@@ -194,6 +194,9 @@ export const Edge: Component<EdgeProps> = (props) => {
           {} as Record<string, boolean>
         ) ?? {}),
       }}
+      style={{
+        "pointer-events": "all",
+      } as any}
       onClick={handleClick}
       onDblClick={handleDoubleClick}
     >
@@ -206,7 +209,11 @@ export const Edge: Component<EdgeProps> = (props) => {
               fill="none"
               stroke={local.edge.style?.stroke ?? (local.selected ? '#3b82f6' : '#b1b1b7')}
               stroke-width={local.edge.style?.strokeWidth ?? (local.selected ? '3' : '2')}
-              style={edgeStyle() as any}
+              style={{
+                ...edgeStyle(),
+                "pointer-events": "stroke",
+                cursor: "pointer",
+              } as any}
               marker-start={getMarkerStart()}
               marker-end={getMarkerEnd()}
             />

@@ -261,6 +261,43 @@ function App() {
 }
 ```
 
+### ⚠️ 关于 asChild 属性的重要说明
+
+**`asChild` 属性使用注意事项**:
+
+1. **仅 Radix 基础组件的 Trigger 支持 `asChild`**
+   - `asChild` 是 Radix UI 的特殊属性，用于将组件的功能传递给子元素
+   - 只有 Radix 基础组件的 Trigger 子组件（如 `Dialog.Trigger`、`Popover.Trigger`、`DropdownMenu.Trigger` 等）支持此属性
+   - 普通的 UI 组件（如 `Button`、`Card` 等）**不支持** `asChild` 属性
+
+2. **正确使用方式**:
+   ```tsx
+   // ✅ 正确 - Radix 组件的 Trigger 支持 asChild
+   <Dialog.Trigger asChild>
+     <Button>打开对话框</Button>
+   </Dialog.Trigger>
+   
+   // ❌ 错误 - Button 组件不支持 asChild
+   <Button asChild>
+     <A href="/page">链接</A>
+   </Button>
+   ```
+
+3. **替代方案**:
+   ```tsx
+   // ✅ 正确 - 使用包装方式
+   <A href="/page">
+     <Button>链接</Button>
+   </A>
+   ```
+
+4. **常见错误**:
+   - 错误: `Property 'asChild' does not exist on type 'IntrinsicAttributes & ButtonProps'`
+   - 原因: 在普通 UI 组件上使用了 `asChild` 属性
+   - 解决: 移除 `asChild` 属性，改用包装方式或直接使用组件
+
+详细说明和解决方案请参考 [agents.md](./agents.md) 中的"错误 9: asChild 属性使用错误"章节。
+
 ## 🔄 移植工作流程
 
 本项目使用标准化的移植流程，详见 [agents.md](./agents.md)。

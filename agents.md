@@ -1077,6 +1077,88 @@ const Component: Component<Props> = (props) => {
 };
 ```
 
+### asChild 属性实现规范
+
+⚠️ **重要**: `asChild` 是 Radix UI 的特殊属性，用于将组件的功能传递给子元素。只有需要这种"功能传递"模式的组件才应该实现 `asChild`。
+
+**何时需要实现 asChild**:
+- Radix 基础组件的 Trigger 子组件（如 `Dialog.Trigger`、`Popover.Trigger` 等）
+- 需要将点击事件、ARIA 属性等功能传递给子元素的组件
+
+**何时不需要实现 asChild**:
+- 普通的 UI 组件（如 `Button`、`Card`、`Input` 等）
+- 不需要功能传递的组件
+
+**实现 asChild 的标准模式**:
+
+```tsx
+import type { Component, JSX } from 'solid-js';
+import { splitProps, children } from 'solid-js';
+
+interface TriggerProps {
+  asChild?: boolean;
+  children?: JSX.Element;
+  onClick?: JSX.EventHandler<HTMLElement, MouseEvent>;
+  // ... 其他 props
+}
+
+export const Trigger: Component<TriggerProps> = (props) => {
+  const [local, others] = splitProps(props, ['asChild', 'children', 'onClick']);
+  
+  const handleClick: JSX.EventHandler<HTMLElement, MouseEvent> = (e) => {
+    // 触发组件的功能逻辑
+    // 例如：打开对话框、显示弹出层等
+    
+    // 调用用户提供的 onClick
+    if (typeof local.onClick === 'function') {
+      local.onClick(e);
+    }
+  };
+  
+  // 如果 asChild 为 true，将功能传递给子元素
+  if (local.asChild) {
+    const child = children(() => local.children);
+    const childElement = child() as JSX.Element & {
+      props: Record<string, any>;
+    };
+    
+    // 合并 props 到子元素
+    return {
+      ...childElement,
+      props: {
+        ...childElement.props,
+        onClick: handleClick,
+        // 添加其他需要的 props（如 ARIA 属性）
+        'aria-expanded': open(),
+        'data-state': open() ? 'open' : 'closed',
+        ...others,
+      },
+    } as JSX.Element;
+  }
+  
+  // 否则正常渲染组件
+  return (
+    <button onClick={handleClick} {...others}>
+      {local.children}
+    </button>
+  );
+};
+```
+
+**注意事项**:
+1. 使用 `splitProps` 分离 `asChild` 和其他 props
+2. 使用 `children()` 获取子元素
+3. 当 `asChild` 为 true 时，需要将功能 props（如 `onClick`、ARIA 属性）合并到子元素
+4. 确保类型安全，使用类型断言处理子元素
+5. 如果原 React 组件支持 `asChild`，移植时必须实现此功能，否则会导致类型错误
+
+**常见错误**:
+- ❌ 在普通 UI 组件上使用 `asChild` 属性
+- ❌ 忘记在 `asChild` 模式下合并功能 props 到子元素
+- ❌ 类型定义中缺少 `asChild?: boolean`
+
+详细错误说明请参考"常见错误和解决方案"中的"错误 9: asChild 属性使用错误"章节。
+
 ---
 
 ## 检查清单
@@ -1726,6 +1808,76 @@ const [local, others] = splitProps(props, ['class', 'children'] as const);
   {children}
 </Portal>
 ```
+
+### 错误 9: asChild 属性使用错误
+
+**错误信息**: `Property 'asChild' does not exist on type 'IntrinsicAttributes & ButtonProps'`
+
+**原因**: 
+1. `asChild` 是 Radix UI 的一个特殊属性，用于将组件的功能传递给子元素，而不是渲染组件本身
+2. 只有 Radix 基础组件（如 `Dialog.Trigger`、`Popover.Trigger` 等）支持 `asChild` 属性
+3. 普通的 UI 组件（如 `Button`）不支持 `asChild` 属性
+
+**解决方案**: 
+
+**方案 1**: 对于 Radix 基础组件的 Trigger，正确使用 `asChild`
+
+```tsx
+// ✅ 正确 - Radix 组件的 Trigger 支持 asChild
+<Dialog>
+  <Dialog.Trigger asChild>
+    <Button>打开对话框</Button>
+  </Dialog.Trigger>
+  <Dialog.Content>...</Dialog.Content>
+</Dialog>
+```
+
+**方案 2**: 对于普通 UI 组件，不要使用 `asChild`，改用包装方式
+
+```tsx
+// ❌ 错误 - Button 组件不支持 asChild
+<Button asChild size="lg">
+  <A href="/components">查看组件</A>
+</Button>
+
+// ✅ 正确 - 使用 A 标签包装 Button
+<A href="/components">
+  <Button size="lg">查看组件</Button>
+</A>
+```
+
+**方案 3**: 如果需要实现类似 `asChild` 的功能，需要修改组件实现
+
+如果确实需要让某个组件支持 `asChild`，需要在组件实现中处理：
+
+```tsx
+interface ComponentProps {
+  asChild?: boolean;
+  children?: JSX.Element;
+  // ... 其他 props
+}
+
+export const Component: Component<ComponentProps> = (props) => {
+  const [local, others] = splitProps(props, ["asChild", "children"]);
+  
+  // 如果 asChild 为 true，直接返回 children（需要是单个元素）
+  if (local.asChild) {
+    return local.children as JSX.Element;
+  }
+  
+  // 否则正常渲染组件
+  return (
+    <div {...others}>
+      {local.children}
+    </div>
+  );
+};
+```
+
+**重要提示**:
+- `asChild` 主要用于 Radix UI 的复合组件模式，允许将组件的功能（如点击事件、ARIA 属性等）传递给子元素
+- 不是所有组件都需要支持 `asChild`，只有需要这种"功能传递"模式的组件才需要实现
+- 在移植 React 组件时，如果原组件支持 `asChild`，需要明确实现这个功能，否则会导致类型错误
 
 ## 调试技巧
 

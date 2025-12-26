@@ -87,6 +87,7 @@ export const Flow: Component<FlowProps> = (props) => {
     const [connectingHandleId, setConnectingHandleId] = createSignal<string | null>(null);
     const [connectingHandleType, setConnectingHandleType] = createSignal<'source' | 'target' | null>(null);
     const [connectingPosition, setConnectingPosition] = createSignal<XYPosition | null>(null);
+    const [hoveredHandle, setHoveredHandle] = createSignal<{ nodeId: string; handleId: string | null; handleType: 'source' | 'target' } | null>(null);
 
     let containerRef: HTMLDivElement | undefined;
     let svgRef: SVGSVGElement | undefined;
@@ -147,6 +148,12 @@ export const Flow: Component<FlowProps> = (props) => {
     const handleNodeMouseDown = (event: MouseEvent, node: Node) => {
         if (!(local.nodesDraggable ?? true)) return;
 
+        // 检查是否点击了 Handle，如果是则不处理节点拖拽
+        const target = event.target as HTMLElement;
+        if (target.closest('[data-handleid]')) {
+            return;
+        }
+
         event.stopPropagation();
         setIsDragging(true);
         setDraggedNodeId(node.id);
@@ -157,7 +164,7 @@ export const Flow: Component<FlowProps> = (props) => {
     const handleMouseMove = (event: MouseEvent) => {
         const currentViewport = viewport();
 
-        // 处理连接状态
+        // 处理连接状态 - 更新临时连接线的终点位置
         if (connectingNodeId()) {
             if (containerRef) {
                 const rect = containerRef.getBoundingClientRect();
@@ -166,6 +173,28 @@ export const Flow: Component<FlowProps> = (props) => {
                     currentViewport
                 );
                 setConnectingPosition(position);
+                
+                // 检查鼠标是否悬停在有效的目标 Handle 上
+                const targetElement = document.elementFromPoint(event.clientX, event.clientY);
+                const targetHandle = targetElement?.closest('[data-handleid]') as HTMLElement;
+                if (targetHandle) {
+                    const targetNodeElement = targetHandle.closest('[data-id]') as HTMLElement;
+                    const targetNodeId = targetNodeElement?.getAttribute('data-id');
+                    const targetHandleId = targetHandle.getAttribute('data-handleid') || null;
+                    const targetHandleType = targetHandle.getAttribute('data-handletype') as 'source' | 'target' | null;
+                    const handleType = connectingHandleType();
+                    
+                    // 更新悬停的 Handle 信息
+                    if (targetNodeId && targetNodeId !== connectingNodeId() && targetHandleType) {
+                        const isValid = (handleType === 'source' && targetHandleType === 'target') ||
+                                       (handleType === 'target' && targetHandleType === 'source');
+                        setHoveredHandle(isValid ? { nodeId: targetNodeId, handleId: targetHandleId, handleType: targetHandleType } : null);
+                    } else {
+                        setHoveredHandle(null);
+                    }
+                } else {
+                    setHoveredHandle(null);
+                }
             }
             return;
         }
@@ -223,35 +252,61 @@ export const Flow: Component<FlowProps> = (props) => {
     const handleMouseUp = (event: MouseEvent) => {
         // 处理连接完成
         if (connectingNodeId()) {
-            const targetElement = event.target as HTMLElement;
-            const targetHandle = targetElement.closest('[data-handleid]') as HTMLElement;
-            
-            if (targetHandle) {
-                const targetNodeElement = targetHandle.closest('[data-id]') as HTMLElement;
-                const targetNodeId = targetNodeElement?.getAttribute('data-id');
-                const targetHandleId = targetHandle.getAttribute('data-handleid') || null;
-                const targetHandleType = targetHandle.getAttribute('data-handletype') as 'source' | 'target' | null;
+            // 优先使用悬停的 Handle 信息
+            const hovered = hoveredHandle();
+            if (hovered && hovered.nodeId !== connectingNodeId()) {
+                const handleType = connectingHandleType();
+                if (handleType === 'source' && hovered.handleType === 'target') {
+                    // 有效的连接：source -> target
+                    const connection: Connection = {
+                        source: connectingNodeId()!,
+                        target: hovered.nodeId,
+                        sourceHandle: connectingHandleId(),
+                        targetHandle: hovered.handleId,
+                    };
+                    local.onConnect?.(connection);
+                } else if (handleType === 'target' && hovered.handleType === 'source') {
+                    // 有效的连接：target <- source（反向）
+                    const connection: Connection = {
+                        source: hovered.nodeId,
+                        target: connectingNodeId()!,
+                        sourceHandle: hovered.handleId,
+                        targetHandle: connectingHandleId(),
+                    };
+                    local.onConnect?.(connection);
+                }
+            } else {
+                // 如果没有悬停信息，尝试通过 DOM 查找
+                const targetElement = document.elementFromPoint(event.clientX, event.clientY) as HTMLElement;
+                const targetHandle = targetElement?.closest('[data-handleid]') as HTMLElement;
                 
-                if (targetNodeId && targetNodeId !== connectingNodeId() && targetHandleType) {
-                    const handleType = connectingHandleType();
-                    if (handleType === 'source' && targetHandleType === 'target') {
-                        // 有效的连接：source -> target
-                        const connection: Connection = {
-                            source: connectingNodeId()!,
-                            target: targetNodeId,
-                            sourceHandle: connectingHandleId(),
-                            targetHandle: targetHandleId,
-                        };
-                        local.onConnect?.(connection);
-                    } else if (handleType === 'target' && targetHandleType === 'source') {
-                        // 有效的连接：target <- source（反向）
-                        const connection: Connection = {
-                            source: targetNodeId,
-                            target: connectingNodeId()!,
-                            sourceHandle: targetHandleId,
-                            targetHandle: connectingHandleId(),
-                        };
-                        local.onConnect?.(connection);
+                if (targetHandle) {
+                    const targetNodeElement = targetHandle.closest('[data-id]') as HTMLElement;
+                    const targetNodeId = targetNodeElement?.getAttribute('data-id');
+                    const targetHandleId = targetHandle.getAttribute('data-handleid') || null;
+                    const targetHandleType = targetHandle.getAttribute('data-handletype') as 'source' | 'target' | null;
+                    
+                    if (targetNodeId && targetNodeId !== connectingNodeId() && targetHandleType) {
+                        const handleType = connectingHandleType();
+                        if (handleType === 'source' && targetHandleType === 'target') {
+                            // 有效的连接：source -> target
+                            const connection: Connection = {
+                                source: connectingNodeId()!,
+                                target: targetNodeId,
+                                sourceHandle: connectingHandleId(),
+                                targetHandle: targetHandleId,
+                            };
+                            local.onConnect?.(connection);
+                        } else if (handleType === 'target' && targetHandleType === 'source') {
+                            // 有效的连接：target <- source（反向）
+                            const connection: Connection = {
+                                source: targetNodeId,
+                                target: connectingNodeId()!,
+                                sourceHandle: targetHandleId,
+                                targetHandle: connectingHandleId(),
+                            };
+                            local.onConnect?.(connection);
+                        }
                     }
                 }
             }
@@ -261,6 +316,7 @@ export const Flow: Component<FlowProps> = (props) => {
             setConnectingHandleId(null);
             setConnectingHandleType(null);
             setConnectingPosition(null);
+            setHoveredHandle(null);
         }
 
         if (draggedNodeId()) {
@@ -286,7 +342,13 @@ export const Flow: Component<FlowProps> = (props) => {
         setConnectingHandleId(handleId);
         setConnectingHandleType(handleType);
         
-        if (containerRef) {
+        // 获取 Handle 的初始位置
+        const node = local.nodes.find((n) => n.id === nodeId);
+        if (node && containerRef) {
+            const handlePosition = handleType === 'source' ? 'right' : 'left';
+            const handlePos = getNodeHandlePosition(node, handleId, handlePosition);
+            setConnectingPosition(handlePos);
+        } else if (containerRef) {
             const rect = containerRef.getBoundingClientRect();
             const position = screenToFlowPosition(
                 { x: event.clientX - rect.left, y: event.clientY - rect.top },
@@ -300,8 +362,13 @@ export const Flow: Component<FlowProps> = (props) => {
 
     // 处理 Handle 的鼠标按下事件（事件委托）
     const handleHandleMouseDown = (event: MouseEvent) => {
+        // 检查是否点击了 Handle
         const handleElement = (event.target as HTMLElement).closest('[data-handleid]') as HTMLElement;
         if (!handleElement) return;
+
+        // 检查是否可连接
+        const connectable = handleElement.getAttribute('data-connectable');
+        if (connectable === 'false') return;
 
         const nodeElement = handleElement.closest('[data-id]') as HTMLElement;
         if (!nodeElement) return;
@@ -313,6 +380,8 @@ export const Flow: Component<FlowProps> = (props) => {
         const handleType = handleElement.getAttribute('data-handletype') as 'source' | 'target' | null;
 
         if (handleType && nodeId) {
+            // 阻止事件冒泡到节点，避免触发节点的拖拽
+            event.stopPropagation();
             handleConnectStart(event, nodeId, handleId, handleType);
         }
     };
@@ -404,6 +473,8 @@ export const Flow: Component<FlowProps> = (props) => {
             containerRef.addEventListener("wheel", handleWheel, {
                 passive: false,
             });
+            // 在 capture 阶段监听 Handle 的 mousedown 事件，确保能捕获到
+            containerRef.addEventListener("mousedown", handleHandleMouseDown, true);
 
             if (local.fitView) {
                 handleFitView();
@@ -415,6 +486,7 @@ export const Flow: Component<FlowProps> = (props) => {
                 containerRef.removeEventListener("mousemove", handleMouseMove);
                 containerRef.removeEventListener("mouseup", handleMouseUp);
                 containerRef.removeEventListener("wheel", handleWheel);
+                containerRef.removeEventListener("mousedown", handleHandleMouseDown, true);
             }
         });
     });
@@ -444,7 +516,6 @@ export const Flow: Component<FlowProps> = (props) => {
             }}
             style={local.style as any}
             onClick={handlePaneClick}
-            onMouseDown={handleHandleMouseDown}
         >
             {/* 背景 */}
             <Background />
@@ -452,11 +523,12 @@ export const Flow: Component<FlowProps> = (props) => {
             {/* SVG 画布 */}
             <svg
                 ref={svgRef}
-                class="absolute inset-0 w-full h-full pointer-events-none"
+                class="absolute inset-0 w-full h-full"
                 style={{
                     transform:
                         `translate(${currentViewport().x}px, ${currentViewport().y}px) scale(${currentViewport().zoom})`,
                     "transform-origin": "0 0",
+                    "pointer-events": "none",
                 }}
             >
                 {/* 标记定义 */}
@@ -585,18 +657,19 @@ export const Flow: Component<FlowProps> = (props) => {
 
             {/* 节点 */}
             <div
-                class="absolute inset-0 pointer-events-none"
+                class="absolute inset-0"
                 style={{
                     transform:
                         `translate(${currentViewport().x}px, ${currentViewport().y}px) scale(${currentViewport().zoom})`,
                     "transform-origin": "0 0",
+                    "pointer-events": "none",
                 }}
             >
                 <For each={local.nodes}>
                     {(node) => {
                         const NodeType = getNodeComponent(node);
                         return (
-                            <div class="pointer-events-auto">
+                            <div style={{ "pointer-events": "auto" }}>
                                 <NodeComponent
                                     node={node}
                                     selected={selectedNodes().has(node.id)}
@@ -630,10 +703,19 @@ export const Flow: Component<FlowProps> = (props) => {
                         
                         const handleType = connectingHandleType();
                         const handleId = connectingHandleId();
-                        const sourcePosition = handleType === 'source'
-                            ? getNodeHandlePosition(sourceNode, handleId, 'right')
-                            : getNodeHandlePosition(sourceNode, handleId, 'left');
+                        const handlePosition = handleType === 'source' ? 'right' : 'left';
+                        const sourcePosition = getNodeHandlePosition(sourceNode, handleId, handlePosition);
                         const targetPosition = connectingPosition()!;
+                        
+                        // 根据悬停的 Handle 判断连接是否有效
+                        const hovered = hoveredHandle();
+                        let isValidConnection = false;
+                        let strokeColor = "#b1b1b7"; // 默认灰色
+                        
+                        if (hovered && hovered.nodeId !== connectingNodeId()) {
+                            isValidConnection = true;
+                            strokeColor = "#10b981"; // 绿色表示有效
+                        }
                         
                         const path = `M ${sourcePosition.x} ${sourcePosition.y} L ${targetPosition.x} ${targetPosition.y}`;
                         
@@ -641,10 +723,11 @@ export const Flow: Component<FlowProps> = (props) => {
                             <path
                                 d={path}
                                 fill="none"
-                                stroke="#b1b1b7"
+                                stroke={strokeColor}
                                 stroke-width="2"
                                 stroke-dasharray="5,5"
-                                marker-end="url(#arrowhead)"
+                                marker-end={isValidConnection ? "url(#arrowhead)" : undefined}
+                                class="transition-colors duration-150"
                             />
                         );
                     })()}

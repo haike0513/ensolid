@@ -112,12 +112,16 @@ export const HomePage: Component = () => {
               {t().home.description}
             </p>
             <div class="flex flex-col items-center justify-center gap-4 sm:flex-row animate-fade-in-up" style={{ "animation-delay": "0.4s" }}>
-              <Button asChild size="lg" class="h-12 px-8 text-base transition-transform hover:scale-105">
-                <A href="/components">{t().home.viewComponents}</A>
-              </Button>
-              <Button asChild size="lg" variant="outline" class="h-12 px-8 text-base transition-transform hover:scale-105">
-                <A href="/solidflow">{t().home.viewFlow}</A>
-              </Button>
+              <A href="/components">
+                <Button size="lg" class="h-12 px-8 text-base transition-transform hover:scale-105">
+                  {t().home.viewComponents}
+                </Button>
+              </A>
+              <A href="/solidflow">
+                <Button size="lg" variant="outline" class="h-12 px-8 text-base transition-transform hover:scale-105">
+                  {t().home.viewFlow}
+                </Button>
+              </A>
             </div>
           </div>
         </div>
@@ -212,9 +216,11 @@ export const HomePage: Component = () => {
                 </CardHeader>
                 <CardContent>
                   <p class="mb-4 text-muted-foreground">{lib.description}</p>
-                  <Button asChild variant="outline" class="w-full">
-                    <A href={lib.link}>{t().home.libraries.viewDetails}</A>
-                  </Button>
+                  <A href={lib.link}>
+                    <Button variant="outline" class="w-full">
+                      {t().home.libraries.viewDetails}
+                    </Button>
+                  </A>
                 </CardContent>
               </Card>
             ))}
@@ -275,12 +281,16 @@ export const HomePage: Component = () => {
               {t().home.cta.subtitle}
             </p>
             <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Button asChild size="lg" class="h-12 px-8 text-base">
-                <A href="/components">{t().home.cta.browseComponents}</A>
-              </Button>
-              <Button asChild size="lg" variant="outline" class="h-12 px-8 text-base">
-                <A href="/docs">{t().home.cta.viewDocs}</A>
-              </Button>
+              <A href="/components">
+                <Button size="lg" class="h-12 px-8 text-base">
+                  {t().home.cta.browseComponents}
+                </Button>
+              </A>
+              <A href="/docs">
+                <Button size="lg" variant="outline" class="h-12 px-8 text-base">
+                  {t().home.cta.viewDocs}
+                </Button>
+              </A>
             </div>
           </div>
         </div>
