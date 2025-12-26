@@ -5,16 +5,28 @@
 import type { Component } from "solid-js";
 import { createSignal } from "solid-js";
 import { Flow, applyNodeChanges } from "@resolid/solidflow";
-import type { Node, Edge, NodeChange, NodeComponentProps } from "@resolid/solidflow";
+import type {
+  Node,
+  Edge,
+  NodeChange,
+  NodeComponentProps,
+} from "@resolid/solidflow";
 import { Handle } from "@resolid/solidflow";
 
 // 自定义输入节点
 const InputNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-blue-100 border-2 border-blue-500 rounded-lg p-4 min-w-[150px] min-h-[60px] shadow-lg">
-      <Handle type="source" position="bottom" nodeId={props.node.id} />
+      <Handle
+        type="source"
+        position="bottom"
+        id="bottom"
+        nodeId={props.node.id}
+      />
       <div class="font-semibold text-blue-800">输入节点</div>
-      <div class="text-sm text-blue-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
+      <div class="text-sm text-blue-600 mt-1">
+        {props.node.data?.label ?? props.node.id}
+      </div>
     </div>
   );
 };
@@ -23,10 +35,17 @@ const InputNode: Component<NodeComponentProps> = (props) => {
 const ProcessNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-green-100 border-2 border-green-500 rounded-lg p-4 min-w-[150px] min-h-[60px] shadow-lg">
-      <Handle type="target" position="top" nodeId={props.node.id} />
-      <Handle type="source" position="bottom" nodeId={props.node.id} />
+      <Handle type="target" position="top" id="top" nodeId={props.node.id} />
+      <Handle
+        type="source"
+        position="bottom"
+        id="bottom"
+        nodeId={props.node.id}
+      />
       <div class="font-semibold text-green-800">处理节点</div>
-      <div class="text-sm text-green-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
+      <div class="text-sm text-green-600 mt-1">
+        {props.node.data?.label ?? props.node.id}
+      </div>
     </div>
   );
 };
@@ -35,9 +54,11 @@ const ProcessNode: Component<NodeComponentProps> = (props) => {
 const OutputNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-red-100 border-2 border-red-500 rounded-lg p-4 min-w-[150px] min-h-[60px] shadow-lg">
-      <Handle type="target" position="top" nodeId={props.node.id} />
+      <Handle type="target" position="top" id="top" nodeId={props.node.id} />
       <div class="font-semibold text-red-800">输出节点</div>
-      <div class="text-sm text-red-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
+      <div class="text-sm text-red-600 mt-1">
+        {props.node.data?.label ?? props.node.id}
+      </div>
     </div>
   );
 };
@@ -47,11 +68,23 @@ const DecisionNode: Component<NodeComponentProps> = (props) => {
   return (
     <div class="bg-yellow-100 border-2 border-yellow-500 rounded-lg p-4 min-w-[150px] min-h-[80px] shadow-lg transform rotate-45">
       <div class="transform -rotate-45">
-        <Handle type="target" position="top" nodeId={props.node.id} />
-        <Handle type="source" position="right" nodeId={props.node.id} />
-        <Handle type="source" position="bottom" nodeId={props.node.id} />
+        <Handle type="target" position="top" id="top" nodeId={props.node.id} />
+        <Handle
+          type="source"
+          position="right"
+          id="right"
+          nodeId={props.node.id}
+        />
+        <Handle
+          type="source"
+          position="bottom"
+          id="bottom"
+          nodeId={props.node.id}
+        />
         <div class="font-semibold text-yellow-800">决策节点</div>
-        <div class="text-sm text-yellow-600 mt-1">{props.node.data?.label ?? props.node.id}</div>
+        <div class="text-sm text-yellow-600 mt-1">
+          {props.node.data?.label ?? props.node.id}
+        </div>
       </div>
     </div>
   );
@@ -150,4 +183,3 @@ export const FlowCustomNodeExample: Component = () => {
     </div>
   );
 };
-
