@@ -94,6 +94,16 @@ export const Header: Component = () => {
               >
                 SolidFlow
               </A>
+              <A
+                href="/workflow"
+                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
+                  isActive("/workflow")
+                    ? "text-foreground"
+                    : "text-foreground/60"
+                }`}
+              >
+                Workflow
+              </A>
             </nav>
           </div>
 

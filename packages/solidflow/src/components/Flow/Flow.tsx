@@ -47,6 +47,8 @@ export const Flow: Component<FlowProps> = (props) => {
     "onNodesDelete",
     "onEdgesDelete",
     "onSelectionChange",
+    "onNodeClick",
+    "onPaneClick",
     "onInit",
     "nodeTypes",
     "edgeTypes",
@@ -156,6 +158,8 @@ export const Flow: Component<FlowProps> = (props) => {
       });
       return newSet;
     });
+
+    local.onNodeClick?.(event, node);
 
     local.onNodesChange?.([
       {
@@ -291,6 +295,7 @@ export const Flow: Component<FlowProps> = (props) => {
     setSelectedNodes(newNodesSet);
     setSelectedEdges(newEdgesSet);
     local.onSelectionChange?.({ nodes: [], edges: [] });
+    local.onPaneClick?.(event);
   };
 
   // 处理鼠标抬起

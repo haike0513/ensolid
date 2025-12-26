@@ -243,6 +243,8 @@ export interface FlowProps {
   children?: any;
   onDragOver?: (event: DragEvent) => void;
   onDrop?: (event: DragEvent) => void;
+  onNodeClick?: (event: MouseEvent, node: Node) => void;
+  onPaneClick?: (event: MouseEvent) => void;
 }
 
 export interface FitViewOptions {

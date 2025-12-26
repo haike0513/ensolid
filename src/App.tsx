@@ -10,6 +10,7 @@ import { SolidFlowPage } from "./pages/SolidFlow";
 import { DocsPage } from "./pages/Docs";
 import { BlocksPage } from "./pages/Blocks";
 import { ChartsPage } from "./pages/Charts";
+import { WorkflowPage } from "./pages/Workflow";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Route path="/solidflow" component={SolidFlowPage} />
       <Route path="/blocks" component={BlocksPage} />
       <Route path="/charts" component={ChartsPage} />
+      <Route path="/workflow" component={WorkflowPage} />
     </Router>
   );
 };
