@@ -26,7 +26,7 @@ export default defineConfig({
         chunkFileNames: '[name].js',
       },
     },
-    sourcemap: true,
+    sourcemap: false,
     target: 'es2020',
     minify: false, // 保持代码可读性，便于 tree shaking
   },
