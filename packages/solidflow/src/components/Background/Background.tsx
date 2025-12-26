@@ -1,4 +1,4 @@
-import { Component, JSX, splitProps } from "solid-js";
+import { type Component, type JSX, splitProps } from "solid-js";
 import type { Viewport } from "../../types";
 
 export interface BackgroundProps {

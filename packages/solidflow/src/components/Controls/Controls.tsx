@@ -2,7 +2,7 @@
  * Controls 组件 - 流程图画布控制按钮
  */
 
-import { Component, JSX, splitProps, Show } from 'solid-js';
+import { type Component, type JSX, splitProps, Show } from 'solid-js';
 
 export interface ControlsProps {
   /**

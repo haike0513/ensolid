@@ -3,7 +3,7 @@
  * 类似于 React Flow 的 useReactFlow hook
  */
 
-import { Accessor } from 'solid-js';
+import { type Accessor } from 'solid-js';
 import { useFlowContext } from '../components/FlowProvider';
 import type { Viewport, Node, Edge } from '../types';
 

@@ -2,7 +2,7 @@
  * MiniMap 组件 - 流程图画布小地图
  */
 
-import { Component, JSX, splitProps, Show } from "solid-js";
+import { type Component, type JSX, splitProps, Show } from "solid-js";
 import type { Node, Edge, Viewport } from "../../types";
 
 export interface MiniMapProps {

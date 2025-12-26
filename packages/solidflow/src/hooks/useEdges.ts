@@ -2,7 +2,7 @@
  * useEdges Hook - 获取和管理边
  */
 
-import { Accessor } from 'solid-js';
+import { type Accessor } from 'solid-js';
 import { useFlowContext } from '../components/FlowProvider';
 import type { Edge, EdgeChange } from '../types';
 

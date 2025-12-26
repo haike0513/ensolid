@@ -3,7 +3,7 @@
  */
 
 import {
-  Component,
+  type Component,
   createSignal,
   For,
   onCleanup,
@@ -135,6 +135,7 @@ export const Flow: Component<FlowProps> = (props) => {
 
   // 处理节点点击
   const handleNodeClick = (event: MouseEvent, node: Node) => {
+    console.log("Flow: handleNodeClick", node.id);
     if (!(local.elementsSelectable ?? true)) return;
     event.stopPropagation();
 

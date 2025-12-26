@@ -1,4 +1,4 @@
-import { Component, JSX, splitProps, Show, onMount, onCleanup } from "solid-js";
+import { type Component, type JSX, splitProps, Show, onMount, onCleanup } from "solid-js";
 import type { Node as NodeType } from "../../types";
 
 export interface NodeProps {
@@ -98,6 +98,7 @@ export const Node: Component<NodeProps> = (props) => {
   });
 
   const handleClick = (event: MouseEvent) => {
+    console.log("NodeComponent: Native click received", local.node.id);
     local.onClick?.(event, local.node);
   };
 

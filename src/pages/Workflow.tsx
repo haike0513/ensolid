@@ -203,6 +203,7 @@ export const WorkflowPage: Component = () => {
 
   // Event Handlers
   const onNodeClick = (_: MouseEvent, node: Node) => {
+    console.log("Workflow: Node clicked", node);
     setSelectedNodeId(node.id);
   };
 

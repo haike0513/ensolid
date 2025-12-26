@@ -2,7 +2,7 @@
  * Edge 组件 - 流程边/连接线
  */
 
-import { Component, JSX, Show, splitProps } from "solid-js";
+import { type Component, type JSX, Show, splitProps } from "solid-js";
 import type { Edge as EdgeType, Node, Position, XYPosition } from "../../types";
 import {
   getBezierPath,

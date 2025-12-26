@@ -2,7 +2,7 @@
  * DefaultNode 组件 - 默认节点组件
  */
 
-import { Component } from "solid-js";
+import { type Component } from "solid-js";
 import type { NodeComponentProps } from "../../types";
 import { Handle } from "../Handle";
 

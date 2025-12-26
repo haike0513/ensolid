@@ -2,7 +2,7 @@
  * useNodes Hook - 获取和管理节点
  */
 
-import { Accessor } from 'solid-js';
+import { type Accessor } from 'solid-js';
 import { useFlowContext } from '../components/FlowProvider';
 import type { Node, NodeChange } from '../types';
 

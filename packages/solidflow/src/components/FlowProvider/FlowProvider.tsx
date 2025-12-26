@@ -2,7 +2,7 @@
  * FlowProvider - 为 Flow 组件提供上下文
  */
 
-import { Component, createContext, useContext, JSX } from 'solid-js';
+import { type Component, createContext, useContext, type JSX } from 'solid-js';
 import type {
     Node,
     Edge,

@@ -30,7 +30,8 @@
     "paths": {
       "@/*": ["./src/*"],
       "@resolid/radix": ["./packages/radix/src"],
-      "@resolid/baseui": ["./packages/baseui/src"]
+      "@resolid/baseui": ["./packages/baseui/src"],
+      "@resolid/solidflow": ["./packages/solidflow/src"]
     }
   },
   "include": ["src"]

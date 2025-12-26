@@ -2,7 +2,7 @@
  * Panel 组件 - 流程图画布面板
  */
 
-import { Component, JSX, splitProps } from 'solid-js';
+import { type Component, type JSX, splitProps } from 'solid-js';
 
 export interface PanelProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**
