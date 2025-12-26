@@ -3,13 +3,41 @@
  */
 
 import type { Component } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
 export const Header: Component = () => {
   const location = useLocation();
+  const [stars, setStars] = createSignal<number | null>(null);
 
   const isActive = (path: string) => {
-    return location.pathname === path || location.pathname.startsWith(path + "/");
+    return location.pathname === path ||
+      location.pathname.startsWith(path + "/");
+  };
+
+  // 获取 GitHub star 数量
+  onMount(async () => {
+    try {
+      const response = await fetch(
+        "https://api.github.com/repos/haike0513/resolid",
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setStars(data.stargazers_count);
+      }
+    } catch (error) {
+      console.error("Failed to fetch GitHub stars:", error);
+    }
+  });
+
+  // 格式化 star 数量显示
+  const formatStars = (count: number | null): string => {
+    if (count === null) return "...";
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}k`;
+    }
+    return count.toString();
   };
 
   return (
@@ -25,9 +53,7 @@ export const Header: Component = () => {
               <A
                 href="/docs"
                 class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/docs")
-                    ? "text-foreground"
-                    : "text-foreground/60"
+                  isActive("/docs") ? "text-foreground" : "text-foreground/60"
                 }`}
               >
                 Docs
@@ -45,9 +71,7 @@ export const Header: Component = () => {
               <A
                 href="/blocks"
                 class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/blocks")
-                    ? "text-foreground"
-                    : "text-foreground/60"
+                  isActive("/blocks") ? "text-foreground" : "text-foreground/60"
                 }`}
               >
                 Blocks
@@ -55,9 +79,7 @@ export const Header: Component = () => {
               <A
                 href="/charts"
                 class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/charts")
-                    ? "text-foreground"
-                    : "text-foreground/60"
+                  isActive("/charts") ? "text-foreground" : "text-foreground/60"
                 }`}
               >
                 Charts
@@ -91,7 +113,7 @@ export const Header: Component = () => {
 
             {/* GitHub */}
             <a
-              href="https://github.com"
+              href="https://github.com/haike0513/resolid"
               target="_blank"
               rel="noopener noreferrer"
               class="flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/80 transition-colors"
@@ -108,8 +130,15 @@ export const Header: Component = () => {
                   clip-rule="evenodd"
                 />
               </svg>
-              <span class="hidden sm:inline text-sm">103k</span>
+              <span class="hidden sm:inline text-sm">
+                {formatStars(stars())}
+              </span>
             </a>
+
+            <div class="h-4 w-px bg-border" />
+
+            {/* 语言切换 */}
+            <LanguageSwitcher />
 
             <div class="h-4 w-px bg-border" />
 
@@ -185,4 +214,3 @@ export const Header: Component = () => {
     </header>
   );
 };
-
