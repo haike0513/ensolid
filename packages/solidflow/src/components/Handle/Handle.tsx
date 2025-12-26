@@ -21,6 +21,10 @@ export interface HandleProps extends JSX.HTMLAttributes<HTMLDivElement> {
    */
   id?: string;
   /**
+   * 节点 ID（用于连接）
+   */
+  nodeId?: string;
+  /**
    * 是否可连接
    * @default true
    */
@@ -38,6 +42,10 @@ export interface HandleProps extends JSX.HTMLAttributes<HTMLDivElement> {
    */
   children?: JSX.Element;
   /**
+   * 连接开始时的回调
+   */
+  onConnectStart?: (event: MouseEvent, nodeId: string, handleId: string | null, handleType: 'source' | 'target') => void;
+  /**
    * 连接有效时的回调
    */
   onConnect?: () => void;
@@ -52,10 +60,12 @@ export const Handle: Component<HandleProps> = (props) => {
     'type',
     'position',
     'id',
+    'nodeId',
     'connectable',
     'style',
     'className',
     'children',
+    'onConnectStart',
     'onConnect',
     'onConnectReject',
   ]);
@@ -63,6 +73,15 @@ export const Handle: Component<HandleProps> = (props) => {
   const type = () => local.type ?? 'source';
   const position = () => local.position ?? 'top';
   const connectable = () => local.connectable ?? true;
+
+  // Handle 的鼠标按下事件会通过事件委托在 Flow 组件中处理
+  // 这里保留以支持直接使用 Handle 的场景
+  const handleMouseDown = (event: MouseEvent) => {
+    if (connectable() && local.nodeId && local.onConnectStart) {
+      event.stopPropagation();
+      local.onConnectStart(event, local.nodeId, local.id ?? null, type());
+    }
+  };
 
   const getPositionClasses = (pos: Position) => {
     const classes: Record<Position, string> = {
@@ -92,6 +111,7 @@ export const Handle: Component<HandleProps> = (props) => {
       style={{
         ...local.style,
       }}
+      onMouseDown={handleMouseDown}
     >
       {local.children}
     </div>

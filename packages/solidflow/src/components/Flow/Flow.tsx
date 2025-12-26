@@ -9,6 +9,7 @@ import {
     onCleanup,
     onMount,
     splitProps,
+    Show,
 } from "solid-js";
 import type {
     EdgeChange,
@@ -17,8 +18,9 @@ import type {
     NodeChange,
     Viewport,
     XYPosition,
+    Connection,
 } from "../../types";
-import { clampZoom } from "../../utils";
+import { clampZoom, screenToFlowPosition, getNodeHandlePosition } from "../../utils";
 import { Background } from "../Background";
 import { Controls } from "../Controls";
 import { MiniMap } from "../MiniMap";
@@ -33,6 +35,8 @@ export const Flow: Component<FlowProps> = (props) => {
         "onNodesChange",
         "onEdgesChange",
         "onConnect",
+        "onConnectStart",
+        "onConnectEnd",
         "onNodesDelete",
         "onEdgesDelete",
         "onSelectionChange",
@@ -77,6 +81,12 @@ export const Flow: Component<FlowProps> = (props) => {
     const [selectedEdges, setSelectedEdges] = createSignal<Set<string>>(
         new Set(),
     );
+
+    // 连接状态
+    const [connectingNodeId, setConnectingNodeId] = createSignal<string | null>(null);
+    const [connectingHandleId, setConnectingHandleId] = createSignal<string | null>(null);
+    const [connectingHandleType, setConnectingHandleType] = createSignal<'source' | 'target' | null>(null);
+    const [connectingPosition, setConnectingPosition] = createSignal<XYPosition | null>(null);
 
     let containerRef: HTMLDivElement | undefined;
     let svgRef: SVGSVGElement | undefined;
@@ -147,6 +157,19 @@ export const Flow: Component<FlowProps> = (props) => {
     const handleMouseMove = (event: MouseEvent) => {
         const currentViewport = viewport();
 
+        // 处理连接状态
+        if (connectingNodeId()) {
+            if (containerRef) {
+                const rect = containerRef.getBoundingClientRect();
+                const position = screenToFlowPosition(
+                    { x: event.clientX - rect.left, y: event.clientY - rect.top },
+                    currentViewport
+                );
+                setConnectingPosition(position);
+            }
+            return;
+        }
+
         if (isDragging() && draggedNodeId()) {
             const nodeId = draggedNodeId()!;
             const start = dragStart();
@@ -197,7 +220,49 @@ export const Flow: Component<FlowProps> = (props) => {
     };
 
     // 处理鼠标抬起
-    const handleMouseUp = () => {
+    const handleMouseUp = (event: MouseEvent) => {
+        // 处理连接完成
+        if (connectingNodeId()) {
+            const targetElement = event.target as HTMLElement;
+            const targetHandle = targetElement.closest('[data-handleid]') as HTMLElement;
+            
+            if (targetHandle) {
+                const targetNodeElement = targetHandle.closest('[data-id]') as HTMLElement;
+                const targetNodeId = targetNodeElement?.getAttribute('data-id');
+                const targetHandleId = targetHandle.getAttribute('data-handleid') || null;
+                const targetHandleType = targetHandle.getAttribute('data-handletype') as 'source' | 'target' | null;
+                
+                if (targetNodeId && targetNodeId !== connectingNodeId() && targetHandleType) {
+                    const handleType = connectingHandleType();
+                    if (handleType === 'source' && targetHandleType === 'target') {
+                        // 有效的连接：source -> target
+                        const connection: Connection = {
+                            source: connectingNodeId()!,
+                            target: targetNodeId,
+                            sourceHandle: connectingHandleId(),
+                            targetHandle: targetHandleId,
+                        };
+                        local.onConnect?.(connection);
+                    } else if (handleType === 'target' && targetHandleType === 'source') {
+                        // 有效的连接：target <- source（反向）
+                        const connection: Connection = {
+                            source: targetNodeId,
+                            target: connectingNodeId()!,
+                            sourceHandle: targetHandleId,
+                            targetHandle: connectingHandleId(),
+                        };
+                        local.onConnect?.(connection);
+                    }
+                }
+            }
+            
+            local.onConnectEnd?.(event);
+            setConnectingNodeId(null);
+            setConnectingHandleId(null);
+            setConnectingHandleType(null);
+            setConnectingPosition(null);
+        }
+
         if (draggedNodeId()) {
             local.onNodesChange?.([
                 {
@@ -210,6 +275,46 @@ export const Flow: Component<FlowProps> = (props) => {
         setIsDragging(false);
         setDraggedNodeId(null);
         setDragStart(null);
+    };
+
+    // 处理连接开始（从 Handle 触发，通过事件委托）
+    const handleConnectStart = (event: MouseEvent, nodeId: string, handleId: string | null, handleType: 'source' | 'target') => {
+        event.stopPropagation();
+        if (!(local.nodesConnectable ?? true)) return;
+        
+        setConnectingNodeId(nodeId);
+        setConnectingHandleId(handleId);
+        setConnectingHandleType(handleType);
+        
+        if (containerRef) {
+            const rect = containerRef.getBoundingClientRect();
+            const position = screenToFlowPosition(
+                { x: event.clientX - rect.left, y: event.clientY - rect.top },
+                viewport()
+            );
+            setConnectingPosition(position);
+        }
+        
+        local.onConnectStart?.(event, { nodeId, handleId, handleType });
+    };
+
+    // 处理 Handle 的鼠标按下事件（事件委托）
+    const handleHandleMouseDown = (event: MouseEvent) => {
+        const handleElement = (event.target as HTMLElement).closest('[data-handleid]') as HTMLElement;
+        if (!handleElement) return;
+
+        const nodeElement = handleElement.closest('[data-id]') as HTMLElement;
+        if (!nodeElement) return;
+
+        const nodeId = nodeElement.getAttribute('data-id');
+        if (!nodeId) return;
+
+        const handleId = handleElement.getAttribute('data-handleid') || null;
+        const handleType = handleElement.getAttribute('data-handletype') as 'source' | 'target' | null;
+
+        if (handleType && nodeId) {
+            handleConnectStart(event, nodeId, handleId, handleType);
+        }
     };
 
     // 处理滚轮缩放
@@ -339,6 +444,7 @@ export const Flow: Component<FlowProps> = (props) => {
             }}
             style={local.style as any}
             onClick={handlePaneClick}
+            onMouseDown={handleHandleMouseDown}
         >
             {/* 背景 */}
             <Background />
@@ -353,6 +459,72 @@ export const Flow: Component<FlowProps> = (props) => {
                     "transform-origin": "0 0",
                 }}
             >
+                {/* 标记定义 */}
+                <defs>
+                    {/* 箭头标记 */}
+                    <marker
+                        id="arrowhead"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="9"
+                        refY="3"
+                        orient="auto"
+                        markerUnits="strokeWidth"
+                    >
+                        <path
+                            d="M0,0 L0,6 L9,3 z"
+                            fill="#b1b1b7"
+                        />
+                    </marker>
+                    <marker
+                        id="arrowclosed"
+                        markerWidth="12"
+                        markerHeight="12"
+                        refX="6"
+                        refY="6"
+                        orient="auto"
+                        markerUnits="strokeWidth"
+                    >
+                        <path
+                            d="M 0 0 L 12 6 L 0 12 z"
+                            fill="#b1b1b7"
+                            stroke="#b1b1b7"
+                            stroke-width="1"
+                        />
+                    </marker>
+                    {/* 选中状态的箭头标记 */}
+                    <marker
+                        id="arrowhead-selected"
+                        markerWidth="10"
+                        markerHeight="10"
+                        refX="9"
+                        refY="3"
+                        orient="auto"
+                        markerUnits="strokeWidth"
+                    >
+                        <path
+                            d="M0,0 L0,6 L9,3 z"
+                            fill="#3b82f6"
+                        />
+                    </marker>
+                    <marker
+                        id="arrowclosed-selected"
+                        markerWidth="12"
+                        markerHeight="12"
+                        refX="6"
+                        refY="6"
+                        orient="auto"
+                        markerUnits="strokeWidth"
+                    >
+                        <path
+                            d="M 0 0 L 12 6 L 0 12 z"
+                            fill="#3b82f6"
+                            stroke="#3b82f6"
+                            stroke-width="1"
+                        />
+                    </marker>
+                </defs>
+
                 {/* 边 */}
                 <For each={local.edges ?? []}>
                     {(edge) => {
@@ -441,6 +613,43 @@ export const Flow: Component<FlowProps> = (props) => {
                     }}
                 </For>
             </div>
+
+            {/* 临时连接线 */}
+            <Show when={connectingNodeId() && connectingPosition()}>
+                <svg
+                    class="absolute inset-0 w-full h-full pointer-events-none z-50"
+                    style={{
+                        transform:
+                            `translate(${currentViewport().x}px, ${currentViewport().y}px) scale(${currentViewport().zoom})`,
+                        "transform-origin": "0 0",
+                    }}
+                >
+                    {(() => {
+                        const sourceNode = local.nodes.find((n) => n.id === connectingNodeId()!);
+                        if (!sourceNode || !connectingPosition()) return null;
+                        
+                        const handleType = connectingHandleType();
+                        const handleId = connectingHandleId();
+                        const sourcePosition = handleType === 'source'
+                            ? getNodeHandlePosition(sourceNode, handleId, 'right')
+                            : getNodeHandlePosition(sourceNode, handleId, 'left');
+                        const targetPosition = connectingPosition()!;
+                        
+                        const path = `M ${sourcePosition.x} ${sourcePosition.y} L ${targetPosition.x} ${targetPosition.y}`;
+                        
+                        return (
+                            <path
+                                d={path}
+                                fill="none"
+                                stroke="#b1b1b7"
+                                stroke-width="2"
+                                stroke-dasharray="5,5"
+                                marker-end="url(#arrowhead)"
+                            />
+                        );
+                    })()}
+                </svg>
+            </Show>
 
             {/* 控制按钮 */}
             <Controls

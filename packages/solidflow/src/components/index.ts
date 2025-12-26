@@ -8,3 +8,4 @@ export * from './Controls';
 export * from './MiniMap';
 export * from './Panel';
 export * from './DefaultNode';
+export * from './FlowProvider';

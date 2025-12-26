@@ -22,6 +22,8 @@ export type {
   OnNodesChange,
   OnEdgesChange,
   OnConnect,
+  OnConnectStart,
+  OnConnectEnd,
   OnNodesDelete,
   OnEdgesDelete,
   OnSelectionChange,
@@ -32,4 +34,5 @@ export type {
   FitViewOptions,
 } from './types';
 export * from './utils';
+export * from './hooks';
 

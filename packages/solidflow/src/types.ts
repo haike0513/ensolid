@@ -120,6 +120,8 @@ export type EdgeTypes = Record<string, Component<EdgeComponentProps>>;
 export type OnNodesChange = (changes: NodeChange[]) => void;
 export type OnEdgesChange = (changes: EdgeChange[]) => void;
 export type OnConnect = (connection: Connection) => void;
+export type OnConnectStart = (event: MouseEvent | TouchEvent, params: { nodeId: NodeId | null; handleId: string | null; handleType: 'source' | 'target' | null }) => void;
+export type OnConnectEnd = (event: MouseEvent | TouchEvent) => void;
 export type OnNodesDelete = (nodes: Node[]) => void;
 export type OnEdgesDelete = (edges: Edge[]) => void;
 export type OnSelectionChange = (params: { nodes: Node[]; edges: Edge[] }) => void;
@@ -184,6 +186,8 @@ export interface FlowProps {
   onNodesChange?: OnNodesChange;
   onEdgesChange?: OnEdgesChange;
   onConnect?: OnConnect;
+  onConnectStart?: OnConnectStart;
+  onConnectEnd?: OnConnectEnd;
   onNodesDelete?: OnNodesDelete;
   onEdgesDelete?: OnEdgesDelete;
   onSelectionChange?: OnSelectionChange;
