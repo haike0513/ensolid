@@ -29,7 +29,7 @@ import { Button } from "../components/ui/button";
 // Agent Node: Represents an AI entity
 const AgentNode: Component<NodeComponentProps> = (props) => {
   return (
-    <div style={{ width: '180px', height: 'auto', border: '2px solid red' }} class="relative group min-w-[180px] rounded-xl bg-white shadow-lg transition-all hover:shadow-xl">
+    <div style={{ width: '180px', height: 'auto' }} class="relative group min-w-[180px] rounded-xl bg-white shadow-lg transition-all hover:shadow-xl">
        {/* Glassmorphism Header */}
       <div class="rounded-t-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-3 py-2">
         <div class="flex items-center gap-2">
@@ -59,7 +59,7 @@ const AgentNode: Component<NodeComponentProps> = (props) => {
 // Task Node: Represents a unit of work
 const TaskNode: Component<NodeComponentProps> = (props) => {
   return (
-    <div style={{ width: '220px', height: 'auto', border: '2px solid red' }} class="relative min-w-[220px] rounded-xl bg-white shadow-lg transition-all hover:shadow-xl">
+    <div style={{ width: '220px', height: 'auto' }} class="relative min-w-[220px] rounded-xl bg-white shadow-lg transition-all hover:shadow-xl">
       <div class="rounded-t-xl bg-gradient-to-r from-emerald-500 to-teal-600 px-3 py-2">
         <div class="flex items-center gap-2">
             <span class="text-lg">📋</span>
@@ -91,7 +91,7 @@ const TriggerNode: Component<NodeComponentProps> = (props) => {
 // Tool Node: External tools
 const ToolNode: Component<NodeComponentProps> = (props) => {
     return (
-        <div style={{ width: '140px', height: 'auto', border: '2px solid red' }} class="min-w-[140px] rounded-lg bg-gray-50 shadow-sm p-2 flex items-center gap-2">
+        <div style={{ width: '140px', height: 'auto' }} class="min-w-[140px] rounded-lg bg-gray-50 shadow-sm p-2 flex items-center gap-2">
             <div class="w-8 h-8 rounded bg-white border flex items-center justify-center text-lg">
                 🛠️
             </div>

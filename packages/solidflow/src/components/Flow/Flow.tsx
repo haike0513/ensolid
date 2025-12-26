@@ -664,6 +664,7 @@ export const Flow: Component<FlowProps> = (props) => {
           }px) scale(${currentViewport().zoom})`,
           "transform-origin": "0 0",
           "pointer-events": "none",
+          overflow: "visible",
         }}
       >
         {/* 标记定义 */}
