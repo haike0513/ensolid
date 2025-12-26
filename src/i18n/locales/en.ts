@@ -1,6 +1,6 @@
 export const en = {
   app: {
-    title: "Resolid UI Component Examples",
+    title: "Ensolid UI Component Examples",
     description: "shadcn/ui style components based on @ensolid/radix",
     componentList: "Component List",
   },
@@ -170,7 +170,7 @@ export const en = {
   },
   home: {
     badge: "Professional SolidJS UI Component Library Ecosystem",
-    title: "Resolid",
+    title: "Ensolid",
     subtitle: "Providing professional-grade UI components and tool libraries for the SolidJS ecosystem",
     description: "Dedicated to porting excellent libraries and UI components from the React ecosystem to SolidJS, providing developers with more available tools and component choices. Adopting a Monorepo architecture with multiple independent component library packages, each package can be used and published independently.",
     viewComponents: "View Components",
@@ -242,7 +242,7 @@ export const en = {
       pnpm: "Package Manager",
     },
     cta: {
-      title: "Get Started with Resolid",
+      title: "Get Started with Ensolid",
       subtitle: "Explore our component library and choose the most suitable components for your SolidJS project",
       browseComponents: "Browse Components",
       viewDocs: "View Documentation",

@@ -20,7 +20,7 @@ export const Header: Component = () => {
   onMount(async () => {
     try {
       const response = await fetch(
-        "https://api.github.com/repos/haike0513/resolid",
+        "https://api.github.com/repos/haike0513/ensolid",
       );
       if (response.ok) {
         const data = await response.json();
@@ -47,7 +47,7 @@ export const Header: Component = () => {
           {/* Logo 和导航链接 */}
           <div class="flex items-center gap-8">
             <A href="/" class="flex items-center gap-2">
-              <img src="/resolid-logo.svg" alt="Resolid Logo" class="w-8 h-8" />
+              <img src="/ensolid-logo.svg" alt="Ensolid Logo" class="w-8 h-8" />
             </A>
             <nav class="hidden md:flex items-center gap-6">
               <A
@@ -123,7 +123,7 @@ export const Header: Component = () => {
 
             {/* GitHub */}
             <a
-              href="https://github.com/haike0513/resolid"
+              href="https://github.com/haike0513/ensolid"
               target="_blank"
               rel="noopener noreferrer"
               class="flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/80 transition-colors"

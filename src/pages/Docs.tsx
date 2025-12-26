@@ -56,7 +56,7 @@ export const DocsPage: Component = () => {
                   <h2 class="text-3xl font-bold">项目概述</h2>
                   <div class="space-y-4">
                     <p>
-                      Resolid 是一个用于完善 SolidJS 生态相关 UI 与工具库的项目。
+                      Ensolid 是一个用于完善 SolidJS 生态相关 UI 与工具库的项目。
                       本项目致力于将 React 生态系统中优秀的库和 UI 组件移植到 SolidJS 生态中，
                       以丰富 SolidJS 的生态系统，为开发者提供更多可用的工具和组件。
                     </p>
@@ -123,8 +123,8 @@ export const DocsPage: Component = () => {
                     <div>
                       <h3 class="text-2xl font-semibold mb-4">克隆项目</h3>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto">
-                        <code>git clone https://github.com/your-org/resolid.git
-cd resolid</code>
+                        <code>git clone https://github.com/your-org/ensolid.git
+cd ensolid</code>
                       </pre>
                     </div>
 
@@ -518,7 +518,7 @@ function App() {
                     <div>
                       <h3 class="text-2xl font-semibold mb-4">项目结构</h3>
                       <pre class="bg-muted p-4 rounded-lg overflow-x-auto text-sm">
-                        <code>{`resolid/
+                        <code>{`ensolid/
 ├── packages/                    # Monorepo 包目录
 │   ├── radix/                  # Radix UI Primitives 移植
 │   ├── baseui/                 # BaseUI 组件库

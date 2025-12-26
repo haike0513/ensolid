@@ -1568,7 +1568,7 @@ const [local, others] = splitProps(props, ["class", "children"] as const);
 ### 项目结构参考
 
 ```
-resolid/
+ensolid/
 ├── packages/
 │   └── radix/                    # Radix UI Primitives 移植
 │       ├── src/

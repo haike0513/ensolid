@@ -1,6 +1,6 @@
 export const zh = {
     app: {
-        title: "Resolid UI 组件示例",
+        title: "Ensolid UI 组件示例",
         description: "基于 @ensolid/radix 的 shadcn/ui 风格组件展示",
         componentList: "组件列表",
     },
@@ -170,7 +170,7 @@ export const zh = {
     },
     home: {
         badge: "专业的 SolidJS UI 组件库生态系统",
-        title: "Resolid",
+        title: "Ensolid",
         subtitle: "为 SolidJS 生态提供专业级的 UI 组件与工具库",
         description: "致力于将 React 生态系统中优秀的库和 UI 组件移植到 SolidJS 生态中，为开发者提供更多可用的工具和组件选择。采用 Monorepo 架构，包含多个独立的组件库包，每个包都可以独立使用和发布。",
         viewComponents: "查看组件",
@@ -242,7 +242,7 @@ export const zh = {
             pnpm: "包管理",
         },
         cta: {
-            title: "开始使用 Resolid",
+            title: "开始使用 Ensolid",
             subtitle: "探索我们的组件库，为您的 SolidJS 项目选择最合适的组件",
             browseComponents: "浏览组件",
             viewDocs: "查看文档",
