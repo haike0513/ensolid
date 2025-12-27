@@ -194,7 +194,9 @@ export const Flow: Component<FlowProps> = (props) => {
     if (
       target.closest(".solidflow-node") ||
       target.closest(".solidflow-edge") ||
-      target.closest("[data-handleid]")
+      target.closest("[data-handleid]") ||
+      target.closest(".solidflow-panel") ||
+      target.closest(".nopan")
     ) {
       return;
     }
