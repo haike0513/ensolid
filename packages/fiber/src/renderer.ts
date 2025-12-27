@@ -82,8 +82,14 @@ export const {
     parent.children.push(node);
     
     if (parent.object && node.object) {
-       const attach = node.props.attach;
+       let attach = node.props.attach;
        
+       // Automatic attach logic
+       if (!attach) {
+           if (node.type.endsWith('Geometry')) attach = 'geometry';
+           else if (node.type.endsWith('Material')) attach = 'material';
+       }
+
        if (attach) {
          if (typeof attach === 'string') {
             // attach='material' -> parent.material = object
