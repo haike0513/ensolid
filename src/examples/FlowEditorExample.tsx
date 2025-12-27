@@ -3,7 +3,8 @@
  */
 
 import type { Component } from "solid-js";
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
+import { NodePropertyPanel } from "./NodePropertyPanel";
 import {
   addEdge,
   applyEdgeChanges,
@@ -140,7 +141,14 @@ export const FlowEditorExample: Component = () => {
       id: "6",
       type: "default",
       position: { x: 100, y: 300 },
-      data: { label: "默认节点" },
+      data: {
+        label: "Agent Node",
+        model: "gpt-5-mini",
+        tools: ["wiki"],
+        outputType: "Text",
+        systemPrompt:
+          "You are a Python expert. Analyze the provided Python code and provide detailed feedback...",
+      },
     },
   ]);
 
@@ -359,6 +367,17 @@ export const FlowEditorExample: Component = () => {
   const selectedEdges = () =>
     edges().filter((e) => selectedEdgeIds().has(e.id));
 
+  const updateNodeData = (id: string, data: any) => {
+    setNodes((nds) =>
+      nds.map((n) => {
+        if (n.id === id) {
+          return { ...n, data };
+        }
+        return n;
+      })
+    );
+  };
+
   return (
     <div class="space-y-4 p-6">
       <div class="flex items-center justify-between mb-4">
@@ -459,7 +478,7 @@ export const FlowEditorExample: Component = () => {
 
       {/* Flow 画布 */}
       <div
-        class="border rounded-lg overflow-hidden bg-white"
+        class="border rounded-lg overflow-hidden bg-white relative"
         style="height: 700px;"
       >
         <Flow
@@ -484,6 +503,15 @@ export const FlowEditorExample: Component = () => {
           onDragOver={onDragOver}
           onDrop={onDrop}
         />
+
+        {/* 属性编辑面板 */}
+        <Show when={selectedNodes().length === 1}>
+          <NodePropertyPanel
+            node={selectedNodes()[0]}
+            onClose={() => setSelectedNodeIds(new Set())}
+            onUpdate={updateNodeData}
+          />
+        </Show>
       </div>
 
       {/* 信息面板 */}
