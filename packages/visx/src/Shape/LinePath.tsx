@@ -1,7 +1,10 @@
-import { JSX, splitProps, createMemo } from 'solid-js';
-import { line, CurveFactory } from 'd3-shape';
+import { type JSX, splitProps, createMemo } from "solid-js";
+import { line, type CurveFactory } from "d3-shape";
 
-export type LinePathProps<T> = Omit<JSX.PathSVGAttributes<SVGPathElement>, 'd'> & {
+export type LinePathProps<T> = Omit<
+  JSX.PathSVGAttributes<SVGPathElement>,
+  "d"
+> & {
   data: T[];
   x?: (d: T, index: number, data: T[]) => number;
   y?: (d: T, index: number, data: T[]) => number;
@@ -10,7 +13,13 @@ export type LinePathProps<T> = Omit<JSX.PathSVGAttributes<SVGPathElement>, 'd'> 
 };
 
 export function LinePath<T>(props: LinePathProps<T>) {
-  const [local, rest] = splitProps(props, ['data', 'x', 'y', 'curve', 'defined']);
+  const [local, rest] = splitProps(props, [
+    "data",
+    "x",
+    "y",
+    "curve",
+    "defined",
+  ]);
 
   const path = createMemo(() => {
     const { data, x, y, curve, defined } = local;
@@ -19,9 +28,17 @@ export function LinePath<T>(props: LinePathProps<T>) {
     if (y) lineGenerator.y(y);
     if (curve) lineGenerator.curve(curve);
     if (defined) lineGenerator.defined(defined);
-    
-    return lineGenerator(data) || '';
+
+    return lineGenerator(data) || "";
   });
 
-  return <path d={path()} fill="none" stroke="currentColor" stroke-width="2" {...rest} />;
+  return (
+    <path
+      d={path()}
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      {...rest}
+    />
+  );
 }

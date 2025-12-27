@@ -1,6 +1,12 @@
-import { Component, For, splitProps, mergeProps, JSX } from 'solid-js';
-import { Group } from '../Group/Group';
-import { AxisScale } from '../Axis/AxisBottom';
+import {
+  type Component,
+  For,
+  splitProps,
+  mergeProps,
+  type JSX,
+} from "solid-js";
+import { Group } from "../Group/Group";
+import type { AxisScale } from "../Axis/AxisBottom";
 
 export type GridColumnsProps = {
   scale: AxisScale;
@@ -16,13 +22,23 @@ export type GridColumnsProps = {
 } & JSX.PathSVGAttributes<SVGLineElement>;
 
 export const GridColumns: Component<GridColumnsProps> = (rawProps) => {
-    const props = mergeProps({
-        stroke: '#e2e2e2',
-        strokeWidth: 1,
-        offset: 0,
-    }, rawProps);
+  const props = mergeProps(
+    {
+      stroke: "#e2e2e2",
+      strokeWidth: 1,
+      offset: 0,
+    },
+    rawProps
+  );
 
-    const [local, rest] = splitProps(props, ['scale', 'height', 'numTicks', 'offset', 'top', 'left']);
+  const [local, rest] = splitProps(props, [
+    "scale",
+    "height",
+    "numTicks",
+    "offset",
+    "top",
+    "left",
+  ]);
 
   const ticks = () => {
     const { scale, numTicks } = local;
@@ -32,20 +48,12 @@ export const GridColumns: Component<GridColumnsProps> = (rawProps) => {
 
   return (
     <Group class="visx-grid-columns" top={local.top} left={local.left}>
-        <For each={ticks()}>
-            {(tick) => {
-                const x = (local.scale(tick) ?? 0) + local.offset;
-                return (
-                    <line
-                        x1={x}
-                        x2={x}
-                        y1={0}
-                        y2={local.height}
-                        {...rest}
-                    />
-                )
-            }}
-        </For>
+      <For each={ticks()}>
+        {(tick) => {
+          const x = (local.scale(tick) ?? 0) + local.offset;
+          return <line x1={x} x2={x} y1={0} y2={local.height} {...rest} />;
+        }}
+      </For>
     </Group>
   );
 };

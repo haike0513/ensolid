@@ -24,6 +24,7 @@ export default defineConfig({
       "@ensolid/radix": path.resolve(__dirname, "./packages/radix/src"),
       "@ensolid/visx": path.resolve(__dirname, "./packages/visx/src"),
       "@ensolid/fiber": path.resolve(__dirname, "./packages/fiber/src"),
+      "@ensolid/solidflow": path.resolve(__dirname, "./packages/solidflow/src"),
       "@": path.resolve(__dirname, "./src"),
     },
   },

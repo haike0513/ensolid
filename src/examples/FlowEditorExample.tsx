@@ -477,7 +477,6 @@ export const FlowEditorExample: Component = () => {
           }}
           nodesConnectable={true}
           elementsSelectable={true}
-          panOnDrag={[1, 2]} // 中键或右键拖拽平移
           zoomOnScroll={true}
           fitView={false}
           defaultViewport={{ x: 0, y: 0, zoom: 1 }}

@@ -187,6 +187,34 @@ export const Flow: Component<FlowProps> = (props) => {
     setDragStart({ x: event.clientX, y: event.clientY });
   };
 
+  // 处理画布拖拽
+  const handlePaneMouseDown = (event: MouseEvent) => {
+    // 检查是否点击了节点或边
+    const target = event.target as HTMLElement;
+    if (
+      target.closest(".solidflow-node") ||
+      target.closest(".solidflow-edge") ||
+      target.closest("[data-handleid]")
+    ) {
+      return;
+    }
+
+    // 检查 panOnDrag 设置
+    const panOnDrag = local.panOnDrag ?? true;
+    const isPanBtn = Array.isArray(panOnDrag)
+      ? panOnDrag.includes(event.button)
+      : panOnDrag && event.button === 0;
+
+    if (!isPanBtn) return;
+
+    // 防止选中文字等默认行为
+    event.preventDefault();
+
+    setIsDragging(true);
+    setDraggedNodeId(null);
+    setDragStart({ x: event.clientX, y: event.clientY });
+  };
+
   // 处理鼠标移动
   const handleMouseMove = (event: MouseEvent) => {
     const currentViewport = viewport();
@@ -272,7 +300,7 @@ export const Flow: Component<FlowProps> = (props) => {
         }
         setDragStart({ x: event.clientX, y: event.clientY });
       }
-    } else if (isDragging() && local.panOnDrag) {
+    } else if (isDragging() && (local.panOnDrag ?? true)) {
       const start = dragStart();
       if (start) {
         const deltaX = event.clientX - start.x;
@@ -561,6 +589,7 @@ export const Flow: Component<FlowProps> = (props) => {
       containerRef.addEventListener("wheel", handleWheel, {
         passive: false,
       });
+      containerRef.addEventListener("mousedown", handlePaneMouseDown);
       // 在 capture 阶段监听 Handle 的 mousedown 事件，确保能捕获到
       containerRef.addEventListener("mousedown", handleHandleMouseDown, true);
 
@@ -614,6 +643,7 @@ export const Flow: Component<FlowProps> = (props) => {
           containerRef.removeEventListener("mousemove", handleMouseMove);
           containerRef.removeEventListener("mouseup", handleMouseUp);
           containerRef.removeEventListener("wheel", handleWheel);
+          containerRef.removeEventListener("mousedown", handlePaneMouseDown);
           containerRef.removeEventListener(
             "mousedown",
             handleHandleMouseDown,

@@ -1,6 +1,12 @@
-import { onMount, onCleanup, Component, createContext, useContext, createSignal } from 'solid-js';
-import * as THREE from 'three';
-import { render, Instance } from '../renderer';
+import {
+  onMount,
+  onCleanup,
+  type Component,
+  createContext,
+  useContext,
+} from "solid-js";
+import * as THREE from "three";
+import { render, type Instance } from "../renderer";
 
 export type RootState = {
   scene: THREE.Scene;
@@ -18,7 +24,9 @@ export const useThree = () => {
   return context;
 };
 
-export const useFrame = (callback: (state: RootState, delta: number) => void) => {
+export const useFrame = (
+  callback: (state: RootState, delta: number) => void
+) => {
   const { addFrameCallback, removeFrameCallback } = useThree();
   onMount(() => addFrameCallback(callback));
   onCleanup(() => removeFrameCallback(callback));
@@ -26,7 +34,7 @@ export const useFrame = (callback: (state: RootState, delta: number) => void) =>
 
 export const Canvas: Component<any> = (props) => {
   let container: HTMLDivElement | undefined;
-  
+
   onMount(() => {
     if (!container) return;
 
@@ -34,21 +42,21 @@ export const Canvas: Component<any> = (props) => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
     camera.position.z = 5;
-    
+
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    
+
     container.appendChild(renderer.domElement);
-    
+
     // Resize handler
     const updateSize = () => {
-       if (!container) return;
-       const width = container.clientWidth;
-       const height = container.clientHeight;
-       renderer.setSize(width, height);
-       camera.aspect = width / height;
-       camera.updateProjectionMatrix();
+      if (!container) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
     };
-    
+
     const observer = new ResizeObserver(updateSize);
     observer.observe(container);
     updateSize();
@@ -58,11 +66,11 @@ export const Canvas: Component<any> = (props) => {
     const clock = new THREE.Clock();
 
     const state: RootState = {
-      scene, 
-      camera, 
+      scene,
+      camera,
       renderer,
       addFrameCallback: (fn) => frameCallbacks.add(fn),
-      removeFrameCallback: (fn) => frameCallbacks.delete(fn)
+      removeFrameCallback: (fn) => frameCallbacks.delete(fn),
     };
 
     // Animation loop
@@ -70,54 +78,57 @@ export const Canvas: Component<any> = (props) => {
     const animate = () => {
       frameId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
-      
-      frameCallbacks.forEach(fn => fn(state, delta));
-      
+
+      frameCallbacks.forEach((fn) => fn(state, delta));
+
       // Default render if no other render loop takes over?
       // R3F separates render logic, but simple loop is fine.
       renderer.render(scene, camera);
     };
     animate();
-    
+
     // Render children into scene
     const rootInstance: Instance = {
-      type: 'Scene',
+      type: "Scene",
       parent: null,
       children: [],
       object: scene,
       props: {},
-      autoAttached: false
+      autoAttached: false,
     };
-    
+
     // Wrap children in Provider
-    const dispose = render(() => (
-      <FiberContext.Provider value={state}>
-        {props.children}
-      </FiberContext.Provider>
-    ), rootInstance);
-    
+    const dispose = render(
+      () => (
+        <FiberContext.Provider value={state}>
+          {props.children}
+        </FiberContext.Provider>
+      ),
+      rootInstance
+    );
+
     onCleanup(() => {
-       cancelAnimationFrame(frameId);
-       observer.disconnect();
-       dispose();
-       renderer.dispose();
-       if (container && renderer.domElement) {
-         container.removeChild(renderer.domElement);
-       }
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+      dispose();
+      renderer.dispose();
+      if (container && renderer.domElement) {
+        container.removeChild(renderer.domElement);
+      }
     });
   });
 
   return (
-    <div 
-      ref={container} 
+    <div
+      ref={container}
       style={{
-        width: '100%', 
-        height: '100%', 
-        position: 'relative', 
-        overflow: 'hidden', 
-        ...props.style
+        width: "100%",
+        height: "100%",
+        position: "relative",
+        overflow: "hidden",
+        ...props.style,
       }}
-      class={props.class} 
+      class={props.class}
     />
   );
 };

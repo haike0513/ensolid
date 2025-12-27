@@ -1,5 +1,11 @@
-import { Component, For, JSX, splitProps, mergeProps } from 'solid-js';
-import { Group } from '../Group/Group';
+import {
+  type Component,
+  For,
+  type JSX,
+  splitProps,
+  mergeProps,
+} from "solid-js";
+import { Group } from "../Group/Group";
 
 // Simplified Scale type definition suitable for d3-scale interactions
 export interface AxisScale<Output = number> {
@@ -18,44 +24,50 @@ export type AxisProps = {
   hideAxisLine?: boolean;
   hideTicks?: boolean;
   tickLength?: number;
-  tickLabelProps?: (value: any, index: number) => JSX.TextSVGAttributes<SVGTextElement>;
+  tickLabelProps?: (
+    value: any,
+    index: number
+  ) => JSX.TextSVGAttributes<SVGTextElement>;
   stroke?: string;
   strokeWidth?: number;
   tickStroke?: string;
   tickStrokeWidth?: number;
   numTicks?: number;
   tickFormat?: (value: any, index: number) => string;
-} & Omit<JSX.GSVGAttributes<SVGGElement>, 'scale'>;
+} & Omit<JSX.GSVGAttributes<SVGGElement>, "scale">;
 
 export const AxisBottom: Component<AxisProps> = (rawProps) => {
-  const props = mergeProps({
-    tickLength: 8,
-    stroke: '#333',
-    strokeWidth: 1,
-    tickStroke: '#333',
-    tickLabelProps: () => ({
-      'text-anchor': 'middle' as const,
-      'font-size': '10px',
-      'font-family': 'sans-serif',
-      fill: '#333',
-      dy: '0.71em', // standard vertical alignment
-    }),
-  }, rawProps);
+  const props = mergeProps(
+    {
+      tickLength: 8,
+      stroke: "#333",
+      strokeWidth: 1,
+      tickStroke: "#333",
+      tickLabelProps: () => ({
+        "text-anchor": "middle" as const,
+        "font-size": "10px",
+        "font-family": "sans-serif",
+        fill: "#333",
+        dy: "0.71em", // standard vertical alignment
+      }),
+    },
+    rawProps
+  );
 
   const [local, rest] = splitProps(props, [
-    'scale',
-    'top',
-    'left',
-    'hideAxisLine',
-    'hideTicks',
-    'tickLength',
-    'tickLabelProps',
-    'stroke',
-    'strokeWidth',
-    'tickStroke',
-    'tickStrokeWidth',
-    'numTicks',
-    'tickFormat',
+    "scale",
+    "top",
+    "left",
+    "hideAxisLine",
+    "hideTicks",
+    "tickLength",
+    "tickLabelProps",
+    "stroke",
+    "strokeWidth",
+    "tickStroke",
+    "tickStrokeWidth",
+    "numTicks",
+    "tickFormat",
   ]);
 
   const ticks = () => {
@@ -65,16 +77,16 @@ export const AxisBottom: Component<AxisProps> = (rawProps) => {
   };
 
   const formatTick = (tick: any, index: number) => {
-      const { scale, tickFormat, numTicks } = local;
-      if (tickFormat) return tickFormat(tick, index);
-      if (scale.tickFormat) return scale.tickFormat(numTicks)(tick);
-      return String(tick);
+    const { scale, tickFormat, numTicks } = local;
+    if (tickFormat) return tickFormat(tick, index);
+    if (scale.tickFormat) return scale.tickFormat(numTicks)(tick);
+    return String(tick);
   };
 
   const offset = () => {
-      const { scale } = local;
-      if(scale.bandwidth) return scale.bandwidth() / 2;
-      return 0;
+    const { scale } = local;
+    if (scale.bandwidth) return scale.bandwidth() / 2;
+    return 0;
   };
 
   const range = () => local.scale.range();
@@ -93,24 +105,24 @@ export const AxisBottom: Component<AxisProps> = (rawProps) => {
       )}
       <For each={ticks()}>
         {(tick, i) => {
-            const x = (local.scale(tick) ?? 0) + offset();
-            return (
-                <Group transform={`translate(${x}, 0)`}>
-                    {!local.hideTicks && (
-                        <line 
-                            y2={local.tickLength} 
-                            stroke={local.tickStroke} 
-                            stroke-width={local.tickStrokeWidth}
-                        />
-                    )}
-                    <text
-                        y={local.tickLength + 5}
-                        {...local.tickLabelProps(tick, i())}
-                    >
-                        {formatTick(tick, i())}
-                    </text>
-                </Group>
-            )
+          const x = (local.scale(tick) ?? 0) + offset();
+          return (
+            <Group transform={`translate(${x}, 0)`}>
+              {!local.hideTicks && (
+                <line
+                  y2={local.tickLength}
+                  stroke={local.tickStroke}
+                  stroke-width={local.tickStrokeWidth}
+                />
+              )}
+              <text
+                y={local.tickLength + 5}
+                {...local.tickLabelProps(tick, i())}
+              >
+                {formatTick(tick, i())}
+              </text>
+            </Group>
+          );
         }}
       </For>
     </Group>
