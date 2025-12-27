@@ -375,6 +375,55 @@ export const WorkflowPage: Component = () => {
   // Canvas State
   const [isLocked, setIsLocked] = createSignal(false);
 
+  // Toolbar Draggable State
+  type ToolbarPosition =
+    | "top-center"
+    | "bottom-center"
+    | "center-left"
+    | "center-right";
+  const [toolbarPos, setToolbarPos] =
+    createSignal<ToolbarPosition>("top-center");
+  const [isDraggingToolbar, setIsDraggingToolbar] = createSignal(false);
+
+  const handleToolbarDragStart = (e: MouseEvent) => {
+    // Prevent interfering with node dragging
+    if ((e.target as HTMLElement).closest('[draggable="true"]')) return;
+
+    e.preventDefault();
+    setIsDraggingToolbar(true);
+
+    const handleMouseMove = (ev: MouseEvent) => {
+      // Determine closest edge based on mouse position
+      const { clientX, clientY, view } = ev;
+      if (!view) return;
+      const { innerWidth, innerHeight } = view;
+
+      const distTop = clientY;
+      const distBottom = innerHeight - clientY;
+      const distLeft = clientX;
+      const distRight = innerWidth - clientX;
+
+      const minDist = Math.min(distTop, distBottom, distLeft, distRight);
+
+      if (minDist === distTop) setToolbarPos("top-center");
+      else if (minDist === distBottom) setToolbarPos("bottom-center");
+      else if (minDist === distLeft) setToolbarPos("center-left");
+      else if (minDist === distRight) setToolbarPos("center-right");
+    };
+
+    const handleMouseUp = () => {
+      setIsDraggingToolbar(false);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+  };
+
+  const isHorizontalToolbar = () =>
+    toolbarPos().includes("top") || toolbarPos().includes("bottom");
+
   return (
     <div class="flex h-[calc(100vh-theme(spacing.16))] flex-col bg-white">
       {/* Hidden File Input for Import */}
@@ -642,8 +691,52 @@ export const WorkflowPage: Component = () => {
           </Panel>
 
           {/* Floating Toolbar Panel */}
-          <Panel position="top-center" class="mt-4">
-            <div class="flex items-center gap-1 rounded-xl border border-gray-200 bg-white p-1.5 shadow-lg">
+          <Panel
+            position={toolbarPos()}
+            class={toolbarPos().includes("bottom") ? "mb-4" : "mt-4"}
+          >
+            <div
+              class={`flex items-center gap-1 rounded-xl border border-gray-200 bg-white p-1.5 shadow-lg cursor-move transition-all duration-200 ${
+                isHorizontalToolbar() ? "flex-row" : "flex-col"
+              } ${
+                isDraggingToolbar()
+                  ? "scale-105 shadow-xl ring-2 ring-indigo-500/20"
+                  : ""
+              }`}
+              onMouseDown={handleToolbarDragStart}
+            >
+              {/* Drag Handle Indicator */}
+              <div
+                class={`flex justify-center items-center ${
+                  isHorizontalToolbar() ? "w-2 h-full" : "h-2 w-full"
+                } text-gray-300`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class={isHorizontalToolbar() ? "rotate-90" : ""}
+                >
+                  <circle cx="9" cy="12" r="1" />
+                  <circle cx="9" cy="5" r="1" />
+                  <circle cx="9" cy="19" r="1" />
+                  <circle cx="15" cy="12" r="1" />
+                  <circle cx="15" cy="5" r="1" />
+                  <circle cx="15" cy="19" r="1" />
+                </svg>
+              </div>
+
+              <div
+                class={`w-px bg-gray-200 mx-1 ${
+                  isHorizontalToolbar() ? "h-6 w-px" : "w-6 h-px"
+                }`}
+              ></div>
               {/* Lock Button (Functional) */}
               <div
                 class={`p-2 rounded-lg cursor-pointer transition-colors ${
@@ -734,7 +827,11 @@ export const WorkflowPage: Component = () => {
                 </svg>
               </div>
 
-              <div class="w-px h-6 bg-gray-200 mx-1"></div>
+              <div
+                class={`bg-gray-200 mx-1 ${
+                  isHorizontalToolbar() ? "h-6 w-px" : "w-6 h-px"
+                }`}
+              ></div>
 
               {/* Draggable Nodes */}
 
@@ -849,7 +946,11 @@ export const WorkflowPage: Component = () => {
                 </span>
               </div>
 
-              <div class="w-px h-6 bg-gray-200 mx-1"></div>
+              <div
+                class={`bg-gray-200 mx-1 ${
+                  isHorizontalToolbar() ? "h-6 w-px" : "w-6 h-px"
+                }`}
+              ></div>
 
               {/* Additional static tools for visuals */}
               <div class="p-2 rounded-lg hover:bg-gray-100 text-gray-500 cursor-pointer">

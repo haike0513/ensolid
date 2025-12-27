@@ -15,7 +15,9 @@ export interface PanelProps extends JSX.HTMLAttributes<HTMLDivElement> {
     | "top-right"
     | "bottom-left"
     | "bottom-center"
-    | "bottom-right";
+    | "bottom-right"
+    | "center-left"
+    | "center-right";
   /**
    * 子元素
    */
@@ -40,6 +42,8 @@ export const Panel: Component<PanelProps> = (props) => {
       "bottom-left": "bottom-4 left-4",
       "bottom-center": "bottom-4 left-1/2 -translate-x-1/2",
       "bottom-right": "bottom-4 right-4",
+      "center-left": "top-1/2 left-4 -translate-y-1/2",
+      "center-right": "top-1/2 right-4 -translate-y-1/2",
     };
     return classes[pos];
   };
