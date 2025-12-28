@@ -145,13 +145,32 @@ export const WorkflowPage: Component = () => {
     setSelectedNodeId(node.id);
   };
 
+  const onSelectionChange = (params: { nodes: Node[]; edges: Edge[] }) => {
+    setSelectedNodeId(params.nodes[0]?.id ?? null);
+  };
+
   const onPaneClick = () => {
     setSelectedNodeId(null);
   };
 
   // Flow Handlers
-  const onNodesChange = (changes: NodeChange[]) =>
+  const onNodesChange = (changes: NodeChange[]) => {
+    let nextSelectedId = selectedNodeId();
+
+    // Sync selection state from Flow change events
+    for (const change of changes) {
+      if (change.type === "select") {
+        if (change.selected) {
+          nextSelectedId = change.id;
+        } else if (nextSelectedId === change.id) {
+          nextSelectedId = null;
+        }
+      }
+    }
+
     setNodes((nds) => applyNodeChanges(changes, nds));
+    setSelectedNodeId(nextSelectedId);
+  };
   const onEdgesChange = (changes: EdgeChange[]) =>
     setEdges((eds) => applyEdgeChanges(changes, eds));
   const onConnect = (connection: Connection) =>
@@ -221,6 +240,7 @@ export const WorkflowPage: Component = () => {
           onDragOver={onDragOver}
           onDrop={onDrop}
           onNodeClick={onNodeClick}
+          onSelectionChange={onSelectionChange}
           onPaneClick={onPaneClick}
           // Locking Props
           nodesDraggable={!isLocked()}

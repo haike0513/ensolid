@@ -47,7 +47,7 @@ export const NodePropertyPanel: Component<NodePropertyPanelProps> = (props) => {
   };
 
   return (
-    <div class="absolute top-4 right-4 w-80 bg-white border rounded-lg shadow-xl p-4 z-40 animate-in fade-in slide-in-from-right-4 h-[calc(100vh-2rem)] overflow-y-auto">
+    <div class="absolute top-4 right-4 w-80 bg-white border rounded-lg shadow-xl p-4 z-[60] pointer-events-auto solidflow-panel animate-in fade-in slide-in-from-right-4 h-[calc(100vh-2rem)] overflow-y-auto">
       <div class="flex items-center justify-between mb-6 border-b pb-4">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
