@@ -27,4 +27,5 @@ export * from "./menubar";
 export * from "./toolbar";
 export * from "./navigation-menu";
 export * from "./textarea";
+export * from "./input";
 export * from "./utils";

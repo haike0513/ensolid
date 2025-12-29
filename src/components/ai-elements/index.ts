@@ -20,3 +20,6 @@ export type { ObjectGenerationProps } from "./object-generation";
 
 export { StreamableValue } from "./streamable-value";
 export type { StreamableValueProps } from "./streamable-value";
+
+export { TextGeneration } from "./text-generation";
+export type { TextGenerationProps } from "./text-generation";

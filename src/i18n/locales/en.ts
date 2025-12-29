@@ -289,6 +289,17 @@ export const en = {
         description: "Generate and edit images through text descriptions",
       },
     },
+    config: {
+      title: "API Configuration",
+      description: "Configure AI Gateway API Key to use AI features",
+      apiKeyLabel: "AI Gateway API Key",
+      apiKeyPlaceholder: "Enter your AI Gateway API Key",
+      save: "Save",
+      clear: "Clear",
+      saved: "Configuration saved",
+      cleared: "Configuration cleared",
+      required: "API Key is required",
+    },
   },
 };
 

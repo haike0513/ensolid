@@ -13,6 +13,7 @@ import { ChartsPage } from "./pages/Charts";
 import { WorkflowPage } from "./pages/Workflow";
 import { FiberPage } from "./pages/Fiber";
 import { AIPlaygroundPage } from "./pages/AIPlayground";
+import { SettingsPage } from "./pages/Settings";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
       <Route path="/workflow" component={WorkflowPage} />
       <Route path="/fiber" component={FiberPage} />
       <Route path="/ai-playground" component={AIPlaygroundPage} />
+      <Route path="/settings" component={SettingsPage} />
     </Router>
   );
 };

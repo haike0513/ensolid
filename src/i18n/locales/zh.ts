@@ -289,5 +289,16 @@ export const zh = {
                 description: "通过文本描述生成和编辑图像",
             },
         },
+        config: {
+            title: "API 配置",
+            description: "配置 AI Gateway API Key 以使用 AI 功能",
+            apiKeyLabel: "AI Gateway API Key",
+            apiKeyPlaceholder: "请输入您的 AI Gateway API Key",
+            save: "保存",
+            clear: "清除",
+            saved: "配置已保存",
+            cleared: "配置已清除",
+            required: "API Key 是必需的",
+        },
     },
 };

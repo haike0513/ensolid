@@ -3,6 +3,7 @@
  */
 
 import type { Component } from "solid-js";
+import { createSignal, onMount } from "solid-js";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
@@ -10,13 +11,57 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n";
 import { Chatbot } from "@/components/ai-elements/chatbot";
 import { Completion } from "@/components/ai-elements/completion";
+import { TextGeneration } from "@/components/ai-elements/text-generation";
 import { AIChat } from "@/components/AIChat";
+import {
+  getAIGatewayApiKey,
+  setAIGatewayApiKey,
+  clearAIGatewayApiKey,
+} from "@/ai/config";
 
 export const AIPlaygroundPage: Component = () => {
   const { t } = useI18n();
+  const [apiKey, setApiKey] = createSignal("");
+  const [message, setMessage] = createSignal("");
+
+  onMount(() => {
+    // 加载已保存的 API Key
+    setApiKey(getAIGatewayApiKey());
+  });
+
+  const handleSave = () => {
+    try {
+      if (apiKey().trim()) {
+        setAIGatewayApiKey(apiKey());
+        setMessage(t().aiPlayground.config.saved);
+        setTimeout(() => setMessage(""), 3000);
+      } else {
+        setMessage(t().aiPlayground.config.required);
+        setTimeout(() => setMessage(""), 3000);
+      }
+    } catch (error) {
+      setMessage(String(error));
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
+
+  const handleClear = () => {
+    try {
+      clearAIGatewayApiKey();
+      setApiKey("");
+      setMessage(t().aiPlayground.config.cleared);
+      setTimeout(() => setMessage(""), 3000);
+    } catch (error) {
+      setMessage(String(error));
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
 
   return (
     <div class="min-h-screen bg-background py-8">
@@ -33,10 +78,12 @@ export const AIPlaygroundPage: Component = () => {
 
         {/* 功能标签页 */}
         <Tabs defaultValue="aichat" class="w-full">
-          <TabsList class="grid w-full grid-cols-3 mb-6">
+          <TabsList class="grid w-full grid-cols-5 mb-6">
             <TabsTrigger value="aichat">AI Chat</TabsTrigger>
             <TabsTrigger value="chat">聊天对话</TabsTrigger>
             <TabsTrigger value="completion">文本补全</TabsTrigger>
+            <TabsTrigger value="generate">文本生成</TabsTrigger>
+            <TabsTrigger value="settings">设置</TabsTrigger>
           </TabsList>
 
           {/* AI Chat 标签页 */}
@@ -95,6 +142,56 @@ export const AIPlaygroundPage: Component = () => {
               placeholder="输入提示..."
             />
           </TabsContent>
+
+          {/* 文本生成标签页 */}
+          <TabsContent value="generate" class="space-y-4">
+            <TextGeneration
+              api="/api/generate-text"
+              model="openrouter:meituan/longcat-flash-thinking"
+              title="文本生成"
+              description="使用 generateText API 生成文本内容（支持 registry 格式的模型 ID）"
+              placeholder="输入提示文本，例如：Write a vegetarian lasagna recipe for 4 people."
+              onError={(err: Error) => {
+                console.error("Generate text error:", err);
+              }}
+            />
+          </TabsContent>
+
+          {/* 设置标签页 */}
+          <TabsContent value="settings" class="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle>{t().aiPlayground.config.title}</CardTitle>
+                <CardDescription>
+                  {t().aiPlayground.config.description}
+                </CardDescription>
+              </CardHeader>
+              <div class="px-6 pb-6 space-y-4">
+                <div class="space-y-2">
+                  <Label for="api-key">{t().aiPlayground.config.apiKeyLabel}</Label>
+                  <Input
+                    id="api-key"
+                    type="password"
+                    value={apiKey()}
+                    onInput={(e) => setApiKey(e.currentTarget.value)}
+                    placeholder={t().aiPlayground.config.apiKeyPlaceholder}
+                    class="w-full"
+                  />
+                </div>
+                <div class="flex gap-2">
+                  <Button onClick={handleSave} variant="default">
+                    {t().aiPlayground.config.save}
+                  </Button>
+                  <Button onClick={handleClear} variant="outline">
+                    {t().aiPlayground.config.clear}
+                  </Button>
+                </div>
+                {message() && (
+                  <p class="text-sm text-muted-foreground">{message()}</p>
+                )}
+              </div>
+            </Card>
+          </TabsContent>
         </Tabs>
 
         {/* 功能卡片 */}
@@ -135,20 +232,6 @@ export const AIPlaygroundPage: Component = () => {
             </Card>
           </div>
         </div>
-
-        {/* API 配置提示 */}
-        <Card class="mt-6 border-muted">
-          <CardHeader>
-            <CardTitle class="text-sm">API 配置</CardTitle>
-            <CardDescription class="text-xs">
-              要使用 AI 功能，需要配置后端 API 端点。查看{" "}
-              <code class="text-xs bg-muted px-1 py-0.5 rounded">
-                src/api/chat.ts
-              </code>{" "}
-              了解如何设置。
-            </CardDescription>
-          </CardHeader>
-        </Card>
       </div>
     </div>
   );
