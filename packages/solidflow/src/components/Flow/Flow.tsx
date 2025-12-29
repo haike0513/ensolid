@@ -171,6 +171,9 @@ export const Flow: Component<FlowProps> = (props) => {
     ]);
   };
 
+  // Has moved flag to distinguish click vs drag
+  const [hasMoved, setHasMoved] = createSignal(false);
+
   // 处理节点拖拽
   const handleNodeMouseDown = (event: MouseEvent, node: Node) => {
     if (!(local.nodesDraggable ?? true)) return;
@@ -185,6 +188,7 @@ export const Flow: Component<FlowProps> = (props) => {
     setIsDragging(true);
     setDraggedNodeId(node.id);
     setDragStart({ x: event.clientX, y: event.clientY });
+    setHasMoved(false);
   };
 
   // 处理画布拖拽
@@ -215,6 +219,7 @@ export const Flow: Component<FlowProps> = (props) => {
     setIsDragging(true);
     setDraggedNodeId(null);
     setDragStart({ x: event.clientX, y: event.clientY });
+    setHasMoved(false);
   };
 
   // 处理鼠标移动
@@ -301,6 +306,7 @@ export const Flow: Component<FlowProps> = (props) => {
           ]);
         }
         setDragStart({ x: event.clientX, y: event.clientY });
+        setHasMoved(true);
       }
     } else if (isDragging() && (local.panOnDrag ?? true)) {
       const start = dragStart();
@@ -312,6 +318,7 @@ export const Flow: Component<FlowProps> = (props) => {
           y: currentViewport.y + deltaY,
         });
         setDragStart({ x: event.clientX, y: event.clientY });
+        setHasMoved(true);
       }
     }
   };
@@ -418,6 +425,14 @@ export const Flow: Component<FlowProps> = (props) => {
     }
 
     if (draggedNodeId()) {
+      // Check if it was a click (no movement)
+      if (!hasMoved()) {
+        const node = local.nodes.find((n) => n.id === draggedNodeId());
+        if (node) {
+          handleNodeClick(event, node);
+        }
+      }
+
       local.onNodesChange?.([
         {
           id: draggedNodeId()!,
@@ -429,6 +444,7 @@ export const Flow: Component<FlowProps> = (props) => {
     setIsDragging(false);
     setDraggedNodeId(null);
     setDragStart(null);
+    setHasMoved(false);
   };
 
   // 处理连接开始（从 Handle 触发，通过事件委托）

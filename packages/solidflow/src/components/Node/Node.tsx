@@ -98,27 +98,32 @@ export const Node: Component<NodeProps> = (props) => {
   });
 
   const handleClick = (event: MouseEvent) => {
-    console.log("NodeComponent: Native click received", local.node.id);
+    // console.log("NodeComponent: Native click received", local.node.id);
     local.onClick?.(event, local.node);
   };
 
   const handleDoubleClick = (event: MouseEvent) => {
+    // console.log("NodeComponent: Native double click received", local.node.id);
     local.onDoubleClick?.(event, local.node);
   };
 
   const handleMouseEnter = (event: MouseEvent) => {
+    // console.log("NodeComponent: Native mouse enter received", event);
     local.onMouseEnter?.(event, local.node);
   };
 
   const handleMouseLeave = (event: MouseEvent) => {
+    // console.log("NodeComponent: Native mouse leave received", local.node.id);
     local.onMouseLeave?.(event, local.node);
   };
 
   const handleMouseDown = (event: MouseEvent) => {
+    // console.log("NodeComponent: Native mouse down received", local.node.id);
     local.onMouseDown?.(event, local.node);
   };
 
   const handleMouseUp = (event: MouseEvent) => {
+    console.log("NodeComponent: Native mouse up received", local.node.id);
     local.onMouseUp?.(event, local.node);
   };
 
