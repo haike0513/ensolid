@@ -1,13 +1,26 @@
 /**
  * Message 组件 - 移植自 Vercel AI Elements
- * 
+ *
  * 用于显示单条聊天消息的组件，支持分支、附件等功能
  */
 
 import type { Component, JSX } from "solid-js";
-import { createContext, useContext, createSignal, createEffect, Show, For, splitProps, children as solidChildren } from "solid-js";
+import {
+  children as solidChildren,
+  createContext,
+  createEffect,
+  createSignal,
+  For,
+  Show,
+  splitProps,
+  useContext,
+} from "solid-js";
 import { Button } from "@/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/components/ui/utils";
 import type { FileUIPart, UIMessage } from "ai";
 
@@ -87,13 +100,13 @@ export type MessageProps = JSX.HTMLAttributes<HTMLDivElement> & {
 
 export const Message: Component<MessageProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "from"]);
-  
+
   return (
     <div
       class={cn(
         "group flex w-full max-w-[95%] flex-col gap-2",
         local.from === "user" ? "is-user ml-auto justify-end" : "is-assistant",
-        local.class
+        local.class,
       )}
       {...others}
     />
@@ -104,14 +117,14 @@ export type MessageContentProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const MessageContent: Component<MessageContentProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
-  
+
   return (
     <div
       class={cn(
         "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
         "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
         "group-[.is-assistant]:text-foreground",
-        local.class
+        local.class,
       )}
       {...others}
     >
@@ -124,7 +137,7 @@ export type MessageActionsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const MessageActions: Component<MessageActionsProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
-  
+
   return (
     <div class={cn("flex items-center gap-1", local.class)} {...others}>
       {local.children}
@@ -135,18 +148,30 @@ export const MessageActions: Component<MessageActionsProps> = (props) => {
 export type MessageActionProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
   tooltip?: string;
   label?: string;
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   size?: "default" | "sm" | "lg" | "icon" | "icon-sm";
 };
 
 export const MessageAction: Component<MessageActionProps> = (props) => {
-  const [local, others] = splitProps(props, ["tooltip", "label", "variant", "size", "children"]);
-  
+  const [local, others] = splitProps(props, [
+    "tooltip",
+    "label",
+    "variant",
+    "size",
+    "children",
+  ]);
+
   const button = (
-    <Button 
-      size={local.size === "icon-sm" ? "icon" : local.size} 
-      type="button" 
-      variant={local.variant || "ghost"} 
+    <Button
+      size={local.size === "icon-sm" ? "icon" : local.size}
+      type="button"
+      variant={local.variant || "ghost"}
       {...others}
     >
       {local.children}
@@ -183,7 +208,7 @@ const useMessageBranch = () => {
   const context = useContext(MessageBranchContext);
   if (!context) {
     throw new Error(
-      "MessageBranch components must be used within MessageBranch"
+      "MessageBranch components must be used within MessageBranch",
     );
   }
   return context;
@@ -195,8 +220,15 @@ export type MessageBranchProps = JSX.HTMLAttributes<HTMLDivElement> & {
 };
 
 export const MessageBranch: Component<MessageBranchProps> = (props) => {
-  const [local, others] = splitProps(props, ["defaultBranch", "onBranchChange", "class", "children"]);
-  const [currentBranch, setCurrentBranch] = createSignal(local.defaultBranch ?? 0);
+  const [local, others] = splitProps(props, [
+    "defaultBranch",
+    "onBranchChange",
+    "class",
+    "children",
+  ]);
+  const [currentBranch, setCurrentBranch] = createSignal(
+    local.defaultBranch ?? 0,
+  );
   const [branches, setBranches] = createSignal<JSX.Element[]>([]);
 
   const handleBranchChange = (newBranch: number) => {
@@ -239,17 +271,21 @@ export const MessageBranch: Component<MessageBranchProps> = (props) => {
 
 export type MessageBranchContentProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export const MessageBranchContent: Component<MessageBranchContentProps> = (props) => {
+export const MessageBranchContent: Component<MessageBranchContentProps> = (
+  props,
+) => {
   const { currentBranch, setBranches, branches } = useMessageBranch();
   const resolvedChildren = solidChildren(() => props.children);
-  
+
   createEffect(() => {
     const childrenArray = resolvedChildren();
     if (childrenArray) {
-      const array = Array.isArray(childrenArray) ? childrenArray : [childrenArray];
-      const elements = array.filter((child): child is JSX.Element => 
+      const array = Array.isArray(childrenArray)
+        ? childrenArray
+        : [childrenArray];
+      const elements = array.filter((child) =>
         child != null && typeof child === "object"
-      );
+      ) as JSX.Element[];
       if (elements.length !== branches().length) {
         setBranches(elements);
       }
@@ -262,7 +298,7 @@ export const MessageBranchContent: Component<MessageBranchContentProps> = (props
         <div
           class={cn(
             "grid gap-2 overflow-hidden [&>div]:pb-0",
-            index() === currentBranch() ? "block" : "hidden"
+            index() === currentBranch() ? "block" : "hidden",
           )}
         >
           {branch}
@@ -276,7 +312,9 @@ export type MessageBranchSelectorProps = JSX.HTMLAttributes<HTMLDivElement> & {
   from: UIMessage["role"];
 };
 
-export const MessageBranchSelector: Component<MessageBranchSelectorProps> = (props) => {
+export const MessageBranchSelector: Component<MessageBranchSelectorProps> = (
+  props,
+) => {
   const { totalBranches } = useMessageBranch();
   const [local, others] = splitProps(props, ["class", "from"]);
 
@@ -289,16 +327,20 @@ export const MessageBranchSelector: Component<MessageBranchSelectorProps> = (pro
     <div
       class={cn(
         "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md flex",
-        local.class
+        local.class,
       )}
       {...others}
     />
   );
 };
 
-export type MessageBranchPreviousProps = JSX.ButtonHTMLAttributes<HTMLButtonElement>;
+export type MessageBranchPreviousProps = JSX.ButtonHTMLAttributes<
+  HTMLButtonElement
+>;
 
-export const MessageBranchPrevious: Component<MessageBranchPreviousProps> = (props) => {
+export const MessageBranchPrevious: Component<MessageBranchPreviousProps> = (
+  props,
+) => {
   const { goToPrevious, totalBranches } = useMessageBranch();
   const [local, others] = splitProps(props, ["children"]);
 
@@ -317,7 +359,9 @@ export const MessageBranchPrevious: Component<MessageBranchPreviousProps> = (pro
   );
 };
 
-export type MessageBranchNextProps = JSX.ButtonHTMLAttributes<HTMLButtonElement>;
+export type MessageBranchNextProps = JSX.ButtonHTMLAttributes<
+  HTMLButtonElement
+>;
 
 export const MessageBranchNext: Component<MessageBranchNextProps> = (props) => {
   const { goToNext, totalBranches } = useMessageBranch();
@@ -348,7 +392,7 @@ export const MessageBranchPage: Component<MessageBranchPageProps> = (props) => {
     <span
       class={cn(
         "border-none bg-transparent text-muted-foreground shadow-none px-3 py-1.5 text-sm",
-        local.class
+        local.class,
       )}
       {...others}
     >
@@ -364,12 +408,12 @@ export type MessageResponseProps = JSX.HTMLAttributes<HTMLDivElement> & {
 // 简单的 markdown 渲染组件，可以后续替换为更完整的实现
 export const MessageResponse: Component<MessageResponseProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
-  
+
   return (
     <div
       class={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 prose prose-sm max-w-none",
-        local.class
+        local.class,
       )}
       {...others}
     >
@@ -386,8 +430,9 @@ export type MessageAttachmentProps = JSX.HTMLAttributes<HTMLDivElement> & {
 export const MessageAttachment: Component<MessageAttachmentProps> = (props) => {
   const [local, others] = splitProps(props, ["data", "onRemove", "class"]);
   const filename = local.data.filename || "";
-  const mediaType =
-    local.data.mediaType?.startsWith("image/") && local.data.url ? "image" : "file";
+  const mediaType = local.data.mediaType?.startsWith("image/") && local.data.url
+    ? "image"
+    : "file";
   const isImage = mediaType === "image";
   const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
 
@@ -395,7 +440,7 @@ export const MessageAttachment: Component<MessageAttachmentProps> = (props) => {
     <div
       class={cn(
         "group relative size-24 overflow-hidden rounded-lg",
-        local.class
+        local.class,
       )}
       {...others}
     >
@@ -460,9 +505,11 @@ export const MessageAttachment: Component<MessageAttachmentProps> = (props) => {
 
 export type MessageAttachmentsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export const MessageAttachments: Component<MessageAttachmentsProps> = (props) => {
+export const MessageAttachments: Component<MessageAttachmentsProps> = (
+  props,
+) => {
   const [local, others] = splitProps(props, ["class", "children"]);
-  
+
   if (!local.children) {
     return null;
   }
@@ -471,7 +518,7 @@ export const MessageAttachments: Component<MessageAttachmentsProps> = (props) =>
     <div
       class={cn(
         "ml-auto flex w-fit flex-wrap items-start gap-2",
-        local.class
+        local.class,
       )}
       {...others}
     >
@@ -484,12 +531,12 @@ export type MessageToolbarProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const MessageToolbar: Component<MessageToolbarProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
-  
+
   return (
     <div
       class={cn(
         "mt-4 flex w-full items-center justify-between gap-4",
-        local.class
+        local.class,
       )}
       {...others}
     >
