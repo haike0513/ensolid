@@ -4,6 +4,19 @@
 
 ## 组件列表
 
+### 新移植的组件（来自 Vercel AI Elements）
+
+以下组件是从 Vercel AI Elements 的 React 实现移植到 SolidJS 的：
+
+- **Message** - 消息组件，支持分支、附件、操作按钮等
+- **Conversation** - 对话列表组件，支持自动滚动
+- **Suggestions** - 建议按钮组件
+- **Sources** - 引用来源组件
+- **Tool** - 工具调用信息组件
+- **CodeBlock** - 代码块组件，支持语法高亮和复制
+
+### 原有组件（已存在）
+
 ### Chatbot
 
 一个完整的聊天机器人 UI 组件，集成了 `useChat` hook。
@@ -76,12 +89,172 @@ function App() {
 - `body` - 自定义请求体
 - `maxTokens` - 最大 token 数
 
-### Message
+### Message（新版本）
 
-用于显示单条聊天消息的组件。
+用于显示单条聊天消息的组件，支持分支、附件、操作按钮等功能。
 
 ```tsx
-import { Message } from "@/components/ai-elements";
+import { Message, MessageContent, MessageActions, MessageAction } from "@/components/ai-elements";
+import type { UIMessage } from "ai";
+
+function App() {
+  const message: UIMessage = {
+    id: "1",
+    role: "user",
+    parts: [{ type: "text", text: "Hello!" }],
+  };
+
+  return (
+    <Message from={message.role}>
+      <MessageContent>
+        {message.parts?.map((part) => 
+          part.type === "text" ? part.text : null
+        )}
+      </MessageContent>
+      <MessageActions>
+        <MessageAction tooltip="复制">复制</MessageAction>
+      </MessageActions>
+    </Message>
+  );
+}
+```
+
+#### 子组件
+
+- `Message` - 主容器组件
+- `MessageContent` - 消息内容容器
+- `MessageActions` - 操作按钮容器
+- `MessageAction` - 单个操作按钮
+- `MessageBranch` - 消息分支容器
+- `MessageBranchContent` - 分支内容
+- `MessageBranchSelector` - 分支选择器
+- `MessageBranchPrevious` - 上一个分支按钮
+- `MessageBranchNext` - 下一个分支按钮
+- `MessageBranchPage` - 分支页码显示
+- `MessageResponse` - 消息响应内容（支持 markdown）
+- `MessageAttachment` - 附件显示
+- `MessageAttachments` - 附件列表容器
+- `MessageToolbar` - 工具栏
+
+### Conversation
+
+用于显示对话列表的组件，支持自动滚动到底部。
+
+```tsx
+import { Conversation, ConversationContent, ConversationEmptyState, ConversationScrollButton } from "@/components/ai-elements";
+
+function App() {
+  return (
+    <Conversation>
+      <ConversationContent>
+        {/* 消息列表 */}
+      </ConversationContent>
+      <ConversationScrollButton />
+      <ConversationEmptyState 
+        title="还没有消息"
+        description="开始对话吧"
+      />
+    </Conversation>
+  );
+}
+```
+
+### Suggestions
+
+用于显示建议按钮的组件。
+
+```tsx
+import { Suggestions, Suggestion } from "@/components/ai-elements";
+
+function App() {
+  return (
+    <Suggestions>
+      <Suggestion 
+        suggestion="告诉我今天的天气"
+        onClick={(suggestion) => console.log(suggestion)}
+      />
+      <Suggestion suggestion="帮我写一首诗" />
+    </Suggestions>
+  );
+}
+```
+
+### Sources
+
+用于显示引用来源的组件。
+
+```tsx
+import { Sources, SourcesTrigger, SourcesContent, Source } from "@/components/ai-elements";
+
+function App() {
+  return (
+    <Sources>
+      <SourcesTrigger count={3} />
+      <SourcesContent>
+        <Source href="https://example.com" title="示例文档" />
+        <Source href="https://example2.com" title="另一个文档" />
+      </SourcesContent>
+    </Sources>
+  );
+}
+```
+
+### Tool
+
+用于显示工具调用信息的组件。
+
+```tsx
+import { Tool, ToolHeader, ToolContent, ToolInput, ToolOutput } from "@/components/ai-elements";
+import type { ToolUIPart } from "ai";
+
+function App() {
+  const toolPart: ToolUIPart = {
+    type: "tool-call",
+    toolCallId: "1",
+    toolName: "search",
+    state: "output-available",
+    input: { query: "test" },
+    output: { results: [] },
+  };
+
+  return (
+    <Tool>
+      <ToolHeader 
+        title="搜索工具"
+        type={toolPart.type}
+        state={toolPart.state}
+      />
+      <ToolContent>
+        <ToolInput input={toolPart.input} />
+        <ToolOutput output={toolPart.output} />
+      </ToolContent>
+    </Tool>
+  );
+}
+```
+
+### CodeBlock
+
+用于显示代码块的组件，支持语法高亮和复制功能。
+
+```tsx
+import { CodeBlock, CodeBlockCopyButton } from "@/components/ai-elements";
+
+function App() {
+  return (
+    <CodeBlock code="const x = 1;" language="typescript">
+      <CodeBlockCopyButton code="const x = 1;" />
+    </CodeBlock>
+  );
+}
+```
+
+### Message（旧版本，保持向后兼容）
+
+用于显示单条聊天消息的组件（旧版本，已弃用，建议使用新版本）。
+
+```tsx
+import { MessageOld } from "@/components/ai-elements";
 import type { Message as MessageType } from "@ensolid/aisolid";
 
 function App() {
@@ -93,7 +266,7 @@ function App() {
   };
 
   return (
-    <Message
+    <MessageOld
       message={message}
       showTimestamp={true}
       showRole={true}
@@ -101,14 +274,6 @@ function App() {
   );
 }
 ```
-
-#### Props
-
-- `message` - 消息对象（必需）
-- `showTimestamp` - 是否显示时间戳（默认: `true`）
-- `showRole` - 是否显示角色标签（默认: `true`）
-- `roleLabels` - 自定义角色标签映射
-- `class` - 自定义类名
 
 ### Assistant
 
