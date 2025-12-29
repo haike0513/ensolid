@@ -3,7 +3,8 @@
  * Features a node-based editor for defining AI agents and their tasks.
  */
 import type { Component } from "solid-js";
-import { createSignal, createMemo, Show } from "solid-js";
+import { createSignal, createMemo, Show, type Accessor } from "solid-js";
+import { createStore } from "solid-js/store";
 import {
   addEdge,
   applyEdgeChanges,
@@ -25,7 +26,7 @@ import { WorkflowToolbar } from "./workflow/components/WorkflowToolbar";
 // --- Main Page ---
 
 export const WorkflowPage: Component = () => {
-  const [nodes, setNodes] = createSignal<Node[]>([
+  const [nodes, setNodes] = createStore<Node[]>([
     {
       id: "trigger-1",
       type: "trigger",
@@ -77,17 +78,14 @@ export const WorkflowPage: Component = () => {
   const [isLocked, setIsLocked] = createSignal(false);
 
   // Helper to get current node
-  const selectedNode = createMemo(() => nodes().find((n) => n.id === selectedNodeId()));
+  const selectedNode = createMemo(() => nodes.find((n) => n.id === selectedNodeId()));
 
   // Update Node Data
   const updateNodeData = (id: string, data: any) => {
-    setNodes((nds) =>
-      nds.map((n) => {
-        if (n.id === id) {
-          return { ...n, data: { ...n.data, ...data } };
-        }
-        return n;
-      })
+    setNodes(
+      (n) => n.id === id,
+      "data",
+      (prev) => ({ ...prev, ...data })
     );
   };
 
@@ -129,14 +127,15 @@ export const WorkflowPage: Component = () => {
       data = { label: "New Tool", description: "Tool..." } as any;
     if (type === "trigger") data = { label: "Start" } as any;
 
-    setNodes((nds) =>
-      nds.concat({
+    setNodes((nds) => [
+      ...nds,
+      {
         id,
         type,
         position,
         data,
-      })
-    );
+      },
+    ]);
   };
 
   // Event Handlers
@@ -168,7 +167,7 @@ export const WorkflowPage: Component = () => {
       }
     }
 
-    setNodes((nds) => applyNodeChanges(changes, nds));
+    setNodes(applyNodeChanges(changes, nodes));
     setSelectedNodeId(nextSelectedId);
   };
   const onEdgesChange = (changes: EdgeChange[]) =>
@@ -184,7 +183,7 @@ export const WorkflowPage: Component = () => {
   // Export Graph
   const exportGraph = () => {
     const data = {
-      nodes: nodes(),
+      nodes: nodes,
       edges: edges(),
     };
     const jsonString = JSON.stringify(data, null, 2);
@@ -231,7 +230,7 @@ export const WorkflowPage: Component = () => {
       {/* Editor Area */}
       <div class="relative flex-1 overflow-hidden">
         <Flow
-          nodes={nodes()}
+          nodes={nodes}
           edges={edges()}
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
