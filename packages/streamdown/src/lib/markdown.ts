@@ -230,25 +230,29 @@ const createJsxAdapter = () => {
     const flatChildren = children.flat(Infinity).filter((c) => c != null);
 
     // In SolidJS, JSX elements are functions that create DOM nodes
-    // For string types (HTML elements), we create a function that returns the element
-    // For component types, we call the component with props
+    // For string types (HTML elements), we need to return a JSX element
+    // that SolidJS can render
     if (typeof type === "string") {
-      // Create a function that returns a JSX element structure
-      // SolidJS will process this during rendering
-      const elementFn = () => {
-        // Create element with props and children
-        // This will be processed by SolidJS's JSX runtime
-        const element: any = {
+      // For SolidJS, we need to return a function that creates the element
+      // SolidJS JSX runtime expects elements to be functions
+      // We'll use a template function that SolidJS can process
+      return (() => {
+        // Create the element using SolidJS's JSX pattern
+        // This will be processed by SolidJS's JSX runtime during rendering
+        const elementProps = { ...convertedProps };
+        if (flatChildren.length > 0) {
+          elementProps.children = flatChildren.length === 1
+            ? flatChildren[0]
+            : flatChildren;
+        }
+        // Return a function that SolidJS can call to create the element
+        // This matches SolidJS's JSX element structure
+        return {
           __solidjs_element: true,
           type,
-          props: convertedProps,
+          props: elementProps,
         };
-        if (flatChildren.length > 0) {
-          element.children = flatChildren;
-        }
-        return element;
-      };
-      return elementFn as unknown as JSX.Element;
+      }) as unknown as JSX.Element;
     }
 
     // For components, call them with props and children

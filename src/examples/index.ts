@@ -30,4 +30,5 @@ export { FlowInteractiveExample } from "./FlowInteractiveExample";
 export { FlowEditorExample } from "./FlowEditorExample";
 export { FlowConnectExample } from "./FlowConnectExample";
 export { FlowEdgeTypesExample } from "./FlowEdgeTypesExample";
+export { StreamdownExample } from "./StreamdownExample";
 
