@@ -22,6 +22,8 @@
     "publish:aisolid": "pnpm --filter @ensolid/aisolid publish"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.1",
+    "@ai-sdk/openai": "^3.0.1",
     "@ai-sdk/openai-compatible": "^2.0.1",
     "@ensolid/baseui": "workspace:*",
     "@ensolid/fiber": "workspace:*",

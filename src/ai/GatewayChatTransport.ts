@@ -3,6 +3,7 @@ import { streamText } from "ai";
 import { getGateway } from "./gateway";
 import { normalizeModelId } from "./utils";
 import { lmstudioProvider } from "./provider/lmstudioProvider";
+import { registry } from "./registry";
 
 /**
  * 自定义 ChatTransport，使用 Gateway 来获取模型
@@ -56,12 +57,14 @@ export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
     // 从 gateway 获取模型
     // gateway 的 languageModel 方法接受完整的模型 ID（包含 provider 前缀）
     // 例如: "gateway:gpt-4" 或直接使用模型 ID "gpt-4"
-    const model = gateway.languageModel(fullModelId);
+    // const model = gateway.languageModel(fullModelId);
+    const model = registry.languageModel("lmstudio:qwen/qwen3-vl-8b");
 
     console.log("model", model);
     // 使用 streamText 调用模型
     const result = await streamText({
-      model: lmstudioProvider.languageModel("qwen/qwen3-vl-8b"),
+      // model: lmstudioProvider.languageModel("qwen/qwen3-vl-8b"),
+      model,
       messages: modelMessages,
       maxRetries: 1,
       abortSignal: options.abortSignal,

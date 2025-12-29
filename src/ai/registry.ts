@@ -42,13 +42,13 @@ export const registry = createProviderRegistry({
   // 注册 OpenAI provider（使用自定义配置）
   openai: createOpenAI({
     // @ts-ignore - process.env 在后端环境中可用
-    apiKey: process.env.OPENAI_API_KEY,
+    // apiKey: process.env.OPENAI_API_KEY,
   }),
 
   // 注册 OpenRouter provider（用于访问自定义模型，如 meituan/longcat-flash-thinking）
   openrouter: createOpenAI({
     // @ts-ignore - process.env 在后端环境中可用
-    apiKey: process.env.OPENROUTER_API_KEY,
+    // apiKey: process.env.OPENROUTER_API_KEY,
     baseURL: "https://openrouter.ai/api/v1",
   }),
 
