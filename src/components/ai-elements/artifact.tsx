@@ -1,11 +1,11 @@
 /**
  * Artifact 组件 - 移植自 Vercel AI Elements
- * 
+ *
  * 用于显示 AI 生成的工作/工件的组件
  */
 
 import type { Component, JSX } from "solid-js";
-import { splitProps, Show } from "solid-js";
+import { Show, splitProps } from "solid-js";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -41,7 +41,7 @@ export const Artifact: Component<ArtifactProps> = (props) => {
     <div
       class={cn(
         "flex flex-col overflow-hidden rounded-lg border bg-background shadow-sm",
-        local.class
+        local.class,
       )}
       {...others}
     />
@@ -56,7 +56,7 @@ export const ArtifactHeader: Component<ArtifactHeaderProps> = (props) => {
     <div
       class={cn(
         "flex items-center justify-between border-b bg-muted/50 px-4 py-3",
-        local.class
+        local.class,
       )}
       {...others}
     />
@@ -64,7 +64,13 @@ export const ArtifactHeader: Component<ArtifactHeaderProps> = (props) => {
 };
 
 export type ArtifactCloseProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
   size?: "default" | "sm" | "lg" | "icon";
 };
 
@@ -79,7 +85,7 @@ export const ArtifactClose: Component<ArtifactCloseProps> = (props) => {
     <Button
       class={cn(
         "size-8 p-0 text-muted-foreground hover:text-foreground",
-        local.class
+        local.class,
       )}
       size={local.size || "sm"}
       type="button"
@@ -107,7 +113,7 @@ export const ArtifactTitle: Component<ArtifactTitleProps> = (props) => {
 export type ArtifactDescriptionProps = JSX.HTMLAttributes<HTMLParagraphElement>;
 
 export const ArtifactDescription: Component<ArtifactDescriptionProps> = (
-  props
+  props,
 ) => {
   const [local, others] = splitProps(props, ["class"]);
   return (
@@ -119,18 +125,24 @@ export type ArtifactActionsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ArtifactActions: Component<ArtifactActionsProps> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
-  return (
-    <div class={cn("flex items-center gap-1", local.class)} {...others} />
-  );
+  return <div class={cn("flex items-center gap-1", local.class)} {...others} />;
 };
 
-export type ArtifactActionProps = JSX.ButtonHTMLAttributes<HTMLButtonElement> & {
-  tooltip?: string;
-  label?: string;
-  icon?: Component<{ size?: number; class?: string }>;
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
-  size?: "default" | "sm" | "lg" | "icon";
-};
+export type ArtifactActionProps =
+  & JSX.ButtonHTMLAttributes<HTMLButtonElement>
+  & {
+    tooltip?: string;
+    label?: string;
+    icon?: Component<{ size?: number; class?: string }>;
+    variant?:
+      | "default"
+      | "destructive"
+      | "outline"
+      | "secondary"
+      | "ghost"
+      | "link";
+    size?: "default" | "sm" | "lg" | "icon";
+  };
 
 export const ArtifactAction: Component<ArtifactActionProps> = (props) => {
   const [local, others] = splitProps(props, [
@@ -149,16 +161,14 @@ export const ArtifactAction: Component<ArtifactActionProps> = (props) => {
     <Button
       class={cn(
         "size-8 p-0 text-muted-foreground hover:text-foreground",
-        local.class
+        local.class,
       )}
       size={local.size || "sm"}
       type="button"
       variant={local.variant || "ghost"}
       {...others}
     >
-      <Show when={Icon} fallback={local.children}>
-        <Icon size={16} />
-      </Show>
+      {Icon ? <Icon size={16} /> : local.children}
       <span class="sr-only">{local.label || local.tooltip}</span>
     </Button>
   );
@@ -182,6 +192,9 @@ export type ArtifactContentProps = JSX.HTMLAttributes<HTMLDivElement>;
 export const ArtifactContent: Component<ArtifactContentProps> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
   return (
-    <div class={cn("flex-1 overflow-auto p-4", local.class)} {...others} />
+    <div
+      class={cn("flex-1 overflow-auto p-4", local.class)}
+      {...others}
+    />
   );
 };
