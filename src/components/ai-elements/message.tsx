@@ -401,23 +401,101 @@ export const MessageBranchPage: Component<MessageBranchPageProps> = (props) => {
   );
 };
 
+import { Streamdown } from "@ensolid/streamdown";
+
 export type MessageResponseProps = JSX.HTMLAttributes<HTMLDivElement> & {
-  children?: JSX.Element;
+  children?: JSX.Element | string;
+  /**
+   * 是否使用流式渲染模式（默认：true，适合 AI 流式响应）
+   */
+  streaming?: boolean;
+  /**
+   * 是否解析不完整的 markdown（默认：true，适合流式内容）
+   */
+  parseIncompleteMarkdown?: boolean;
 };
 
-// 简单的 markdown 渲染组件，可以后续替换为更完整的实现
+// 使用 Streamdown 进行 markdown 渲染的组件
 export const MessageResponse: Component<MessageResponseProps> = (props) => {
-  const [local, others] = splitProps(props, ["class", "children"]);
+  const [local, others] = splitProps(props, [
+    "class",
+    "children",
+    "streaming",
+    "parseIncompleteMarkdown",
+  ]);
+
+  const streaming = () => local.streaming ?? true;
+  const parseIncomplete = () => local.parseIncompleteMarkdown ?? true;
+
+  // 使用 solidChildren 解析 children，支持字符串和 JSX 元素
+  const resolvedChildren = solidChildren(() => local.children);
+
+  // 提取字符串内容用于 Streamdown 渲染
+  const markdownContent = () => {
+    const children = resolvedChildren();
+
+    // 如果直接是字符串，直接返回
+    if (typeof children === "string") {
+      return children;
+    }
+
+    // 如果是数组，提取所有字符串并合并
+    if (Array.isArray(children)) {
+      const textParts = children
+        .map((c) => (typeof c === "string" ? c : ""))
+        .filter((c) => c.length > 0);
+      return textParts.length > 0 ? textParts.join("") : "";
+    }
+
+    // 其他情况返回空字符串
+    return "";
+  };
+
+  // 判断是否有可渲染的 markdown 内容
+  const hasMarkdownContent = () => {
+    const content = markdownContent();
+    return content.length > 0;
+  };
 
   return (
     <div
       class={cn(
-        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 prose prose-sm max-w-none",
+        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
         local.class,
       )}
       {...others}
     >
-      {local.children}
+      <Show
+        when={hasMarkdownContent()}
+        fallback={
+          // 如果没有 markdown 内容，直接渲染原始 children
+
+            <div class="prose prose-sm max-w-none dark:prose-invert">
+              {resolvedChildren()}
+            </div>
+
+        }
+      >
+        <Streamdown
+          mode={streaming() ? "streaming" : "static"}
+          parseIncompleteMarkdown={parseIncomplete()}
+          class="prose prose-sm max-w-none dark:prose-invert
+            prose-headings:font-semibold
+            prose-p:leading-relaxed
+            prose-pre:bg-muted
+            prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+            prose-a:text-primary prose-a:underline
+            prose-strong:font-semibold
+            prose-ul:list-disc prose-ul:pl-6
+            prose-ol:list-decimal prose-ol:pl-6
+            prose-blockquote:border-l-4 prose-blockquote:border-muted-foreground prose-blockquote:pl-4 prose-blockquote:italic
+            prose-table:border-collapse prose-table:border prose-table:border-border
+            prose-th:border prose-th:border-border prose-th:p-2 prose-th:bg-muted
+            prose-td:border prose-td:border-border prose-td:p-2"
+        >
+          {markdownContent()}
+        </Streamdown>
+      </Show>
     </div>
   );
 };

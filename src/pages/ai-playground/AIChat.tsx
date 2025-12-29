@@ -12,12 +12,10 @@ import type { UIMessage } from "ai";
 import { GatewayChatTransport } from "@/ai";
 import { registry } from "@/ai/registry";
 import {
-    MessageBranch,
-    MessageBranchContent,
-    MessageBranchNext,
-    MessageBranchPage,
-    MessageBranchPrevious,
-    MessageBranchSelector,
+    Message,
+    MessageAction,
+    MessageActions,
+    MessageContent,
 } from "@/components/ai-elements/message";
 import {
     Conversation,
@@ -25,7 +23,6 @@ import {
     ConversationEmptyState,
     ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
-import { Message, MessageContent } from "@/components/ai-elements/message";
 import {
     PromptInput,
     PromptInputActionAddAttachments,
@@ -58,72 +55,8 @@ import {
     ModelSelectorName,
     ModelSelectorTrigger,
 } from "@/components/ai-elements/model-selector";
-import {
-    Reasoning,
-    ReasoningContent,
-    ReasoningTrigger,
-} from "@/components/ai-elements/reasoning";
 import { MessageResponse } from "@/components/ai-elements/message";
-import {
-    Source,
-    Sources,
-    SourcesContent,
-    SourcesTrigger,
-} from "@/components/ai-elements/sources";
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
-
-// 简单的 ID 生成函数
-function generateId(): string {
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
-}
-
-type MessageType = {
-    key: string;
-    from: "user" | "assistant";
-    sources?: { href: string; title: string }[];
-    versions: {
-        id: string;
-        content: string;
-    }[];
-    reasoning?: {
-        content: string;
-        duration: number;
-    };
-    tools?: {
-        name: string;
-        description: string;
-        status: "input-available" | "partial-call" | "result";
-        parameters: Record<string, unknown>;
-        result: string | undefined;
-        error: string | undefined;
-    }[];
-};
-
-// 将 UIMessage 转换为 MessageType 格式
-function convertUIMessageToMessageType(uiMessage: UIMessage): MessageType {
-    // 从 UIMessage 中提取文本内容
-    const textContent = (uiMessage.parts ?? [])
-        .filter((part) => part && part.type === "text")
-        .map((part) =>
-            part && part.type === "text" && typeof part.text === "string"
-                ? part.text
-                : ""
-        )
-        .join("") || "";
-
-    return {
-        key: uiMessage.id || generateId(),
-        from: uiMessage.role === "user" ? "user" : "assistant",
-        versions: [
-            {
-                id: uiMessage.id || generateId(),
-                content: textContent,
-            },
-        ],
-        // 可以在这里添加 sources、reasoning 等扩展信息
-        // 如果 UIMessage 中有这些信息的话
-    };
-}
 
 // 图标组件
 const CheckIcon = (props: { size?: number; class?: string }) => (
@@ -179,6 +112,44 @@ const MicIcon = (props: { size?: number; class?: string }) => (
         <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
         <line x1="12" x2="12" y1="19" y2="23" />
         <line x1="8" x2="16" y1="23" y2="23" />
+    </svg>
+);
+
+const RefreshCcwIcon = (props: { size?: number; class?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={props.size || 16}
+        height={props.size || 16}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={props.class}
+    >
+        <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+        <path d="M21 3v5h-5" />
+        <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+        <path d="M8 16H3v5" />
+    </svg>
+);
+
+const CopyIcon = (props: { size?: number; class?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={props.size || 16}
+        height={props.size || 16}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={props.class}
+    >
+        <rect width="14" height="14" x="8" y="8" rx="2" ry="2" />
+        <path d="M4 16c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2h8c1.1 0 2 .9 2 2" />
     </svg>
 );
 
@@ -317,6 +288,7 @@ export const AIChat: Component<AIChatProps> = (props) => {
         stop,
         setMessages,
         sendMessage,
+        regenerate,
     } = useChat<UIMessage>({
         ...(transport ? { transport } : { api: props.api || "/api/chat" }),
         id: props.id || "ai-chat",
@@ -325,13 +297,8 @@ export const AIChat: Component<AIChatProps> = (props) => {
         body: props.body,
     });
 
-    // 将 UIMessage[] 转换为 MessageType[] 用于 ai-elements 组件
-    const messages = createMemo(() =>
-        uiMessages().map(convertUIMessageToMessageType)
-    );
-
     // 检查是否有消息
-    const hasMessages = createMemo(() => messages().length > 0);
+    const hasMessages = createMemo(() => uiMessages().length > 0);
 
     const [model, setModel] = createSignal<string>(models[0].id);
     const [modelSelectorOpen, setModelSelectorOpen] = createSignal(false);
@@ -429,84 +396,65 @@ export const AIChat: Component<AIChatProps> = (props) => {
                             />
                         }
                     >
-                        <For each={messages()}>
-                            {(message) => (
-                                <MessageBranch defaultBranch={0}>
-                                    <MessageBranchContent>
-                                        <For each={message.versions}>
-                                            {(version) => (
-                                                <Message from={message.from}>
-                                                    <div class="flex flex-col gap-2">
-                                                        <Show
-                                                            when={message
-                                                                .sources
-                                                                ?.length}
+                        <For each={uiMessages()}>
+                            {(message, messageIndex) => (
+                                <For each={message.parts ?? []}>
+                                    {(part) => {
+                                        if (part.type !== "text") {
+                                            return null;
+                                        }
+
+                                        const textContent =
+                                            typeof part.text === "string"
+                                                ? part.text
+                                                : "";
+                                        const isLastMessage = messageIndex() ===
+                                            uiMessages().length - 1;
+                                        const isAssistant =
+                                            message.role === "assistant";
+
+                                        return (
+                                            <Message from={message.role}>
+                                                <MessageContent>
+                                                    <MessageResponse>
+                                                        {textContent}
+                                                    </MessageResponse>
+                                                </MessageContent>
+                                                <Show
+                                                    when={isAssistant &&
+                                                        isLastMessage}
+                                                >
+                                                    <MessageActions>
+                                                        <MessageAction
+                                                            onClick={() =>
+                                                                regenerate()}
+                                                            label="重试"
+                                                            size="icon-sm"
                                                         >
-                                                            <Sources>
-                                                                <SourcesTrigger
-                                                                    count={message
-                                                                        .sources!
-                                                                        .length}
-                                                                />
-                                                                <SourcesContent>
-                                                                    <For
-                                                                        each={message
-                                                                            .sources}
-                                                                    >
-                                                                        {(
-                                                                            source,
-                                                                        ) => (
-                                                                            <Source
-                                                                                href={source
-                                                                                    .href}
-                                                                                title={source
-                                                                                    .title}
-                                                                            />
-                                                                        )}
-                                                                    </For>
-                                                                </SourcesContent>
-                                                            </Sources>
-                                                        </Show>
-                                                        <Show
-                                                            when={message
-                                                                .reasoning}
+                                                            <RefreshCcwIcon
+                                                                size={12}
+                                                            />
+                                                        </MessageAction>
+                                                        <MessageAction
+                                                            onClick={() =>
+                                                                navigator
+                                                                    .clipboard
+                                                                    .writeText(
+                                                                        textContent,
+                                                                    )}
+                                                            label="复制"
+                                                            size="icon-sm"
                                                         >
-                                                            <Reasoning
-                                                                duration={message
-                                                                    .reasoning!
-                                                                    .duration}
-                                                            >
-                                                                <ReasoningTrigger />
-                                                                <ReasoningContent>
-                                                                    {message
-                                                                        .reasoning!
-                                                                        .content}
-                                                                </ReasoningContent>
-                                                            </Reasoning>
-                                                        </Show>
-                                                        <MessageContent>
-                                                            <MessageResponse>
-                                                                {version
-                                                                    .content}
-                                                            </MessageResponse>
-                                                        </MessageContent>
-                                                    </div>
-                                                </Message>
-                                            )}
-                                        </For>
-                                    </MessageBranchContent>
-                                    <Show
-                                        when={message.versions.length > 1}
-                                    >
-                                        <MessageBranchSelector
-                                            from={message.from}
-                                        >
-                                            <MessageBranchPrevious />
-                                            <MessageBranchPage />
-                                            <MessageBranchNext />
-                                        </MessageBranchSelector>
-                                    </Show>
-                                </MessageBranch>
+                                                            <CopyIcon
+                                                                size={12}
+                                                            />
+                                                        </MessageAction>
+                                                    </MessageActions>
+                                                </Show>
+                                            </Message>
+                                        );
+                                    }}
+                                </For>
                             )}
                         </For>
                     </Show>
