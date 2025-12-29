@@ -18,7 +18,7 @@ import { useI18n } from "@/i18n";
 import { PlaygroundChatbot } from "./ai-playground/Chatbot";
 import { Completion } from "@/components/ai-elements/completion";
 import { TextGeneration } from "@/components/ai-elements/text-generation";
-import { AIChat } from "@/components/AIChat";
+import { AIChat } from "./ai-playground/AIChat";
 import {
   clearAIGatewayApiKey,
   getAIGatewayApiKey,
@@ -89,6 +89,7 @@ export const AIPlaygroundPage: Component = () => {
           {/* AI Chat 标签页 */}
           <TabsContent value="aichat" class="space-y-4">
             <AIChat
+              modelId="meituan/longcat-flash-chat"
               api="/api/chat"
               id="ai-playground-aichat"
               showTitleCard={true}

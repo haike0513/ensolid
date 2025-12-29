@@ -6,8 +6,13 @@ import { getAIGatewayApiKey } from "./config";
  * 每次调用都会从 localStorage 读取最新的 API Key
  */
 export function getGateway() {
+    const apiKey = getAIGatewayApiKey();
+    console.log("apiKey", apiKey);
+    if (!apiKey) {
+        throw new Error("AI Gateway API Key is not set");
+    }
     return createGateway({
-        apiKey: getAIGatewayApiKey(),
+        apiKey,
     });
 }
 

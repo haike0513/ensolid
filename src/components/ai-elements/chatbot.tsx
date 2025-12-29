@@ -5,8 +5,9 @@
  */
 
 import type { Component, JSX } from "solid-js";
-import { For, Show, createMemo } from "solid-js";
-import { useChat, type Message } from "@ensolid/aisolid";
+import { For, Show, createMemo, createSignal } from "solid-js";
+import { useChat } from "@ensolid/aisolid";
+import type { UIMessage } from "ai";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,7 +26,7 @@ export interface ChatbotProps {
   /**
    * 初始消息列表
    */
-  initialMessages?: Message[];
+  initialMessages?: UIMessage[];
   /**
    * 自定义类名
    */
@@ -43,15 +44,15 @@ export interface ChatbotProps {
    */
   title?: string;
   /**
-   * 响应回调
+   * 响应回调（新 API 不支持，保留用于向后兼容）
    */
   onResponse?: (response: Response) => void | Promise<void>;
   /**
-   * 完成回调
+   * 完成回调（新 API 不支持，保留用于向后兼容）
    */
-  onFinish?: (message: Message) => void | Promise<void>;
+  onFinish?: (message: UIMessage) => void | Promise<void>;
   /**
-   * 错误回调
+   * 错误回调（新 API 不支持，保留用于向后兼容）
    */
   onError?: (error: Error) => void;
   /**
@@ -73,31 +74,58 @@ export interface ChatbotProps {
 }
 
 export const Chatbot: Component<ChatbotProps> = (props) => {
+  // 输入状态管理
+  const [input, setInput] = createSignal("");
+
+  // 使用 useChat hook
   const {
     messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
+    status,
     error,
     stop,
     setMessages,
-  } = useChat({
+    sendMessage,
+  } = useChat<UIMessage>({
     api: props.api || "/api/chat",
     id: props.id,
     initialMessages: props.initialMessages,
-    onResponse: props.onResponse,
-    onFinish: props.onFinish,
-    onError: props.onError,
     headers: props.headers,
     body: props.body,
   });
 
+  const isLoading = createMemo(() => status() === "streaming" || status() === "submitted");
+  const hasMessages = createMemo(() => messages().length > 0);
+
+  const handleInputChange = (e: Event | { target: { value: string } }) => {
+    let value = "";
+    if ("target" in e && e.target) {
+      const target = e.target as HTMLInputElement | HTMLTextAreaElement;
+      value = target.value || "";
+    } else if ("currentTarget" in e && e.currentTarget) {
+      const target = e.currentTarget as HTMLInputElement | HTMLTextAreaElement;
+      value = target.value || "";
+    } else if ("target" in e && typeof e.target === "object" && e.target !== null && "value" in e.target) {
+      value = (e.target as { value: string }).value || "";
+    }
+    setInput(value);
+  };
+
+  const handleSubmit = (e: Event) => {
+    e.preventDefault();
+    const inputValue = input().trim();
+    if (!inputValue || isLoading()) return;
+
+    // 使用 sendMessage 发送消息
+    sendMessage({
+      role: "user",
+      parts: [{ type: "text", text: inputValue }],
+    });
+    setInput("");
+  };
+
   const clearChat = () => {
     setMessages([]);
   };
-
-  const hasMessages = createMemo(() => messages().length > 0);
 
   return (
     <Card class={cn("flex flex-col h-full", props.class)}>
@@ -135,35 +163,42 @@ export const Chatbot: Component<ChatbotProps> = (props) => {
               }
             >
               <For each={messages()}>
-                {(message) => (
-                  <div
-                    class={cn(
-                      "flex gap-3",
-                      message.role === "user" ? "justify-end" : "justify-start"
-                    )}
-                  >
+                {(message) => {
+                  // 从 UIMessage 中提取文本内容
+                  const textContent = (message.parts ?? [])
+                    .filter((part) => part && part.type === "text")
+                    .map((part) =>
+                      part && part.type === "text" && typeof part.text === "string"
+                        ? part.text
+                        : ""
+                    )
+                    .join("") || "";
+
+                  return (
                     <div
                       class={cn(
-                        "max-w-[80%] rounded-lg px-4 py-2",
-                        message.role === "user"
-                          ? "bg-primary text-primary-foreground"
-                          : "bg-muted"
+                        "flex gap-3",
+                        message.role === "user" ? "justify-end" : "justify-start"
                       )}
                     >
-                      <div class="text-xs font-medium mb-1 opacity-70">
-                        {message.role === "user" ? "你" : "AI"}
-                      </div>
-                      <div class="text-sm whitespace-pre-wrap">
-                        {message.content}
-                      </div>
-                      <Show when={message.createdAt}>
-                        <div class="text-xs opacity-50 mt-1">
-                          {new Date(message.createdAt!).toLocaleTimeString()}
+                      <div
+                        class={cn(
+                          "max-w-[80%] rounded-lg px-4 py-2",
+                          message.role === "user"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted"
+                        )}
+                      >
+                        <div class="text-xs font-medium mb-1 opacity-70">
+                          {message.role === "user" ? "你" : "AI"}
                         </div>
-                      </Show>
+                        <div class="text-sm whitespace-pre-wrap">
+                          {textContent}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                }}
               </For>
               <Show when={isLoading()}>
                 <div class="flex justify-start">

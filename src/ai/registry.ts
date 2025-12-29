@@ -8,7 +8,7 @@
  * 如果在前端项目中，需要将其复制到后端代码目录使用
  *
  * 依赖安装：
- * npm install ai @ai-sdk/anthropic @ai-sdk/openai
+ * npm install ai @ai-sdk/anthropic @ai-sdk/openai @ai-sdk/openai-compatible
  * npm install --save-dev @types/node (用于 TypeScript 类型支持)
  */
 
@@ -18,6 +18,8 @@ import { createProviderRegistry } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 // @ts-ignore
 import { createOpenAI } from "@ai-sdk/openai";
+// @ts-ignore
+import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { gateway } from "./gateway";
 /**
  * 创建提供者注册表
@@ -29,6 +31,7 @@ import { gateway } from "./gateway";
  * - openai:gpt-4
  * - anthropic:claude-3-5-sonnet-20241022
  * - openrouter:meituan/longcat-flash-thinking
+ * - lmstudio:qwen/qwen3-vl-8b
  */
 export const registry = createProviderRegistry({
   gateway,
@@ -47,6 +50,12 @@ export const registry = createProviderRegistry({
     apiKey: process.env.OPENROUTER_API_KEY,
     baseURL: "https://openrouter.ai/api/v1",
   }),
+
+  // 注册 LMStudio provider（本地运行的模型服务）
+  lmstudio: createOpenAICompatible({
+    name: "lmstudio",
+    baseURL: "http://localhost:1234/v1",
+  }),
 });
 
 /**
@@ -60,7 +69,7 @@ export const registry = createProviderRegistry({
  *   const { prompt, model } = await req.json();
  *
  *   // 使用 registry 访问模型
- *   // model 可以是 "openai:gpt-4" 或 "anthropic:claude-3-5-sonnet-20241022"
+ *   // model 可以是 "openai:gpt-4"、"anthropic:claude-3-5-sonnet-20241022" 或 "lmstudio:qwen/qwen3-vl-8b"
  *   const result = await generateText({
  *     model: registry.languageModel(model),
  *     prompt,

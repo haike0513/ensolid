@@ -7,12 +7,11 @@ import { normalizeModelId } from "./utils";
  * 自定义 ChatTransport，使用 Gateway 来获取模型
  * 支持 providerId:modelId 格式，例如: 'gateway:gpt-4'
  * 如果只提供 modelId，默认使用 'gateway' 作为 provider
- * 
+ *
  * 无需通过 HTTP API，直接在前端调用 streamText
  */
 export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
-  implements ChatTransport<UI_MESSAGE>
-{
+  implements ChatTransport<UI_MESSAGE> {
   private modelId: string;
 
   /**
@@ -33,15 +32,14 @@ export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
   }): Promise<ReadableStream<UIMessageChunk>> {
     // 将 UIMessage 转换为 streamText 需要的格式
     const modelMessages = options.messages.map((msg) => {
-      const textContent =
-        (msg.parts ?? [])
-          .filter((part) => part && part.type === "text")
-          .map((part) =>
-            part && part.type === "text" && typeof part.text === "string"
-              ? part.text
-              : "",
-          )
-          .join("") || "";
+      const textContent = (msg.parts ?? [])
+        .filter((part) => part && part.type === "text")
+        .map((part) =>
+          part && part.type === "text" && typeof part.text === "string"
+            ? part.text
+            : ""
+        )
+        .join("") || "";
 
       return {
         role: msg.role as "user" | "assistant" | "system",
@@ -53,12 +51,13 @@ export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
     // 规范化模型 ID，确保使用 providerId:modelId 格式
     const fullModelId = normalizeModelId(this.modelId, "gateway");
     const gateway = getGateway();
-    
+
     // 从 gateway 获取模型
     // gateway 的 languageModel 方法接受完整的模型 ID（包含 provider 前缀）
     // 例如: "gateway:gpt-4" 或直接使用模型 ID "gpt-4"
     const model = gateway.languageModel(fullModelId);
 
+    console.log("model", model);
     // 使用 streamText 调用模型
     const result = await streamText({
       model,

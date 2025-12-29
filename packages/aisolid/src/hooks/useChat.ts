@@ -1,418 +1,299 @@
 /**
- * useChat hook - 用于聊天对话
- * 移植自 Vercel AI SDK React 包
+ * useChat Hook（SolidJS 版本）
+ * 基于 Vercel AI SDK v6 的 UI Chat 抽象（AbstractChat）
+ *
+ * 作用：
+ * - 复用 `ai` 包中的 `AbstractChat`、`DefaultChatTransport`、`UIMessage` 等
+ * - 将其封装成 SolidJS 风格的 Hook（返回的是 Solid 信号）
+ * - 请求协议保持与 React 版 `useChat` / 默认 UI Chat 一致，并适配本项目的 `/api/chat` 路由
  */
 
-import { createSignal, createEffect, onCleanup, batch } from 'solid-js';
-import type { UseChatOptions, UseChatHelpers, Message } from '../types';
-import type { UIMessage, UIMessageChunk } from 'ai';
-import { generateId } from '../utils';
+import { type Accessor, createSignal, onCleanup } from "solid-js";
+import {
+  AbstractChat,
+  type ChatInit,
+  type ChatStatus,
+  DefaultChatTransport,
+  type UIMessage,
+} from "ai";
+import { Chat } from "./chat.react";
 
-export function useChat(options: UseChatOptions = {}): UseChatHelpers {
+// 对外再导出，方便业务侧直接使用 `UIMessage` / `CreateUIMessage` 类型
+export type { CreateUIMessage, UIMessage } from "ai";
+
+/**
+ * Solid 版 useChat 返回的辅助类型
+ *
+ * 与 React 版差异：
+ * - `messages` / `status` / `error` 都是 Solid 的 `Accessor` 信号
+ * - 其他方法（sendMessage / regenerate / stop / addToolOutput 等）与 React 基本一致
+ */
+export type UseChatHelpers<UI_MESSAGE extends UIMessage> =
+  & {
+    /**
+     * Chat 的唯一标识（由 AI SDK 生成或传入）
+     */
+    readonly id: string;
+
+    /**
+     * 当前 UI 消息列表（Solid `Accessor`）
+     */
+    readonly messages: Accessor<UI_MESSAGE[]>;
+
+    /**
+     * 当前状态：'submitted' | 'streaming' | 'ready' | 'error'
+     */
+    readonly status: Accessor<ChatStatus>;
+
+    /**
+     * 当前错误（如有）
+     */
+    readonly error: Accessor<Error | undefined>;
+
+    /**
+     * 本地更新 messages，不会自动触发 API 请求。
+     * 一般用于手动编辑历史记录，然后再调用 `regenerate`。
+     */
+    setMessages: (
+      messages: UI_MESSAGE[] | ((messages: UI_MESSAGE[]) => UI_MESSAGE[]),
+    ) => void;
+  }
+  & Pick<
+    AbstractChat<UI_MESSAGE>,
+    | "sendMessage"
+    | "regenerate"
+    | "stop"
+    | "resumeStream"
+    | "addToolResult"
+    | "addToolOutput"
+    | "addToolApprovalResponse"
+    | "clearError"
+  >;
+
+/**
+ * 允许 `headers` / `body` 等为常量或函数（可返回 Promise）
+ */
+type Resolvable<T> = T | (() => T | Promise<T>);
+
+/**
+ * Solid 版本 useChat 的配置项
+ *
+ * 与 React 版的设计基本保持一致：
+ * - 可以直接传入已创建好的 `Chat` 实例（复用状态）
+ * - 或者传入一组初始化参数，由 Hook 内部创建 `Chat`
+ * - 额外增加了一些 HTTP 相关选项（api / credentials / headers / body / fetch）
+ */
+type UseChatInitOptions<UI_MESSAGE extends UIMessage> = ChatInit<UI_MESSAGE> & {
+  /**
+   * 初始消息列表（UIMessage），通常来自服务器侧的历史记录。
+   * 会作为 Chat 的初始状态参与后续对话。
+   */
+  initialMessages?: UI_MESSAGE[];
+
+  /**
+   * Chat 接口地址，默认 `/api/chat`
+   */
+  api?: string;
+
+  /**
+   * fetch 的 credentials 配置
+   */
+  credentials?: RequestCredentials;
+
+  /**
+   * 请求头，可以是对象或函数
+   */
+  headers?: Resolvable<Record<string, string> | Headers>;
+
+  /**
+   * 额外请求体字段（例如传递 chatId 等）
+   */
+  body?: Resolvable<Record<string, unknown>>;
+
+  /**
+   * 自定义 fetch 实现
+   */
+  fetch?: typeof fetch;
+};
+
+export type UseChatOptions<UI_MESSAGE extends UIMessage> =
+  & (
+    | {
+      /**
+       * 直接复用已有的 Chat 实例
+       */
+      chat: Chat<UI_MESSAGE>;
+    }
+    | UseChatInitOptions<UI_MESSAGE>
+  )
+  & {
+    /**
+     * 自定义节流毫秒数，用于 message / status / error 的回调更新。
+     * 默认不节流。
+     */
+    experimental_throttle?: number;
+
+    /**
+     * 是否在挂载后尝试恢复上一次未完成的流式响应。
+     */
+    resume?: boolean;
+  };
+
+/**
+ * 将 UIMessage 转换为本项目后端 `/api/chat` 期望的消息格式：
+ * `{ role, content }`，其中 content 为聚合后的纯文本。
+ */
+function convertUIToRequestMessages(uiMessages: UIMessage[]): {
+  role: "user" | "assistant" | "system";
+  content: string;
+}[] {
+  return uiMessages.map((message) => {
+    const text = (message.parts ?? [])
+      .map((part) =>
+        part && part.type === "text" && typeof part.text === "string"
+          ? part.text
+          : ""
+      )
+      .join("") || "";
+
+    return {
+      role: message.role as "user" | "assistant" | "system",
+      content: text,
+    };
+  });
+}
+
+export function useChat<UI_MESSAGE extends UIMessage = UIMessage>(
+  options: UseChatOptions<UI_MESSAGE> = {} as UseChatOptions<UI_MESSAGE>,
+): UseChatHelpers<UI_MESSAGE> {
   const {
-    api = '/api/chat',
-    transport,
-    id,
-    initialMessages = [],
-    initialInput = '',
-    onResponse,
-    onFinish,
-    onError,
-    headers,
-    body,
-    credentials,
-    generateId: customGenerateId = generateId,
-    keepLastMessageOnError = false,
-    fetch: customFetch = fetch,
+    experimental_throttle: throttleWaitMs,
+    resume = false,
+    ...rest
   } = options;
 
-  // 如果提供了 transport，优先使用 transport
-  const useTransport = !!transport;
+  // 初始化 Chat 实例
+  let chat: Chat<UI_MESSAGE>;
 
-  const [messages, setMessages] = createSignal<Message[]>(initialMessages);
-  const [input, setInput] = createSignal(initialInput);
-  const [isLoading, setIsLoading] = createSignal(false);
-  const [error, setError] = createSignal<Error | undefined>(undefined);
-  const [abortController, setAbortController] = createSignal<AbortController | null>(null);
+  if ("chat" in rest) {
+    // 外部直接传入 Chat 实例（共享状态）
+    chat = rest.chat;
+  } else {
+    const {
+      api = "/api/chat",
+      credentials,
+      headers,
+      body,
+      fetch: customFetch,
+      initialMessages = [],
+      ...chatInit
+    } = rest as UseChatInitOptions<UI_MESSAGE>;
 
-  // 从 localStorage 恢复消息（如果提供了 id）
-  createEffect(() => {
-    if (id && typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem(`ai-chat-${id}`);
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) {
-            setMessages(parsed.map((msg) => ({
-              ...msg,
-              createdAt: msg.createdAt ? new Date(msg.createdAt) : new Date(),
-            })));
-          }
-        }
-      } catch (e) {
-        // Ignore parse errors
-      }
-    }
-  });
-
-  // 保存消息到 localStorage
-  createEffect(() => {
-    if (id && typeof window !== 'undefined') {
-      try {
-        localStorage.setItem(`ai-chat-${id}`, JSON.stringify(messages()));
-      } catch (e) {
-        // Ignore storage errors
-      }
-    }
-  });
-
-  const append = async (
-    message: Message | Pick<Message, 'role' | 'content'>,
-    options?: { data?: any; experimental_attachments?: any }
-  ): Promise<string | null> => {
-    const messageId = customGenerateId();
-    const userMessage: Message = {
-      id: messageId,
-      role: message.role,
-      content: message.content,
-      createdAt: new Date(),
-      ...('id' in message ? message : {}),
-    };
-
-    batch(() => {
-      setMessages((prev) => [...prev, userMessage]);
-      setIsLoading(true);
-      setError(undefined);
-    });
-
-    const abortController = new AbortController();
-    setAbortController(abortController);
-
-    try {
-      // 如果使用 transport
-      if (useTransport && transport) {
-        // 将 Message 转换为 UIMessage
-        const uiMessages: UIMessage[] = messages()
-          .filter((msg) => msg.role === 'user' || msg.role === 'assistant' || msg.role === 'system')
-          .map((msg) => ({
-            id: msg.id,
-            role: msg.role as 'user' | 'assistant' | 'system',
-            parts: [{ type: 'text', text: msg.content }],
-          }));
-
-        // 使用 transport 发送消息
-        const stream = await transport.sendMessages({
-          trigger: 'submit-message',
-          chatId: id || 'default',
-          messageId: undefined,
-          messages: uiMessages,
-          abortSignal: abortController.signal,
-        });
-
-        let assistantMessageId = customGenerateId();
-        let assistantMessage: Message = {
-          id: assistantMessageId,
-          role: 'assistant',
-          content: '',
-          createdAt: new Date(),
-        };
-
-        batch(() => {
-          setMessages((prev) => [...prev, assistantMessage]);
-        });
-
-        const reader = stream.getReader();
-        let fullContent = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          const chunk = value as UIMessageChunk;
-
-          // 处理不同类型的 chunk
-          if (chunk.type === 'text-delta') {
-            // text-delta chunk 有 delta 属性
-            fullContent += (chunk as any).delta || '';
-          } else {
-            // 处理其他可能的 chunk 类型
-            const chunkAny = chunk as any;
-            if (chunkAny.message && chunkAny.message.parts) {
-              // 如果包含 message 对象
-              const msg = chunkAny.message;
-              fullContent = msg.parts
-                .filter((part: any) => part && part.type === 'text')
-                .map((part: any) => (part && part.type === 'text' && typeof part.text === 'string' ? part.text : ''))
-                .join('');
-            } else if (chunkAny.delta) {
-              // 如果有 delta 属性
-              fullContent += chunkAny.delta;
-            }
-          }
-
-          // 更新助手消息
-          batch(() => {
-            setMessages((prev) => {
-              const updated = [...prev];
-              const index = updated.findIndex((m) => m.id === assistantMessageId);
-              if (index !== -1) {
-                updated[index] = {
-                  ...updated[index],
-                  content: fullContent,
-                };
-              }
-              return updated;
-            });
-          });
-        }
-
-        const finalMessage: Message = {
-          ...assistantMessage,
-          content: fullContent,
-        };
-
-        if (onFinish) {
-          await onFinish(finalMessage);
-        }
-
-        return assistantMessageId;
-      } else {
-        // 使用 HTTP API
-        const response = await customFetch(api, {
-          method: 'POST',
+    const transport = chatInit.transport ??
+      new DefaultChatTransport<UI_MESSAGE>({
+        api,
+        credentials,
+        headers,
+        body,
+        fetch: customFetch,
+        // 将 UIMessage 转成后端期望的 `{ role, content }` 结构
+        prepareSendMessagesRequest: async ({
+          api: baseApi,
+          id: _chatId,
+          messages,
+          body: mergedBody,
+          headers: mergedHeaders,
+          credentials: mergedCredentials,
+        }) => ({
+          api: baseApi,
+          credentials: mergedCredentials,
           headers: {
-            'Content-Type': 'application/json',
-            ...(headers instanceof Headers ? Object.fromEntries(headers.entries()) : headers),
+            ...mergedHeaders,
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            messages: messages(),
-            data: options?.data,
-            experimental_attachments: options?.experimental_attachments,
-            ...body,
-          }),
-          credentials,
-          signal: abortController.signal,
-        });
+          body: {
+            ...mergedBody,
+            // 使用纯文本消息数组，后端再转换为 `streamText` 所需格式
+            messages: convertUIToRequestMessages(messages),
+            // 这里不直接使用 `id`，而是交由上层的 `body`（如 chatId）控制会话 ID
+          },
+        }),
+      });
 
-        if (onResponse) {
-          await onResponse(response);
-        }
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const reader = response.body?.getReader();
-        const decoder = new TextDecoder();
-
-        if (!reader) {
-          throw new Error('Response body is not readable');
-        }
-
-        let assistantMessageId = customGenerateId();
-        let assistantMessage: Message = {
-          id: assistantMessageId,
-          role: 'assistant',
-          content: '',
-          createdAt: new Date(),
-        };
-
-        batch(() => {
-          setMessages((prev) => [...prev, assistantMessage]);
-        });
-
-        let fullContent = '';
-        let buffer = '';
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) {
-            // 处理剩余的 buffer
-            if (buffer.trim()) {
-              const lines = buffer.split('\n').filter((line) => line.trim());
-              for (const line of lines) {
-                if (line.startsWith('0:') || line.startsWith('data: ')) {
-                  try {
-                    const jsonStr = line.startsWith('0:') ? line.slice(2) : line.slice(6);
-                    const data = JSON.parse(jsonStr);
-                    if (data.type === 'text-delta' && data.textDelta) {
-                      fullContent += data.textDelta;
-                    } else if (data.choices?.[0]?.delta?.content) {
-                      fullContent += data.choices[0].delta.content;
-                    } else if (data.content) {
-                      fullContent += data.content;
-                    }
-                  } catch (e) {
-                    // Ignore parse errors
-                  }
-                } else if (line.trim() && !line.startsWith('0:') && !line.startsWith('data:')) {
-                  // 直接文本内容
-                  fullContent += line;
-                }
-              }
-            }
-            break;
-          }
-
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() || ''; // 保留最后一个不完整的行
-
-          for (const line of lines) {
-            if (!line.trim()) continue;
-
-            if (line.startsWith('0:')) {
-              try {
-                const data = JSON.parse(line.slice(2));
-                if (data.type === 'text-delta' && data.textDelta) {
-                  fullContent += data.textDelta;
-                } else if (data.type === 'message' && data.message?.content) {
-                  fullContent = data.message.content;
-                }
-              } catch (e) {
-                // Ignore parse errors
-              }
-            } else if (line.startsWith('data: ')) {
-              try {
-                const data = JSON.parse(line.slice(6));
-                if (data.choices?.[0]?.delta?.content) {
-                  fullContent += data.choices[0].delta.content;
-                } else if (data.choices?.[0]?.text) {
-                  fullContent += data.choices[0].text;
-                } else if (data.content) {
-                  fullContent += data.content;
-                }
-              } catch (e) {
-                // Ignore parse errors
-              }
-            } else if (line.trim() && !line.startsWith('0:') && !line.startsWith('data:')) {
-              // 直接文本内容（某些 API 可能直接返回文本）
-              fullContent += line;
-            }
-          }
-
-          // 更新助手消息
-          batch(() => {
-            setMessages((prev) => {
-              const updated = [...prev];
-              const index = updated.findIndex((m) => m.id === assistantMessageId);
-              if (index !== -1) {
-                updated[index] = {
-                  ...updated[index],
-                  content: fullContent,
-                };
-              }
-              return updated;
-            });
-          });
-        }
-
-        const finalMessage: Message = {
-          ...assistantMessage,
-          content: fullContent,
-        };
-
-        if (onFinish) {
-          await onFinish(finalMessage);
-        }
-
-        return assistantMessageId;
-      }
-    } catch (err: any) {
-      if (err.name === 'AbortError') {
-        return null;
-      }
-
-      const error = err instanceof Error ? err : new Error(String(err));
-      setError(error);
-
-      if (onError) {
-        onError(error);
-      }
-
-      if (!keepLastMessageOnError) {
-        batch(() => {
-          setMessages((prev) => prev.filter((m) => m.id !== messageId));
-        });
-      }
-
-      return null;
-    } finally {
-      setIsLoading(false);
-      setAbortController(null);
-    }
-  };
-
-  const reload = async (): Promise<string | null> => {
-    const lastMessage = messages()[messages().length - 1];
-    if (!lastMessage || lastMessage.role !== 'assistant') {
-      return null;
-    }
-
-    batch(() => {
-      setMessages((prev) => prev.slice(0, -1));
+    chat = new Chat<UI_MESSAGE>({
+      ...chatInit,
+      messages: chatInit.messages ?? initialMessages,
+      transport,
     });
+  }
 
-    return append(
-      { role: 'user', content: '' },
-      { data: body }
-    );
-  };
+  // Solid 状态：messages / status / error
+  const [messages, setMessagesSignal] = createSignal<UI_MESSAGE[]>(
+    chat.messages,
+  );
+  const [status, setStatusSignal] = createSignal<ChatStatus>(chat.status);
+  const [error, setErrorSignal] = createSignal<Error | undefined>(chat.error);
 
-  const stop = () => {
-    const controller = abortController();
-    if (controller) {
-      controller.abort();
-      setAbortController(null);
-    }
-    setIsLoading(false);
-  };
+  // 订阅 Chat 状态变化
+  const unsubscribeMessages = chat["~registerMessagesCallback"](
+    () => {
+      setMessagesSignal(chat.messages);
+      setStatusSignal(chat.status);
+      setErrorSignal(chat.error);
+    },
+    throttleWaitMs,
+  );
 
-  const handleInputChange = (e: Event | { target: { value: string } }) => {
-    let value = '';
-    if ('target' in e && e.target) {
-      const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-      value = target.value || '';
-    } else if ('currentTarget' in e && e.currentTarget) {
-      const target = e.currentTarget as HTMLInputElement | HTMLTextAreaElement;
-      value = target.value || '';
-    } else if ('target' in e && typeof e.target === 'object' && e.target !== null && 'value' in e.target) {
-      value = (e.target as { value: string }).value || '';
-    }
-    setInput(value);
-  };
+  const unsubscribeStatus = chat["~registerStatusCallback"](() => {
+    setStatusSignal(chat.status);
+  });
 
-  const handleSubmit = (
-    e: Event,
-    options?: { data?: any; experimental_attachments?: any }
-  ) => {
-    e.preventDefault();
-    const inputValue = input().trim();
-    if (!inputValue || isLoading()) return;
-
-    append(
-      { role: 'user', content: inputValue },
-      options
-    ).then(() => {
-      setInput('');
-    });
-  };
+  const unsubscribeError = chat["~registerErrorCallback"](() => {
+    setErrorSignal(chat.error);
+  });
 
   onCleanup(() => {
-    stop();
+    unsubscribeMessages?.();
+    unsubscribeStatus?.();
+    unsubscribeError?.();
   });
 
+  // 可选：挂载时尝试恢复未完成的流
+  if (resume) {
+    // 不阻塞当前调用
+    void chat.resumeStream().catch(() => {
+      // 恢复失败时交由 Chat 内部的 onError 处理
+    });
+  }
+
+  const setMessages: UseChatHelpers<UI_MESSAGE>["setMessages"] = (
+    messagesParam,
+  ) => {
+    const nextMessages = typeof messagesParam === "function"
+      ? (messagesParam as (prev: UI_MESSAGE[]) => UI_MESSAGE[])(chat.messages)
+      : messagesParam;
+
+    chat.messages = nextMessages;
+    // 虽然 ChatState 会触发回调，这里立即同步一次，保证 Solid 状态及时更新
+    setMessagesSignal(nextMessages);
+  };
+
   return {
+    id: chat.id,
     messages,
+    status,
     error,
-    append,
-    reload,
-    stop,
     setMessages,
-    setInput,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
+    sendMessage: chat.sendMessage,
+    regenerate: chat.regenerate,
+    clearError: chat.clearError,
+    stop: chat.stop,
+    resumeStream: chat.resumeStream,
+    /**
+     * @deprecated 使用 `addToolOutput` 替代
+     */
+    addToolResult: chat.addToolOutput,
+    addToolOutput: chat.addToolOutput,
+    addToolApprovalResponse: chat.addToolApprovalResponse,
   };
 }
