@@ -123,9 +123,12 @@ export const Reasoning: Component<ReasoningProps> = (props) => {
       if (startTime() === null) {
         setStartTime(Date.now());
       }
-    } else if (startTime() !== null) {
-      setDuration(Math.ceil((Date.now() - startTime()) / MS_IN_S));
-      setStartTime(null);
+    } else {
+      const currentStartTime = startTime();
+      if (currentStartTime !== null) {
+        setDuration(Math.ceil((Date.now() - currentStartTime) / MS_IN_S));
+        setStartTime(null);
+      }
     }
   });
 

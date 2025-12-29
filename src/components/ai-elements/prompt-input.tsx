@@ -426,7 +426,7 @@ export const PromptInputAttachment: Component<PromptInputAttachmentProps> = (pro
           <span class="flex-1 truncate">{attachmentLabel}</span>
         </div>
       </HoverCardTrigger>
-      <HoverCardContent class="w-auto p-2" align="start">
+      <HoverCardContent class="w-auto p-2">
         <div class="w-auto space-y-3">
           <Show when={isImage}>
             <div class="flex max-h-96 w-96 items-center justify-center overflow-hidden rounded-md border">
@@ -875,7 +875,7 @@ export const PromptInputTextarea: Component<PromptInputTextareaProps> = (props) 
 
   const handleKeyDown: JSX.EventHandler<HTMLTextAreaElement, KeyboardEvent> = (e) => {
     if (e.key === "Enter") {
-      if (isComposing() || (e.nativeEvent as any).isComposing) {
+      if (isComposing()) {
         return;
       }
       if (e.shiftKey) {
@@ -906,7 +906,9 @@ export const PromptInputTextarea: Component<PromptInputTextareaProps> = (props) 
       }
     }
 
-    local.onKeyDown?.(e);
+    if (local.onKeyDown && typeof local.onKeyDown === "function") {
+      (local.onKeyDown as any)(e);
+    }
   };
 
   const handlePaste: JSX.EventHandler<HTMLTextAreaElement, ClipboardEvent> = (event) => {
@@ -932,7 +934,9 @@ export const PromptInputTextarea: Component<PromptInputTextareaProps> = (props) 
       attachments.add(fileList);
     }
 
-    local.onPaste?.(event);
+    if (local.onPaste && typeof local.onPaste === "function") {
+      (local.onPaste as any)(event);
+    }
   };
 
   const controlledProps = controller
@@ -941,7 +945,9 @@ export const PromptInputTextarea: Component<PromptInputTextareaProps> = (props) 
         onInput: (e: Event) => {
           const target = e.currentTarget as HTMLTextAreaElement;
           controller.textInput.setInput(target.value);
-          local.onChange?.(e as any);
+          if (local.onChange && typeof local.onChange === "function") {
+            (local.onChange as any)(e);
+          }
         },
       }
     : {
@@ -954,11 +960,15 @@ export const PromptInputTextarea: Component<PromptInputTextareaProps> = (props) 
       name="message"
       onCompositionEnd={(e) => {
         setIsComposing(false);
-        local.onCompositionEnd?.(e);
+        if (local.onCompositionEnd && typeof local.onCompositionEnd === "function") {
+          (local.onCompositionEnd as any)(e);
+        }
       }}
       onCompositionStart={(e) => {
         setIsComposing(true);
-        local.onCompositionStart?.(e);
+        if (local.onCompositionStart && typeof local.onCompositionStart === "function") {
+          (local.onCompositionStart as any)(e);
+        }
       }}
       onKeyDown={handleKeyDown}
       onPaste={handlePaste}
@@ -1043,7 +1053,7 @@ export const PromptInputActionMenuContent: Component<PromptInputActionMenuConten
   props
 ) => {
   const [local, others] = splitProps(props, ["class"]);
-  return <DropdownMenuContent align="start" class={cn(local.class)} {...others} />;
+  return <DropdownMenuContent class={cn(local.class)} {...others} />;
 };
 
 export type PromptInputActionMenuItemProps = JSX.HTMLAttributes<HTMLDivElement>;
@@ -1247,11 +1257,13 @@ export const PromptInputSelectContent: Component<PromptInputSelectContentProps> 
   return <SelectContent class={cn(local.class)} {...others} />;
 };
 
-export type PromptInputSelectItemProps = JSX.HTMLAttributes<HTMLDivElement>;
+export type PromptInputSelectItemProps = JSX.HTMLAttributes<HTMLDivElement> & {
+  value?: string;
+};
 
 export const PromptInputSelectItem: Component<PromptInputSelectItemProps> = (props) => {
-  const [local, others] = splitProps(props, ["class"]);
-  return <SelectItem class={cn(local.class)} {...others} />;
+  const [local, others] = splitProps(props, ["class", "value"]);
+  return <SelectItem value={local.value || ""} class={cn(local.class)} {...others} />;
 };
 
 export type PromptInputSelectValueProps = JSX.HTMLAttributes<HTMLSpanElement>;
@@ -1287,8 +1299,8 @@ export type PromptInputHoverCardContentProps = JSX.HTMLAttributes<HTMLDivElement
 export const PromptInputHoverCardContent: Component<PromptInputHoverCardContentProps> = (
   props
 ) => {
-  const [local, others] = splitProps(props, ["align"]);
-  return <HoverCardContent align={local.align || "start"} {...others} />;
+  const [local, others] = splitProps(props, ["align", "class"]);
+  return <HoverCardContent class={cn(local.class)} {...others} />;
 };
 
 // Tabs 相关组件（简化版）

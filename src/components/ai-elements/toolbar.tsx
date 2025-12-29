@@ -17,7 +17,7 @@ export const Toolbar: Component<ToolbarProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "position", "children"]);
   return (
     <Panel
-      position={local.position || "bottom"}
+      position={local.position}
       class={cn(
         "flex items-center gap-1 rounded-sm border bg-background p-1.5",
         local.class

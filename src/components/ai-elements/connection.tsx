@@ -19,35 +19,38 @@ export type ConnectionProps = EdgeComponentProps & {
 const HALF = 0.5;
 
 export const Connection: Component<ConnectionProps> = (props) => {
-  const { edge, path, fromX, fromY, toX, toY } = props;
+  const { path, fromX, fromY, toX, toY } = props;
   
-  // 如果有明确的坐标，使用它们；否则使用 path
-  const sourceX = fromX ?? edge.sourceX ?? 0;
-  const sourceY = fromY ?? edge.sourceY ?? 0;
-  const targetX = toX ?? edge.targetX ?? 0;
-  const targetY = toY ?? edge.targetY ?? 0;
+  // 如果有明确的坐标，计算路径；否则使用提供的 path
+  let finalPath = path;
+  if (fromX !== undefined && fromY !== undefined && toX !== undefined && toY !== undefined) {
+    const midX = fromX + (toX - fromX) * HALF;
+    finalPath = `M${fromX},${fromY} C ${midX},${fromY} ${midX},${toY} ${toX},${toY}`;
+  }
   
-  // 计算贝塞尔曲线路径
-  const midX = sourceX + (targetX - sourceX) * HALF;
-  const bezierPath = `M${sourceX},${sourceY} C ${midX},${sourceY} ${midX},${targetY} ${targetX},${targetY}`;
+  if (!finalPath) {
+    return null;
+  }
   
   return (
     <g>
       <path
         class="animated"
-        d={path || bezierPath}
+        d={finalPath}
         fill="none"
         stroke="var(--color-ring)"
         stroke-width="1"
       />
-      <circle
-        cx={targetX}
-        cy={targetY}
-        fill="#fff"
-        r="3"
-        stroke="var(--color-ring)"
-        stroke-width="1"
-      />
+      {toX !== undefined && toY !== undefined && (
+        <circle
+          cx={toX}
+          cy={toY}
+          fill="#fff"
+          r="3"
+          stroke="var(--color-ring)"
+          stroke-width="1"
+        />
+      )}
     </g>
   );
 };

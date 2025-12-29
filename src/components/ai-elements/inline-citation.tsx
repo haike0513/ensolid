@@ -75,11 +75,11 @@ export const InlineCitationCardTrigger: Component<
       >
         <Show
           when={local.sources[0]}
-          fallback="unknown"}
+          fallback={<span>unknown</span>}
         >
-          {() => {
+          {(() => {
             try {
-              const url = new URL(local.sources[0]);
+              const url = new URL(local.sources[0]!);
               return (
                 <>
                   {url.hostname}{" "}
@@ -87,9 +87,9 @@ export const InlineCitationCardTrigger: Component<
                 </>
               );
             } catch {
-              return local.sources[0];
+              return <span>{local.sources[0]}</span>;
             }
-          }}
+          })()}
         </Show>
       </Badge>
     </HoverCardTrigger>

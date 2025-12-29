@@ -1,12 +1,16 @@
 /**
  * Edge 组件 - 移植自 Vercel AI Elements
- * 
+ *
  * 用于显示流程边的组件
  */
 
 import type { Component } from "solid-js";
 import { splitProps } from "solid-js";
-import { Edge as EdgeBase, type EdgeComponentProps } from "@ensolid/solidflow";
+// 直接从组件目录导入 Edge 组件，避免类型冲突
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { Edge as EdgeBase } from "@ensolid/solidflow/dist/components/Edge/Edge";
+import type { EdgeComponentProps } from "@ensolid/solidflow";
 import { cn } from "@/components/ui/utils";
 
 export type EdgeProps = EdgeComponentProps & {
@@ -14,14 +18,14 @@ export type EdgeProps = EdgeComponentProps & {
 };
 
 export const Edge: Component<EdgeProps> = (props) => {
-  const [local, others] = splitProps(props, ["class", "edge", "path"]);
-  
+  const [local, others] = splitProps(props, ["className", "edge", "path"]);
+
   // 使用 SolidFlow 的 Edge 组件，但添加自定义样式
   return (
     <EdgeBase
       edge={local.edge}
       path={local.path}
-      class={cn("stroke-1 stroke-ring", local.class)}
+      className={cn("stroke-1 stroke-ring", local.className)}
       {...others}
     />
   );
@@ -32,7 +36,7 @@ export type TemporaryEdgeProps = EdgeComponentProps;
 
 export const TemporaryEdge: Component<TemporaryEdgeProps> = (props) => {
   const { edge, path } = props;
-  
+
   return (
     <g>
       <path

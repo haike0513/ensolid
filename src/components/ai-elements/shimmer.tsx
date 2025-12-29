@@ -25,28 +25,31 @@ export const Shimmer: Component<TextShimmerProps> = (props) => {
     "spread",
   ]);
 
-  const Component = local.as || "p";
+  const TagName = local.as || "p";
   const duration = local.duration || 2;
   const spread = local.spread || 2;
 
   const dynamicSpread = createMemo(() => (local.children?.length ?? 0) * spread);
 
+  const style = createMemo(() => ({
+    "--spread": `${dynamicSpread()}px`,
+    "background-image":
+      "var(--bg), linear-gradient(var(--color-muted-foreground), var(--color-muted-foreground))",
+    "animation-duration": `${duration}s`,
+  } as JSX.CSSProperties));
+
+  const Tag = TagName as any;
   return (
-    <Component
+    <Tag
       class={cn(
         "relative inline-block bg-[length:250%_100%,auto] bg-clip-text text-transparent animate-shimmer",
         "[--bg:linear-gradient(90deg,#0000_calc(50%-var(--spread)),var(--color-background),#0000_calc(50%+var(--spread)))] [background-repeat:no-repeat,padding-box]",
         local.class
       )}
-      style={{
-        "--spread": `${dynamicSpread()}px`,
-        "background-image":
-          "var(--bg), linear-gradient(var(--color-muted-foreground), var(--color-muted-foreground))",
-        "animation-duration": `${duration}s`,
-      } as JSX.CSSProperties}
+      style={style()}
       {...others}
     >
       {local.children}
-    </Component>
+    </Tag>
   );
 };

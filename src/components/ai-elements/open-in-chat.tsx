@@ -174,7 +174,6 @@ export const OpenInContent: Component<OpenInContentProps> = (props) => {
   const [local, others] = splitProps(props, ["class"]);
   return (
     <DropdownMenuContent
-      align="start"
       class={cn("w-[240px]", local.class)}
       {...others}
     />
@@ -221,7 +220,7 @@ export const OpenInChatGPT: Component<OpenInChatGPTProps> = (props) => {
   const { query } = useOpenInContext();
   const [local, others] = splitProps(props, ["class", "href", "rel", "target"]);
   return (
-    <DropdownMenuItem asChild>
+    <DropdownMenuItem>
       <a
         class={cn("flex items-center gap-2", local.class)}
         href={providers.chatgpt.createUrl(query())}
@@ -243,7 +242,7 @@ export const OpenInClaude: Component<OpenInClaudeProps> = (props) => {
   const { query } = useOpenInContext();
   const [local, others] = splitProps(props, ["class", "href", "rel", "target"]);
   return (
-    <DropdownMenuItem asChild>
+    <DropdownMenuItem>
       <a
         class={cn("flex items-center gap-2", local.class)}
         href={providers.claude.createUrl(query())}
@@ -265,7 +264,7 @@ export const OpenInT3: Component<OpenInT3Props> = (props) => {
   const { query } = useOpenInContext();
   const [local, others] = splitProps(props, ["class", "href", "rel", "target"]);
   return (
-    <DropdownMenuItem asChild>
+    <DropdownMenuItem>
       <a
         class={cn("flex items-center gap-2", local.class)}
         href={providers.t3.createUrl(query())}

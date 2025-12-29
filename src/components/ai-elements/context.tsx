@@ -1,16 +1,16 @@
 /**
  * Context 组件 - 移植自 Vercel AI Elements
- * 
+ *
  * 用于显示模型上下文使用情况的组件
  */
 
 import type { Component, JSX } from "solid-js";
 import {
   createContext,
-  useContext,
   createMemo,
-  splitProps,
   Show,
+  splitProps,
+  useContext,
 } from "solid-js";
 import { Button } from "@/components/ui/button";
 import {
@@ -47,8 +47,10 @@ const useContextValue = () => {
   return context;
 };
 
-export type ContextProps = JSX.HTMLAttributes<HTMLDivElement> &
-  ContextSchema & {
+export type ContextProps =
+  & JSX.HTMLAttributes<HTMLDivElement>
+  & ContextSchema
+  & {
     openDelay?: number;
     closeDelay?: number;
   };
@@ -67,16 +69,16 @@ export const Context: Component<ContextProps> = (props) => {
   const contextValue: ContextSchema = {
     usedTokens: typeof local.usedTokens === "function"
       ? local.usedTokens
-      : () => local.usedTokens,
+      : () => (typeof local.usedTokens === "number" ? local.usedTokens : 0),
     maxTokens: typeof local.maxTokens === "function"
       ? local.maxTokens
-      : () => local.maxTokens,
+      : () => (typeof local.maxTokens === "number" ? local.maxTokens : 0),
     usage: typeof local.usage === "function"
       ? local.usage
-      : () => local.usage,
+      : () => (local.usage as LanguageModelUsage | undefined),
     modelId: typeof local.modelId === "function"
       ? local.modelId
-      : () => local.modelId,
+      : () => (local.modelId as ModelId | undefined),
   };
 
   return (
@@ -127,7 +129,10 @@ const ContextIcon: Component = () => {
         stroke-dashoffset={dashOffset()}
         stroke-linecap="round"
         stroke-width={ICON_STROKE_WIDTH}
-        style={{ transformOrigin: "center", transform: "rotate(-90deg)" }}
+        style={{
+          "transform-origin": "center",
+          transform: "rotate(-90deg)",
+        } as JSX.CSSProperties}
       />
     </svg>
   );
@@ -176,7 +181,7 @@ export const ContextContent: Component<ContextContentProps> = (props) => {
 export type ContextContentHeaderProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ContextContentHeader: Component<ContextContentHeaderProps> = (
-  props
+  props,
 ) => {
   const { usedTokens, maxTokens } = useContextValue();
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -225,7 +230,7 @@ export const ContextContentHeader: Component<ContextContentHeaderProps> = (
 export type ContextContentBodyProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ContextContentBody: Component<ContextContentBodyProps> = (
-  props
+  props,
 ) => {
   const [local, others] = splitProps(props, ["class", "children"]);
   return (
@@ -238,7 +243,7 @@ export const ContextContentBody: Component<ContextContentBodyProps> = (
 export type ContextContentFooterProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ContextContentFooter: Component<ContextContentFooterProps> = (
-  props
+  props,
 ) => {
   const { modelId, usage } = useContextValue();
   const [local, others] = splitProps(props, ["class", "children"]);
@@ -265,7 +270,7 @@ export const ContextContentFooter: Component<ContextContentFooterProps> = (
     <div
       class={cn(
         "flex w-full items-center justify-between gap-3 bg-secondary p-3 text-xs",
-        local.class
+        local.class,
       )}
       {...others}
     >
@@ -312,7 +317,9 @@ export const ContextInputUsage: Component<ContextInputUsageProps> = (props) => {
 
 export type ContextOutputUsageProps = JSX.HTMLAttributes<HTMLDivElement>;
 
-export const ContextOutputUsage: Component<ContextOutputUsageProps> = (props) => {
+export const ContextOutputUsage: Component<ContextOutputUsageProps> = (
+  props,
+) => {
   const { usage } = useContextValue();
   const [local, others] = splitProps(props, ["class", "children"]);
 
@@ -344,7 +351,7 @@ export const ContextOutputUsage: Component<ContextOutputUsageProps> = (props) =>
 export type ContextReasoningUsageProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const ContextReasoningUsage: Component<ContextReasoningUsageProps> = (
-  props
+  props,
 ) => {
   const { usage } = useContextValue();
   const [local, others] = splitProps(props, ["class", "children"]);

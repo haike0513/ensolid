@@ -94,7 +94,7 @@ export const CheckpointTrigger: Component<CheckpointTriggerProps> = (props) => {
     return (
       <Tooltip>
         <TooltipTrigger asChild>{button}</TooltipTrigger>
-        <TooltipContent align="start" side="bottom">
+        <TooltipContent>
           {local.tooltip}
         </TooltipContent>
       </Tooltip>

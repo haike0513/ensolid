@@ -6,23 +6,24 @@
 
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import { Controls as ControlsBase, type PanelPosition } from "@ensolid/solidflow";
+import { Controls as ControlsBase } from "@ensolid/solidflow";
 import { cn } from "@/components/ui/utils";
 
 export type ControlsProps = JSX.HTMLAttributes<HTMLDivElement> & {
-  position?: PanelPosition;
+  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 };
 
 export const Controls: Component<ControlsProps> = (props) => {
-  const [local, others] = splitProps(props, ["class", "position"]);
+  const [local, others] = splitProps(props, ["class", "position", "style"]);
   return (
     <ControlsBase
-      position={local.position}
-      class={cn(
+      position={local.position as any}
+      className={cn(
         "gap-px overflow-hidden rounded-md border bg-card p-1 shadow-none!",
         "[&>button]:rounded-md [&>button]:border-none! [&>button]:bg-transparent! [&>button]:hover:bg-secondary!",
         local.class
       )}
+      style={typeof local.style === "object" ? local.style : undefined}
       {...others}
     />
   );

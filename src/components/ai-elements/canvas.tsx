@@ -1,43 +1,46 @@
 /**
  * Canvas 组件 - 移植自 Vercel AI Elements
- * 
+ *
  * 用于显示流程图的画布组件
  */
 
 import type { Component, JSX } from "solid-js";
 import { splitProps } from "solid-js";
-import { Flow, Background, type FlowProps } from "@ensolid/solidflow";
+import { Background, Flow, type FlowProps } from "@ensolid/solidflow";
 import { cn } from "@/components/ui/utils";
 
 export type CanvasProps = FlowProps & {
   children?: JSX.Element;
+  deleteKeyCode?: string[];
+  selectionOnDrag?: boolean;
+  class?: string;
 };
 
 export const Canvas: Component<CanvasProps> = (props) => {
-  const [local, others] = splitProps(props, [
-    "class",
-    "children",
-    "deleteKeyCode",
-    "fitView",
-    "panOnDrag",
-    "panOnScroll",
-    "selectionOnDrag",
-    "zoomOnDoubleClick",
-  ]);
+  const {
+    children,
+    deleteKeyCode: _deleteKeyCode,
+    selectionOnDrag,
+    class: className,
+    nodes,
+    edges,
+    ...flowProps
+  } = props;
 
   return (
     <Flow
-      deleteKeyCode={local.deleteKeyCode || ["Backspace", "Delete"]}
-      fitView={local.fitView ?? true}
-      panOnDrag={local.panOnDrag ?? false}
-      panOnScroll={local.panOnScroll ?? true}
-      selectionOnDrag={local.selectionOnDrag ?? true}
-      zoomOnDoubleClick={local.zoomOnDoubleClick ?? false}
-      class={cn(local.class)}
-      {...others}
+      fitView={props.fitView ?? true}
+      panOnDrag={props.panOnDrag ?? false}
+      panOnScroll={props.panOnScroll ?? true}
+      selectNodesOnDrag={selectionOnDrag ?? true}
+      zoomOnDoubleClick={props.zoomOnDoubleClick ?? false}
+      nodes={nodes || []}
+      edges={edges || []}
+      className={className}
+      {...flowProps}
     >
-      <Background bgColor="var(--sidebar)" />
-      {local.children}
+      <Background color="var(--sidebar)" />
+      {children}
     </Flow>
   );
 };

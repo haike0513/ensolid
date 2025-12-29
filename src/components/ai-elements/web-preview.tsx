@@ -185,7 +185,9 @@ export const WebPreviewUrl: Component<WebPreviewUrlProps> = (props) => {
   const handleChange = (event: Event) => {
     const target = event.currentTarget as HTMLInputElement;
     setInputValue(target.value);
-    local.onChange?.(event as any);
+    if (local.onChange) {
+      (local.onChange as any)(event);
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -193,7 +195,9 @@ export const WebPreviewUrl: Component<WebPreviewUrlProps> = (props) => {
       const target = event.currentTarget as HTMLInputElement;
       setUrl(target.value);
     }
-    local.onKeyDown?.(event as any);
+    if (local.onKeyDown) {
+      (local.onKeyDown as any)(event);
+    }
   };
 
   return (
