@@ -248,4 +248,42 @@ export const zh = {
             viewDocs: "查看文档",
         },
     },
+    aiPlayground: {
+        title: "AI Playground",
+        subtitle: "探索和体验AI相关功能",
+        input: {
+            title: "输入",
+            description: "在此输入您的问题或提示",
+            placeholder: "输入您想要询问的内容...",
+            submit: "提交",
+            processing: "处理中...",
+            stop: "停止",
+        },
+        chat: {
+            title: "AI 聊天",
+            description: "与 AI 进行实时对话",
+            empty: "开始与 AI 对话吧！",
+            clear: "清空对话",
+        },
+        output: {
+            title: "输出",
+            description: "AI生成的回复将显示在这里",
+            empty: "等待输入...",
+        },
+        features: {
+            title: "功能特性",
+            chat: {
+                title: "智能对话",
+                description: "与AI进行自然语言对话，获取智能回复和建议",
+            },
+            code: {
+                title: "代码生成",
+                description: "使用AI生成、优化和解释代码",
+            },
+            image: {
+                title: "图像生成",
+                description: "通过文本描述生成和编辑图像",
+            },
+        },
+    },
 };

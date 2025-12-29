@@ -3,7 +3,7 @@
  * Features a node-based editor for defining AI agents and their tasks.
  */
 import type { Component } from "solid-js";
-import { createSignal, createMemo, Show, type Accessor } from "solid-js";
+import { createSignal, createMemo, Show } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   addEdge,

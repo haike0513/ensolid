@@ -248,5 +248,43 @@ export const en = {
       viewDocs: "View Documentation",
     },
   },
+  aiPlayground: {
+    title: "AI Playground",
+    subtitle: "Explore and experience AI-related features",
+    input: {
+      title: "Input",
+      description: "Enter your question or prompt here",
+      placeholder: "Enter what you want to ask...",
+      submit: "Submit",
+      processing: "Processing...",
+      stop: "Stop",
+    },
+    chat: {
+      title: "AI Chat",
+      description: "Have real-time conversations with AI",
+      empty: "Start a conversation with AI!",
+      clear: "Clear Chat",
+    },
+    output: {
+      title: "Output",
+      description: "AI-generated responses will appear here",
+      empty: "Waiting for input...",
+    },
+    features: {
+      title: "Features",
+      chat: {
+        title: "Smart Chat",
+        description: "Have natural language conversations with AI to get intelligent replies and suggestions",
+      },
+      code: {
+        title: "Code Generation",
+        description: "Use AI to generate, optimize, and explain code",
+      },
+      image: {
+        title: "Image Generation",
+        description: "Generate and edit images through text descriptions",
+      },
+    },
+  },
 };
 

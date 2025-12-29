@@ -26,4 +26,5 @@ export * from "./aspect-ratio";
 export * from "./menubar";
 export * from "./toolbar";
 export * from "./navigation-menu";
+export * from "./textarea";
 export * from "./utils";

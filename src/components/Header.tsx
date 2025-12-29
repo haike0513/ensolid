@@ -104,6 +104,16 @@ export const Header: Component = () => {
               >
                 Workflow
               </A>
+              <A
+                href="/ai-playground"
+                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
+                  isActive("/ai-playground")
+                    ? "text-foreground"
+                    : "text-foreground/60"
+                }`}
+              >
+                AI Playground
+              </A>
             </nav>
           </div>
 

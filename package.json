@@ -13,10 +13,13 @@
     "dev:solidflow": "pnpm --filter @ensolid/solidflow dev",
     "build:radix": "pnpm --filter @ensolid/radix build",
     "dev:radix": "pnpm --filter @ensolid/radix dev",
+    "build:aisolid": "pnpm --filter @ensolid/aisolid build",
+    "dev:aisolid": "pnpm --filter @ensolid/aisolid dev",
     "publish": "pnpm -r --filter './packages/*' publish",
     "publish:baseui": "pnpm --filter @ensolid/baseui publish",
     "publish:radix": "pnpm --filter @ensolid/radix publish",
-    "publish:solidflow": "pnpm --filter @ensolid/solidflow publish"
+    "publish:solidflow": "pnpm --filter @ensolid/solidflow publish",
+    "publish:aisolid": "pnpm --filter @ensolid/aisolid publish"
   },
   "dependencies": {
     "@ensolid/baseui": "workspace:*",

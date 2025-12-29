@@ -1,0 +1,34 @@
+{
+  "name": "@ensolid/aisolid",
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch"
+  },
+  "dependencies": {
+    "solid-js": "^1.9.9"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.9.9",
+    "ai": "^6.0.0"
+  }
+}
