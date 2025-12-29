@@ -3,6 +3,8 @@
  * 移植自 Vercel AI SDK React 包
  */
 
+import type { ChatTransport, UIMessage } from 'ai';
+
 export interface Message {
   id: string;
   role: 'system' | 'user' | 'assistant' | 'function' | 'data' | 'tool';
@@ -26,6 +28,11 @@ export interface Message {
 
 export interface UseChatOptions {
   api?: string;
+  /**
+   * ChatTransport 实例
+   * 如果提供了 transport，将使用 transport 而不是 api
+   */
+  transport?: ChatTransport<UIMessage>;
   id?: string;
   initialMessages?: Message[];
   initialInput?: string;

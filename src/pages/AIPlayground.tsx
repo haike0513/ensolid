@@ -15,14 +15,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useI18n } from "@/i18n";
-import { Chatbot } from "@/components/ai-elements/chatbot";
+import { PlaygroundChatbot } from "./ai-playground/Chatbot";
 import { Completion } from "@/components/ai-elements/completion";
 import { TextGeneration } from "@/components/ai-elements/text-generation";
 import { AIChat } from "@/components/AIChat";
 import {
+  clearAIGatewayApiKey,
   getAIGatewayApiKey,
   setAIGatewayApiKey,
-  clearAIGatewayApiKey,
 } from "@/ai/config";
 
 export const AIPlaygroundPage: Component = () => {
@@ -101,22 +101,11 @@ export const AIPlaygroundPage: Component = () => {
 
           {/* 聊天标签页 */}
           <TabsContent value="chat" class="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle>{t().aiPlayground.chat.title}</CardTitle>
-                <CardDescription>
-                  {t().aiPlayground.chat.description}
-                </CardDescription>
-              </CardHeader>
-            </Card>
             <div class="h-[600px]">
-              <Chatbot
+              <PlaygroundChatbot
                 api="/api/chat"
                 id="ai-playground-chat"
-                title={t().aiPlayground.chat.title}
                 placeholder={t().aiPlayground.input.placeholder}
-                showTitle={true}
-                showClearButton={true}
                 onError={(err: Error) => {
                   console.error("Chat error:", err);
                 }}
@@ -168,7 +157,9 @@ export const AIPlaygroundPage: Component = () => {
               </CardHeader>
               <div class="px-6 pb-6 space-y-4">
                 <div class="space-y-2">
-                  <Label for="api-key">{t().aiPlayground.config.apiKeyLabel}</Label>
+                  <Label for="api-key">
+                    {t().aiPlayground.config.apiKeyLabel}
+                  </Label>
                   <Input
                     id="api-key"
                     type="password"
