@@ -1,8 +1,8 @@
 /**
  * AIChat 组件 - AI 聊天界面
  *
- * 一个独立的 AI 聊天组件，可以在多个地方复用
- * 使用 useChat hook 来获取渲染聊天相关的列表与交互
+ * 集成 ai-elements 组件的示例实现
+ * 展示如何使用 Message, Conversation, PromptInput 等组件构建完整的聊天界面
  */
 
 import type { Component } from "solid-js";
@@ -10,19 +10,225 @@ import { createMemo, createSignal, For, Show } from "solid-js";
 import { useChat } from "@ensolid/aisolid";
 import type { UIMessage } from "ai";
 import { GatewayChatTransport } from "@/ai";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/components/ui/utils";
-import { useI18n } from "@/i18n";
 import { registry } from "@/ai/registry";
+import {
+    MessageBranch,
+    MessageBranchContent,
+    MessageBranchNext,
+    MessageBranchPage,
+    MessageBranchPrevious,
+    MessageBranchSelector,
+} from "@/components/ai-elements/message";
+import {
+    Conversation,
+    ConversationContent,
+    ConversationScrollButton,
+} from "@/components/ai-elements/conversation";
+import { Message, MessageContent } from "@/components/ai-elements/message";
+import {
+    PromptInput,
+    PromptInputActionAddAttachments,
+    PromptInputActionMenu,
+    PromptInputActionMenuContent,
+    PromptInputActionMenuTrigger,
+    PromptInputAttachment,
+    PromptInputAttachments,
+    PromptInputBody,
+    PromptInputButton,
+    PromptInputFooter,
+    PromptInputHeader,
+    type PromptInputMessage,
+    PromptInputProvider,
+    PromptInputSubmit,
+    PromptInputTextarea,
+    PromptInputTools,
+    usePromptInputController,
+} from "@/components/ai-elements/prompt-input";
+import {
+    ModelSelector,
+    ModelSelectorContent,
+    ModelSelectorEmpty,
+    ModelSelectorGroup,
+    ModelSelectorInput,
+    ModelSelectorItem,
+    ModelSelectorList,
+    ModelSelectorLogo,
+    ModelSelectorLogoGroup,
+    ModelSelectorName,
+    ModelSelectorTrigger,
+} from "@/components/ai-elements/model-selector";
+import {
+    Reasoning,
+    ReasoningContent,
+    ReasoningTrigger,
+} from "@/components/ai-elements/reasoning";
+import { MessageResponse } from "@/components/ai-elements/message";
+import {
+    Source,
+    Sources,
+    SourcesContent,
+    SourcesTrigger,
+} from "@/components/ai-elements/sources";
+import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
+
+// 简单的 ID 生成函数
+function generateId(): string {
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+}
+
+type MessageType = {
+    key: string;
+    from: "user" | "assistant";
+    sources?: { href: string; title: string }[];
+    versions: {
+        id: string;
+        content: string;
+    }[];
+    reasoning?: {
+        content: string;
+        duration: number;
+    };
+    tools?: {
+        name: string;
+        description: string;
+        status: "input-available" | "partial-call" | "result";
+        parameters: Record<string, unknown>;
+        result: string | undefined;
+        error: string | undefined;
+    }[];
+};
+
+// 将 UIMessage 转换为 MessageType 格式
+function convertUIMessageToMessageType(uiMessage: UIMessage): MessageType {
+    // 从 UIMessage 中提取文本内容
+    const textContent = (uiMessage.parts ?? [])
+        .filter((part) => part && part.type === "text")
+        .map((part) =>
+            part && part.type === "text" && typeof part.text === "string"
+                ? part.text
+                : ""
+        )
+        .join("") || "";
+
+    return {
+        key: uiMessage.id || generateId(),
+        from: uiMessage.role === "user" ? "user" : "assistant",
+        versions: [
+            {
+                id: uiMessage.id || generateId(),
+                content: textContent,
+            },
+        ],
+        // 可以在这里添加 sources、reasoning 等扩展信息
+        // 如果 UIMessage 中有这些信息的话
+    };
+}
+
+// 图标组件
+const CheckIcon = (props: { size?: number; class?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={props.size || 16}
+        height={props.size || 16}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={props.class}
+    >
+        <path d="M20 6 9 17l-5-5" />
+    </svg>
+);
+
+const GlobeIcon = (props: { size?: number; class?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={props.size || 16}
+        height={props.size || 16}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={props.class}
+    >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+        <path d="M2 12h20" />
+    </svg>
+);
+
+const MicIcon = (props: { size?: number; class?: string }) => (
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width={props.size || 16}
+        height={props.size || 16}
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class={props.class}
+    >
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3Z" />
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+        <line x1="12" x2="12" y1="19" y2="23" />
+        <line x1="8" x2="16" y1="23" y2="23" />
+    </svg>
+);
+
+const models = [
+    {
+        id: "gpt-4o",
+        name: "GPT-4o",
+        chef: "OpenAI",
+        chefSlug: "openai",
+        providers: ["openai", "azure"],
+    },
+    {
+        id: "gpt-4o-mini",
+        name: "GPT-4o Mini",
+        chef: "OpenAI",
+        chefSlug: "openai",
+        providers: ["openai", "azure"],
+    },
+    {
+        id: "claude-opus-4-20250514",
+        name: "Claude 4 Opus",
+        chef: "Anthropic",
+        chefSlug: "anthropic",
+        providers: ["anthropic", "azure", "google", "amazon-bedrock"],
+    },
+    {
+        id: "claude-sonnet-4-20250514",
+        name: "Claude 4 Sonnet",
+        chef: "Anthropic",
+        chefSlug: "anthropic",
+        providers: ["anthropic", "azure", "google", "amazon-bedrock"],
+    },
+    {
+        id: "gemini-2.0-flash-exp",
+        name: "Gemini 2.0 Flash",
+        chef: "Google",
+        chefSlug: "google",
+        providers: ["google"],
+    },
+];
+
+const suggestions = [
+    "AI 的最新趋势是什么？",
+    "机器学习是如何工作的？",
+    "解释一下量子计算",
+    "React 开发的最佳实践",
+    "告诉我 TypeScript 的好处",
+    "如何优化数据库查询？",
+    "SQL 和 NoSQL 有什么区别？",
+    "解释一下云计算基础知识",
+];
 
 export interface AIChatProps {
     /**
@@ -76,248 +282,375 @@ export interface AIChatProps {
     modelId?: string;
 }
 
-export const AIChat: Component<AIChatProps> = (props) => {
-    const { t } = useI18n();
+// 内部组件：用于访问 PromptInputController
+const PromptInputSubmitWithController: Component<{
+    isLoading: () => boolean;
+    submitStatus: () => "submitted" | "streaming" | "ready" | "error";
+}> = (props) => {
+    const controller = usePromptInputController();
+    const isDisabled = () =>
+        !controller.textInput.value().trim() || props.isLoading();
 
+    return (
+        <PromptInputSubmit
+            disabled={isDisabled()}
+            status={props.submitStatus()}
+        />
+    );
+};
+
+export const AIChat: Component<AIChatProps> = (props) => {
     // 创建 GatewayChatTransport
     // 如果提供了 modelId 则使用它，否则使用默认的模型 ID
-    const transport = new GatewayChatTransport(
-        registry,
-        props.modelId || "lmstudio:qwen/qwen3-vl-4b",
-    );
-
-    // 输入状态管理
-    const [input, setInput] = createSignal("");
+    console.log("registry", registry);
+    console.log("props.modelId", props.modelId);
+    const transport = props.modelId
+        ? new GatewayChatTransport(registry, props.modelId)
+        : undefined;
 
     // 使用 useChat hook 获取聊天相关的列表与交互
-    // 使用 GatewayChatTransport 而不是 HTTP API
     const {
-        messages,
+        messages: uiMessages,
         status,
         error,
         stop,
         setMessages,
         sendMessage,
     } = useChat<UIMessage>({
-        transport,
+        ...(transport ? { transport } : { api: props.api || "/api/chat" }),
         id: props.id || "ai-chat",
         initialMessages: props.initialMessages as UIMessage[],
         headers: props.headers,
         body: props.body,
     });
 
+    // 将 UIMessage[] 转换为 MessageType[] 用于 ai-elements 组件
+    const messages = createMemo(() =>
+        uiMessages().map(convertUIMessageToMessageType)
+    );
+
+    const [model, setModel] = createSignal<string>(models[0].id);
+    const [modelSelectorOpen, setModelSelectorOpen] = createSignal(false);
+    const [text, setText] = createSignal<string>("");
+    const [useWebSearch, setUseWebSearch] = createSignal<boolean>(false);
+    const [useMicrophone, setUseMicrophone] = createSignal<boolean>(false);
+
     const isLoading = createMemo(() =>
         status() === "streaming" || status() === "submitted"
     );
-    const hasMessages = createMemo(() => messages().length > 0);
 
-    const handleInputChange = (e: Event | { target: { value: string } }) => {
-        let value = "";
-        if ("target" in e && e.target) {
-            const target = e.target as HTMLInputElement | HTMLTextAreaElement;
-            value = target.value || "";
-        } else if ("currentTarget" in e && e.currentTarget) {
-            const target = e.currentTarget as
-                | HTMLInputElement
-                | HTMLTextAreaElement;
-            value = target.value || "";
-        } else if (
-            "target" in e && typeof e.target === "object" &&
-            e.target !== null && "value" in e.target
-        ) {
-            value = (e.target as { value: string }).value || "";
+    const selectedModelData = createMemo(() =>
+        models.find((m) => m.id === model())
+    );
+
+    // 将 status 转换为 PromptInputSubmit 需要的格式
+    const submitStatus = createMemo<
+        "submitted" | "streaming" | "ready" | "error"
+    >(() => {
+        const currentStatus = status();
+        if (currentStatus === "streaming" || currentStatus === "submitted") {
+            return currentStatus;
         }
-        setInput(value);
-    };
+        if (error()) {
+            return "error";
+        }
+        return "ready";
+    });
 
-    const handleSubmit = (e: Event) => {
-        e.preventDefault();
-        const inputValue = input().trim();
-        if (!inputValue || isLoading()) return;
+    const handleSubmit = (message: PromptInputMessage) => {
+        const hasText = Boolean(message.text);
+        const hasAttachments = Boolean(message.files?.length);
+
+        if (!(hasText || hasAttachments) || isLoading()) {
+            return;
+        }
+
+        if (message.files?.length) {
+            console.log("Files attached", {
+                description:
+                    `${message.files.length} file(s) attached to message`,
+            });
+        }
 
         // 使用 sendMessage 发送消息
         sendMessage({
             role: "user",
-            parts: [{ type: "text", text: inputValue }],
+            parts: [{ type: "text", text: message.text || "" }],
         });
-        setInput("");
+        setText("");
     };
 
-    const clearChat = () => {
-        setMessages([]);
+    const handleSuggestionClick = (suggestion: string) => {
+        if (isLoading()) return;
+
+        // 使用 sendMessage 发送建议消息
+        sendMessage({
+            role: "user",
+            parts: [{ type: "text", text: suggestion }],
+        });
     };
 
     return (
-        <div class={props.class}>
-            {/* 标题卡片 */}
-            {props.showTitleCard !== false && (
-                <Card class="mb-4">
-                    <CardHeader>
-                        <CardTitle>{t().aiPlayground.aichat.title}</CardTitle>
-                        <CardDescription>
-                            {t().aiPlayground.aichat.description}
-                        </CardDescription>
-                    </CardHeader>
-                </Card>
-            )}
-
-            {/* 聊天机器人 */}
-            <div style={{ height: props.height || "600px" }}>
-                <Card class="flex flex-col h-full">
-                    <CardContent class="flex flex-col h-full p-0">
-                        {/* 标题栏 */}
-                        <CardHeader class="border-b">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <CardTitle>
-                                        {t().aiPlayground.aichat.title}
-                                    </CardTitle>
-                                    <CardDescription>
-                                        {t().aiPlayground.aichat.description}
-                                    </CardDescription>
-                                </div>
-                                <Show when={hasMessages()}>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        onClick={clearChat}
-                                    >
-                                        {t().aiPlayground.chat.clear}
-                                    </Button>
-                                </Show>
-                            </div>
-                        </CardHeader>
-
-                        {/* 消息区域 */}
-                        <ScrollArea class="flex-1 p-4">
-                            <div class="space-y-4">
-                                <Show
-                                    when={hasMessages()}
-                                    fallback={
-                                        <div class="flex items-center justify-center h-full text-center text-muted-foreground py-8">
-                                            <div>
-                                                <p class="text-lg mb-2">👋</p>
-                                                <p>
-                                                    {t().aiPlayground.chat
-                                                        .empty}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    }
-                                >
-                                    <For each={messages()}>
-                                        {(message) => {
-                                            // 从 UIMessage 中提取文本内容
-                                            const textContent =
-                                                (message.parts ?? [])
-                                                    .filter((part) =>
-                                                        part &&
-                                                        part.type === "text"
-                                                    )
-                                                    .map((part) =>
-                                                        part &&
-                                                            part.type ===
-                                                                "text" &&
-                                                            typeof part.text ===
-                                                                "string"
-                                                            ? part.text
-                                                            : ""
-                                                    )
-                                                    .join("") || "";
-
-                                            return (
-                                                <div
-                                                    class={cn(
-                                                        "flex gap-3",
-                                                        message.role === "user"
-                                                            ? "justify-end"
-                                                            : "justify-start",
-                                                    )}
-                                                >
-                                                    <div
-                                                        class={cn(
-                                                            "max-w-[80%] rounded-lg px-4 py-2",
-                                                            message.role ===
-                                                                    "user"
-                                                                ? "bg-primary text-primary-foreground"
-                                                                : "bg-muted",
-                                                        )}
+        <div class="relative flex size-full flex-col divide-y overflow-hidden">
+            <Conversation>
+                <ConversationContent>
+                    <For each={messages()}>
+                        {(message) => (
+                            <MessageBranch defaultBranch={0}>
+                                <MessageBranchContent>
+                                    <For each={message.versions}>
+                                        {(version) => (
+                                            <Message from={message.from}>
+                                                <div>
+                                                    <Show
+                                                        when={message.sources
+                                                            ?.length}
                                                     >
-                                                        <div class="text-xs font-medium mb-1 opacity-70">
-                                                            {message.role ===
-                                                                    "user"
-                                                                ? "你"
-                                                                : "AI"}
-                                                        </div>
-                                                        <div class="text-sm whitespace-pre-wrap">
-                                                            {textContent}
-                                                        </div>
-                                                    </div>
+                                                        <Sources>
+                                                            <SourcesTrigger
+                                                                count={message
+                                                                    .sources!
+                                                                    .length}
+                                                            />
+                                                            <SourcesContent>
+                                                                <For
+                                                                    each={message
+                                                                        .sources}
+                                                                >
+                                                                    {(
+                                                                        source,
+                                                                    ) => (
+                                                                        <Source
+                                                                            href={source
+                                                                                .href}
+                                                                            title={source
+                                                                                .title}
+                                                                        />
+                                                                    )}
+                                                                </For>
+                                                            </SourcesContent>
+                                                        </Sources>
+                                                    </Show>
+                                                    <Show
+                                                        when={message.reasoning}
+                                                    >
+                                                        <Reasoning
+                                                            duration={message
+                                                                .reasoning!
+                                                                .duration}
+                                                        >
+                                                            <ReasoningTrigger />
+                                                            <ReasoningContent>
+                                                                {message
+                                                                    .reasoning!
+                                                                    .content}
+                                                            </ReasoningContent>
+                                                        </Reasoning>
+                                                    </Show>
+                                                    <MessageContent>
+                                                        <MessageResponse>
+                                                            {version.content}
+                                                        </MessageResponse>
+                                                    </MessageContent>
                                                 </div>
-                                            );
-                                        }}
+                                            </Message>
+                                        )}
                                     </For>
-                                    <Show when={isLoading()}>
-                                        <div class="flex justify-start">
-                                            <div class="bg-muted rounded-lg px-4 py-2">
-                                                <div class="flex items-center gap-2">
-                                                    <div class="w-2 h-2 bg-current rounded-full animate-pulse">
-                                                    </div>
-                                                    <span class="text-sm text-muted-foreground">
-                                                        {t().aiPlayground.input
-                                                            .processing}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Show>
-                                </Show>
-                            </div>
-                        </ScrollArea>
-
-                        {/* 错误提示 */}
-                        <Show when={error()}>
-                            <div class="px-4 py-2 bg-destructive/10 text-destructive text-sm border-t">
-                                <strong>错误：</strong> {error()?.message}
-                            </div>
-                        </Show>
-
-                        {/* 输入区域 */}
-                        <form
-                            onSubmit={handleSubmit}
-                            class="p-4 border-t space-y-2"
-                        >
-                            <Textarea
-                                value={input()}
-                                onInput={handleInputChange}
-                                placeholder={t().aiPlayground.input.placeholder}
-                                class="resize-none"
-                                disabled={isLoading()}
-                                rows={3}
-                            />
-                            <div class="flex gap-2">
-                                <Button
-                                    type="submit"
-                                    disabled={isLoading() || !input().trim()}
-                                    class="flex-1"
+                                </MessageBranchContent>
+                                <Show
+                                    when={message.versions.length > 1}
                                 >
-                                    {isLoading()
-                                        ? t().aiPlayground.input.processing
-                                        : t().aiPlayground.input.submit}
-                                </Button>
-                                <Show when={isLoading()}>
-                                    <Button
-                                        type="button"
-                                        variant="outline"
-                                        onClick={stop}
-                                    >
-                                        {t().aiPlayground.input.stop}
-                                    </Button>
+                                    <MessageBranchSelector from={message.from}>
+                                        <MessageBranchPrevious />
+                                        <MessageBranchPage />
+                                        <MessageBranchNext />
+                                    </MessageBranchSelector>
                                 </Show>
-                            </div>
-                        </form>
-                    </CardContent>
-                </Card>
+                            </MessageBranch>
+                        )}
+                    </For>
+                </ConversationContent>
+                <ConversationScrollButton />
+            </Conversation>
+            <div class="grid shrink-0 gap-4 pt-4">
+                <Suggestions class="px-4">
+                    <For each={suggestions}>
+                        {(suggestion) => (
+                            <Suggestion
+                                suggestion={suggestion}
+                                onClick={() =>
+                                    handleSuggestionClick(suggestion)}
+                            />
+                        )}
+                    </For>
+                </Suggestions>
+                <div class="w-full px-4 pb-4">
+                    <PromptInputProvider initialInput={text()}>
+                        <PromptInput
+                            globalDrop
+                            multiple
+                            onSubmit={handleSubmit}
+                        >
+                            <PromptInputHeader>
+                                <PromptInputAttachments>
+                                    {(attachment) => (
+                                        <PromptInputAttachment
+                                            data={attachment}
+                                        />
+                                    )}
+                                </PromptInputAttachments>
+                            </PromptInputHeader>
+                            <PromptInputBody>
+                                <PromptInputTextarea
+                                    onChange={(event) =>
+                                        setText(
+                                            (event
+                                                .target as HTMLTextAreaElement)
+                                                .value,
+                                        )}
+                                />
+                            </PromptInputBody>
+                            <PromptInputFooter>
+                                <PromptInputTools>
+                                    <PromptInputActionMenu>
+                                        <PromptInputActionMenuTrigger />
+                                        <PromptInputActionMenuContent>
+                                            <PromptInputActionAddAttachments />
+                                        </PromptInputActionMenuContent>
+                                    </PromptInputActionMenu>
+                                    <PromptInputButton
+                                        onClick={() =>
+                                            setUseMicrophone(!useMicrophone())}
+                                        variant={useMicrophone()
+                                            ? "default"
+                                            : "ghost"}
+                                    >
+                                        <MicIcon size={16} />
+                                        <span class="sr-only">麦克风</span>
+                                    </PromptInputButton>
+                                    <PromptInputButton
+                                        onClick={() =>
+                                            setUseWebSearch(!useWebSearch())}
+                                        variant={useWebSearch()
+                                            ? "default"
+                                            : "ghost"}
+                                    >
+                                        <GlobeIcon size={16} />
+                                        <span>搜索</span>
+                                    </PromptInputButton>
+                                    <ModelSelector
+                                        onOpenChange={setModelSelectorOpen}
+                                        open={modelSelectorOpen()}
+                                    >
+                                        <ModelSelectorTrigger class="h-auto px-2 py-1.5 text-sm font-medium">
+                                            <Show
+                                                when={selectedModelData()
+                                                    ?.chefSlug}
+                                            >
+                                                <ModelSelectorLogo
+                                                    provider={selectedModelData()!
+                                                        .chefSlug}
+                                                />
+                                            </Show>
+                                            <Show
+                                                when={selectedModelData()?.name}
+                                            >
+                                                <ModelSelectorName>
+                                                    {selectedModelData()!.name}
+                                                </ModelSelectorName>
+                                            </Show>
+                                        </ModelSelectorTrigger>
+                                        <ModelSelectorContent>
+                                            <ModelSelectorInput placeholder="搜索模型..." />
+                                            <ModelSelectorList>
+                                                <ModelSelectorEmpty>
+                                                    未找到模型。
+                                                </ModelSelectorEmpty>
+                                                <For
+                                                    each={[
+                                                        "OpenAI",
+                                                        "Anthropic",
+                                                        "Google",
+                                                    ]}
+                                                >
+                                                    {(chef) => (
+                                                        <div>
+                                                            <div class="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                                                                {chef}
+                                                            </div>
+                                                            <ModelSelectorGroup>
+                                                                <For
+                                                                    each={models
+                                                                        .filter(
+                                                                            (
+                                                                                m,
+                                                                            ) => m
+                                                                                .chef ===
+                                                                                chef,
+                                                                        )}
+                                                                >
+                                                                    {(m) => (
+                                                                        <ModelSelectorItem
+                                                                            value={m
+                                                                                .id}
+                                                                            onSelect={() => {
+                                                                                setModel(
+                                                                                    m.id,
+                                                                                );
+                                                                                setModelSelectorOpen(
+                                                                                    false,
+                                                                                );
+                                                                            }}
+                                                                        >
+                                                                            <ModelSelectorLogo
+                                                                                provider={m
+                                                                                    .chefSlug}
+                                                                            />
+                                                                            <ModelSelectorName>
+                                                                                {m.name}
+                                                                            </ModelSelectorName>
+                                                                            <ModelSelectorLogoGroup>
+                                                                                <For
+                                                                                    each={m
+                                                                                        .providers}
+                                                                                >
+                                                                                    {(
+                                                                                        provider,
+                                                                                    ) => (
+                                                                                        <ModelSelectorLogo
+                                                                                            provider={provider}
+                                                                                        />
+                                                                                    )}
+                                                                                </For>
+                                                                            </ModelSelectorLogoGroup>
+                                                                            <Show
+                                                                                when={model() ===
+                                                                                    m.id}
+                                                                                fallback={
+                                                                                    <div class="ml-auto size-4" />
+                                                                                }
+                                                                            >
+                                                                                <CheckIcon class="ml-auto size-4" />
+                                                                            </Show>
+                                                                        </ModelSelectorItem>
+                                                                    )}
+                                                                </For>
+                                                            </ModelSelectorGroup>
+                                                        </div>
+                                                    )}
+                                                </For>
+                                            </ModelSelectorList>
+                                        </ModelSelectorContent>
+                                    </ModelSelector>
+                                </PromptInputTools>
+                                <PromptInputSubmitWithController
+                                    isLoading={isLoading}
+                                    submitStatus={submitStatus}
+                                />
+                            </PromptInputFooter>
+                        </PromptInput>
+                    </PromptInputProvider>
+                </div>
             </div>
         </div>
     );

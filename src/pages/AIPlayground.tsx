@@ -89,7 +89,7 @@ export const AIPlaygroundPage: Component = () => {
           {/* AI Chat 标签页 */}
           <TabsContent value="aichat" class="space-y-4">
             <AIChat
-              modelId="meituan/longcat-flash-chat"
+              modelId="gateway:meituan/longcat-flash-chat"
               api="/api/chat"
               id="ai-playground-aichat"
               showTitleCard={true}

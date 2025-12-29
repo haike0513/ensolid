@@ -55,7 +55,7 @@ export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
     });
 
     // 规范化模型 ID，确保使用 providerId:modelId 格式
-    const fullModelId = normalizeModelId(this.modelId, "lmstudio");
+    const fullModelId = normalizeModelId(this.modelId, "gateway");
     // 从 registry 获取模型
     // registry 的 languageModel 方法接受完整的模型 ID（包含 provider 前缀）
     // 例如: "gateway:gpt-4", "lmstudio:qwen/qwen3-vl-8b" 等
