@@ -11,3 +11,12 @@ export type { CompletionProps } from "./completion";
 
 export { MessageComponent as Message } from "./message";
 export type { MessageProps } from "./message";
+
+export { Assistant } from "./assistant";
+export type { AssistantProps } from "./assistant";
+
+export { ObjectGeneration } from "./object-generation";
+export type { ObjectGenerationProps } from "./object-generation";
+
+export { StreamableValue } from "./streamable-value";
+export type { StreamableValueProps } from "./streamable-value";
