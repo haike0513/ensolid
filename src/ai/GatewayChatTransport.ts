@@ -2,6 +2,7 @@ import type { ChatTransport, UIMessage, UIMessageChunk } from "ai";
 import { streamText } from "ai";
 import { getGateway } from "./gateway";
 import { normalizeModelId } from "./utils";
+import { lmstudioProvider } from "./provider/lmstudioProvider";
 
 /**
  * 自定义 ChatTransport，使用 Gateway 来获取模型
@@ -60,7 +61,7 @@ export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
     console.log("model", model);
     // 使用 streamText 调用模型
     const result = await streamText({
-      model,
+      model: lmstudioProvider.languageModel("qwen/qwen3-vl-8b"),
       messages: modelMessages,
       maxRetries: 1,
       abortSignal: options.abortSignal,

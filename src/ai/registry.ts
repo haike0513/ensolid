@@ -21,6 +21,7 @@ import { createOpenAI } from "@ai-sdk/openai";
 // @ts-ignore
 import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { gateway } from "./gateway";
+import { lmstudioProvider } from "./provider/lmstudioProvider";
 /**
  * 创建提供者注册表
  *
@@ -52,10 +53,7 @@ export const registry = createProviderRegistry({
   }),
 
   // 注册 LMStudio provider（本地运行的模型服务）
-  lmstudio: createOpenAICompatible({
-    name: "lmstudio",
-    baseURL: "http://localhost:1234/v1",
-  }),
+  lmstudio: lmstudioProvider,
 });
 
 /**
