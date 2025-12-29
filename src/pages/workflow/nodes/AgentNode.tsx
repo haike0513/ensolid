@@ -5,7 +5,10 @@ export const AgentNode: Component<NodeComponentProps> = (props) => {
   return (
     <div
       style={{ width: "180px", height: "auto" }}
-      class="relative group min-w-[180px] rounded-xl bg-white shadow-lg transition-all hover:shadow-xl"
+      class="relative group min-w-[180px] rounded-xl bg-white shadow-lg transition-all hover:shadow-xl border  border-red-500"
+      onClick={() => {
+        console.log("Node clicked", props.node);
+      }}
     >
       {/* Glassmorphism Header */}
       <div class="rounded-t-xl bg-gradient-to-r from-indigo-500 to-purple-600 px-3 py-2">

@@ -116,7 +116,7 @@ export const Flow: Component<FlowProps> = (props) => {
   } | null>(null);
 
   let containerRef: HTMLDivElement | undefined;
-  let svgRef: SVGSVGElement | undefined;
+
 
   // 处理视口更新
   const updateViewport = (updates: Partial<Viewport>) => {
@@ -684,11 +684,10 @@ export const Flow: Component<FlowProps> = (props) => {
       onClick={handlePaneClick}
     >
       {/* 背景 */}
-      <Background viewport={currentViewport()} />
+      <Background viewport={currentViewport()} className="-z-10" />
 
-      {/* SVG 画布 */}
-      <svg
-        ref={svgRef}
+      {/* 边图层 */}
+      <div
         class="absolute inset-0 w-full h-full"
         style={{
           transform: `translate(${currentViewport().x}px, ${
@@ -696,112 +695,51 @@ export const Flow: Component<FlowProps> = (props) => {
           }px) scale(${currentViewport().zoom})`,
           "transform-origin": "0 0",
           "pointer-events": "none",
-          overflow: "visible",
         }}
       >
-        {/* 标记定义 */}
-        <defs>
-          {/* 箭头标记 */}
-          <marker
-            id="arrowhead"
-            markerWidth="10"
-            markerHeight="10"
-            refX="9"
-            refY="3"
-            orient="auto"
-            markerUnits="strokeWidth"
-          >
-            <path d="M0,0 L0,6 L9,3 z" fill="#b1b1b7" />
-          </marker>
-          <marker
-            id="arrowclosed"
-            markerWidth="12"
-            markerHeight="12"
-            refX="6"
-            refY="6"
-            orient="auto"
-            markerUnits="strokeWidth"
-          >
-            <path
-              d="M 0 0 L 12 6 L 0 12 z"
-              fill="#b1b1b7"
-              stroke="#b1b1b7"
-              stroke-width="1"
-            />
-          </marker>
-          {/* 选中状态的箭头标记 */}
-          <marker
-            id="arrowhead-selected"
-            markerWidth="10"
-            markerHeight="10"
-            refX="9"
-            refY="3"
-            orient="auto"
-            markerUnits="strokeWidth"
-          >
-            <path d="M0,0 L0,6 L9,3 z" fill="#3b82f6" />
-          </marker>
-          <marker
-            id="arrowclosed-selected"
-            markerWidth="12"
-            markerHeight="12"
-            refX="6"
-            refY="6"
-            orient="auto"
-            markerUnits="strokeWidth"
-          >
-            <path
-              d="M 0 0 L 12 6 L 0 12 z"
-              fill="#3b82f6"
-              stroke="#3b82f6"
-              stroke-width="1"
-            />
-          </marker>
-        </defs>
-
-        {/* 边 */}
-        <For each={local.edges ?? []}>
-          {(edge) => (
-            <EdgeComponent
-              edge={edge}
-              sourceNode={local.nodes.find((n) => n.id === edge.source)}
-              targetNode={local.nodes.find((n) => n.id === edge.target)}
-              selected={selectedEdges().has(edge.id)}
-              onClick={(e, ed) => {
-                if (!(local.elementsSelectable ?? true)) {
-                  return;
-                }
-                e.stopPropagation();
-                setSelectedEdges((prev) => {
-                  const newSet = new Set(prev);
-                  if (e.ctrlKey || e.metaKey) {
-                    if (newSet.has(ed.id)) {
-                      newSet.delete(ed.id);
+          {/* 边 */}
+          <For each={local.edges ?? []}>
+            {(edge) => (
+              <EdgeComponent
+                edge={edge}
+                sourceNode={local.nodes.find((n) => n.id === edge.source)}
+                targetNode={local.nodes.find((n) => n.id === edge.target)}
+                selected={selectedEdges().has(edge.id)}
+                onClick={(e, ed) => {
+                  if (!(local.elementsSelectable ?? true)) {
+                    return;
+                  }
+                  e.stopPropagation();
+                  setSelectedEdges((prev) => {
+                    const newSet = new Set(prev);
+                    if (e.ctrlKey || e.metaKey) {
+                      if (newSet.has(ed.id)) {
+                        newSet.delete(ed.id);
+                      } else {
+                        newSet.add(ed.id);
+                      }
                     } else {
+                      newSet.clear();
                       newSet.add(ed.id);
                     }
-                  } else {
-                    newSet.clear();
-                    newSet.add(ed.id);
-                  }
-                  local.onSelectionChange?.({
-                    nodes: local.nodes.filter((n) => selectedNodes().has(n.id)),
-                    edges: (local.edges ?? []).filter((e) => newSet.has(e.id)),
+                    local.onSelectionChange?.({
+                      nodes: local.nodes.filter((n) => selectedNodes().has(n.id)),
+                      edges: (local.edges ?? []).filter((e) => newSet.has(e.id)),
+                    });
+                    return newSet;
                   });
-                  return newSet;
-                });
-                local.onEdgesChange?.([
-                  {
-                    id: ed.id,
-                    type: "select",
-                    selected: !selectedEdges().has(ed.id),
-                  } as EdgeChange,
-                ]);
-              }}
-            />
-          )}
-        </For>
-      </svg>
+                  local.onEdgesChange?.([
+                    {
+                      id: ed.id,
+                      type: "select",
+                      selected: !selectedEdges().has(ed.id),
+                    } as EdgeChange,
+                  ]);
+                }}
+              />
+            )}
+          </For>
+      </div>
 
       {/* 节点 */}
       <div
@@ -818,7 +756,6 @@ export const Flow: Component<FlowProps> = (props) => {
           {(node) => {
             const NodeType = getNodeComponent(node);
             return (
-              <div style={{ "pointer-events": "auto" }}>
                 <NodeComponent
                   node={node}
                   selected={selectedNodes().has(node.id)}
@@ -838,7 +775,6 @@ export const Flow: Component<FlowProps> = (props) => {
                     ]);
                   }}
                 />
-              </div>
             );
           }}
         </For>

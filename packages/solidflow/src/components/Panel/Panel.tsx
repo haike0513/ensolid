@@ -4,20 +4,22 @@
 
 import { type Component, type JSX, splitProps } from "solid-js";
 
+export type PanelPosition =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right"
+  | "center-left"
+  | "center-right";
+
 export interface PanelProps extends JSX.HTMLAttributes<HTMLDivElement> {
   /**
    * 位置
    * @default 'top-left'
    */
-  position?:
-    | "top-left"
-    | "top-center"
-    | "top-right"
-    | "bottom-left"
-    | "bottom-center"
-    | "bottom-right"
-    | "center-left"
-    | "center-right";
+  position?: PanelPosition;
   /**
    * 子元素
    */

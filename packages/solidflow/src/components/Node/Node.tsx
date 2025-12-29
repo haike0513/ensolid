@@ -129,6 +129,7 @@ export const Node: Component<NodeProps> = (props) => {
     width: local.node.width ? `${local.node.width}px` : "auto",
     height: local.node.height ? `${local.node.height}px` : "auto",
     zIndex: local.node.zIndex ?? (local.selected ? 1000 : 1),
+    "pointer-events": "auto",
     ...local.node.style,
   });
 

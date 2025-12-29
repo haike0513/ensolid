@@ -206,7 +206,7 @@ export const Edge: Component<EdgeProps> = (props) => {
   };
 
   return (
-    <g
+    <svg
       {...others}
       data-id={local.edge.id}
       data-type={local.edge.type}
@@ -222,7 +222,14 @@ export const Edge: Component<EdgeProps> = (props) => {
         ) ?? {}),
       }}
       style={{
-        "pointer-events": "all",
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        top: 0,
+        left: 0,
+        overflow: "visible",
+        "pointer-events": "none",
+        "z-index": local.edge.zIndex ?? (local.selected ? 1000 : 1),
       } as any}
       onClick={handleClick}
       onDblClick={handleDoubleClick}
@@ -253,7 +260,10 @@ export const Edge: Component<EdgeProps> = (props) => {
                 text-anchor="middle"
                 dominant-baseline="middle"
                 fill={local.edge.labelStyle?.color ?? "#000"}
-                style={local.edge.labelStyle as any}
+                style={{
+                  ...local.edge.labelStyle,
+                  "pointer-events": "all", 
+                } as any}
                 class="solidflow-edge-label"
               >
                 {local.edge.label}
@@ -264,6 +274,6 @@ export const Edge: Component<EdgeProps> = (props) => {
       >
         {local.renderEdge?.(local.edge, path())}
       </Show>
-    </g>
+    </svg>
   );
 };
