@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/components/ui/utils";
 import { useI18n } from "@/i18n";
+import { registry } from "@/ai/registry";
 
 export interface AIChatProps {
     /**
@@ -81,7 +82,8 @@ export const AIChat: Component<AIChatProps> = (props) => {
     // 创建 GatewayChatTransport
     // 如果提供了 modelId 则使用它，否则使用默认的模型 ID
     const transport = new GatewayChatTransport(
-        props.modelId || "gateway:gpt-4",
+        registry,
+        props.modelId || "lmstudio:qwen/qwen3-vl-4b",
     );
 
     // 输入状态管理

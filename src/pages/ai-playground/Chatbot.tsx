@@ -76,7 +76,7 @@ export const PlaygroundChatbot: Component<PlaygroundChatbotProps> = (props) => {
 
   // 如果提供了 modelId，创建 GatewayChatTransport
   const transport = props.modelId
-    ? new GatewayChatTransport(props.modelId)
+    ? new GatewayChatTransport(undefined, props.modelId)
     : undefined;
 
   // 输入状态管理

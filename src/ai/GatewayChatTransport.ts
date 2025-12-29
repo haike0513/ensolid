@@ -1,27 +1,32 @@
 import type { ChatTransport, UIMessage, UIMessageChunk } from "ai";
 import { streamText } from "ai";
-import { getGateway } from "./gateway";
 import { normalizeModelId } from "./utils";
-import { lmstudioProvider } from "./provider/lmstudioProvider";
 import { registry } from "./registry";
 
 /**
- * 自定义 ChatTransport，使用 Gateway 来获取模型
- * 支持 providerId:modelId 格式，例如: 'gateway:gpt-4'
- * 如果只提供 modelId，默认使用 'gateway' 作为 provider
+ * 自定义 ChatTransport，使用 Registry 来获取模型
+ * 支持 providerId:modelId 格式，例如: 'gateway:gpt-4', 'lmstudio:qwen/qwen3-vl-8b'
+ * 如果只提供 modelId，默认使用 'lmstudio' 作为 provider
  *
  * 无需通过 HTTP API，直接在前端调用 streamText
  */
 export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
   implements ChatTransport<UI_MESSAGE> {
+  private registry: typeof registry;
   private modelId: string;
 
   /**
+   * @param modelRegistry - Provider Registry 实例，用于获取模型
    * @param modelId - 模型 ID，支持格式:
    *   - 'gateway:gpt-4' (完整格式: providerId:modelId)
-   *   - 'gpt-4' (简化格式，默认使用 gateway provider)
+   *   - 'lmstudio:qwen/qwen3-vl-8b' (完整格式)
+   *   - 'gpt-4' (简化格式，默认使用 lmstudio provider)
    */
-  constructor(modelId: string = "gateway:gpt-4") {
+  constructor(
+    modelRegistry: typeof registry = registry,
+    modelId: string = "lmstudio:qwen/qwen3-vl-4b",
+  ) {
+    this.registry = modelRegistry;
     this.modelId = modelId;
   }
 
@@ -49,16 +54,19 @@ export class GatewayChatTransport<UI_MESSAGE extends UIMessage>
       };
     });
 
-    // 使用 gateway 获取模型
     // 规范化模型 ID，确保使用 providerId:modelId 格式
-    const fullModelId = normalizeModelId(this.modelId, "gateway");
-    const gateway = getGateway();
-
-    // 从 gateway 获取模型
-    // gateway 的 languageModel 方法接受完整的模型 ID（包含 provider 前缀）
-    // 例如: "gateway:gpt-4" 或直接使用模型 ID "gpt-4"
-    // const model = gateway.languageModel(fullModelId);
-    const model = registry.languageModel("lmstudio:qwen/qwen3-vl-8b");
+    const fullModelId = normalizeModelId(this.modelId, "lmstudio");
+    // 从 registry 获取模型
+    // registry 的 languageModel 方法接受完整的模型 ID（包含 provider 前缀）
+    // 例如: "gateway:gpt-4", "lmstudio:qwen/qwen3-vl-8b" 等
+    const model = this.registry.languageModel(
+      fullModelId as
+        | `gateway:${string}`
+        | `anthropic:${string}`
+        | `openai:${string}`
+        | `openrouter:${string}`
+        | `lmstudio:${string}`,
+    );
 
     console.log("model", model);
     // 使用 streamText 调用模型
