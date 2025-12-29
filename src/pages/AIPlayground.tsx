@@ -1,46 +1,22 @@
 /**
- * AI Playground 页面 - 集成 AI SDK Core 和 useChat
+ * AI Playground 页面 - 使用 AI Elements 组件
  */
 
 import type { Component } from "solid-js";
-import { For, Show } from "solid-js";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Card,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardDescription,
-  CardContent,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useI18n } from "@/i18n";
-import { useChat } from "@ensolid/aisolid";
+import { Chatbot } from "@/components/ai-elements/chatbot";
+import { Completion } from "@/components/ai-elements/completion";
+import { AIChat } from "@/components/AIChat";
 
 export const AIPlaygroundPage: Component = () => {
   const { t } = useI18n();
-  
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    error,
-    stop,
-    setMessages,
-  } = useChat({
-    api: "/api/chat",
-    id: "ai-playground-chat",
-    initialMessages: [],
-    onError: (err: Error) => {
-      console.error("Chat error:", err);
-    },
-  });
-
-  const clearChat = () => {
-    setMessages([]);
-  };
 
   return (
     <div class="min-h-screen bg-background py-8">
@@ -55,178 +31,107 @@ export const AIPlaygroundPage: Component = () => {
           </p>
         </div>
 
-        {/* 聊天界面 */}
-        <div class="grid gap-6 lg:grid-cols-3">
-          {/* 聊天消息区域 */}
-          <Card class="lg:col-span-2">
-            <CardHeader class="flex flex-row items-center justify-between space-y-0 pb-4">
-              <div>
+        {/* 功能标签页 */}
+        <Tabs defaultValue="aichat" class="w-full">
+          <TabsList class="grid w-full grid-cols-3 mb-6">
+            <TabsTrigger value="aichat">AI Chat</TabsTrigger>
+            <TabsTrigger value="chat">聊天对话</TabsTrigger>
+            <TabsTrigger value="completion">文本补全</TabsTrigger>
+          </TabsList>
+
+          {/* AI Chat 标签页 */}
+          <TabsContent value="aichat" class="space-y-4">
+            <AIChat
+              api="/api/chat"
+              id="ai-playground-aichat"
+              showTitleCard={true}
+              height="600px"
+              onError={(err: Error) => {
+                console.error("Chat error:", err);
+              }}
+            />
+          </TabsContent>
+
+          {/* 聊天标签页 */}
+          <TabsContent value="chat" class="space-y-4">
+            <Card>
+              <CardHeader>
                 <CardTitle>{t().aiPlayground.chat.title}</CardTitle>
                 <CardDescription>
                   {t().aiPlayground.chat.description}
                 </CardDescription>
-              </div>
-              <Show when={messages().length > 0}>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={clearChat}
-                >
-                  {t().aiPlayground.chat.clear}
-                </Button>
-              </Show>
-            </CardHeader>
-            <CardContent>
-              <ScrollArea class="h-[500px] w-full pr-4">
-                <div class="space-y-4">
-                  <Show
-                    when={messages().length > 0}
-                    fallback={
-                      <div class="flex items-center justify-center h-full text-center text-muted-foreground py-8">
-                        <div>
-                          <p class="text-lg mb-2">👋</p>
-                          <p>{t().aiPlayground.chat.empty}</p>
-                        </div>
-                      </div>
-                    }
-                  >
-                    <For each={messages()}>
-                      {(message) => (
-                        <div
-                          class={`flex gap-3 ${
-                            message.role === "user"
-                              ? "justify-end"
-                              : "justify-start"
-                          }`}
-                        >
-                          <div
-                            class={`max-w-[80%] rounded-lg px-4 py-2 ${
-                              message.role === "user"
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted"
-                            }`}
-                          >
-                            <div class="text-xs font-medium mb-1 opacity-70">
-                              {message.role === "user" ? "你" : "AI"}
-                            </div>
-                            <div class="text-sm whitespace-pre-wrap">
-                              {message.content}
-                            </div>
-                            <Show when={message.createdAt}>
-                              <div class="text-xs opacity-50 mt-1">
-                                {new Date(message.createdAt!).toLocaleTimeString()}
-                              </div>
-                            </Show>
-                          </div>
-                        </div>
-                      )}
-                    </For>
-                    <Show when={isLoading()}>
-                      <div class="flex justify-start">
-                        <div class="bg-muted rounded-lg px-4 py-2">
-                          <div class="flex items-center gap-2">
-                            <div class="w-2 h-2 bg-current rounded-full animate-pulse"></div>
-                            <span class="text-sm text-muted-foreground">
-                              {t().aiPlayground.input.processing}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </Show>
-                  </Show>
-                </div>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+              </CardHeader>
+            </Card>
+            <div class="h-[600px]">
+              <Chatbot
+                api="/api/chat"
+                id="ai-playground-chat"
+                title={t().aiPlayground.chat.title}
+                placeholder={t().aiPlayground.input.placeholder}
+                showTitle={true}
+                showClearButton={true}
+                onError={(err: Error) => {
+                  console.error("Chat error:", err);
+                }}
+              />
+            </div>
+          </TabsContent>
 
-          {/* 输入和控制区域 */}
-          <div class="space-y-6">
+          {/* 文本补全标签页 */}
+          <TabsContent value="completion" class="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>{t().aiPlayground.input.title}</CardTitle>
+                <CardTitle>文本补全</CardTitle>
                 <CardDescription>
-                  {t().aiPlayground.input.description}
+                  输入提示文本，AI 将为您补全内容
                 </CardDescription>
               </CardHeader>
-              <CardContent class="space-y-4">
-                <form onSubmit={handleSubmit}>
-                  <Textarea
-                    value={input()}
-                    onInput={handleInputChange}
-                    placeholder={t().aiPlayground.input.placeholder}
-                    class="min-h-[200px] resize-none"
-                    disabled={isLoading()}
-                  />
-                  <div class="flex gap-2 mt-4">
-                    <Button
-                      type="submit"
-                      disabled={isLoading() || !input().trim()}
-                      class="flex-1"
-                    >
-                      {isLoading()
-                        ? t().aiPlayground.input.processing
-                        : t().aiPlayground.input.submit}
-                    </Button>
-                    <Show when={isLoading()}>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={stop}
-                      >
-                        {t().aiPlayground.input.stop}
-                      </Button>
-                    </Show>
-                  </div>
-                </form>
-              </CardContent>
             </Card>
+            <Completion
+              api="/api/completion"
+              id="ai-playground-completion"
+              title="文本补全"
+              description="输入提示文本，AI 将为您补全内容"
+              placeholder="输入提示..."
+            />
+          </TabsContent>
+        </Tabs>
 
-            {/* 错误提示 */}
-            <Show when={error()}>
-              <Card class="border-destructive">
-                <CardContent class="pt-6">
-                  <div class="text-sm text-destructive">
-                    <strong>错误：</strong> {error()?.message}
-                  </div>
-                </CardContent>
-              </Card>
-            </Show>
-
-            {/* 功能卡片 */}
+        {/* 功能卡片 */}
+        <div class="mt-8">
+          <h2 class="mb-4 text-2xl font-semibold">
+            {t().aiPlayground.features.title}
+          </h2>
+          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             <Card>
               <CardHeader>
                 <CardTitle class="text-lg">
-                  {t().aiPlayground.features.title}
+                  {t().aiPlayground.features.chat.title}
                 </CardTitle>
+                <CardDescription>
+                  {t().aiPlayground.features.chat.description}
+                </CardDescription>
               </CardHeader>
-              <CardContent>
-                <div class="space-y-3">
-                  <div>
-                    <div class="font-medium text-sm mb-1">
-                      {t().aiPlayground.features.chat.title}
-                    </div>
-                    <div class="text-xs text-muted-foreground">
-                      {t().aiPlayground.features.chat.description}
-                    </div>
-                  </div>
-                  <div>
-                    <div class="font-medium text-sm mb-1">
-                      {t().aiPlayground.features.code.title}
-                    </div>
-                    <div class="text-xs text-muted-foreground">
-                      {t().aiPlayground.features.code.description}
-                    </div>
-                  </div>
-                  <div>
-                    <div class="font-medium text-sm mb-1">
-                      {t().aiPlayground.features.image.title}
-                    </div>
-                    <div class="text-xs text-muted-foreground">
-                      {t().aiPlayground.features.image.description}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle class="text-lg">
+                  {t().aiPlayground.features.code.title}
+                </CardTitle>
+                <CardDescription>
+                  {t().aiPlayground.features.code.description}
+                </CardDescription>
+              </CardHeader>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle class="text-lg">
+                  {t().aiPlayground.features.image.title}
+                </CardTitle>
+                <CardDescription>
+                  {t().aiPlayground.features.image.description}
+                </CardDescription>
+              </CardHeader>
             </Card>
           </div>
         </div>

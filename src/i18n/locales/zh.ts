@@ -259,6 +259,10 @@ export const zh = {
             processing: "处理中...",
             stop: "停止",
         },
+        aichat: {
+            title: "AI Chat",
+            description: "与 AI 进行实时对话，体验智能聊天功能",
+        },
         chat: {
             title: "AI 聊天",
             description: "与 AI 进行实时对话",

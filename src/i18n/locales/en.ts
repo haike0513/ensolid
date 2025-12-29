@@ -259,6 +259,10 @@ export const en = {
       processing: "Processing...",
       stop: "Stop",
     },
+    aichat: {
+      title: "AI Chat",
+      description: "Have real-time conversations with AI and experience intelligent chat features",
+    },
     chat: {
       title: "AI Chat",
       description: "Have real-time conversations with AI",
