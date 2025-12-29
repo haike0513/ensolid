@@ -367,6 +367,41 @@ export * from './components';
 - 组件名：使用 PascalCase
 - 文件名：与组件名保持一致
 
+### SVG 资源管理规范
+
+⚠️ **重要**: 所有 SVG 实现应放在单独的文件夹中统一管理，其他页面通过引入的方式使用。
+
+**目录结构**:
+```
+src/
+├── assets/
+│   └── svg/              # SVG 文件统一存放目录
+│       ├── icon-name.svg
+│       └── logo.svg
+└── components/
+    └── ComponentName.tsx  # 组件中引入 SVG
+```
+
+**使用方式**:
+```tsx
+// ✅ 正确 - 从统一目录引入
+import IconName from '@/assets/svg/icon-name.svg';
+import Logo from '@/assets/svg/logo.svg';
+
+// ❌ 错误 - 不要在组件文件中直接内联 SVG
+const Component = () => {
+  return (
+    <svg>...</svg>  // 不推荐
+  );
+};
+```
+
+**优势**:
+- 统一管理，便于维护和复用
+- 避免 SVG 代码分散在各个组件中
+- 方便进行 SVG 优化和批量处理
+- 提高代码可读性和可维护性
+
 ---
 
 ## 构建配置规范

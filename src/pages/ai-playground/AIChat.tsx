@@ -22,6 +22,7 @@ import {
 import {
     Conversation,
     ConversationContent,
+    ConversationEmptyState,
     ConversationScrollButton,
 } from "@/components/ai-elements/conversation";
 import { Message, MessageContent } from "@/components/ai-elements/message";
@@ -329,6 +330,9 @@ export const AIChat: Component<AIChatProps> = (props) => {
         uiMessages().map(convertUIMessageToMessageType)
     );
 
+    // 检查是否有消息
+    const hasMessages = createMemo(() => messages().length > 0);
+
     const [model, setModel] = createSignal<string>(models[0].id);
     const [modelSelectorOpen, setModelSelectorOpen] = createSignal(false);
     const [text, setText] = createSignal<string>("");
@@ -390,266 +394,336 @@ export const AIChat: Component<AIChatProps> = (props) => {
         });
     };
 
+    // 欢迎图标
+    const WelcomeIcon = () => (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="text-muted-foreground"
+        >
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            <path d="M13 8H7" />
+            <path d="M17 12H7" />
+        </svg>
+    );
+
     return (
-        <div class="relative flex size-full flex-col divide-y overflow-hidden">
-            <Conversation>
-                <ConversationContent>
-                    <For each={messages()}>
-                        {(message) => (
-                            <MessageBranch defaultBranch={0}>
-                                <MessageBranchContent>
-                                    <For each={message.versions}>
-                                        {(version) => (
-                                            <Message from={message.from}>
-                                                <div>
-                                                    <Show
-                                                        when={message.sources
-                                                            ?.length}
-                                                    >
-                                                        <Sources>
-                                                            <SourcesTrigger
-                                                                count={message
-                                                                    .sources!
-                                                                    .length}
-                                                            />
-                                                            <SourcesContent>
-                                                                <For
-                                                                    each={message
-                                                                        .sources}
-                                                                >
-                                                                    {(
-                                                                        source,
-                                                                    ) => (
-                                                                        <Source
-                                                                            href={source
-                                                                                .href}
-                                                                            title={source
-                                                                                .title}
-                                                                        />
-                                                                    )}
-                                                                </For>
-                                                            </SourcesContent>
-                                                        </Sources>
-                                                    </Show>
-                                                    <Show
-                                                        when={message.reasoning}
-                                                    >
-                                                        <Reasoning
-                                                            duration={message
-                                                                .reasoning!
-                                                                .duration}
+        <div class="relative flex size-full flex-col overflow-hidden bg-background">
+            {/* 对话区域 */}
+            <Conversation class="flex-1 bg-background">
+                <ConversationContent class="mx-auto max-w-3xl">
+                    <Show
+                        when={hasMessages()}
+                        fallback={
+                            <ConversationEmptyState
+                                title="欢迎使用 AI 助手"
+                                description="我可以帮助您解答问题、提供建议或进行对话。请在下方输入您的问题，或选择一个建议开始。"
+                                icon={<WelcomeIcon />}
+                            />
+                        }
+                    >
+                        <For each={messages()}>
+                            {(message) => (
+                                <MessageBranch defaultBranch={0}>
+                                    <MessageBranchContent>
+                                        <For each={message.versions}>
+                                            {(version) => (
+                                                <Message from={message.from}>
+                                                    <div class="flex flex-col gap-2">
+                                                        <Show
+                                                            when={message
+                                                                .sources
+                                                                ?.length}
                                                         >
-                                                            <ReasoningTrigger />
-                                                            <ReasoningContent>
-                                                                {message
+                                                            <Sources>
+                                                                <SourcesTrigger
+                                                                    count={message
+                                                                        .sources!
+                                                                        .length}
+                                                                />
+                                                                <SourcesContent>
+                                                                    <For
+                                                                        each={message
+                                                                            .sources}
+                                                                    >
+                                                                        {(
+                                                                            source,
+                                                                        ) => (
+                                                                            <Source
+                                                                                href={source
+                                                                                    .href}
+                                                                                title={source
+                                                                                    .title}
+                                                                            />
+                                                                        )}
+                                                                    </For>
+                                                                </SourcesContent>
+                                                            </Sources>
+                                                        </Show>
+                                                        <Show
+                                                            when={message
+                                                                .reasoning}
+                                                        >
+                                                            <Reasoning
+                                                                duration={message
                                                                     .reasoning!
+                                                                    .duration}
+                                                            >
+                                                                <ReasoningTrigger />
+                                                                <ReasoningContent>
+                                                                    {message
+                                                                        .reasoning!
+                                                                        .content}
+                                                                </ReasoningContent>
+                                                            </Reasoning>
+                                                        </Show>
+                                                        <MessageContent>
+                                                            <MessageResponse>
+                                                                {version
                                                                     .content}
-                                                            </ReasoningContent>
-                                                        </Reasoning>
-                                                    </Show>
-                                                    <MessageContent>
-                                                        <MessageResponse>
-                                                            {version.content}
-                                                        </MessageResponse>
-                                                    </MessageContent>
-                                                </div>
-                                            </Message>
-                                        )}
-                                    </For>
-                                </MessageBranchContent>
-                                <Show
-                                    when={message.versions.length > 1}
-                                >
-                                    <MessageBranchSelector from={message.from}>
-                                        <MessageBranchPrevious />
-                                        <MessageBranchPage />
-                                        <MessageBranchNext />
-                                    </MessageBranchSelector>
-                                </Show>
-                            </MessageBranch>
-                        )}
-                    </For>
+                                                            </MessageResponse>
+                                                        </MessageContent>
+                                                    </div>
+                                                </Message>
+                                            )}
+                                        </For>
+                                    </MessageBranchContent>
+                                    <Show
+                                        when={message.versions.length > 1}
+                                    >
+                                        <MessageBranchSelector
+                                            from={message.from}
+                                        >
+                                            <MessageBranchPrevious />
+                                            <MessageBranchPage />
+                                            <MessageBranchNext />
+                                        </MessageBranchSelector>
+                                    </Show>
+                                </MessageBranch>
+                            )}
+                        </For>
+                    </Show>
                 </ConversationContent>
                 <ConversationScrollButton />
             </Conversation>
-            <div class="grid shrink-0 gap-4 pt-4">
-                <Suggestions class="px-4">
-                    <For each={suggestions}>
-                        {(suggestion) => (
-                            <Suggestion
-                                suggestion={suggestion}
-                                onClick={() =>
-                                    handleSuggestionClick(suggestion)}
-                            />
-                        )}
-                    </For>
-                </Suggestions>
-                <div class="w-full px-4 pb-4">
-                    <PromptInputProvider initialInput={text()}>
-                        <PromptInput
-                            globalDrop
-                            multiple
-                            onSubmit={handleSubmit}
-                        >
-                            <PromptInputHeader>
-                                <PromptInputAttachments>
-                                    {(attachment) => (
-                                        <PromptInputAttachment
-                                            data={attachment}
-                                        />
-                                    )}
-                                </PromptInputAttachments>
-                            </PromptInputHeader>
-                            <PromptInputBody>
-                                <PromptInputTextarea
-                                    onChange={(event) =>
-                                        setText(
-                                            (event
-                                                .target as HTMLTextAreaElement)
-                                                .value,
+
+            {/* 输入区域 */}
+            <div class="shrink-0 border-t bg-background/95 backdrop-blur">
+                {/* 建议提示 - 只在没有消息时显示 */}
+                <Show when={!hasMessages()}>
+                    <div class="mx-auto max-w-3xl px-4 pt-4">
+                        <div class="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            建议问题
+                        </div>
+                        <Suggestions>
+                            <For each={suggestions}>
+                                {(suggestion) => (
+                                    <Suggestion
+                                        suggestion={suggestion}
+                                        onClick={() =>
+                                            handleSuggestionClick(suggestion)}
+                                        variant="outline"
+                                        class="hover:bg-accent hover:text-accent-foreground transition-colors"
+                                    />
+                                )}
+                            </For>
+                        </Suggestions>
+                    </div>
+                </Show>
+
+                {/* 输入框容器 */}
+                <div class="w-full px-4 pb-4 pt-4">
+                    <div class="mx-auto max-w-3xl">
+                        <PromptInputProvider initialInput={text()}>
+                            <PromptInput
+                                globalDrop
+                                multiple
+                                onSubmit={handleSubmit}
+                                class="rounded-xl border bg-card shadow-sm transition-shadow hover:shadow-md focus-within:shadow-md"
+                            >
+                                <PromptInputHeader>
+                                    <PromptInputAttachments>
+                                        {(attachment) => (
+                                            <PromptInputAttachment
+                                                data={attachment}
+                                            />
                                         )}
-                                />
-                            </PromptInputBody>
-                            <PromptInputFooter>
-                                <PromptInputTools>
-                                    <PromptInputActionMenu>
-                                        <PromptInputActionMenuTrigger />
-                                        <PromptInputActionMenuContent>
-                                            <PromptInputActionAddAttachments />
-                                        </PromptInputActionMenuContent>
-                                    </PromptInputActionMenu>
-                                    <PromptInputButton
-                                        onClick={() =>
-                                            setUseMicrophone(!useMicrophone())}
-                                        variant={useMicrophone()
-                                            ? "default"
-                                            : "ghost"}
-                                    >
-                                        <MicIcon size={16} />
-                                        <span class="sr-only">麦克风</span>
-                                    </PromptInputButton>
-                                    <PromptInputButton
-                                        onClick={() =>
-                                            setUseWebSearch(!useWebSearch())}
-                                        variant={useWebSearch()
-                                            ? "default"
-                                            : "ghost"}
-                                    >
-                                        <GlobeIcon size={16} />
-                                        <span>搜索</span>
-                                    </PromptInputButton>
-                                    <ModelSelector
-                                        onOpenChange={setModelSelectorOpen}
-                                        open={modelSelectorOpen()}
-                                    >
-                                        <ModelSelectorTrigger class="h-auto px-2 py-1.5 text-sm font-medium">
-                                            <Show
-                                                when={selectedModelData()
-                                                    ?.chefSlug}
-                                            >
-                                                <ModelSelectorLogo
-                                                    provider={selectedModelData()!
-                                                        .chefSlug}
-                                                />
-                                            </Show>
-                                            <Show
-                                                when={selectedModelData()?.name}
-                                            >
-                                                <ModelSelectorName>
-                                                    {selectedModelData()!.name}
-                                                </ModelSelectorName>
-                                            </Show>
-                                        </ModelSelectorTrigger>
-                                        <ModelSelectorContent>
-                                            <ModelSelectorInput placeholder="搜索模型..." />
-                                            <ModelSelectorList>
-                                                <ModelSelectorEmpty>
-                                                    未找到模型。
-                                                </ModelSelectorEmpty>
-                                                <For
-                                                    each={[
-                                                        "OpenAI",
-                                                        "Anthropic",
-                                                        "Google",
-                                                    ]}
+                                    </PromptInputAttachments>
+                                </PromptInputHeader>
+                                <PromptInputBody>
+                                    <PromptInputTextarea
+                                        placeholder={hasMessages()
+                                            ? "继续对话..."
+                                            : "输入您的问题或想法..."}
+                                        onChange={(event) =>
+                                            setText(
+                                                (event
+                                                    .target as HTMLTextAreaElement)
+                                                    .value,
+                                            )}
+                                        class="min-h-[60px] border-0 bg-transparent px-4 py-3 text-sm focus-visible:ring-0"
+                                    />
+                                </PromptInputBody>
+                                <PromptInputFooter class="border-t bg-muted/30 px-3 py-2">
+                                    <PromptInputTools>
+                                        <PromptInputActionMenu>
+                                            <PromptInputActionMenuTrigger />
+                                            <PromptInputActionMenuContent>
+                                                <PromptInputActionAddAttachments />
+                                            </PromptInputActionMenuContent>
+                                        </PromptInputActionMenu>
+                                        <PromptInputButton
+                                            onClick={() =>
+                                                setUseMicrophone(
+                                                    !useMicrophone(),
+                                                )}
+                                            variant={useMicrophone()
+                                                ? "default"
+                                                : "ghost"}
+                                            size="icon"
+                                            title="语音输入"
+                                        >
+                                            <MicIcon size={16} />
+                                            <span class="sr-only">麦克风</span>
+                                        </PromptInputButton>
+                                        <PromptInputButton
+                                            onClick={() =>
+                                                setUseWebSearch(
+                                                    !useWebSearch(),
+                                                )}
+                                            variant={useWebSearch()
+                                                ? "default"
+                                                : "ghost"}
+                                            size="icon"
+                                            title="网络搜索"
+                                        >
+                                            <GlobeIcon size={16} />
+                                            <span class="sr-only">搜索</span>
+                                        </PromptInputButton>
+                                        <ModelSelector
+                                            onOpenChange={setModelSelectorOpen}
+                                            open={modelSelectorOpen()}
+                                        >
+                                            <ModelSelectorTrigger class="h-8 px-2.5 text-sm font-medium">
+                                                <Show
+                                                    when={selectedModelData()
+                                                        ?.chefSlug}
                                                 >
-                                                    {(chef) => (
-                                                        <div>
-                                                            <div class="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
-                                                                {chef}
-                                                            </div>
-                                                            <ModelSelectorGroup>
-                                                                <For
-                                                                    each={models
-                                                                        .filter(
-                                                                            (
-                                                                                m,
-                                                                            ) => m
-                                                                                .chef ===
-                                                                                chef,
-                                                                        )}
-                                                                >
-                                                                    {(m) => (
-                                                                        <ModelSelectorItem
-                                                                            value={m
-                                                                                .id}
-                                                                            onSelect={() => {
-                                                                                setModel(
-                                                                                    m.id,
-                                                                                );
-                                                                                setModelSelectorOpen(
-                                                                                    false,
-                                                                                );
-                                                                            }}
-                                                                        >
-                                                                            <ModelSelectorLogo
-                                                                                provider={m
-                                                                                    .chefSlug}
-                                                                            />
-                                                                            <ModelSelectorName>
-                                                                                {m.name}
-                                                                            </ModelSelectorName>
-                                                                            <ModelSelectorLogoGroup>
-                                                                                <For
-                                                                                    each={m
-                                                                                        .providers}
-                                                                                >
-                                                                                    {(
-                                                                                        provider,
-                                                                                    ) => (
-                                                                                        <ModelSelectorLogo
-                                                                                            provider={provider}
-                                                                                        />
-                                                                                    )}
-                                                                                </For>
-                                                                            </ModelSelectorLogoGroup>
-                                                                            <Show
-                                                                                when={model() ===
-                                                                                    m.id}
-                                                                                fallback={
-                                                                                    <div class="ml-auto size-4" />
-                                                                                }
+                                                    <ModelSelectorLogo
+                                                        provider={selectedModelData()!
+                                                            .chefSlug}
+                                                    />
+                                                </Show>
+                                                <Show
+                                                    when={selectedModelData()
+                                                        ?.name}
+                                                >
+                                                    <ModelSelectorName>
+                                                        {selectedModelData()!
+                                                            .name}
+                                                    </ModelSelectorName>
+                                                </Show>
+                                            </ModelSelectorTrigger>
+                                            <ModelSelectorContent>
+                                                <ModelSelectorInput placeholder="搜索模型..." />
+                                                <ModelSelectorList>
+                                                    <ModelSelectorEmpty>
+                                                        未找到模型。
+                                                    </ModelSelectorEmpty>
+                                                    <For
+                                                        each={[
+                                                            "OpenAI",
+                                                            "Anthropic",
+                                                            "Google",
+                                                        ]}
+                                                    >
+                                                        {(chef) => (
+                                                            <div>
+                                                                <div class="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                                                                    {chef}
+                                                                </div>
+                                                                <ModelSelectorGroup>
+                                                                    <For
+                                                                        each={models
+                                                                            .filter(
+                                                                                (
+                                                                                    m,
+                                                                                ) => m
+                                                                                    .chef ===
+                                                                                    chef,
+                                                                            )}
+                                                                    >
+                                                                        {(
+                                                                            m,
+                                                                        ) => (
+                                                                            <ModelSelectorItem
+                                                                                value={m
+                                                                                    .id}
+                                                                                onSelect={() => {
+                                                                                    setModel(
+                                                                                        m.id,
+                                                                                    );
+                                                                                    setModelSelectorOpen(
+                                                                                        false,
+                                                                                    );
+                                                                                }}
                                                                             >
-                                                                                <CheckIcon class="ml-auto size-4" />
-                                                                            </Show>
-                                                                        </ModelSelectorItem>
-                                                                    )}
-                                                                </For>
-                                                            </ModelSelectorGroup>
-                                                        </div>
-                                                    )}
-                                                </For>
-                                            </ModelSelectorList>
-                                        </ModelSelectorContent>
-                                    </ModelSelector>
-                                </PromptInputTools>
-                                <PromptInputSubmitWithController
-                                    isLoading={isLoading}
-                                    submitStatus={submitStatus}
-                                />
-                            </PromptInputFooter>
-                        </PromptInput>
-                    </PromptInputProvider>
+                                                                                <ModelSelectorLogo
+                                                                                    provider={m
+                                                                                        .chefSlug}
+                                                                                />
+                                                                                <ModelSelectorName>
+                                                                                    {m.name}
+                                                                                </ModelSelectorName>
+                                                                                <ModelSelectorLogoGroup>
+                                                                                    <For
+                                                                                        each={m
+                                                                                            .providers}
+                                                                                    >
+                                                                                        {(
+                                                                                            provider,
+                                                                                        ) => (
+                                                                                            <ModelSelectorLogo
+                                                                                                provider={provider}
+                                                                                            />
+                                                                                        )}
+                                                                                    </For>
+                                                                                </ModelSelectorLogoGroup>
+                                                                                <Show
+                                                                                    when={model() ===
+                                                                                        m.id}
+                                                                                    fallback={
+                                                                                        <div class="ml-auto size-4" />
+                                                                                    }
+                                                                                >
+                                                                                    <CheckIcon class="ml-auto size-4" />
+                                                                                </Show>
+                                                                            </ModelSelectorItem>
+                                                                        )}
+                                                                    </For>
+                                                                </ModelSelectorGroup>
+                                                            </div>
+                                                        )}
+                                                    </For>
+                                                </ModelSelectorList>
+                                            </ModelSelectorContent>
+                                        </ModelSelector>
+                                    </PromptInputTools>
+                                    <PromptInputSubmitWithController
+                                        isLoading={isLoading}
+                                        submitStatus={submitStatus}
+                                    />
+                                </PromptInputFooter>
+                            </PromptInput>
+                        </PromptInputProvider>
+                    </div>
                 </div>
             </div>
         </div>
