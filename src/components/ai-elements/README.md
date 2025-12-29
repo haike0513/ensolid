@@ -131,7 +131,7 @@ function App() {
 - `MessageBranchPrevious` - 上一个分支按钮
 - `MessageBranchNext` - 下一个分支按钮
 - `MessageBranchPage` - 分支页码显示
-- `MessageResponse` - 消息响应内容（支持 markdown）
+- `MessageResponse` - 消息响应内容（支持 markdown，已集成 @ensolid/streamdown 进行流式渲染）
 - `MessageAttachment` - 附件显示
 - `MessageAttachments` - 附件列表容器
 - `MessageToolbar` - 工具栏
