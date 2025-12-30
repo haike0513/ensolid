@@ -4,7 +4,7 @@
  * 用于显示单条聊天消息的组件，支持分支、附件等功能
  */
 
-import type { Component, JSX } from "solid-js";
+import type { Component, JSX, ComponentProps } from "solid-js";
 import {
   children as solidChildren,
   createContext,
@@ -106,7 +106,7 @@ export const Message: Component<MessageProps> = (props) => {
       class={cn(
         "group flex w-full max-w-[95%] flex-col gap-2",
         local.from === "user" ? "is-user ml-auto justify-end" : "is-assistant",
-        local.class,
+        local.class
       )}
       {...others}
     />
@@ -124,7 +124,7 @@ export const MessageContent: Component<MessageContentProps> = (props) => {
         "is-user:dark flex w-fit max-w-full min-w-0 flex-col gap-2 overflow-hidden text-sm",
         "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
         "group-[.is-assistant]:text-foreground",
-        local.class,
+        local.class
       )}
       {...others}
     >
@@ -208,7 +208,7 @@ const useMessageBranch = () => {
   const context = useContext(MessageBranchContext);
   if (!context) {
     throw new Error(
-      "MessageBranch components must be used within MessageBranch",
+      "MessageBranch components must be used within MessageBranch"
     );
   }
   return context;
@@ -227,7 +227,7 @@ export const MessageBranch: Component<MessageBranchProps> = (props) => {
     "children",
   ]);
   const [currentBranch, setCurrentBranch] = createSignal(
-    local.defaultBranch ?? 0,
+    local.defaultBranch ?? 0
   );
   const [branches, setBranches] = createSignal<JSX.Element[]>([]);
 
@@ -272,7 +272,7 @@ export const MessageBranch: Component<MessageBranchProps> = (props) => {
 export type MessageBranchContentProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const MessageBranchContent: Component<MessageBranchContentProps> = (
-  props,
+  props
 ) => {
   const { currentBranch, setBranches, branches } = useMessageBranch();
   const resolvedChildren = solidChildren(() => props.children);
@@ -283,8 +283,8 @@ export const MessageBranchContent: Component<MessageBranchContentProps> = (
       const array = Array.isArray(childrenArray)
         ? childrenArray
         : [childrenArray];
-      const elements = array.filter((child) =>
-        child != null && typeof child === "object"
+      const elements = array.filter(
+        (child) => child != null && typeof child === "object"
       ) as JSX.Element[];
       if (elements.length !== branches().length) {
         setBranches(elements);
@@ -298,7 +298,7 @@ export const MessageBranchContent: Component<MessageBranchContentProps> = (
         <div
           class={cn(
             "grid gap-2 overflow-hidden [&>div]:pb-0",
-            index() === currentBranch() ? "block" : "hidden",
+            index() === currentBranch() ? "block" : "hidden"
           )}
         >
           {branch}
@@ -313,7 +313,7 @@ export type MessageBranchSelectorProps = JSX.HTMLAttributes<HTMLDivElement> & {
 };
 
 export const MessageBranchSelector: Component<MessageBranchSelectorProps> = (
-  props,
+  props
 ) => {
   const { totalBranches } = useMessageBranch();
   const [local, others] = splitProps(props, ["class", "from"]);
@@ -327,19 +327,18 @@ export const MessageBranchSelector: Component<MessageBranchSelectorProps> = (
     <div
       class={cn(
         "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md flex",
-        local.class,
+        local.class
       )}
       {...others}
     />
   );
 };
 
-export type MessageBranchPreviousProps = JSX.ButtonHTMLAttributes<
-  HTMLButtonElement
->;
+export type MessageBranchPreviousProps =
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const MessageBranchPrevious: Component<MessageBranchPreviousProps> = (
-  props,
+  props
 ) => {
   const { goToPrevious, totalBranches } = useMessageBranch();
   const [local, others] = splitProps(props, ["children"]);
@@ -359,9 +358,8 @@ export const MessageBranchPrevious: Component<MessageBranchPreviousProps> = (
   );
 };
 
-export type MessageBranchNextProps = JSX.ButtonHTMLAttributes<
-  HTMLButtonElement
->;
+export type MessageBranchNextProps =
+  JSX.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export const MessageBranchNext: Component<MessageBranchNextProps> = (props) => {
   const { goToNext, totalBranches } = useMessageBranch();
@@ -392,7 +390,7 @@ export const MessageBranchPage: Component<MessageBranchPageProps> = (props) => {
     <span
       class={cn(
         "border-none bg-transparent text-muted-foreground shadow-none px-3 py-1.5 text-sm",
-        local.class,
+        local.class
       )}
       {...others}
     >
@@ -403,100 +401,19 @@ export const MessageBranchPage: Component<MessageBranchPageProps> = (props) => {
 
 import { Streamdown } from "@ensolid/streamdown";
 
-export type MessageResponseProps = JSX.HTMLAttributes<HTMLDivElement> & {
-  children?: JSX.Element | string;
-  /**
-   * 是否使用流式渲染模式（默认：true，适合 AI 流式响应）
-   */
-  streaming?: boolean;
-  /**
-   * 是否解析不完整的 markdown（默认：true，适合流式内容）
-   */
-  parseIncompleteMarkdown?: boolean;
-};
+export type MessageResponseProps = ComponentProps<typeof Streamdown>;
 
-// 使用 Streamdown 进行 markdown 渲染的组件
 export const MessageResponse: Component<MessageResponseProps> = (props) => {
-  const [local, others] = splitProps(props, [
-    "class",
-    "children",
-    "streaming",
-    "parseIncompleteMarkdown",
-  ]);
-
-  const streaming = () => local.streaming ?? true;
-  const parseIncomplete = () => local.parseIncompleteMarkdown ?? true;
-
-  // 使用 solidChildren 解析 children，支持字符串和 JSX 元素
-  const resolvedChildren = solidChildren(() => local.children);
-
-  // 提取字符串内容用于 Streamdown 渲染
-  const markdownContent = () => {
-    const children = resolvedChildren();
-
-    // 如果直接是字符串，直接返回
-    if (typeof children === "string") {
-      return children;
-    }
-
-    // 如果是数组，提取所有字符串并合并
-    if (Array.isArray(children)) {
-      const textParts = children
-        .map((c) => (typeof c === "string" ? c : ""))
-        .filter((c) => c.length > 0);
-      return textParts.length > 0 ? textParts.join("") : "";
-    }
-
-    // 其他情况返回空字符串
-    return "";
-  };
-
-  // 判断是否有可渲染的 markdown 内容
-  const hasMarkdownContent = () => {
-    const content = markdownContent();
-    return content.length > 0;
-  };
+  const [local, others] = splitProps(props, ["class"]);
 
   return (
-    <div
+    <Streamdown
       class={cn(
         "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
-        local.class,
+        local.class
       )}
       {...others}
-    >
-      <Show
-        when={hasMarkdownContent()}
-        fallback={
-          // 如果没有 markdown 内容，直接渲染原始 children
-
-            <div class="prose prose-sm max-w-none dark:prose-invert">
-              {resolvedChildren()}
-            </div>
-
-        }
-      >
-        <Streamdown
-          mode={streaming() ? "streaming" : "static"}
-          parseIncompleteMarkdown={parseIncomplete()}
-          class="prose prose-sm max-w-none dark:prose-invert
-            prose-headings:font-semibold
-            prose-p:leading-relaxed
-            prose-pre:bg-muted
-            prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-            prose-a:text-primary prose-a:underline
-            prose-strong:font-semibold
-            prose-ul:list-disc prose-ul:pl-6
-            prose-ol:list-decimal prose-ol:pl-6
-            prose-blockquote:border-l-4 prose-blockquote:border-muted-foreground prose-blockquote:pl-4 prose-blockquote:italic
-            prose-table:border-collapse prose-table:border prose-table:border-border
-            prose-th:border prose-th:border-border prose-th:p-2 prose-th:bg-muted
-            prose-td:border prose-td:border-border prose-td:p-2"
-        >
-          {markdownContent()}
-        </Streamdown>
-      </Show>
-    </div>
+    />
   );
 };
 
@@ -508,9 +425,10 @@ export type MessageAttachmentProps = JSX.HTMLAttributes<HTMLDivElement> & {
 export const MessageAttachment: Component<MessageAttachmentProps> = (props) => {
   const [local, others] = splitProps(props, ["data", "onRemove", "class"]);
   const filename = local.data.filename || "";
-  const mediaType = local.data.mediaType?.startsWith("image/") && local.data.url
-    ? "image"
-    : "file";
+  const mediaType =
+    local.data.mediaType?.startsWith("image/") && local.data.url
+      ? "image"
+      : "file";
   const isImage = mediaType === "image";
   const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
 
@@ -518,7 +436,7 @@ export const MessageAttachment: Component<MessageAttachmentProps> = (props) => {
     <div
       class={cn(
         "group relative size-24 overflow-hidden rounded-lg",
-        local.class,
+        local.class
       )}
       {...others}
     >
@@ -584,7 +502,7 @@ export const MessageAttachment: Component<MessageAttachmentProps> = (props) => {
 export type MessageAttachmentsProps = JSX.HTMLAttributes<HTMLDivElement>;
 
 export const MessageAttachments: Component<MessageAttachmentsProps> = (
-  props,
+  props
 ) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
@@ -594,10 +512,7 @@ export const MessageAttachments: Component<MessageAttachmentsProps> = (
 
   return (
     <div
-      class={cn(
-        "ml-auto flex w-fit flex-wrap items-start gap-2",
-        local.class,
-      )}
+      class={cn("ml-auto flex w-fit flex-wrap items-start gap-2", local.class)}
       {...others}
     >
       {local.children}
@@ -614,7 +529,7 @@ export const MessageToolbar: Component<MessageToolbarProps> = (props) => {
     <div
       class={cn(
         "mt-4 flex w-full items-center justify-between gap-4",
-        local.class,
+        local.class
       )}
       {...others}
     >

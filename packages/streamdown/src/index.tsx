@@ -41,17 +41,17 @@ export { parseMarkdownIntoBlocks } from "./lib/parse-blocks";
 export type ControlsConfig =
   | boolean
   | {
-    table?: boolean;
-    code?: boolean;
-    mermaid?:
-      | boolean
-      | {
-        download?: boolean;
-        copy?: boolean;
-        fullscreen?: boolean;
-        panZoom?: boolean;
-      };
-  };
+      table?: boolean;
+      code?: boolean;
+      mermaid?:
+        | boolean
+        | {
+            download?: boolean;
+            copy?: boolean;
+            fullscreen?: boolean;
+            panZoom?: boolean;
+          };
+    };
 
 export type MermaidErrorComponentProps = {
   error: string;
@@ -132,7 +132,7 @@ const defaultStreamdownContext: StreamdownContextType = {
 };
 
 export const StreamdownContext = createContext<StreamdownContextType>(
-  defaultStreamdownContext,
+  defaultStreamdownContext
 );
 
 type BlockProps = Options & {
@@ -152,7 +152,7 @@ const defaultShikiTheme: [BundledTheme, BundledTheme] = [
 
 // Helper functions to reduce complexity
 const checkKatexPlugin = (
-  rehypePlugins: Pluggable[] | null | undefined,
+  rehypePlugins: Pluggable[] | null | undefined
 ): boolean =>
   Array.isArray(rehypePlugins) &&
   rehypePlugins.some((plugin) =>
@@ -160,7 +160,7 @@ const checkKatexPlugin = (
   );
 
 const checkSingleDollarEnabled = (
-  remarkPlugins: Pluggable[] | null | undefined,
+  remarkPlugins: Pluggable[] | null | undefined
 ): boolean => {
   if (!Array.isArray(remarkPlugins)) {
     return false;
@@ -180,10 +180,11 @@ const checkSingleDollarEnabled = (
 
 const checkMathSyntax = (
   content: string,
-  singleDollarEnabled: boolean,
+  singleDollarEnabled: boolean
 ): boolean => {
   const hasDoubleDollar = content.includes("$$");
-  const hasSingleDollar = singleDollarEnabled &&
+  const hasSingleDollar =
+    singleDollarEnabled &&
     (MIDDLE_DOLLAR_PATTERN.test(content) ||
       START_DOLLAR_PATTERN.test(content) ||
       END_DOLLAR_PATTERN.test(content));
@@ -286,8 +287,8 @@ export const Streamdown: Component<StreamdownProps> = (props) => {
   const style = createMemo(() =>
     caret() && isAnimating()
       ? ({
-        "--streamdown-caret": `"${carets[caret()!]}"`,
-      } as JSX.CSSProperties)
+          "--streamdown-caret": `"${carets[caret()!]}"`,
+        } as JSX.CSSProperties)
       : undefined
   );
 
@@ -300,7 +301,7 @@ export const Streamdown: Component<StreamdownProps> = (props) => {
           caret()
             ? "*:last:after:inline *:last:after:align-baseline *:last:after:content-(--streamdown-caret)"
             : null,
-          className(),
+          className()
         )}
         style={style()}
       >
@@ -309,25 +310,26 @@ export const Streamdown: Component<StreamdownProps> = (props) => {
           fallback={
             // Streaming mode: parse into blocks - use For component for better performance
 
-              <For each={blocksToRender()}>
-                {(block, index) => {
-                  const BlockComp = BlockComponent();
-                  return (
-                    <BlockComp
-                      components={mergedComponents()}
-                      content={block}
-                      index={index()}
-                      rehypePlugins={props.rehypePlugins ??
-                        defaultRehypePluginsArray}
-                      remarkPlugins={props.remarkPlugins ??
-                        defaultRemarkPluginsArray}
-                      shouldParseIncompleteMarkdown={shouldParseIncompleteMarkdown()}
-                      remarkRehypeOptions={props.remarkRehypeOptions}
-                    />
-                  );
-                }}
-              </For>
-
+            <For each={blocksToRender()}>
+              {(block, index) => {
+                const BlockComp = BlockComponent();
+                return (
+                  <BlockComp
+                    components={mergedComponents()}
+                    content={block}
+                    index={index()}
+                    rehypePlugins={
+                      props.rehypePlugins ?? defaultRehypePluginsArray
+                    }
+                    remarkPlugins={
+                      props.remarkPlugins ?? defaultRemarkPluginsArray
+                    }
+                    shouldParseIncompleteMarkdown={shouldParseIncompleteMarkdown()}
+                    remarkRehypeOptions={props.remarkRehypeOptions}
+                  />
+                );
+              }}
+            </For>
           }
         >
           <Markdown
