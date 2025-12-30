@@ -21,7 +21,9 @@
     "dev:streamdown": "pnpm --filter @ensolid/streamdown dev",
     "publish": "pnpm -r --filter './packages/*' publish",
     "publish:baseui": "pnpm --filter @ensolid/baseui publish",
+    "publish:remend": "pnpm --filter @ensolid/remend publish",
     "publish:radix": "pnpm --filter @ensolid/radix publish",
+    "publish:streamdown": "pnpm --filter @ensolid/streamdown publish",
     "publish:solidflow": "pnpm --filter @ensolid/solidflow publish",
     "publish:aisolid": "pnpm --filter @ensolid/aisolid publish"
   },
