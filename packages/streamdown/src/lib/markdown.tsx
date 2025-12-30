@@ -1,7 +1,8 @@
 // @ts-ignore - hast types are available via hast-util-to-jsx-runtime
 import type { Element, Nodes } from "hast";
 import { toJsxRuntime } from "hast-util-to-jsx-runtime";
-import type { Component, JSX } from "solid-js";
+import { createComponent, createMemo, type Component, type JSX } from "solid-js";
+import { Dynamic } from "solid-js/web";
 import remarkParse from "remark-parse";
 import type { Options as RemarkRehypeOptions } from "remark-rehype";
 import remarkRehype from "remark-rehype";
@@ -13,9 +14,11 @@ import { unified } from "unified";
 // but we need a component function for hast-util-to-jsx-runtime
 // SolidJS only supports <>...</> syntax in JSX, not Fragment as a component
 // However, for hast-util-to-jsx-runtime compatibility, we create a Fragment component
+// Fragment component for SolidJS - returns children as-is
 const Fragment: Component<{ children?: JSX.Element }> = (props) => {
-  return props.children as JSX.Element;
+  return props.children as any;
 };
+
 
 export type ExtraProps = {
   node?: Element | undefined;
@@ -163,14 +166,15 @@ class ProcessorCache {
 // Global processor cache instance
 const processorCache = new ProcessorCache();
 
-export const Markdown = (options: Readonly<Options>) => {
-  const processor = getCachedProcessor(options);
-  const content = options.children || "";
-  return post(
-    // biome-ignore lint/suspicious/noExplicitAny: runSync return type varies with processor configuration
-    processor.runSync(processor.parse(content), content) as any,
-    options,
-  );
+export const Markdown: Component<Options> = (props) => {
+  const content = createMemo(() => {
+    const processor = getCachedProcessor(props);
+    const text = props.children || "";
+    const tree = processor.runSync(processor.parse(text), text);
+    return post(tree as any, props);
+  });
+
+  return <>{content()}</>;
 };
 
 const getCachedProcessor = (options: Readonly<Options>) => {
@@ -217,52 +221,32 @@ const convertProps = (props: Record<string, any>): Record<string, any> => {
 // In SolidJS, JSX elements are functions that return DOM nodes or components
 // We create a function that SolidJS's renderer can execute
 const createJsxAdapter = () => {
-  return (type: any, props: any, ...children: any[]) => {
-    // Handle Fragment specially - in SolidJS, Fragment should return children directly
+  return (type: any, props: any, key: any) => {
+    const { children, ...rest } = props || {};
+    const convertedProps = convertProps(rest);
+
+    if (key !== undefined) {
+      convertedProps.key = key;
+    }
+
     if (type === Fragment) {
-      const flatChildren = children.flat(Infinity).filter((c) => c != null);
-      // For Fragment, return children directly (SolidJS Fragment behavior)
-      return flatChildren.length === 1 ? flatChildren[0] : flatChildren;
+      return children;
     }
 
-    const convertedProps = convertProps(props || {});
-    // Flatten children array
-    const flatChildren = children.flat(Infinity).filter((c) => c != null);
-
-    // In SolidJS, JSX elements are functions that create DOM nodes
-    // For string types (HTML elements), we need to return a JSX element
-    // that SolidJS can render
     if (typeof type === "string") {
-      // For SolidJS, we need to return a function that creates the element
-      // SolidJS JSX runtime expects elements to be functions
-      // We'll use a template function that SolidJS can process
-      return (() => {
-        // Create the element using SolidJS's JSX pattern
-        // This will be processed by SolidJS's JSX runtime during rendering
-        const elementProps = { ...convertedProps };
-        if (flatChildren.length > 0) {
-          elementProps.children = flatChildren.length === 1
-            ? flatChildren[0]
-            : flatChildren;
-        }
-        // Return a function that SolidJS can call to create the element
-        // This matches SolidJS's JSX element structure
-        return {
-          __solidjs_element: true,
-          type,
-          props: elementProps,
-        };
-      }) as unknown as JSX.Element;
+      return () =>
+        createComponent(Dynamic, {
+          component: type,
+          ...convertedProps,
+          children,
+        });
     }
 
-    // For components, call them with props and children
-    // SolidJS components receive props as first argument
-    if (flatChildren.length > 0) {
-      convertedProps.children = flatChildren.length === 1
-        ? flatChildren[0]
-        : flatChildren;
-    }
-    return type(convertedProps) as JSX.Element;
+    return () =>
+      createComponent(type, {
+        ...convertedProps,
+        children,
+      });
   };
 };
 
