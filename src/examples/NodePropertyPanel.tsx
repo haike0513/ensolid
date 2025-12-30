@@ -1,5 +1,5 @@
 import type { Component } from "solid-js";
-import { For, Show } from "solid-js";
+import { For, Show, Match, Switch } from "solid-js";
 import type { Node } from "@ensolid/solidflow";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { pluginRegistry } from "@/pages/workflow/plugins";
 
 export interface NodePropertyPanelProps {
   node: Node;
@@ -32,6 +33,14 @@ export const NodePropertyPanel: Component<NodePropertyPanelProps> = (props) => {
   };
 
   const getNodeTypeLabel = (type?: string) => {
+    if (!type) return "Node Properties";
+    
+    const nodeDef = pluginRegistry.getNodeDefinition(type);
+    if (nodeDef) {
+      return nodeDef.label;
+    }
+    
+    // 回退到默认标签
     switch (type) {
       case "agent":
         return "Agent Node";
@@ -46,23 +55,48 @@ export const NodePropertyPanel: Component<NodePropertyPanelProps> = (props) => {
     }
   };
 
+  // 获取节点定义
+  const nodeDef = () => {
+    if (!props.node.type) return undefined;
+    return pluginRegistry.getNodeDefinition(props.node.type);
+  };
+
+  // 获取节点图标
+  const getNodeIcon = () => {
+    const def = nodeDef();
+    if (def?.icon) {
+      if (typeof def.icon === "string") {
+        return def.icon;
+      }
+      // JSX.Element 会在渲染时处理
+      return null;
+    }
+    // 回退到默认图标
+    return null;
+  };
+
   return (
     <div class="absolute top-4 right-4 w-80 bg-white border rounded-lg shadow-xl p-4 z-[60] pointer-events-auto solidflow-panel animate-in fade-in slide-in-from-right-4 h-[calc(100vh-2rem)] overflow-y-auto">
       <div class="flex items-center justify-between mb-6 border-b pb-4">
         <div class="flex items-center gap-2">
           <div class="w-8 h-8 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center">
-            <Show when={props.node.type === "agent"}>🤖</Show>
-            <Show when={props.node.type === "task"}>📋</Show>
-            <Show when={props.node.type === "tool"}>🛠️</Show>
-            <Show when={props.node.type === "trigger"}>🚀</Show>
-            <Show
-              when={
-                !["agent", "task", "tool", "trigger"].includes(
-                  props.node.type || ""
-                )
-              }
-            >
-              📦
+            <Show when={typeof getNodeIcon() === "string"}>
+              {getNodeIcon() as string}
+            </Show>
+            <Show when={getNodeIcon() === null}>
+              <Show when={props.node.type === "agent"}>🤖</Show>
+              <Show when={props.node.type === "task"}>📋</Show>
+              <Show when={props.node.type === "tool"}>🛠️</Show>
+              <Show when={props.node.type === "trigger"}>🚀</Show>
+              <Show
+                when={
+                  !["agent", "task", "tool", "trigger"].includes(
+                    props.node.type || ""
+                  )
+                }
+              >
+                📦
+              </Show>
             </Show>
           </div>
           <div>
@@ -84,25 +118,45 @@ export const NodePropertyPanel: Component<NodePropertyPanelProps> = (props) => {
       </div>
 
       <div class="space-y-6">
-        <div>
-          <h4 class="font-semibold mb-4 text-sm uppercase text-gray-500">
-            Configuration
-          </h4>
+        <Switch>
+          <Match when={nodeDef()?.propertyPanel}>
+            {/* 使用插件的自定义属性面板 */}
+            {(() => {
+              const CustomPanel = nodeDef()!.propertyPanel!;
+              return (
+                <CustomPanel
+                  node={props.node}
+                  onUpdate={(data) => {
+                    props.onUpdate(props.node.id, {
+                      ...props.node.data,
+                      ...data,
+                    });
+                  }}
+                />
+              );
+            })()}
+          </Match>
+          <Match when={!nodeDef()?.propertyPanel}>
+            {/* 默认属性面板 */}
+            <div>
+              <h4 class="font-semibold mb-4 text-sm uppercase text-gray-500">
+                Configuration
+              </h4>
 
-          <div class="space-y-4">
-            {/* Common: Label/Name */}
-            <div class="space-y-2">
-              <Label>Name</Label>
-              <input
-                type="text"
-                class={inputClass}
-                value={props.node.data?.label || ""}
-                onInput={(e) => updateData("label", e.currentTarget.value)}
-                placeholder="Node Name"
-              />
-            </div>
+              <div class="space-y-4">
+                {/* Common: Label/Name */}
+                <div class="space-y-2">
+                  <Label>Name</Label>
+                  <input
+                    type="text"
+                    class={inputClass}
+                    value={props.node.data?.label || ""}
+                    onInput={(e) => updateData("label", e.currentTarget.value)}
+                    placeholder="Node Name"
+                  />
+                </div>
 
-            {/* Agent Specific */}
+                {/* Agent Specific */}
             <Show
               when={
                 props.node.type === "agent" || props.node.type === "default"
@@ -214,8 +268,10 @@ export const NodePropertyPanel: Component<NodePropertyPanelProps> = (props) => {
                 </div>
               </div>
             </Show>
-          </div>
-        </div>
+              </div>
+            </div>
+          </Match>
+        </Switch>
 
         {/* Metadata section */}
         <div class="pt-4 border-t border-gray-100">

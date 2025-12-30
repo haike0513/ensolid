@@ -19,13 +19,18 @@ import {
   type FlowInstance,
 } from "@ensolid/solidflow";
 import { NodePropertyPanel } from "../examples/NodePropertyPanel";
-import { AgentNode, TaskNode, TriggerNode, ToolNode } from "./workflow/nodes";
 import { WorkflowMenu } from "./workflow/components/WorkflowMenu";
 import { WorkflowToolbar } from "./workflow/components/WorkflowToolbar";
+import { pluginRegistry } from "./workflow/plugins";
+import { registerBuiltinNodes } from "./workflow/plugins/builtin";
+
+// 初始化内置节点插件（在模块加载时注册）
+registerBuiltinNodes();
 
 // --- Main Page ---
 
 export const WorkflowPage: Component = () => {
+
   const [nodes, setNodes] = createStore<Node[]>([
     {
       id: "trigger-1",
@@ -117,15 +122,12 @@ export const WorkflowPage: Component = () => {
     });
 
     const id = `${type}-${Date.now()}`;
-    let data = { label: `New ${type}` };
-
-    if (type === "agent")
-      data = { label: "New Agent", role: "Assistant" } as any;
-    if (type === "task")
-      data = { label: "New Task", description: "Task description..." } as any;
-    if (type === "tool")
-      data = { label: "New Tool", description: "Tool..." } as any;
-    if (type === "trigger") data = { label: "Start" } as any;
+    
+    // 从插件系统获取节点定义
+    const nodeDef = pluginRegistry.getNodeDefinition(type);
+    const data = nodeDef?.createNodeData
+      ? nodeDef.createNodeData(type)
+      : nodeDef?.defaultData || { label: `New ${type}` };
 
     setNodes((nds) => [
       ...nds,
@@ -207,12 +209,8 @@ export const WorkflowPage: Component = () => {
     reader.readAsText(file);
   };
 
-  const nodeTypes = {
-    agent: AgentNode,
-    task: TaskNode,
-    trigger: TriggerNode,
-    tool: ToolNode,
-  };
+  // 从插件系统获取所有节点组件
+  const nodeTypes = pluginRegistry.getAllNodeComponents();
 
   createEffect(() => {
     console.log("selectedNode", selectedNode());

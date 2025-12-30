@@ -6,6 +6,13 @@ import type { Component } from "solid-js";
 import { createSignal, onMount } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Button } from "./ui/button";
 
 export const Header: Component = () => {
   const location = useLocation();
@@ -49,6 +56,8 @@ export const Header: Component = () => {
             <A href="/" class="flex items-center gap-2">
               <img src="/ensolid-logo.svg" alt="Ensolid Logo" class="w-8 h-8" />
             </A>
+            
+            {/* 桌面端导航菜单 */}
             <nav class="hidden md:flex items-center gap-6">
               <A
                 href="/docs"
@@ -115,6 +124,93 @@ export const Header: Component = () => {
                 AI Playground
               </A>
             </nav>
+
+            {/* 移动端下拉菜单 */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  class="md:hidden"
+                  aria-label="打开导航菜单"
+                >
+                  <svg
+                    class="h-6 w-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent class="w-48">
+                <DropdownMenuItem
+                  class={isActive("/docs") ? "bg-accent text-accent-foreground" : ""}
+                >
+                  <A href="/docs" class="w-full block">
+                    Docs
+                  </A>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  class={
+                    isActive("/components") ? "bg-accent text-accent-foreground" : ""
+                  }
+                >
+                  <A href="/components" class="w-full block">
+                    Components
+                  </A>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  class={isActive("/blocks") ? "bg-accent text-accent-foreground" : ""}
+                >
+                  <A href="/blocks" class="w-full block">
+                    Blocks
+                  </A>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  class={isActive("/charts") ? "bg-accent text-accent-foreground" : ""}
+                >
+                  <A href="/charts" class="w-full block">
+                    Charts
+                  </A>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  class={
+                    isActive("/solidflow") ? "bg-accent text-accent-foreground" : ""
+                  }
+                >
+                  <A href="/solidflow" class="w-full block">
+                    SolidFlow
+                  </A>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  class={
+                    isActive("/workflow") ? "bg-accent text-accent-foreground" : ""
+                  }
+                >
+                  <A href="/workflow" class="w-full block">
+                    Workflow
+                  </A>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  class={
+                    isActive("/ai-playground")
+                      ? "bg-accent text-accent-foreground"
+                      : ""
+                  }
+                >
+                  <A href="/ai-playground" class="w-full block">
+                    AI Playground
+                  </A>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* 右侧操作 */}
@@ -162,39 +258,6 @@ export const Header: Component = () => {
 
             <div class="h-4 w-px bg-border" />
 
-            {/* 设置按钮 */}
-            <A
-              href="/settings"
-              class={`inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9 ${
-                isActive("/settings")
-                  ? "bg-accent text-accent-foreground"
-                  : ""
-              }`}
-              aria-label="设置"
-            >
-              <svg
-                class="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
-            </A>
-
-            <div class="h-4 w-px bg-border" />
-
             {/* 主题切换按钮 */}
             <button
               type="button"
@@ -216,28 +279,6 @@ export const Header: Component = () => {
               </svg>
             </button>
 
-            <div class="h-4 w-px bg-border" />
-
-            {/* New Project 按钮 */}
-            <button
-              type="button"
-              class="inline-flex items-center justify-center rounded-md bg-gray-900 text-white px-4 py-2 text-sm font-medium hover:bg-gray-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <svg
-                class="mr-2 h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-              New Project
-            </button>
           </div>
         </div>
       </div>

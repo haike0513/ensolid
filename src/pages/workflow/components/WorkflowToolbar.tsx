@@ -1,6 +1,7 @@
 import type { Component, Setter, Accessor } from "solid-js";
-import { createSignal, Show } from "solid-js";
+import { createSignal, Show, For } from "solid-js";
 import { Panel, type PanelPosition } from "@ensolid/solidflow";
+import { pluginRegistry } from "../plugins";
 
 interface WorkflowToolbarProps {
   isLocked: Accessor<boolean>;
@@ -11,6 +12,9 @@ interface WorkflowToolbarProps {
 export const WorkflowToolbar: Component<WorkflowToolbarProps> = (props) => {
   const [toolbarPos, setToolbarPos] = createSignal<PanelPosition>("top-center");
   const [isDraggingToolbar, setIsDraggingToolbar] = createSignal(false);
+  
+  // 获取所有注册的节点定义（在渲染时获取，确保插件已注册）
+  const nodeDefinitions = () => Array.from(pluginRegistry.getNodeTypes().values());
 
   const handleToolbarDragStart = (e: MouseEvent) => {
     // Prevent interfering with node dragging
@@ -194,118 +198,26 @@ export const WorkflowToolbar: Component<WorkflowToolbarProps> = (props) => {
           }`}
         ></div>
 
-        {/* Draggable Nodes */}
-
-        {/* Agent Node */}
-        <div
-          class="p-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-grab active:cursor-grabbing relative group transition-colors"
-          title="Agent Node"
-          draggable={true}
-          onDragStart={(e) => props.onNodeDragStart(e, "agent")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M12 8V4H8" />
-            <rect width="16" height="12" x="4" y="8" rx="2" />
-            <path d="M2 14h2" />
-            <path d="M20 14h2" />
-            <path d="M15 13v2" />
-            <path d="M9 13v2" />
-          </svg>
-          <span class="absolute -bottom-1 -right-1 text-[8px] font-bold text-gray-400">
-            1
-          </span>
-        </div>
-
-        {/* Task Node */}
-        <div
-          class="p-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-grab active:cursor-grabbing relative group transition-colors"
-          title="Task Node"
-          draggable={true}
-          onDragStart={(e) => props.onNodeDragStart(e, "task")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />
-            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-            <path d="M12 11h4" />
-            <path d="M12 16h4" />
-            <path d="M8 11h.01" />
-            <path d="M8 16h.01" />
-          </svg>
-          <span class="absolute -bottom-1 -right-1 text-[8px] font-bold text-gray-400">
-            2
-          </span>
-        </div>
-
-        {/* Tool Node */}
-        <div
-          class="p-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-grab active:cursor-grabbing relative group transition-colors"
-          title="Tool Node"
-          draggable={true}
-          onDragStart={(e) => props.onNodeDragStart(e, "tool")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-          </svg>
-          <span class="absolute -bottom-1 -right-1 text-[8px] font-bold text-gray-400">
-            3
-          </span>
-        </div>
-
-        {/* Trigger Node */}
-        <div
-          class="p-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-grab active:cursor-grabbing relative group transition-colors"
-          title="Trigger Node"
-          draggable={true}
-          onDragStart={(e) => props.onNodeDragStart(e, "trigger")}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="m10 8 6 4-6 4V8z" />
-          </svg>
-          <span class="absolute -bottom-1 -right-1 text-[8px] font-bold text-gray-400">
-            4
-          </span>
-        </div>
+        {/* Draggable Nodes - 动态生成 */}
+        <For each={nodeDefinitions()}>
+          {(nodeDef, index) => (
+            <div
+              class="p-2 rounded-lg hover:bg-gray-100 text-gray-700 cursor-grab active:cursor-grabbing relative group transition-colors"
+              title={nodeDef.toolbar?.title || nodeDef.label}
+              draggable={true}
+              onDragStart={(e) => props.onNodeDragStart(e, nodeDef.type)}
+            >
+              {nodeDef.toolbar?.icon || (
+                <div class="w-[18px] h-[18px] flex items-center justify-center text-lg">
+                  {typeof nodeDef.icon === "string" ? nodeDef.icon : nodeDef.icon}
+                </div>
+              )}
+              <span class="absolute -bottom-1 -right-1 text-[8px] font-bold text-gray-400">
+                {index() + 1}
+              </span>
+            </div>
+          )}
+        </For>
 
         <div
           class={`bg-gray-200 mx-1 ${
