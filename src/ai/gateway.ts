@@ -8,9 +8,6 @@ import { getAIGatewayApiKey } from "./config";
 export function getGateway() {
     const apiKey = getAIGatewayApiKey();
     console.log("apiKey", apiKey);
-    if (!apiKey) {
-        throw new Error("AI Gateway API Key is not set");
-    }
     return createGateway({
         apiKey,
     });

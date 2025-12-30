@@ -3,7 +3,7 @@
  * Features a node-based editor for defining AI agents and their tasks.
  */
 import type { Component } from "solid-js";
-import { createSignal, createMemo, Show } from "solid-js";
+import { createSignal, createMemo, Show, createEffect } from "solid-js";
 import { createStore } from "solid-js/store";
 import {
   addEdge,
@@ -141,10 +141,11 @@ export const WorkflowPage: Component = () => {
   // Event Handlers
   const onNodeClick = (_: MouseEvent, node: Node) => {
     console.log("Workflow: Node clicked", node);
-    setSelectedNodeId(node.id);
+    // 不在这里设置 selectedNodeId，让 onSelectionChange 统一处理
   };
 
   const onSelectionChange = (params: { nodes: Node[]; edges: Edge[] }) => {
+    // 统一由 onSelectionChange 管理选择状态
     setSelectedNodeId(params.nodes[0]?.id ?? null);
   };
 
@@ -154,21 +155,9 @@ export const WorkflowPage: Component = () => {
 
   // Flow Handlers
   const onNodesChange = (changes: NodeChange[]) => {
-    let nextSelectedId = selectedNodeId();
-
-    // Sync selection state from Flow change events
-    for (const change of changes) {
-      if (change.type === "select") {
-        if (change.selected) {
-          nextSelectedId = change.id;
-        } else if (nextSelectedId === change.id) {
-          nextSelectedId = null;
-        }
-      }
-    }
-
+    // 只处理节点数据变化，不处理选择状态
+    // 选择状态由 onSelectionChange 统一管理
     setNodes(applyNodeChanges(changes, nodes));
-    setSelectedNodeId(nextSelectedId);
   };
   const onEdgesChange = (changes: EdgeChange[]) =>
     setEdges((eds) => applyEdgeChanges(changes, eds));
@@ -225,6 +214,10 @@ export const WorkflowPage: Component = () => {
     tool: ToolNode,
   };
 
+  createEffect(() => {
+    console.log("selectedNode", selectedNode());
+  });
+
   return (
     <div class="flex h-[calc(100vh-theme(spacing.16))] flex-col bg-white">
       {/* Editor Area */}
@@ -267,6 +260,7 @@ export const WorkflowPage: Component = () => {
             onNodeDragStart={onDragStart}
           />
         </Flow>
+        {/* {selectedNode() && <div>Selected Node: {selectedNode().data.label}</div>} */}
 
         {/* Property Panel Sidebar */}
         <Show when={selectedNode()}>

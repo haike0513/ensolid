@@ -67,8 +67,11 @@ export const NodePropertyPanel: Component<NodePropertyPanelProps> = (props) => {
           </div>
           <div>
             <h3 class="font-bold text-lg">
-              {getNodeTypeLabel(props.node.type)}
+              {props.node.data?.label || "Unnamed Node"}
             </h3>
+            <p class="text-xs text-gray-500">
+              {getNodeTypeLabel(props.node.type)}
+            </p>
             <p class="text-xs text-gray-400 font-mono">{props.node.id}</p>
           </div>
         </div>
