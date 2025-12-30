@@ -382,10 +382,13 @@ export const AIChat: Component<AIChatProps> = (props) => {
   });
 
   return (
-    <div class="relative flex size-full flex-col overflow-hidden bg-background">
+    <div
+      class="relative flex w-full flex-col overflow-hidden bg-background"
+      style={{ height: props.height ?? "100%" }}
+    >
       {/* 对话区域 */}
       <Conversation class="flex-1 bg-background">
-        <ConversationContent class="mx-auto max-w-3xl">
+        <ConversationContent class="mx-auto max-w-3xl p-0">
           <Show
             when={hasMessages()}
             fallback={
