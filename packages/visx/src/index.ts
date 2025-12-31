@@ -36,3 +36,37 @@ export type {
 
 export * from 'd3-scale';
 export * from 'd3-array';
+
+// d3-hierarchy exports
+export {
+    hierarchy,
+    treemap,
+    treemapBinary,
+    treemapDice,
+    treemapSlice,
+    treemapSliceDice,
+    treemapSquarify,
+    treemapResquarify,
+    partition,
+    pack,
+    packSiblings,
+    packEnclose,
+    stratify,
+    cluster,
+    tree
+} from 'd3-hierarchy';
+export type {
+    HierarchyNode,
+    HierarchyRectangularNode,
+    HierarchyCircularNode,
+    HierarchyPointNode,
+    HierarchyLink,
+    HierarchyPointLink,
+    HierarchyRectangularLink,
+    TreemapLayout,
+    PackLayout,
+    PartitionLayout,
+    ClusterLayout,
+    TreeLayout,
+    StratifyOperator
+} from 'd3-hierarchy';
