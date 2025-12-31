@@ -34,6 +34,12 @@ import { SankeyChart } from "./charts/SankeyChart";
 import { WordCloudChart } from "./charts/WordCloudChart";
 import { NegativeBarChart } from "./charts/NegativeBarChart";
 import { HorizontalBarChart } from "./charts/HorizontalBarChart";
+// 新增 ECharts 移植图表
+import { CalendarChart } from "./charts/CalendarChart";
+import { PictorialBarChart } from "./charts/PictorialBarChart";
+import { TreeChart } from "./charts/TreeChart";
+import { ThemeRiverChart } from "./charts/ThemeRiverChart";
+import { GanttChart } from "./charts/GanttChart";
 
 type ChartCategory = "基础图表" | "数据对比" | "数据分布" | "趋势分析" | "特殊图表" | "关系图表";
 
@@ -114,6 +120,7 @@ const chartItems: ChartItem[] = [
   { id: "pie", name: "饼图", component: PieChart, category: "基础图表", icon: "🥧", description: "展示占比关系" },
   { id: "donut", name: "环形图", component: DonutChart, category: "基础图表", icon: "🍩", description: "中心带空白的饼图" },
   { id: "horizontal-bar", name: "横向柱状图", component: HorizontalBarChart, category: "基础图表", icon: "📊", description: "横向排名展示" },
+  { id: "pictorial-bar", name: "象形柱图", component: PictorialBarChart, category: "基础图表", icon: "🎨", description: "创意形象化展示" },
   // 数据对比
   { id: "stacked-bar", name: "堆叠柱状图", component: StackedBarChart, category: "数据对比", icon: "📊", description: "多维度数据堆叠对比" },
   { id: "multi-line", name: "多折线图", component: MultiLineChart, category: "数据对比", icon: "📉", description: "多系列趋势对比" },
@@ -134,14 +141,18 @@ const chartItems: ChartItem[] = [
   { id: "step-line", name: "阶梯图", component: StepLineChart, category: "趋势分析", icon: "📶", description: "阶跃数据变化" },
   { id: "candlestick", name: "K线图", component: CandlestickChart, category: "趋势分析", icon: "📈", description: "金融数据走势" },
   { id: "waterfall", name: "瀑布图", component: WaterfallChart, category: "趋势分析", icon: "📉", description: "增减变化分析" },
+  { id: "theme-river", name: "主题河流图", component: ThemeRiverChart, category: "趋势分析", icon: "🌊", description: "事件流趋势分析" },
+  { id: "gantt", name: "甘特图", component: GanttChart, category: "趋势分析", icon: "📅", description: "项目进度管理" },
   // 特殊图表
   { id: "funnel", name: "漏斗图", component: FunnelChart, category: "特殊图表", icon: "🔻", description: "转化率分析" },
   { id: "gauge", name: "仪表盘", component: GaugeChart, category: "特殊图表", icon: "⏱️", description: "完成度展示" },
   { id: "sunburst", name: "旭日图", component: SunburstChart, category: "特殊图表", icon: "☀️", description: "多层级结构展示" },
   { id: "liquid", name: "水球图", component: LiquidChart, category: "特殊图表", icon: "💧", description: "完成进度展示" },
   { id: "wordcloud", name: "词云图", component: WordCloudChart, category: "特殊图表", icon: "☁️", description: "关键词分析" },
+  { id: "calendar", name: "日历图", component: CalendarChart, category: "特殊图表", icon: "📅", description: "时间维度数据分布" },
   // 关系图表
   { id: "sankey", name: "桑基图", component: SankeyChart, category: "关系图表", icon: "🔀", description: "流量分布分析" },
+  { id: "tree", name: "树图", component: TreeChart, category: "关系图表", icon: "🌲", description: "层级结构展示" },
 ];
 
 export const ChartsPage: Component = () => {

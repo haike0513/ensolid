@@ -24,7 +24,12 @@ export {
     curveStep,
     curveStepAfter,
     curveStepBefore,
-    curveNatural
+    curveNatural,
+    stackOffsetWiggle,
+    stackOrderNone,
+    stackOffsetNone,
+    stackOffsetExpand,
+    stackOffsetSilhouette
 } from 'd3-shape';
 export type {
     CurveFactory,
@@ -33,6 +38,8 @@ export type {
     Line as D3Line,
     Area as D3Area
 } from 'd3-shape';
+export * from 'd3-time-format';
+export * from 'd3-format';
 
 export * from 'd3-scale';
 export * from 'd3-array';
