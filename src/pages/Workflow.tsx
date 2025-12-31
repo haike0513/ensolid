@@ -217,9 +217,36 @@ export const WorkflowPage: Component = () => {
   });
 
   return (
-    <div class="flex h-[calc(100vh-theme(spacing.16))] flex-col bg-white">
+    <div class="flex h-[calc(100vh-theme(spacing.16))] flex-col bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 dark:from-slate-950 dark:via-blue-950/30 dark:to-slate-950">
+      {/* 顶部标题栏 */}
+      <div class="border-b bg-background/80 backdrop-blur-sm px-6 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+            <span class="text-xl">🔄</span>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+              工作流编辑器
+            </h1>
+            <p class="text-xs text-muted-foreground">拖拽节点构建 AI 工作流</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <div class="px-3 py-1.5 rounded-lg bg-muted/50 text-xs">
+            <span class="text-muted-foreground">节点: </span>
+            <span class="font-semibold text-foreground">{nodes.length}</span>
+          </div>
+          <div class="px-3 py-1.5 rounded-lg bg-muted/50 text-xs">
+            <span class="text-muted-foreground">连接: </span>
+            <span class="font-semibold text-foreground">{edges().length}</span>
+          </div>
+        </div>
+      </div>
+
       {/* Editor Area */}
       <div class="relative flex-1 overflow-hidden">
+        {/* 背景装饰 */}
+        <div class="absolute inset-0 bg-grid-pattern opacity-[0.02] pointer-events-none"></div>
         <Flow
           nodes={nodes}
           edges={edges()}

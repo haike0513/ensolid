@@ -59,49 +59,172 @@ export const SettingsPage: Component = () => {
   };
 
   return (
-    <div class="min-h-screen bg-background py-8">
-      <div class="container mx-auto px-4 max-w-4xl">
-        {/* 页面标题 */}
-        <div class="mb-8">
-          <h1 class="mb-2 text-4xl font-bold tracking-tight">设置</h1>
-          <p class="text-lg text-muted-foreground">
+    <div class="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* 顶部标题区域 */}
+      <div class="border-b bg-background/50 backdrop-blur-sm">
+        <div class="container mx-auto px-4 py-8">
+          <div class="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-gradient-to-r from-slate-500/10 to-gray-500/10 backdrop-blur-sm border border-slate-500/20">
+            <span class="text-xl">⚙️</span>
+            <span class="text-xs font-medium bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
+              Configuration
+            </span>
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 bg-clip-text text-transparent">
+            设置
+          </h1>
+          <p class="text-muted-foreground text-lg">
             管理您的应用配置和偏好设置
           </p>
         </div>
+      </div>
 
-        {/* AI 配置 */}
-        <Card>
-          <CardHeader>
-            <CardTitle>{t().aiPlayground.config.title}</CardTitle>
-            <CardDescription>
-              {t().aiPlayground.config.description}
-            </CardDescription>
-          </CardHeader>
-          <div class="px-6 pb-6 space-y-4">
-            <div class="space-y-2">
-              <Label for="api-key">{t().aiPlayground.config.apiKeyLabel}</Label>
-              <Input
-                id="api-key"
-                type="password"
-                value={apiKey()}
-                onInput={(e) => setApiKey(e.currentTarget.value)}
-                placeholder={t().aiPlayground.config.apiKeyPlaceholder}
-                class="w-full"
-              />
+      <div class="container mx-auto px-4 max-w-4xl py-8">
+        <div class="space-y-6">
+          {/* AI 配置 */}
+          <div class="group relative">
+            <div class="absolute -inset-1 bg-gradient-to-r from-violet-500/20 to-fuchsia-500/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div class="relative bg-card border-2 border-muted rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:border-violet-500/30">
+              <div class="bg-gradient-to-r from-violet-500/10 via-fuchsia-500/10 to-violet-500/10 border-b border-border p-6 backdrop-blur-sm">
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/20 to-fuchsia-500/20">
+                    <span class="text-3xl">🤖</span>
+                  </div>
+                  <div>
+                    <h2 class="text-2xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+                      {t().aiPlayground.config.title}
+                    </h2>
+                    <p class="text-sm text-muted-foreground">
+                      {t().aiPlayground.config.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="p-8 space-y-6">
+                <div class="space-y-3">
+                  <Label for="api-key" class="text-base font-semibold">
+                    {t().aiPlayground.config.apiKeyLabel}
+                  </Label>
+                  <div class="relative">
+                    <Input
+                      id="api-key"
+                      type="password"
+                      value={apiKey()}
+                      onInput={(e) => setApiKey(e.currentTarget.value)}
+                      placeholder={t().aiPlayground.config.apiKeyPlaceholder}
+                      class="w-full h-12 px-4 text-base border-2 focus:ring-2 focus:ring-violet-500/50"
+                    />
+                  </div>
+                </div>
+                <div class="flex gap-3">
+                  <Button 
+                    onClick={handleSave} 
+                    variant="default"
+                    class="h-11 px-6 bg-gradient-to-r from-violet-600 to-fuchsia-600 hover:from-violet-700 hover:to-fuchsia-700 transition-all duration-300"
+                  >
+                    <span class="flex items-center gap-2">
+                      <span>💾</span>
+                      <span>{t().aiPlayground.config.save}</span>
+                    </span>
+                  </Button>
+                  <Button 
+                    onClick={handleClear} 
+                    variant="outline"
+                    class="h-11 px-6 border-2 hover:bg-muted transition-all duration-300"
+                  >
+                    <span class="flex items-center gap-2">
+                      <span>🗑️</span>
+                      <span>{t().aiPlayground.config.clear}</span>
+                    </span>
+                  </Button>
+                </div>
+                {message() && (
+                  <div class="p-4 rounded-lg bg-muted/50 border border-border">
+                    <p class="text-sm font-medium">{message()}</p>
+                  </div>
+                )}
+              </div>
             </div>
-            <div class="flex gap-2">
-              <Button onClick={handleSave} variant="default">
-                {t().aiPlayground.config.save}
-              </Button>
-              <Button onClick={handleClear} variant="outline">
-                {t().aiPlayground.config.clear}
-              </Button>
-            </div>
-            {message() && (
-              <p class="text-sm text-muted-foreground">{message()}</p>
-            )}
           </div>
-        </Card>
+
+          {/* 其他设置卡片 */}
+          <div class="grid gap-6 md:grid-cols-2">
+            {/* 外观设置 */}
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-blue-500/30">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+                    <span class="text-2xl">🎨</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold">外观设置</h3>
+                    <p class="text-xs text-muted-foreground">主题和显示选项</p>
+                  </div>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  自定义应用的外观和主题设置
+                </p>
+              </div>
+            </div>
+
+            {/* 通知设置 */}
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-green-500/30">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20">
+                    <span class="text-2xl">🔔</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold">通知设置</h3>
+                    <p class="text-xs text-muted-foreground">管理通知偏好</p>
+                  </div>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  控制应用通知和提醒方式
+                </p>
+              </div>
+            </div>
+
+            {/* 隐私设置 */}
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-purple-500/30">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                    <span class="text-2xl">🔒</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold">隐私设置</h3>
+                    <p class="text-xs text-muted-foreground">数据和隐私控制</p>
+                  </div>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  管理您的数据隐私和安全选项
+                </p>
+              </div>
+            </div>
+
+            {/* 高级设置 */}
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-orange-500/30">
+                <div class="flex items-center gap-3 mb-4">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-orange-500/20 to-red-500/20">
+                    <span class="text-2xl">⚡</span>
+                  </div>
+                  <div>
+                    <h3 class="text-lg font-bold">高级设置</h3>
+                    <p class="text-xs text-muted-foreground">开发者选项</p>
+                  </div>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  高级功能和开发者工具配置
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

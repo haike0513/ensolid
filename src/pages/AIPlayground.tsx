@@ -64,27 +64,64 @@ export const AIPlaygroundPage: Component = () => {
   };
 
   return (
-    <div class="min-h-screen bg-background py-8">
-      <div class="container mx-auto px-4 max-w-6xl">
-        {/* 页面标题 */}
-        <div class="mb-8 text-center">
-          <h1 class="mb-2 text-4xl font-bold tracking-tight">
+    <div class="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
+      {/* 顶部标题区域 */}
+      <div class="border-b bg-background/50 backdrop-blur-sm">
+        <div class="container mx-auto px-4 py-8">
+          <div class="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 backdrop-blur-sm border border-violet-500/20">
+            <span class="text-xl">🤖</span>
+            <span class="text-xs font-medium bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+              AI Powered
+            </span>
+          </div>
+          <h1 class="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-violet-600 via-fuchsia-600 to-violet-600 bg-clip-text text-transparent">
             {t().aiPlayground.title}
           </h1>
-          <p class="text-lg text-muted-foreground">
+          <p class="text-muted-foreground text-lg">
             {t().aiPlayground.subtitle}
           </p>
         </div>
+      </div>
+
+      <div class="container mx-auto px-4 max-w-6xl py-8">
 
         {/* 功能标签页 */}
-        <Tabs defaultValue="aichat" class="w-full">
-          <TabsList class="grid w-full grid-cols-5 mb-6">
-            <TabsTrigger value="aichat">AI Chat</TabsTrigger>
-            <TabsTrigger value="chat">聊天对话</TabsTrigger>
-            <TabsTrigger value="completion">文本补全</TabsTrigger>
-            <TabsTrigger value="generate">文本生成</TabsTrigger>
-            <TabsTrigger value="settings">设置</TabsTrigger>
-          </TabsList>
+        <div class="relative group">
+          <div class="absolute -inset-1 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 rounded-2xl blur-xl opacity-50"></div>
+          <div class="relative">
+            <Tabs defaultValue="aichat" class="w-full">
+              <TabsList class="grid w-full grid-cols-5 mb-6 h-auto p-1 bg-card/50 backdrop-blur-sm border-2 border-muted rounded-xl">
+                <TabsTrigger value="aichat" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
+                  <span class="flex items-center gap-2">
+                    <span>🤖</span>
+                    <span>AI Chat</span>
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger value="chat" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
+                  <span class="flex items-center gap-2">
+                    <span>💬</span>
+                    <span>聊天对话</span>
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger value="completion" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
+                  <span class="flex items-center gap-2">
+                    <span>✨</span>
+                    <span>文本补全</span>
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger value="generate" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
+                  <span class="flex items-center gap-2">
+                    <span>🎯</span>
+                    <span>文本生成</span>
+                  </span>
+                </TabsTrigger>
+                <TabsTrigger value="settings" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
+                  <span class="flex items-center gap-2">
+                    <span>⚙️</span>
+                    <span>设置</span>
+                  </span>
+                </TabsTrigger>
+              </TabsList>
 
           {/* AI Chat 标签页 */}
           <TabsContent value="aichat" class="space-y-4">
@@ -185,43 +222,68 @@ export const AIPlaygroundPage: Component = () => {
             </Card>
           </TabsContent>
         </Tabs>
+          </div>
+        </div>
 
         {/* 功能卡片 */}
         <div class="mt-8">
-          <h2 class="mb-4 text-2xl font-semibold">
-            {t().aiPlayground.features.title}
-          </h2>
-          <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Card>
-              <CardHeader>
-                <CardTitle class="text-lg">
-                  {t().aiPlayground.features.chat.title}
-                </CardTitle>
-                <CardDescription>
+          <div class="flex items-center gap-3 mb-6">
+            <span class="text-2xl">✨</span>
+            <h2 class="text-2xl font-bold bg-gradient-to-r from-violet-600 to-fuchsia-600 bg-clip-text text-transparent">
+              {t().aiPlayground.features.title}
+            </h2>
+          </div>
+          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-500/20 to-cyan-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-blue-500/30 hover:-translate-y-1">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+                    <span class="text-2xl">💬</span>
+                  </div>
+                  <h3 class="text-lg font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                    {t().aiPlayground.features.chat.title}
+                  </h3>
+                </div>
+                <p class="text-sm text-muted-foreground leading-relaxed">
                   {t().aiPlayground.features.chat.description}
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle class="text-lg">
-                  {t().aiPlayground.features.code.title}
-                </CardTitle>
-                <CardDescription>
+                </p>
+              </div>
+            </div>
+
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-green-500/20 to-emerald-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-green-500/30 hover:-translate-y-1">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20">
+                    <span class="text-2xl">💻</span>
+                  </div>
+                  <h3 class="text-lg font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                    {t().aiPlayground.features.code.title}
+                  </h3>
+                </div>
+                <p class="text-sm text-muted-foreground leading-relaxed">
                   {t().aiPlayground.features.code.description}
-                </CardDescription>
-              </CardHeader>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle class="text-lg">
-                  {t().aiPlayground.features.image.title}
-                </CardTitle>
-                <CardDescription>
+                </p>
+              </div>
+            </div>
+
+            <div class="group relative">
+              <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
+              <div class="relative bg-card border-2 border-muted rounded-xl p-6 transition-all duration-300 hover:border-purple-500/30 hover:-translate-y-1">
+                <div class="flex items-center gap-3 mb-3">
+                  <div class="flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20">
+                    <span class="text-2xl">🎨</span>
+                  </div>
+                  <h3 class="text-lg font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    {t().aiPlayground.features.image.title}
+                  </h3>
+                </div>
+                <p class="text-sm text-muted-foreground leading-relaxed">
                   {t().aiPlayground.features.image.description}
-                </CardDescription>
-              </CardHeader>
-            </Card>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

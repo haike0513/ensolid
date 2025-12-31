@@ -229,43 +229,148 @@ export const HomePage: Component = () => {
       </section>
 
       {/* 技术栈 */}
-      <section class="py-20 sm:py-32">
-        <div class="container mx-auto px-4">
+      <section class="relative py-20 sm:py-32 overflow-hidden">
+        {/* 背景装饰 */}
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent"></div>
+        <div class="absolute top-1/2 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl opacity-20 animate-pulse"></div>
+        <div class="absolute top-1/3 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl opacity-20 animate-pulse" style={{ "animation-delay": "1s" }}></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
           <div class="mb-16 text-center">
-            <h2 class="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">
+            <div class="inline-flex items-center gap-2 mb-4 px-4 py-2 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
+              <span class="text-2xl">🛠️</span>
+              <span class="text-sm font-medium text-primary">Technology Stack</span>
+            </div>
+            <h2 class="mb-4 text-3xl font-bold tracking-tight sm:text-4xl bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
               {t().home.techStack.title}
             </h2>
             <p class="mx-auto max-w-2xl text-lg text-muted-foreground">
               {t().home.techStack.subtitle}
             </p>
           </div>
-          <div class="mx-auto max-w-4xl">
-            <Card>
-              <CardContent class="p-8">
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                  <div class="text-center">
-                    <div class="mb-3 text-4xl">⚛️</div>
-                    <div class="font-semibold">SolidJS</div>
-                    <div class="text-sm text-muted-foreground">{t().home.techStack.solidjs}</div>
-                  </div>
-                  <div class="text-center">
-                    <div class="mb-3 text-4xl">📘</div>
-                    <div class="font-semibold">TypeScript</div>
-                    <div class="text-sm text-muted-foreground">{t().home.techStack.typescript}</div>
-                  </div>
-                  <div class="text-center">
-                    <div class="mb-3 text-4xl">⚡</div>
-                    <div class="font-semibold">Vite</div>
-                    <div class="text-sm text-muted-foreground">{t().home.techStack.vite}</div>
-                  </div>
-                  <div class="text-center">
-                    <div class="mb-3 text-4xl">📦</div>
-                    <div class="font-semibold">pnpm</div>
-                    <div class="text-sm text-muted-foreground">{t().home.techStack.pnpm}</div>
+          
+          <div class="mx-auto max-w-6xl">
+            <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {/* SolidJS Card */}
+              <div class="group relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-2xl blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+                <div class="relative h-full bg-background border-2 border-muted rounded-2xl p-6 transition-all duration-300 hover:border-blue-500/50 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm">
+                  <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div class="relative">
+                    <div class="mb-4 flex items-center justify-center">
+                      <div class="flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl filter group-hover:drop-shadow-lg transition-all duration-300">⚛️</span>
+                      </div>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold text-center bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                      SolidJS
+                    </h3>
+                    <p class="text-sm text-center text-muted-foreground leading-relaxed">
+                      {t().home.techStack.solidjs}
+                    </p>
+                    <div class="mt-4 flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                      <div class="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" style={{ "animation-delay": "0.2s" }}></div>
+                      <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ "animation-delay": "0.4s" }}></div>
+                    </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+
+              {/* TypeScript Card */}
+              <div class="group relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-700 to-blue-500 rounded-2xl blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+                <div class="relative h-full bg-background border-2 border-muted rounded-2xl p-6 transition-all duration-300 hover:border-blue-600/50 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm">
+                  <div class="absolute inset-0 bg-gradient-to-br from-blue-600/5 to-blue-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div class="relative">
+                    <div class="mb-4 flex items-center justify-center">
+                      <div class="flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-blue-600/20 to-blue-500/20 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl filter group-hover:drop-shadow-lg transition-all duration-300">📘</span>
+                      </div>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold text-center bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                      TypeScript
+                    </h3>
+                    <p class="text-sm text-center text-muted-foreground leading-relaxed">
+                      {t().home.techStack.typescript}
+                    </p>
+                    <div class="mt-4 flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></div>
+                      <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse" style={{ "animation-delay": "0.2s" }}></div>
+                      <div class="w-2 h-2 rounded-full bg-blue-600 animate-pulse" style={{ "animation-delay": "0.4s" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vite Card */}
+              <div class="group relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-purple-600 to-yellow-500 rounded-2xl blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+                <div class="relative h-full bg-background border-2 border-muted rounded-2xl p-6 transition-all duration-300 hover:border-purple-500/50 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm">
+                  <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-yellow-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div class="relative">
+                    <div class="mb-4 flex items-center justify-center">
+                      <div class="flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-purple-500/20 to-yellow-500/20 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl filter group-hover:drop-shadow-lg transition-all duration-300">⚡</span>
+                      </div>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold text-center bg-gradient-to-r from-purple-600 to-yellow-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                      Vite
+                    </h3>
+                    <p class="text-sm text-center text-muted-foreground leading-relaxed">
+                      {t().home.techStack.vite}
+                    </p>
+                    <div class="mt-4 flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
+                      <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse" style={{ "animation-delay": "0.2s" }}></div>
+                      <div class="w-2 h-2 rounded-full bg-purple-500 animate-pulse" style={{ "animation-delay": "0.4s" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* pnpm Card */}
+              <div class="group relative">
+                <div class="absolute -inset-0.5 bg-gradient-to-r from-orange-600 to-amber-500 rounded-2xl blur opacity-0 group-hover:opacity-75 transition duration-500"></div>
+                <div class="relative h-full bg-background border-2 border-muted rounded-2xl p-6 transition-all duration-300 hover:border-orange-500/50 hover:-translate-y-2 hover:shadow-2xl backdrop-blur-sm">
+                  <div class="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-amber-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div class="relative">
+                    <div class="mb-4 flex items-center justify-center">
+                      <div class="flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 group-hover:scale-110 transition-transform duration-300">
+                        <span class="text-4xl filter group-hover:drop-shadow-lg transition-all duration-300">📦</span>
+                      </div>
+                    </div>
+                    <h3 class="mb-2 text-xl font-bold text-center bg-gradient-to-r from-orange-600 to-amber-500 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+                      pnpm
+                    </h3>
+                    <p class="text-sm text-center text-muted-foreground leading-relaxed">
+                      {t().home.techStack.pnpm}
+                    </p>
+                    <div class="mt-4 flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse"></div>
+                      <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse" style={{ "animation-delay": "0.2s" }}></div>
+                      <div class="w-2 h-2 rounded-full bg-orange-500 animate-pulse" style={{ "animation-delay": "0.4s" }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 技术栈底部装饰 */}
+            <div class="mt-12 flex items-center justify-center gap-8 opacity-60">
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div class="w-3 h-3 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500"></div>
+                <span>现代化</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div class="w-3 h-3 rounded-full bg-gradient-to-r from-purple-500 to-yellow-500"></div>
+                <span>高性能</span>
+              </div>
+              <div class="flex items-center gap-2 text-sm text-muted-foreground">
+                <div class="w-3 h-3 rounded-full bg-gradient-to-r from-orange-500 to-amber-500"></div>
+                <span>可扩展</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
