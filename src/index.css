@@ -508,6 +508,52 @@
     opacity: 0.1;
   }
   
+  /* 专业级动画 */
+  .animate-fade-in {
+    animation: fade-in 0.4s ease-out forwards;
+  }
+  
+  /* prose样式定制 */
+  .prose-custom {
+    @apply text-foreground;
+  }
+  
+  .prose-custom h2 {
+    @apply text-3xl font-bold mb-4 mt-8 first:mt-0;
+  }
+  
+  .prose-custom h3 {
+    @apply text-2xl font-bold mb-3 mt-6;
+  }
+  
+  .prose-custom h4 {
+    @apply text-xl font-semibold mb-2 mt-4;
+  }
+  
+  .prose-custom p {
+    @apply text-base leading-relaxed mb-4 text-foreground/90;
+  }
+  
+  .prose-custom ul {
+    @apply list-disc pl-6 mb-4 space-y-2;
+  }
+  
+  .prose-custom ol {
+    @apply list-decimal pl-6 mb-4 space-y-2;
+  }
+  
+  .prose-custom code {
+    @apply px-2 py-0.5 rounded bg-muted text-primary text-sm font-mono;
+  }
+  
+  .prose-custom pre {
+    @apply mb-4 rounded-lg p-4 bg-muted overflow-x-auto;
+  }
+  
+  .prose-custom a {
+    @apply text-primary hover:underline;
+  }
+  
   /* 文本选择样式 */
   .select-none {
     user-select: none;

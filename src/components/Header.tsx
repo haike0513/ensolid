@@ -1,9 +1,9 @@
 /**
- * Header 组件
+ * Header 组件 - 专业级重构版本
  */
 
 import type { Component } from "solid-js";
-import { createSignal, onMount } from "solid-js";
+import { createSignal, onMount, Show } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import {
@@ -17,6 +17,8 @@ import { Button } from "./ui/button";
 export const Header: Component = () => {
   const location = useLocation();
   const [stars, setStars] = createSignal<number | null>(null);
+  const [scrolled, setScrolled] = createSignal(false);
+  const [searchFocused, setSearchFocused] = createSignal(false);
 
   const isActive = (path: string) => {
     return location.pathname === path ||
@@ -36,6 +38,13 @@ export const Header: Component = () => {
     } catch (error) {
       console.error("Failed to fetch GitHub stars:", error);
     }
+
+    // 监听滚动事件以改变Header样式
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   });
 
   // 格式化 star 数量显示
@@ -47,95 +56,89 @@ export const Header: Component = () => {
     return count.toString();
   };
 
+  const navItems = [
+    { path: "/docs", label: "文档", icon: "📚" },
+    { path: "/components", label: "组件", icon: "🧩" },
+    { path: "/blocks", label: "区块", icon: "🔲" },
+    { path: "/charts", label: "图表", icon: "📊" },
+    { path: "/solidflow", label: "流程图", icon: "🌊" },
+    { path: "/workflow", label: "工作流", icon: "⚡" },
+    { path: "/ai-playground", label: "AI", icon: "🤖" },
+  ];
+
   return (
-    <header class="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div class="container mx-auto px-4">
+    <header
+      class={`sticky top-0 z-50 w-full transition-all duration-300 ${
+        scrolled()
+          ? "border-b border-border/40 bg-background/80 backdrop-blur-xl shadow-sm"
+          : "border-b border-transparent bg-background/60 backdrop-blur-md"
+      }`}
+    >
+      {/* 顶部装饰线 */}
+      <div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent opacity-50" />
+      
+      <div class="container mx-auto px-4 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           {/* Logo 和导航链接 */}
           <div class="flex items-center gap-8">
-            <A href="/" class="flex items-center gap-2">
-              <img src="/ensolid-logo.svg" alt="Ensolid Logo" class="w-8 h-8" />
+            {/* Logo区域 - 增强设计 */}
+            <A 
+              href="/" 
+              class="group flex items-center gap-2.5 transition-all duration-300 hover:scale-105"
+            >
+              <div class="relative">
+                <div class="absolute inset-0 rounded-lg bg-gradient-to-br from-primary/20 to-primary/5 blur-md opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <img 
+                  src="/ensolid-logo.svg" 
+                  alt="Ensolid Logo" 
+                  class="relative w-8 h-8 transition-transform duration-300 group-hover:rotate-12" 
+                />
+              </div>
+              <span class="hidden sm:block text-lg font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                Ensolid
+              </span>
             </A>
             
-            {/* 桌面端导航菜单 */}
-            <nav class="hidden md:flex items-center gap-6">
-              <A
-                href="/docs"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/docs") ? "text-foreground" : "text-foreground/60"
-                }`}
-              >
-                Docs
-              </A>
-              <A
-                href="/components"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/components")
-                    ? "text-foreground"
-                    : "text-foreground/60"
-                }`}
-              >
-                Components
-              </A>
-              <A
-                href="/blocks"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/blocks") ? "text-foreground" : "text-foreground/60"
-                }`}
-              >
-                Blocks
-              </A>
-              <A
-                href="/charts"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/charts") ? "text-foreground" : "text-foreground/60"
-                }`}
-              >
-                Charts
-              </A>
-              <A
-                href="/solidflow"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/solidflow")
-                    ? "text-foreground"
-                    : "text-foreground/60"
-                }`}
-              >
-                SolidFlow
-              </A>
-              <A
-                href="/workflow"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/workflow")
-                    ? "text-foreground"
-                    : "text-foreground/60"
-                }`}
-              >
-                Workflow
-              </A>
-              <A
-                href="/ai-playground"
-                class={`text-sm font-medium transition-colors hover:text-foreground/80 ${
-                  isActive("/ai-playground")
-                    ? "text-foreground"
-                    : "text-foreground/60"
-                }`}
-              >
-                AI Playground
-              </A>
+            {/* 桌面端导航菜单 - 增强版 */}
+            <nav class="hidden lg:flex items-center gap-1">
+              {navItems.map((item) => (
+                <A
+                  href={item.path}
+                  class={`group relative px-3 py-2 text-sm font-medium transition-all duration-300 rounded-lg ${
+                    isActive(item.path)
+                      ? "text-foreground"
+                      : "text-foreground/60 hover:text-foreground"
+                  }`}
+                >
+                  {/* 活动指示器 */}
+                  <Show when={isActive(item.path)}>
+                    <div class="absolute inset-0 rounded-lg bg-primary/10 border border-primary/20" />
+                    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent rounded-full" />
+                  </Show>
+                  
+                  {/* 悬停效果 */}
+                  <div class="absolute inset-0 rounded-lg bg-accent/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  
+                  <span class="relative flex items-center gap-1.5">
+                    <span class="text-xs opacity-70">{item.icon}</span>
+                    {item.label}
+                  </span>
+                </A>
+              ))}
             </nav>
 
-            {/* 移动端下拉菜单 */}
+            {/* 移动端下拉菜单 - 改进版 */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  class="md:hidden"
+                  class="lg:hidden relative group"
                   aria-label="打开导航菜单"
                 >
+                  <div class="absolute inset-0 rounded-lg bg-primary/5 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   <svg
-                    class="h-6 w-6"
+                    class="h-5 w-5 transition-transform duration-300 group-hover:scale-110"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -149,93 +152,71 @@ export const Header: Component = () => {
                   </svg>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent class="w-48">
-                <DropdownMenuItem
-                  class={isActive("/docs") ? "bg-accent text-accent-foreground" : ""}
-                >
-                  <A href="/docs" class="w-full block">
-                    Docs
-                  </A>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class={
-                    isActive("/components") ? "bg-accent text-accent-foreground" : ""
-                  }
-                >
-                  <A href="/components" class="w-full block">
-                    Components
-                  </A>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class={isActive("/blocks") ? "bg-accent text-accent-foreground" : ""}
-                >
-                  <A href="/blocks" class="w-full block">
-                    Blocks
-                  </A>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class={isActive("/charts") ? "bg-accent text-accent-foreground" : ""}
-                >
-                  <A href="/charts" class="w-full block">
-                    Charts
-                  </A>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class={
-                    isActive("/solidflow") ? "bg-accent text-accent-foreground" : ""
-                  }
-                >
-                  <A href="/solidflow" class="w-full block">
-                    SolidFlow
-                  </A>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class={
-                    isActive("/workflow") ? "bg-accent text-accent-foreground" : ""
-                  }
-                >
-                  <A href="/workflow" class="w-full block">
-                    Workflow
-                  </A>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  class={
-                    isActive("/ai-playground")
-                      ? "bg-accent text-accent-foreground"
-                      : ""
-                  }
-                >
-                  <A href="/ai-playground" class="w-full block">
-                    AI Playground
-                  </A>
-                </DropdownMenuItem>
+              <DropdownMenuContent class="w-56 bg-background/95 backdrop-blur-xl border-border/50">
+                {navItems.map((item) => (
+                  <DropdownMenuItem
+                    class={`transition-colors ${
+                      isActive(item.path)
+                        ? "bg-primary/10 text-foreground font-medium"
+                        : "hover:bg-accent"
+                    }`}
+                  >
+                    <A href={item.path} class="w-full flex items-center gap-2">
+                      <span class="text-base">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </A>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
 
-          {/* 右侧操作 */}
-          <div class="flex items-center gap-3">
-            {/* 搜索框 */}
-            <div class="relative hidden lg:block">
+          {/* 右侧操作区域 - 重新设计 */}
+          <div class="flex items-center gap-2">
+            {/* 搜索框 - 增强版 */}
+            <div class="relative hidden xl:block group">
+              <div class={`absolute inset-0 rounded-lg bg-gradient-to-r from-primary/10 to-primary/5 transition-opacity duration-300 ${
+                searchFocused() ? "opacity-100" : "opacity-0"
+              }`} />
               <input
                 type="text"
-                placeholder="Search documentation..."
-                class="w-64 rounded-md border border-input bg-background px-3 py-2 pr-20 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                placeholder="搜索文档..."
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                class="relative w-64 rounded-lg border border-input/50 bg-background/50 px-4 py-2 pr-20 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:border-primary/50 focus:bg-background transition-all duration-300"
               />
-              <kbd class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100">
+              <kbd class="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 flex h-6 select-none items-center gap-1 rounded-md border border-border/50 bg-muted/50 px-2 font-mono text-[10px] font-medium backdrop-blur-sm">
                 <span class="text-xs">⌘</span>K
               </kbd>
+              {/* 搜索图标 */}
+              <div class="absolute left-3 top-1/2 -translate-y-1/2 opacity-0 transition-opacity duration-300 group-hover:opacity-50">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
             </div>
 
-            {/* GitHub */}
+            {/* 搜索按钮（小屏幕） */}
+            <button
+              type="button"
+              class="xl:hidden inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 hover:bg-accent/50 h-9 w-9 group"
+              aria-label="搜索"
+            >
+              <svg class="h-4 w-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+
+            {/* GitHub - 增强版 */}
             <a
               href="https://github.com/haike0513/ensolid"
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/80 transition-colors"
+              class="group relative flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-foreground/70 hover:text-foreground transition-all duration-300 hover:bg-accent/50"
             >
+              <div class="absolute inset-0 rounded-lg bg-gradient-to-r from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <svg
-                class="h-5 w-5"
+                class="relative h-4 w-4 transition-transform duration-300 group-hover:scale-110"
                 fill="currentColor"
                 viewBox="0 0 24 24"
                 aria-hidden="true"
@@ -246,26 +227,37 @@ export const Header: Component = () => {
                   clip-rule="evenodd"
                 />
               </svg>
-              <span class="hidden sm:inline text-sm">
-                {formatStars(stars())}
+              <span class="relative hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold">
+                <Show when={stars() !== null}>
+                  <span class="flex items-center gap-1">
+                    <svg class="h-3 w-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                    {formatStars(stars())}
+                  </span>
+                </Show>
               </span>
             </a>
 
-            <div class="h-4 w-px bg-border" />
+            <div class="hidden sm:block h-5 w-px bg-border/50" />
 
-            {/* 语言切换 */}
-            <LanguageSwitcher />
+            {/* 语言切换 - 增强包装 */}
+            <div class="relative group">
+              <div class="absolute inset-0 rounded-lg bg-accent/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+              <LanguageSwitcher />
+            </div>
 
-            <div class="h-4 w-px bg-border" />
+            <div class="hidden sm:block h-5 w-px bg-border/50" />
 
-            {/* 主题切换按钮 */}
+            {/* 主题切换按钮 - 增强版 */}
             <button
               type="button"
-              class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 w-9"
+              class="relative inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 hover:bg-accent/50 h-9 w-9 group overflow-hidden"
               aria-label="切换主题"
             >
+              <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-blue-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               <svg
-                class="h-5 w-5"
+                class="relative h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -278,10 +270,12 @@ export const Header: Component = () => {
                 />
               </svg>
             </button>
-
           </div>
         </div>
       </div>
+
+      {/* 底部进度条（可选） */}
+      <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
     </header>
   );
 };
