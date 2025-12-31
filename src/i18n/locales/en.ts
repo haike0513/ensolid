@@ -160,6 +160,7 @@ export const en = {
   common: {
     selectLanguage: "Select Language",
     selectTheme: "Select Theme",
+    switchLanguage: "Switch Language",
     light: "Light",
     dark: "Dark",
     system: "System",

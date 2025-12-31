@@ -4,12 +4,15 @@
 
 import type { Component } from "solid-js";
 import { Header } from "./Header";
+import { ThemeProvider } from "./ThemeProvider";
 
 export const Layout: Component<{ children?: any }> = (props) => {
-    return (
-        <div class="min-h-screen bg-background">
-            <Header />
-            {props.children}
-        </div>
-    );
+  return (
+    <ThemeProvider>
+      <div class="min-h-screen bg-background text-foreground transition-colors duration-300">
+        <Header />
+        {props.children}
+      </div>
+    </ThemeProvider>
+  );
 };

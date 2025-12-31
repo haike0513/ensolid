@@ -6,6 +6,7 @@ import type { Component } from "solid-js";
 import { createSignal, onMount, Show } from "solid-js";
 import { A, useLocation } from "@solidjs/router";
 import { LanguageSwitcher } from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -241,35 +242,13 @@ export const Header: Component = () => {
 
             <div class="hidden sm:block h-5 w-px bg-border/50" />
 
-            {/* 语言切换 - 增强包装 */}
-            <div class="relative group">
-              <div class="absolute inset-0 rounded-lg bg-accent/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <LanguageSwitcher />
-            </div>
+            {/* 语言切换 */}
+            <LanguageSwitcher />
 
             <div class="hidden sm:block h-5 w-px bg-border/50" />
 
-            {/* 主题切换按钮 - 增强版 */}
-            <button
-              type="button"
-              class="relative inline-flex items-center justify-center rounded-lg text-sm font-medium transition-all duration-300 hover:bg-accent/50 h-9 w-9 group overflow-hidden"
-              aria-label="切换主题"
-            >
-              <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-blue-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-              <svg
-                class="relative h-4 w-4 transition-transform duration-300 group-hover:rotate-180"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                />
-              </svg>
-            </button>
+            {/* 主题切换按钮 */}
+            <ThemeToggle />
           </div>
         </div>
       </div>

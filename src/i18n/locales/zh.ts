@@ -160,6 +160,7 @@ export const zh = {
     common: {
         selectLanguage: "选择语言",
         selectTheme: "选择主题",
+        switchLanguage: "切换语言",
         light: "浅色",
         dark: "深色",
         system: "系统",
