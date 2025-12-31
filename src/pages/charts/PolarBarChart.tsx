@@ -102,9 +102,7 @@ export const PolarBarChart: Component = () => {
                         verticalAnchor="middle"
                         fill="#64748b"
                         font-size="12px"
-                      >
-                        {d.name}
-                      </Text>
+                      >{d.name}</Text>
                     </g>
                   );
                 }}
@@ -118,9 +116,7 @@ export const PolarBarChart: Component = () => {
                 fill="#1e293b"
                 font-size="12px"
                 font-weight="bold"
-              >
-                活跃度
-              </Text>
+              >活跃度</Text>
             </Group>
           </svg>
         </div>

@@ -132,9 +132,7 @@ export const GaugeChart: Component = () => {
                         verticalAnchor="middle"
                         fill="#64748b"
                         font-size="12px"
-                      >
-                        {tick}
-                      </Text>
+                      >{tick}</Text>
                     </g>
                   );
                 }}
@@ -161,9 +159,7 @@ export const GaugeChart: Component = () => {
                 fill="#1e293b"
                 font-size="48px"
                 font-weight="bold"
-              >
-                {gaugeValue}%
-              </Text>
+              >{`${gaugeValue}%`}</Text>
               <Text
                 y={90}
                 textAnchor="middle"

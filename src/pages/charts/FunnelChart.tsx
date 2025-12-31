@@ -81,9 +81,7 @@ export const FunnelChart: Component = () => {
                         fill="#ffffff"
                         font-size="14px"
                         font-weight="bold"
-                      >
-                        {d.stage}
-                      </Text>
+                      >{d.stage}</Text>
                       <Text
                         x={centerX + currentWidth / 2 + 15}
                         y={y + stageHeight / 2}
@@ -91,9 +89,7 @@ export const FunnelChart: Component = () => {
                         verticalAnchor="middle"
                         fill="#64748b"
                         font-size="12px"
-                      >
-                        {d.value}%
-                      </Text>
+                      >{`${d.value}%`}</Text>
                     </g>
                   );
                 }}

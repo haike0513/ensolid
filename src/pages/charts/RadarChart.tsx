@@ -115,9 +115,7 @@ export const RadarChart: Component = () => {
                     verticalAnchor="middle"
                     font-size="12px"
                     fill="#64748b"
-                  >
-                    {radarData[i()].attribute}
-                  </Text>
+                  >{radarData[i()].attribute}</Text>
                 </g>
               )}
             </For>

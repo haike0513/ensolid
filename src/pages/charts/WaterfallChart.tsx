@@ -122,9 +122,7 @@ export const WaterfallChart: Component = () => {
                         fill="#64748b"
                         font-size="11px"
                         font-weight="bold"
-                      >
-                        {d.isTotal ? d.value : (d.value >= 0 ? `+${d.value}` : d.value)}
-                      </Text>
+                      >{d.isTotal ? d.value : (d.value >= 0 ? `+${d.value}` : d.value)}</Text>
                     </g>
                   );
                 }}

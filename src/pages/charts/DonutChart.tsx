@@ -64,9 +64,7 @@ export const DonutChart: Component = () => {
                         </g>
                       )}
                     </For>
-                    <Text textAnchor="middle" verticalAnchor="middle" font-size="24px" font-weight="bold" fill="#333">
-                      Usage
-                    </Text>
+                    <Text textAnchor="middle" verticalAnchor="middle" font-size="24px" font-weight="bold" fill="#fff">Usage</Text>
                   </Group>
                 )}
               </Pie>

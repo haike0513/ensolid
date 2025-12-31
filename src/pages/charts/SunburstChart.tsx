@@ -128,9 +128,7 @@ export const SunburstChart: Component = () => {
                 fill="#1e293b"
                 font-size="14px"
                 font-weight="bold"
-              >
-                全球市场
-              </Text>
+              >全球市场</Text>
 
               {/* 第一层 */}
               <For each={level1Arcs}>
@@ -162,9 +160,7 @@ export const SunburstChart: Component = () => {
                         fill="#ffffff"
                         font-size="12px"
                         font-weight="bold"
-                      >
-                        {arc.name}
-                      </Text>
+                      >{arc.name}</Text>
                     </g>
                   );
                 }}

@@ -141,9 +141,7 @@ export const LiquidChart: Component = () => {
                 fill="#1e293b"
                 font-size="48px"
                 font-weight="bold"
-              >
-                {liquidValue}%
-              </Text>
+              >{`${liquidValue}%`}</Text>
               <Text
                 x={centerX}
                 y={centerY + 30}
@@ -151,9 +149,7 @@ export const LiquidChart: Component = () => {
                 verticalAnchor="middle"
                 fill="#64748b"
                 font-size="14px"
-              >
-                任务完成度
-              </Text>
+              >任务完成度</Text>
             </Group>
           </svg>
         </div>

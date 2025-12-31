@@ -71,7 +71,7 @@ export const TreemapChart: Component = () => {
             <Group top={margin.top} left={margin.left}>
               <For each={leaves}>
                 {(leaf) => {
-                  const nodeData = leaf.data as TreemapChild;
+                  const nodeData = leaf.data as any;
                   const rectWidth = leaf.x1 - leaf.x0;
                   const rectHeight = leaf.y1 - leaf.y0;
                   const centerX = (leaf.x0 + leaf.x1) / 2;
@@ -100,9 +100,7 @@ export const TreemapChart: Component = () => {
                             fill="#ffffff"
                             font-size="14px"
                             font-weight="bold"
-                          >
-                            {nodeData.name}
-                          </Text>
+                          >{nodeData.name}</Text>
                           <Text
                             x={centerX}
                             y={centerY + 10}
@@ -110,9 +108,7 @@ export const TreemapChart: Component = () => {
                             verticalAnchor="middle"
                             fill="rgba(255,255,255,0.8)"
                             font-size="12px"
-                          >
-                            {`${nodeData.value}人`}
-                          </Text>
+                          >{`${nodeData.value}人`}</Text>
                         </>
                       )}
                     </g>

@@ -66,9 +66,7 @@ export const PieChart: Component = () => {
                           font-size="12px"
                           font-weight="bold"
                           pointer-events="none"
-                        >
-                          {arcDatum.data.label}
-                        </Text>
+                        >{arcDatum.data.label}</Text>
                       </g>
                     )}
                   </For>
