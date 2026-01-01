@@ -40,6 +40,12 @@ import { PictorialBarChart } from "./charts/PictorialBarChart";
 import { TreeChart } from "./charts/TreeChart";
 import { ThemeRiverChart } from "./charts/ThemeRiverChart";
 import { GanttChart } from "./charts/GanttChart";
+import { GraphChart } from "./charts/GraphChart";
+import { NightingaleChart } from "./charts/NightingaleChart";
+import { DynamicLineChart } from "./charts/DynamicLineChart";
+import { MixedChart } from "./charts/MixedChart";
+import { PunchCardChart } from "./charts/PunchCardChart";
+import { LollipopChart } from "./charts/LollipopChart";
 
 type ChartCategory = "基础图表" | "数据对比" | "数据分布" | "趋势分析" | "特殊图表" | "关系图表";
 
@@ -153,6 +159,13 @@ const chartItems: ChartItem[] = [
   // 关系图表
   { id: "sankey", name: "桑基图", component: SankeyChart, category: "关系图表", icon: "🔀", description: "流量分布分析" },
   { id: "tree", name: "树图", component: TreeChart, category: "关系图表", icon: "🌲", description: "层级结构展示" },
+  { id: "graph", name: "关系图", component: GraphChart, category: "关系图表", icon: "🕸️", description: "节点链接关系" },
+  // 新增图表 - 放在适当分类
+  { id: "nightingale", name: "南丁格尔玫瑰图", component: NightingaleChart, category: "数据对比", icon: "🌹", description: "极坐标半径对比" },
+  { id: "mixed", name: "折柱混合图", component: MixedChart, category: "数据对比", icon: "📉", description: "多维度双轴分析" },
+  { id: "dynamic-line", name: "动态折线图", component: DynamicLineChart, category: "趋势分析", icon: "⚡", description: "实时数据监控" },
+  { id: "punch-card", name: "打卡图", component: PunchCardChart, category: "数据分布", icon: "🎫", description: "时间段活跃度分布" },
+  { id: "lollipop", name: "棒棒糖图", component: LollipopChart, category: "数据对比", icon: "🍭", description: "类别数据对比" },
 ];
 
 export const ChartsPage: Component = () => {
@@ -252,52 +265,35 @@ export const ChartsPage: Component = () => {
                 </div>
               </div>
 
-              {/* 图表列表 */}
-              <nav class="bg-card border-2 border-muted rounded-xl p-4">
-                <div class="flex items-center justify-between mb-3">
-                  <div class="flex items-center gap-2">
-                    <span class="text-lg">📋</span>
-                    <span class="text-sm font-semibold">图表列表</span>
-                  </div>
-                  <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
-                    {filteredCharts().length}
-                  </span>
-                </div>
-                <div class="space-y-1 max-h-[400px] overflow-y-auto pr-2 scrollbar-thin">
-                  <For each={filteredCharts()}>
-                    {(chart) => (
-                      <button
-                        type="button"
-                        onClick={() => setSelectedChart(selectedChart() === chart.id ? null : chart.id)}
-                        class={`group w-full text-left px-3 py-2.5 rounded-lg text-sm transition-all duration-300 relative ${
-                          selectedChart() === chart.id
-                            ? "bg-gradient-to-r from-primary to-primary/80 text-primary-foreground font-medium shadow-lg shadow-primary/25"
-                            : "hover:bg-accent hover:text-accent-foreground hover:translate-x-1"
-                        }`}
-                      >
-                        <div class="flex items-center gap-2">
-                          <span class="text-base">{chart.icon}</span>
-                          <div class="flex-1">
-                            <div class="font-medium">{chart.name}</div>
-                            <div class={`text-xs mt-0.5 ${
-                              selectedChart() === chart.id
-                                ? "text-primary-foreground/80"
-                                : "text-muted-foreground"
-                            }`}>
-                              {chart.description}
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    )}
-                  </For>
-                </div>
-              </nav>
+
             </div>
           </aside>
 
           {/* 主内容区 */}
           <main class="flex-1 min-w-0 pb-20">
+            {/* 顶部图表列表 (Horizontal) */}
+            <div class="mb-6 overflow-x-auto pb-2 scrollbar-thin">
+              <div class="flex gap-3 min-w-min">
+                <For each={filteredCharts()}>
+                  {(chart) => (
+                    <button
+                      type="button"
+                      onClick={() => setSelectedChart(selectedChart() === chart.id ? null : chart.id)}
+                      class={`shrink-0 flex items-center gap-2 px-4 py-3 rounded-xl border-2 transition-all duration-300 ${
+                        selectedChart() === chart.id
+                          ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/25 scale-105"
+                          : "bg-card border-muted hover:border-primary/50 hover:bg-accent hover:-translate-y-0.5"
+                      }`}
+                    >
+                      <span class="text-xl">{chart.icon}</span>
+                      <div class="text-left">
+                         <div class="font-medium text-sm whitespace-nowrap">{chart.name}</div>
+                      </div>
+                    </button>
+                  )}
+                </For>
+              </div>
+            </div>
             <Show when={selectedChart() && currentChartDetail()}>
               {/* 单个图表详情视图 */}
               <div class="relative group">
