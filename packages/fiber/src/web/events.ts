@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { RootState } from './Canvas';
+import { type RootState } from './Canvas';
 
 export interface ThreeEvent extends THREE.Intersection {
   eventObject: THREE.Object3D;
