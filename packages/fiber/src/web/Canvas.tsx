@@ -7,6 +7,8 @@ import {
 } from "solid-js";
 import * as THREE from "three";
 import { render, type Instance } from "../renderer";
+import { createEvents } from "./events";
+export type { ThreeEvent } from "./events";
 
 export type RootState = {
   scene: THREE.Scene;
@@ -107,11 +109,31 @@ export const Canvas: Component<any> = (props) => {
       rootInstance
     );
 
+    // Event System
+    const events = createEvents(state);
+    const domEvents: Record<string, any> = {
+      click: events.onClick,
+      pointerdown: events.onPointerDown,
+      pointerup: events.onPointerUp,
+      pointermove: events.onPointerMove,
+      mousemove: events.onMouseMove,
+    };
+    
+    Object.entries(domEvents).forEach(([name, handler]) => {
+      container!.addEventListener(name, handler);
+    });
+
     onCleanup(() => {
       cancelAnimationFrame(frameId);
       observer.disconnect();
       dispose();
       renderer.dispose();
+      
+      // Cleanup events
+      Object.entries(domEvents).forEach(([name, handler]) => {
+        if (container) container.removeEventListener(name, handler);
+      });
+
       if (container && renderer.domElement) {
         container.removeChild(renderer.domElement);
       }

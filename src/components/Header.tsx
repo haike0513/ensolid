@@ -67,6 +67,14 @@ export const Header: Component = () => {
     { path: "/ai-playground", label: "AI", icon: "🤖" },
   ];
 
+  const moreNavItems = [
+    { path: "/fiber", label: "Fiber 3D", icon: "🎨" },
+    { path: "/examples", label: "示例", icon: "💡" },
+    { path: "/templates", label: "模板", icon: "📋" },
+    { path: "/blog", label: "博客", icon: "📝" },
+    { path: "/community", label: "社区", icon: "👥" },
+  ];
+
   return (
     <header
       class={`sticky top-0 z-50 w-full transition-all duration-300 ${
@@ -126,6 +134,37 @@ export const Header: Component = () => {
                   </span>
                 </A>
               ))}
+
+              {/* 更多菜单 Dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger
+                  asChild
+                >
+                  <Button 
+                    variant="ghost" 
+                    size="sm"
+                    class="group relative px-3 py-2 h-auto text-sm font-medium text-foreground/60 hover:text-foreground transition-all duration-300 rounded-lg hover:bg-transparent data-[expanded]:text-foreground"
+                  >
+                     <div class="absolute inset-0 rounded-lg bg-accent/50 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                     <span class="relative flex items-center gap-1.5">
+                       <span>更多</span>
+                       <svg class="h-4 w-4 opacity-50 transition-transform duration-200 group-data-[expanded]:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                       </svg>
+                     </span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent class="w-48 bg-background/95 backdrop-blur-xl border-border/50 p-1">
+                  {moreNavItems.map((item) => (
+                    <DropdownMenuItem class="cursor-pointer rounded-md focus:bg-accent focus:text-accent-foreground">
+                      <A href={item.path} class="w-full flex items-center gap-2 px-2 py-1.5">
+                        <span class="text-sm opacity-70">{item.icon}</span>
+                        <span class="text-sm font-medium">{item.label}</span>
+                      </A>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </nav>
 
             {/* 移动端下拉菜单 - 改进版 */}
@@ -155,6 +194,24 @@ export const Header: Component = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent class="w-56 bg-background/95 backdrop-blur-xl border-border/50">
                 {navItems.map((item) => (
+                  <DropdownMenuItem
+                    class={`transition-colors ${
+                      isActive(item.path)
+                        ? "bg-primary/10 text-foreground font-medium"
+                        : "hover:bg-accent"
+                    }`}
+                  >
+                    <A href={item.path} class="w-full flex items-center gap-2">
+                      <span class="text-base">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </A>
+                  </DropdownMenuItem>
+                ))}
+                
+                {/* 移动端菜单分隔线 */}
+                <div class="h-px bg-border/50 my-1 mx-2" />
+                
+                {moreNavItems.map((item) => (
                   <DropdownMenuItem
                     class={`transition-colors ${
                       isActive(item.path)

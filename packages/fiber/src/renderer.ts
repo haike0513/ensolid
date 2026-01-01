@@ -26,16 +26,12 @@ export const {
   getRootNode,
 } = createRenderer<Instance>({
   createElement(str: string) {
-    // We defer creation until we have args if possible, but Solid creates element then sets props.
-    // So we create a wrapper instance.
+    // console.log("Creating element:", str);
     return {
       type: str,
       parent: null,
       children: [],
-      object: null, // Created later or lazily?
-      // Actually, to keep it simple, we try to create immediately if no args needed,
-      // or we accept that strict arg-based objects need a specific handling.
-      // For now, let's try to instantiate immediately if possible, or use a "sentinel"
+      object: null, 
       props: {},
       autoAttached: false,
     };
@@ -156,12 +152,27 @@ function applyProp(object: any, name: string, value: any) {
   }
 }
 
+// Global catalogue of known components
+const catalogue: Record<string, any> = {};
+
+export const extend = (objects: Record<string, any>) => {
+  Object.assign(catalogue, objects);
+};
+
 function updateInstance(node: Instance) {
   // Logic to instantiate THREE object based on node.type and node.props.args
   if (!node.type) return;
 
-  // @ts-ignore
-  const Class = THREE[node.type.charAt(0).toUpperCase() + node.type.slice(1)];
+  // Resolve component from catalogue or THREE
+  let Class = catalogue[node.type];
+
+  // Auto-resolve standard THREE components if not found (camelCase -> PascalCase)
+  if (!Class) {
+     const name = node.type.charAt(0).toUpperCase() + node.type.slice(1);
+     // @ts-ignore
+     Class = THREE[name];
+  }
+
   if (!Class) {
     // console.warn(`Could not find THREE class for ${node.type}`);
     return;
@@ -181,6 +192,9 @@ function updateInstance(node: Instance) {
 
   try {
     node.object = new Class(...args);
+    // Link back to the fiber instance for event handling
+    if (!node.object.userData) node.object.userData = {};
+    node.object.userData.fiber = node;
   } catch (e) {
     console.error(e);
   }
@@ -189,6 +203,31 @@ function updateInstance(node: Instance) {
   for (const key in node.props) {
     applyProp(node.object, key, node.props[key]);
   }
+
+  // If we have children, we need to attach them now because they might have been 
+  // inserted while this object was null.
+  node.children.forEach(child => {
+     if (!child.object) return;
+     
+     let attach = child.props.attach;
+     
+     if (!attach) {
+        if (child.type.endsWith("Geometry")) attach = "geometry";
+        else if (child.type.endsWith("Material")) attach = "material";
+     }
+
+     if (attach) {
+        if (typeof attach === "string") {
+           if (node.object[attach] instanceof THREE.Material) {
+              node.object[attach].dispose?.();
+           }
+           node.object[attach] = child.object;
+           child.autoAttached = true;
+        }
+     } else if (child.object.isObject3D && node.object.isObject3D) {
+        node.object.add(child.object);
+     }
+  });
 
   // If already attached to parent, re-attach?
   // This simplistic implementation assumes updateInstance called during creation mainly

@@ -50,6 +50,9 @@ importers:
       '@types/node':
         specifier: ^25.0.3
         version: 25.0.3
+      '@types/three':
+        specifier: ^0.170.0
+        version: 0.170.0
       '@xyflow/system':
         specifier: ^0.0.74
         version: 0.0.74
@@ -62,6 +65,9 @@ importers:
       tailwindcss:
         specifier: ^4.1.18
         version: 4.1.18
+      three:
+        specifier: ^0.170.0
+        version: 0.170.0
       throttleit:
         specifier: ^2.1.0
         version: 2.1.0
