@@ -1,82 +1,39 @@
+// Group
 export * from "./Group/Group";
+
+// Shapes
 export * from "./Shape/Bar";
 export * from "./Shape/LinePath";
 export * from "./Shape/Area";
 export * from "./Shape/Arc";
 export * from "./Shape/Pie";
+export * from "./Shape/Circle";
+export * from "./Shape/Line";
+
+// Axes
 export * from "./Axis/AxisBottom";
 export * from "./Axis/AxisLeft";
+export * from "./Axis/AxisTop";
+export * from "./Axis/AxisRight";
+
+// Grid
 export * from "./Grid/GridRows";
 export * from "./Grid/GridColumns";
+
+// Text
 export * from "./Text/Text";
 
-export * from "d3-scale";
-// export * from 'd3-shape'; // Partial export to avoid conflicts (Pie)
-export {
-  line,
-  area,
-  arc,
-  pie as d3Pie,
-  stack,
-  curveBasis,
-  curveLinear,
-  curveMonotoneX,
-  curveStep,
-  curveStepAfter,
-  curveStepBefore,
-  curveNatural,
-  stackOffsetWiggle,
-  stackOrderNone,
-  stackOffsetNone,
-  stackOffsetExpand,
-  stackOffsetSilhouette,
-  linkRadial,
-  linkHorizontal,
-  linkVertical,
-} from "d3-shape";
-export type {
-  CurveFactory,
-  PieArcDatum,
-  Arc as D3Arc,
-  Line as D3Line,
-  Area as D3Area,
-} from "d3-shape";
-export * from "d3-time-format";
-export * from "d3-format";
+// Tooltip
+export * from "./Tooltip/Tooltip";
 
-export * from "d3-scale";
-export * from "d3-array";
+// Gradients
+export * from "./Gradient/LinearGradient";
+export * from "./Gradient/RadialGradient";
 
-// d3-hierarchy exports
-export {
-  hierarchy,
-  treemap,
-  treemapBinary,
-  treemapDice,
-  treemapSlice,
-  treemapSliceDice,
-  treemapSquarify,
-  treemapResquarify,
-  partition,
-  pack,
-  packSiblings,
-  packEnclose,
-  stratify,
-  cluster,
-  tree,
-} from "d3-hierarchy";
-export type {
-  HierarchyNode,
-  HierarchyRectangularNode,
-  HierarchyCircularNode,
-  HierarchyPointNode,
-  HierarchyLink,
-  HierarchyPointLink,
-  HierarchyRectangularLink,
-  TreemapLayout,
-  PackLayout,
-  PartitionLayout,
-  ClusterLayout,
-  TreeLayout,
-  StratifyOperator,
-} from "d3-hierarchy";
+// Pattern
+export * from "./Pattern/Pattern";
+
+// ClipPath
+export * from "./ClipPath/ClipPath";
+export * from "./ClipPath/CircleClipPath";
+export * from "./ClipPath/RectClipPath";

@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridRows, Group, scaleBand, scaleLinear, Bar, Text, max, min } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridRows, Group, Bar, Text } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { max, min } from "d3-array";
 
 const waterfallData = [
   { label: "期初", value: 1000, isTotal: true },

@@ -38,6 +38,14 @@
       "import": "./dist/Shape/Pie.js",
       "types": "./dist/Shape/Pie.d.ts"
     },
+    "./Circle": {
+      "import": "./dist/Shape/Circle.js",
+      "types": "./dist/Shape/Circle.d.ts"
+    },
+    "./Line": {
+      "import": "./dist/Shape/Line.js",
+      "types": "./dist/Shape/Line.d.ts"
+    },
     "./AxisBottom": {
       "import": "./dist/Axis/AxisBottom.js",
       "types": "./dist/Axis/AxisBottom.d.ts"
@@ -45,6 +53,14 @@
     "./AxisLeft": {
       "import": "./dist/Axis/AxisLeft.js",
       "types": "./dist/Axis/AxisLeft.d.ts"
+    },
+    "./AxisTop": {
+      "import": "./dist/Axis/AxisTop.js",
+      "types": "./dist/Axis/AxisTop.d.ts"
+    },
+    "./AxisRight": {
+      "import": "./dist/Axis/AxisRight.js",
+      "types": "./dist/Axis/AxisRight.d.ts"
     },
     "./GridRows": {
       "import": "./dist/Grid/GridRows.js",
@@ -57,6 +73,34 @@
     "./Text": {
       "import": "./dist/Text/Text.js",
       "types": "./dist/Text/Text.d.ts"
+    },
+    "./Tooltip": {
+      "import": "./dist/Tooltip/Tooltip.js",
+      "types": "./dist/Tooltip/Tooltip.d.ts"
+    },
+    "./LinearGradient": {
+      "import": "./dist/Gradient/LinearGradient.js",
+      "types": "./dist/Gradient/LinearGradient.d.ts"
+    },
+    "./RadialGradient": {
+      "import": "./dist/Gradient/RadialGradient.js",
+      "types": "./dist/Gradient/RadialGradient.d.ts"
+    },
+    "./Pattern": {
+      "import": "./dist/Pattern/Pattern.js",
+      "types": "./dist/Pattern/Pattern.d.ts"
+    },
+    "./ClipPath": {
+      "import": "./dist/ClipPath/ClipPath.js",
+      "types": "./dist/ClipPath/ClipPath.d.ts"
+    },
+    "./CircleClipPath": {
+      "import": "./dist/ClipPath/CircleClipPath.js",
+      "types": "./dist/ClipPath/CircleClipPath.d.ts"
+    },
+    "./RectClipPath": {
+      "import": "./dist/ClipPath/RectClipPath.js",
+      "types": "./dist/ClipPath/RectClipPath.d.ts"
     }
   },
   "files": [
