@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -76,6 +77,50 @@
     "./Toggle": {
       "import": "./dist/components/Toggle/Toggle.js",
       "types": "./dist/components/Toggle/index.d.ts"
+    },
+    "./Avatar": {
+      "import": "./dist/components/Avatar/Avatar.js",
+      "types": "./dist/components/Avatar/index.d.ts"
+    },
+    "./Collapsible": {
+      "import": "./dist/components/Collapsible/Collapsible.js",
+      "types": "./dist/components/Collapsible/index.d.ts"
+    },
+    "./ContextMenu": {
+      "import": "./dist/components/ContextMenu/ContextMenu.js",
+      "types": "./dist/components/ContextMenu/index.d.ts"
+    },
+    "./HoverCard": {
+      "import": "./dist/components/HoverCard/HoverCard.js",
+      "types": "./dist/components/HoverCard/index.d.ts"
+    },
+    "./ScrollArea": {
+      "import": "./dist/components/ScrollArea/ScrollArea.js",
+      "types": "./dist/components/ScrollArea/index.d.ts"
+    },
+    "./ToggleGroup": {
+      "import": "./dist/components/ToggleGroup/ToggleGroup.js",
+      "types": "./dist/components/ToggleGroup/index.d.ts"
+    },
+    "./AspectRatio": {
+      "import": "./dist/components/AspectRatio/AspectRatio.js",
+      "types": "./dist/components/AspectRatio/index.d.ts"
+    },
+    "./VisuallyHidden": {
+      "import": "./dist/components/VisuallyHidden/VisuallyHidden.js",
+      "types": "./dist/components/VisuallyHidden/index.d.ts"
+    },
+    "./Menubar": {
+      "import": "./dist/components/Menubar/Menubar.js",
+      "types": "./dist/components/Menubar/index.d.ts"
+    },
+    "./Toolbar": {
+      "import": "./dist/components/Toolbar/Toolbar.js",
+      "types": "./dist/components/Toolbar/index.d.ts"
+    },
+    "./NavigationMenu": {
+      "import": "./dist/components/NavigationMenu/NavigationMenu.js",
+      "types": "./dist/components/NavigationMenu/index.d.ts"
     }
   },
   "files": [

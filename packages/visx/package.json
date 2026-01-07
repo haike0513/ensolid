@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -12,6 +13,50 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./Group": {
+      "import": "./dist/Group/Group.js",
+      "types": "./dist/Group/Group.d.ts"
+    },
+    "./Bar": {
+      "import": "./dist/Shape/Bar.js",
+      "types": "./dist/Shape/Bar.d.ts"
+    },
+    "./LinePath": {
+      "import": "./dist/Shape/LinePath.js",
+      "types": "./dist/Shape/LinePath.d.ts"
+    },
+    "./Area": {
+      "import": "./dist/Shape/Area.js",
+      "types": "./dist/Shape/Area.d.ts"
+    },
+    "./Arc": {
+      "import": "./dist/Shape/Arc.js",
+      "types": "./dist/Shape/Arc.d.ts"
+    },
+    "./Pie": {
+      "import": "./dist/Shape/Pie.js",
+      "types": "./dist/Shape/Pie.d.ts"
+    },
+    "./AxisBottom": {
+      "import": "./dist/Axis/AxisBottom.js",
+      "types": "./dist/Axis/AxisBottom.d.ts"
+    },
+    "./AxisLeft": {
+      "import": "./dist/Axis/AxisLeft.js",
+      "types": "./dist/Axis/AxisLeft.d.ts"
+    },
+    "./GridRows": {
+      "import": "./dist/Grid/GridRows.js",
+      "types": "./dist/Grid/GridRows.d.ts"
+    },
+    "./GridColumns": {
+      "import": "./dist/Grid/GridColumns.js",
+      "types": "./dist/Grid/GridColumns.d.ts"
+    },
+    "./Text": {
+      "import": "./dist/Text/Text.js",
+      "types": "./dist/Text/Text.d.ts"
     }
   },
   "files": [

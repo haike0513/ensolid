@@ -5,10 +5,26 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./Canvas": {
+      "import": "./dist/web/Canvas.js",
+      "types": "./dist/web/Canvas.d.ts"
+    },
+    "./renderer": {
+      "import": "./dist/renderer.js",
+      "types": "./dist/renderer.d.ts"
+    },
+    "./loader": {
+      "import": "./dist/web/loader.js",
+      "types": "./dist/web/loader.d.ts"
     }
   },
   "files": [

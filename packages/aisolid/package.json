@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -12,6 +13,26 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./useChat": {
+      "import": "./dist/hooks/useChat.js",
+      "types": "./dist/hooks/useChat.d.ts"
+    },
+    "./useCompletion": {
+      "import": "./dist/hooks/useCompletion.js",
+      "types": "./dist/hooks/useCompletion.d.ts"
+    },
+    "./useAssistant": {
+      "import": "./dist/hooks/useAssistant.js",
+      "types": "./dist/hooks/useAssistant.d.ts"
+    },
+    "./utils": {
+      "import": "./dist/utils.js",
+      "types": "./dist/utils.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
     }
   },
   "files": [

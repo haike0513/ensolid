@@ -2,9 +2,10 @@
   "name": "@ensolid/streamdown",
   "version": "0.0.1",
   "type": "module",
-  "main": "./dist/index`.js",
+  "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -12,6 +13,22 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./Streamdown": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./parse-blocks": {
+      "types": "./dist/lib/parse-blocks.d.ts",
+      "import": "./dist/lib/parse-blocks.js"
+    },
+    "./utils": {
+      "types": "./dist/lib/utils.d.ts",
+      "import": "./dist/lib/utils.js"
+    },
+    "./markdown": {
+      "types": "./dist/lib/markdown.d.ts",
+      "import": "./dist/lib/markdown.js"
     }
   },
   "files": [

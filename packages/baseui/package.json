@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -12,6 +13,82 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./Button": {
+      "import": "./dist/components/Button/index.js",
+      "types": "./dist/components/Button/index.d.ts"
+    },
+    "./Input": {
+      "import": "./dist/components/Input/index.js",
+      "types": "./dist/components/Input/index.d.ts"
+    },
+    "./Select": {
+      "import": "./dist/components/Select/index.js",
+      "types": "./dist/components/Select/index.d.ts"
+    },
+    "./Modal": {
+      "import": "./dist/components/Modal/index.js",
+      "types": "./dist/components/Modal/index.d.ts"
+    },
+    "./Table": {
+      "import": "./dist/components/Table/index.js",
+      "types": "./dist/components/Table/index.d.ts"
+    },
+    "./Tabs": {
+      "import": "./dist/components/Tabs/index.js",
+      "types": "./dist/components/Tabs/index.d.ts"
+    },
+    "./Tooltip": {
+      "import": "./dist/components/Tooltip/index.js",
+      "types": "./dist/components/Tooltip/index.d.ts"
+    },
+    "./Popover": {
+      "import": "./dist/components/Popover/index.js",
+      "types": "./dist/components/Popover/index.d.ts"
+    },
+    "./Menu": {
+      "import": "./dist/components/Menu/index.js",
+      "types": "./dist/components/Menu/index.d.ts"
+    },
+    "./Accordion": {
+      "import": "./dist/components/Accordion/index.js",
+      "types": "./dist/components/Accordion/index.d.ts"
+    },
+    "./AlertDialog": {
+      "import": "./dist/components/AlertDialog/index.js",
+      "types": "./dist/components/AlertDialog/index.d.ts"
+    },
+    "./Avatar": {
+      "import": "./dist/components/Avatar/index.js",
+      "types": "./dist/components/Avatar/index.d.ts"
+    },
+    "./Badge": {
+      "import": "./dist/components/Badge/index.js",
+      "types": "./dist/components/Badge/index.d.ts"
+    },
+    "./Checkbox": {
+      "import": "./dist/components/Checkbox/index.js",
+      "types": "./dist/components/Checkbox/index.d.ts"
+    },
+    "./Switch": {
+      "import": "./dist/components/Switch/index.js",
+      "types": "./dist/components/Switch/index.d.ts"
+    },
+    "./Radio": {
+      "import": "./dist/components/Radio/index.js",
+      "types": "./dist/components/Radio/index.d.ts"
+    },
+    "./Slider": {
+      "import": "./dist/components/Slider/index.js",
+      "types": "./dist/components/Slider/index.d.ts"
+    },
+    "./Progress": {
+      "import": "./dist/components/Progress/index.js",
+      "types": "./dist/components/Progress/index.d.ts"
+    },
+    "./Card": {
+      "import": "./dist/components/Card/index.js",
+      "types": "./dist/components/Card/index.d.ts"
     }
   },
   "files": [

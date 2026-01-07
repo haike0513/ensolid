@@ -365,9 +365,33 @@ Since this project uses AI-assisted porting, if you find any issues or have impr
 
 - ✅ **TypeScript Support**: All components have complete type definitions
 - ✅ **SSR Compatible**: All components support server-side rendering
-- ✅ **Tree Shaking**: Support for on-demand imports, reducing bundle size
+- ✅ **Tree Shaking**: Fully optimized for tree shaking with `sideEffects: false` and granular exports
 - ✅ **Monorepo Architecture**: Use pnpm workspace to manage multi-package projects
 - ✅ **Independent Build**: Each package can be built and published independently
+
+### Tree Shaking Support
+
+All `@ensolid/*` packages are fully optimized for tree shaking:
+
+- ✅ **Zero Side Effects**: All packages marked with `sideEffects: false`
+- ✅ **Granular Exports**: Individual component exports for precise imports
+- ✅ **Module Preservation**: `preserveModules: true` in build configuration
+- ✅ **Optimal Bundle Size**: Import only what you need
+
+**Usage Example:**
+
+```typescript
+// Default import - modern bundlers will tree shake automatically
+import { Button, Input } from '@ensolid/baseui';
+
+// Precise import - maximum tree shaking
+import { Button } from '@ensolid/baseui/Button';
+import { Input } from '@ensolid/baseui/Input';
+```
+
+**📖 For detailed tree shaking guide and best practices, see [TREE_SHAKING_GUIDE.md](./TREE_SHAKING_GUIDE.md)**
+
+**Bundle Size Reduction**: Up to 90% smaller when importing specific components vs entire package!
 
 ## 🏗️ Architecture Design
 

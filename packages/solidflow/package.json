@@ -5,6 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
@@ -12,6 +13,50 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./Flow": {
+      "import": "./dist/components/Flow/index.js",
+      "types": "./dist/components/Flow/index.d.ts"
+    },
+    "./Node": {
+      "import": "./dist/components/Node/index.js",
+      "types": "./dist/components/Node/index.d.ts"
+    },
+    "./Edge": {
+      "import": "./dist/components/Edge/index.js",
+      "types": "./dist/components/Edge/index.d.ts"
+    },
+    "./Handle": {
+      "import": "./dist/components/Handle/index.js",
+      "types": "./dist/components/Handle/index.d.ts"
+    },
+    "./Background": {
+      "import": "./dist/components/Background/index.js",
+      "types": "./dist/components/Background/index.d.ts"
+    },
+    "./Controls": {
+      "import": "./dist/components/Controls/index.js",
+      "types": "./dist/components/Controls/index.d.ts"
+    },
+    "./MiniMap": {
+      "import": "./dist/components/MiniMap/index.js",
+      "types": "./dist/components/MiniMap/index.d.ts"
+    },
+    "./Panel": {
+      "import": "./dist/components/Panel/index.js",
+      "types": "./dist/components/Panel/index.d.ts"
+    },
+    "./FlowProvider": {
+      "import": "./dist/components/FlowProvider/index.js",
+      "types": "./dist/components/FlowProvider/index.d.ts"
+    },
+    "./types": {
+      "import": "./dist/types.js",
+      "types": "./dist/types.d.ts"
+    },
+    "./utils": {
+      "import": "./dist/utils/index.js",
+      "types": "./dist/utils/index.d.ts"
     }
   },
   "files": [
