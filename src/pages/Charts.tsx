@@ -52,6 +52,18 @@ import { BulletChart } from "./charts/BulletChart";
 import { GroupedBarChart } from "./charts/GroupedBarChart";
 import { StreamGraph } from "./charts/StreamGraph";
 import { SlopeChart } from "./charts/SlopeChart";
+import { RidgelineChart } from "./charts/RidgelineChart";
+import { MarimekkoChart } from "./charts/MarimekkoChart";
+import { DumbbellChart } from "./charts/DumbbellChart";
+import { BumpChart } from "./charts/BumpChart";
+import { ViolinPlot } from "./charts/ViolinPlot";
+import { SpiralChart } from "./charts/SpiralChart";
+import { WaffleChart } from "./charts/WaffleChart";
+import { TernaryPlot } from "./charts/TernaryPlot";
+import { ArcDiagram } from "./charts/ArcDiagram";
+import { ChordDiagram } from "./charts/ChordDiagram";
+import { ForceDirectedGraph } from "./charts/ForceDirectedGraph";
+import { EdgeBundlingChart } from "./charts/EdgeBundlingChart";
 
 type ChartCategory =
   | "基础图表"
@@ -505,6 +517,102 @@ const chartItems: ChartItem[] = [
     category: "趋势分析",
     icon: "📈",
     description: "前后对比分析",
+  },
+  {
+    id: "ridgeline",
+    name: "山脊图",
+    component: RidgelineChart,
+    category: "数据分布",
+    icon: "🏔️",
+    description: "多层级分布趋势",
+  },
+  {
+    id: "marimekko",
+    name: "马赛克图",
+    component: MarimekkoChart,
+    category: "数据对比",
+    icon: "🧱",
+    description: "不等宽堆叠柱状图",
+  },
+  {
+    id: "dumbbell",
+    name: "哑铃图",
+    component: DumbbellChart,
+    category: "数据对比",
+    icon: "🏋️",
+    description: "前后对比分析",
+  },
+  {
+    id: "bump",
+    name: "凹凸图",
+    component: BumpChart,
+    category: "趋势分析",
+    icon: "🎢",
+    description: "排名变化展示",
+  },
+  {
+    id: "violin",
+    name: "小提琴图",
+    component: ViolinPlot,
+    category: "数据分布",
+    icon: "🎻",
+    description: "数据分布密度",
+  },
+  {
+    id: "spiral",
+    name: "螺旋图",
+    component: SpiralChart,
+    category: "特殊图表",
+    icon: "🌀",
+    description: "周期性数据展示",
+  },
+  {
+    id: "waffle",
+    name: "华夫饼图",
+    component: WaffleChart,
+    category: "数据分布",
+    icon: "🧇",
+    description: "百分比构成展示",
+  },
+  {
+    id: "ternary",
+    name: "三元图",
+    component: TernaryPlot,
+    category: "关系图表",
+    icon: "🔺",
+    description: "三维占比分析",
+  },
+  {
+    id: "arc",
+    name: "弧线图",
+    component: ArcDiagram,
+    category: "关系图表",
+    icon: "🌈",
+    description: "线性关系展示",
+  },
+  {
+    id: "chord",
+    name: "弦图",
+    component: ChordDiagram,
+    category: "关系图表",
+    icon: "🕸️",
+    description: "复杂关系流转",
+  },
+  {
+    id: "force",
+    name: "力导向图",
+    component: ForceDirectedGraph,
+    category: "关系图表",
+    icon: "⚡",
+    description: "动态网络结构",
+  },
+  {
+    id: "edge-bundling",
+    name: "边缘捆绑图",
+    component: EdgeBundlingChart,
+    category: "关系图表",
+    icon: "🧶",
+    description: "层级关系连接",
   },
 ];
 

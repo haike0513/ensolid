@@ -62,12 +62,12 @@ export const Header: Component = () => {
     { path: "/components", label: "组件", icon: "🧩" },
     { path: "/blocks", label: "区块", icon: "🔲" },
     { path: "/charts", label: "图表", icon: "📊" },
-    { path: "/solidflow", label: "流程图", icon: "🌊" },
-    { path: "/workflow", label: "工作流", icon: "⚡" },
-    { path: "/ai-playground", label: "AI", icon: "🤖" },
   ];
 
   const moreNavItems = [
+    { path: "/solidflow", label: "流程图", icon: "🌊" },
+    { path: "/workflow", label: "工作流", icon: "⚡" },
+    { path: "/ai-playground", label: "AI", icon: "🤖" },
     { path: "/fiber", label: "Fiber 3D", icon: "🎨" },
     { path: "/examples", label: "示例", icon: "💡" },
     { path: "/templates", label: "模板", icon: "📋" },
