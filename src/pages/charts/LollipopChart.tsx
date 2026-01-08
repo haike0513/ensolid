@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For, createMemo } from "solid-js";
-import { Group, AxisBottom, AxisLeft, scaleBand, scaleLinear } from "@ensolid/visx";
+import { Group, AxisBottom, AxisLeft } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
 
 const data = [
   { country: "United States", value: 12394 },

@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridRows, Group, scaleBand, scaleLinear, Bar, min, max } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridRows, Group, Bar } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { min, max } from "d3-array";
 
 const candlestickData = Array.from({ length: 30 }, (_, i) => {
   const base = 100 + Math.random() * 20;

@@ -46,6 +46,11 @@
     "@types/three": "^0.170.0",
     "@xyflow/system": "^0.0.74",
     "ai": "^6.0.3",
+    "d3-array": "^3.2.4",
+    "d3-hierarchy": "^3.1.2",
+    "d3-scale": "^4.0.2",
+    "d3-shape": "^3.2.0",
+    "d3-time-format": "^4.1.0",
     "solid-js": "^1.9.9",
     "tailwindcss": "^4.1.18",
     "three": "^0.170.0",
@@ -54,6 +59,11 @@
     "zod": "^4.2.1"
   },
   "devDependencies": {
+    "@types/d3-array": "^3.2.1",
+    "@types/d3-hierarchy": "^3.1.7",
+    "@types/d3-scale": "^4.0.8",
+    "@types/d3-shape": "^3.1.6",
+    "@types/d3-time-format": "^4.0.3",
     "clsx": "^2.1.1",
     "tsup": "^8.5.1",
     "typescript": "~5.8.3",

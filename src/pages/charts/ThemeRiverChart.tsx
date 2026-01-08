@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, area, stack, stackOffsetWiggle, stackOrderNone, scaleLinear, scalePoint, curveBasis } from "@ensolid/visx";
+import { Group } from "@ensolid/visx";
+import { area, stack, stackOffsetWiggle, stackOrderNone, curveBasis } from "d3-shape";
+import { scaleLinear, scalePoint } from "d3-scale";
 
 const themes = ["Social", "Search", "Mobile", "Email", "Video"];
 const timeSteps = 15;
@@ -33,15 +35,15 @@ export const ThemeRiverChart: Component = () => {
 
   const yScale = scaleLinear<number>()
     .domain([
-      Math.min(...series.flatMap(s => s.map(d => d[0]))),
-      Math.max(...series.flatMap(s => s.map(d => d[1])))
+      Math.min(...series.flatMap((s: any[]) => s.map((d: any) => d[0]))),
+      Math.max(...series.flatMap((s: any[]) => s.map((d: any) => d[1])))
     ])
     .range([innerHeight, 0]);
 
   const areaGen = area<any>()
-    .x(d => xScale(d.data.time))
-    .y0(d => yScale(d[0]))
-    .y1(d => yScale(d[1]))
+    .x((d: any) => xScale(d.data.time))
+    .y0((d: any) => yScale(d[0]))
+    .y1((d: any) => yScale(d[1]))
     .curve(curveBasis);
 
   const colors = ["#6366f1", "#8b5cf6", "#a855f7", "#d946ef", "#ec4899"];

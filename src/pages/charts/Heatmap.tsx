@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, Group, scaleBand, scaleLinear } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, Group } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
 
 const heatmapData = Array.from({ length: 7 }, (_, day) =>
     Array.from({ length: 12 }, (_, hour) => ({

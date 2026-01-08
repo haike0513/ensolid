@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, hierarchy, tree } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { hierarchy, tree } from "d3-hierarchy";
 
 const treeData = {
   name: "Root",

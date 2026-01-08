@@ -1,6 +1,9 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridColumns, GridRows, Group, LinePath, curveMonotoneX, extent, scaleLinear, max } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridColumns, GridRows, Group, LinePath } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
+import { extent, max } from "d3-array";
+import { curveMonotoneX } from "d3-shape";
 
 const lineData = Array.from({ length: 20 }, (_, i) => ({
     x: i,

@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridRows, Group, scaleBand, scaleLinear, Bar, min, max } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridRows, Group, Bar } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { min, max } from "d3-array";
 
 const boxPlotData = [
   { label: "Group A", min: 10, q1: 30, median: 50, q3: 70, max: 90 },

@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, scaleBand, scaleLinear } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
 
 const pictorialData = [
   { name: "Apples", value: 100, icon: "🍎" },

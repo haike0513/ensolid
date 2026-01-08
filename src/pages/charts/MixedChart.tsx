@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, Group, Bar, LinePath, scaleBand, scaleLinear, curveMonotoneX, GridRows } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, Group, Bar, LinePath, GridRows } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { curveMonotoneX } from "d3-shape";
 
 const data = [
   { month: "Jan", evaporation: 2.0, precipitation: 2.6, temperature: 2.0 },

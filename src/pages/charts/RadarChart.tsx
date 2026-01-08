@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, scaleLinear, Text } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
 
 const radarData = [
   { attribute: "Speed", value: 90 },

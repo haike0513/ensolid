@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, Arc, arc as d3Arc, Pie } from "@ensolid/visx";
+import { Group, Text, Arc, Pie } from "@ensolid/visx";
+import { arc as d3Arc } from "d3-shape";
 
 const sunburstData = {
   name: "全部",

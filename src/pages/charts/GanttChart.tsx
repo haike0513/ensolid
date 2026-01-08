@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, scaleBand, scaleTime } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { scaleBand, scaleTime } from "d3-scale";
 
 const ganttData = [
   { task: "Research", start: new Date(2024, 0, 1), end: new Date(2024, 0, 5), color: "#6366f1" },

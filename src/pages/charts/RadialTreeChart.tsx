@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For, createMemo } from "solid-js";
-import { Group, tree, hierarchy, scaleLinear, linkRadial } from "@ensolid/visx";
+import { Group } from "@ensolid/visx";
+import { hierarchy, tree } from "d3-hierarchy";
+import { linkRadial } from "d3-shape";
 
 interface Data {
   name: string;

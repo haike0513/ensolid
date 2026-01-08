@@ -1,6 +1,9 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Arc, Group, Pie, Text, arc as d3Arc, scaleLinear, max } from "@ensolid/visx";
+import { Arc, Group, Pie, Text } from "@ensolid/visx";
+import { arc as d3Arc } from "d3-shape";
+import { scaleLinear } from "d3-scale";
+import { max } from "d3-array";
 
 const roseData = [
   { label: "rose1", value: 40, color: "#ff7c7c" },
@@ -20,7 +23,7 @@ export const NightingaleChart: Component = () => {
 
   const radiusScale = scaleLinear<number>()
     .range([50, radius])
-    .domain([0, max(roseData, (d) => d.value) || 100]);
+    .domain([0, max(roseData, (d: {value: number}) => d.value) || 100]);
 
   return (
     <div class="group relative">

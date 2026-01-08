@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridRows, Group, scaleBand, scaleLinear, Bar, max } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridRows, Group, Bar } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { max } from "d3-array";
 
 const negativeData = [
   { label: "A类", positive: 45, negative: -30 },

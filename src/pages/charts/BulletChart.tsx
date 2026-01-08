@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For, createMemo } from "solid-js";
-import { Group, scaleLinear, AxisBottom } from "@ensolid/visx";
+import { Group, AxisBottom } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
 
 interface BulletData {
   title: string;

@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, Arc, arc as d3Arc, scaleLinear } from "@ensolid/visx";
+import { Group, Text, Arc } from "@ensolid/visx";
+import { arc as d3Arc } from "d3-shape";
+import { scaleLinear } from "d3-scale";
 
 const polarData = [
   { name: "周一", value: 120, color: "#6366f1" },

@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridColumns, GridRows, Group, scaleLinear, scaleOrdinal, scaleSqrt, max, min } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridColumns, GridRows, Group } from "@ensolid/visx";
+import { scaleLinear, scaleOrdinal, scaleSqrt } from "d3-scale";
+import { max, min } from "d3-array";
 
 const bubbleData = Array.from({ length: 30 }, (_, i) => ({
     x: Math.random() * 100,
@@ -18,15 +20,15 @@ export const BubbleChart: Component = () => {
 
   const xScale = scaleLinear<number>()
     .range([0, xMax])
-    .domain([0, max(bubbleData, (d) => d.x) ?? 100]);
+    .domain([0, max(bubbleData, (d: {x: number}) => d.x) ?? 100]);
 
   const yScale = scaleLinear<number>()
     .range([yMax, 0])
-    .domain([0, max(bubbleData, (d) => d.y) ?? 100]);
+    .domain([0, max(bubbleData, (d: {y: number}) => d.y) ?? 100]);
 
   const sizeScale = scaleSqrt<number>()
     .range([5, 40])
-    .domain([min(bubbleData, (d) => d.value) ?? 100, max(bubbleData, (d) => d.value) ?? 1100]);
+    .domain([min(bubbleData, (d: {value: number}) => d.value) ?? 100, max(bubbleData, (d: {value: number}) => d.value) ?? 1100]);
 
   const colorScale = scaleOrdinal<string, string>()
     .domain(["A", "B", "C"])

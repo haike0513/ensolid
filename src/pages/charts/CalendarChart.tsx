@@ -1,6 +1,8 @@
 import type { Component } from "solid-js";
 import { For, createMemo } from "solid-js";
-import { Group, Text, scaleLinear, timeFormat } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
+import { timeFormat } from "d3-time-format";
 
 export const CalendarChart: Component = () => {
   const width = 800;

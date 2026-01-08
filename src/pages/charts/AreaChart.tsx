@@ -1,5 +1,8 @@
 import type { Component } from "solid-js";
-import { AxisBottom, AxisLeft, Group, LinePath, Area, curveMonotoneX, extent, scaleLinear, max, GridRows } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, Group, LinePath, Area, GridRows } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
+import { curveMonotoneX } from "d3-shape";
+import { extent, max } from "d3-array";
 
 const stockData = Array.from({ length: 50 }, (_, i) => ({
     date: new Date(2023, 0, i + 1),
@@ -15,11 +18,11 @@ export const AreaChart: Component = () => {
 
   const xScale = scaleLinear<number>()
     .range([0, xMax])
-    .domain(extent(stockData, (d) => d.date.getTime()) as [number, number]);
+    .domain(extent(stockData, (d: {date: Date}) => d.date.getTime()) as [number, number]);
 
   const yScale = scaleLinear<number>()
     .range([yMax, 0])
-    .domain([0, max(stockData, (d) => d.value) ?? 0]);
+    .domain([0, max(stockData, (d: {value: number}) => d.value) ?? 0]);
 
   return (
     <div class="group relative">

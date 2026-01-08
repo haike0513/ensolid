@@ -7,11 +7,10 @@ import {
   GridRows,
   Group,
   LinePath,
-  curveStep,
-  scaleLinear,
-  max,
-  extent
 } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
+import { max, extent } from "d3-array";
+import { curveStep } from "d3-shape";
 
 const stepData = Array.from({ length: 20 }, (_, i) => ({
   x: i,
@@ -27,11 +26,11 @@ export const StepLineChart: Component = () => {
 
   const xScale = scaleLinear<number>()
     .range([0, xMax])
-    .domain(extent(stepData, (d) => d.x) as [number, number]);
+    .domain(extent(stepData, (d: {x: number}) => d.x) as [number, number]);
 
   const yScale = scaleLinear<number>()
     .range([yMax, 0])
-    .domain([0, max(stepData, (d) => d.y) ?? 100]);
+    .domain([0, max(stepData, (d: {y: number}) => d.y) ?? 100]);
 
   return (
     <div class="group relative">

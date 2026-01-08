@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Arc, Group, Pie, Text, arc as d3Arc } from "@ensolid/visx";
+import { Arc, Group, Pie, Text } from "@ensolid/visx";
+import { arc as d3Arc } from "d3-shape";
 
 const pieData = [
     { label: "Chrome", usage: 65, color: "#4285F4" },

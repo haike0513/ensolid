@@ -1,6 +1,9 @@
 import type { Component } from "solid-js";
 import { For, createSignal, onCleanup, onMount } from "solid-js";
-import { AxisBottom, AxisLeft, GridColumns, GridRows, Group, LinePath, curveMonotoneX, extent, scaleLinear, max } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridColumns, GridRows, Group, LinePath } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
+import { curveMonotoneX } from "d3-shape";
+import { extent, max } from "d3-array";
 
 export const DynamicLineChart: Component = () => {
     const width = 600;

@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, Group, scaleBand, scaleLinear, scaleOrdinal } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, Group } from "@ensolid/visx";
+import { scaleBand, scaleLinear, scaleOrdinal } from "d3-scale";
 
 const hours = Array.from({ length: 24 }, (_, i) => i);
 const days = ["Saturday", "Friday", "Thursday", "Wednesday", "Tuesday", "Monday", "Sunday"];

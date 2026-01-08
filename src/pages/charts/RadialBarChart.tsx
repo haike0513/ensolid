@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Arc, Group, scaleBand, scaleLinear, scaleSqrt } from "@ensolid/visx";
+import { Arc, Group } from "@ensolid/visx";
+import { scaleBand, scaleLinear, scaleSqrt } from "d3-scale";
 
 const radialData = [
   { name: "Design", score: 90, color: "#f43f5e" },

@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, hierarchy, treemap, treemapSquarify } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { hierarchy, treemap, treemapSquarify } from "d3-hierarchy";
 
 const treemapData = {
   name: "root",
@@ -32,7 +33,7 @@ export const TreemapChart: Component = () => {
   // 创建层级结构
   const root = hierarchy(treemapData)
     .sum((d: any) => d.value)
-    .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
+    .sort((a: any, b: any) => (b.value ?? 0) - (a.value ?? 0));
 
   // 创建 treemap 布局
   const treemapLayout = treemap<typeof treemapData>()

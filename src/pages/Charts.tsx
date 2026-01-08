@@ -49,6 +49,9 @@ import { LollipopChart } from "./charts/LollipopChart";
 import { CircularPackingChart } from "./charts/CircularPackingChart";
 import { RadialTreeChart } from "./charts/RadialTreeChart";
 import { BulletChart } from "./charts/BulletChart";
+import { GroupedBarChart } from "./charts/GroupedBarChart";
+import { StreamGraph } from "./charts/StreamGraph";
+import { SlopeChart } from "./charts/SlopeChart";
 
 type ChartCategory =
   | "基础图表"
@@ -478,6 +481,30 @@ const chartItems: ChartItem[] = [
     category: "数据对比",
     icon: "📏",
     description: "目标达成情况对比",
+  },
+  {
+    id: "grouped-bar",
+    name: "分组柱状图",
+    component: GroupedBarChart,
+    category: "数据对比",
+    icon: "📊",
+    description: "多维度并列对比",
+  },
+  {
+    id: "stream",
+    name: "河流图",
+    component: StreamGraph,
+    category: "趋势分析",
+    icon: "🌊",
+    description: "流动趋势变化",
+  },
+  {
+    id: "slope",
+    name: "斜率图",
+    component: SlopeChart,
+    category: "趋势分析",
+    icon: "📈",
+    description: "前后对比分析",
   },
 ];
 

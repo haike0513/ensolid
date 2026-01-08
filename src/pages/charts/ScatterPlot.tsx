@@ -6,11 +6,9 @@ import {
   GridColumns,
   GridRows,
   Group,
-  scaleLinear,
-  scaleSqrt,
-  max,
-  min
 } from "@ensolid/visx";
+import { scaleLinear, scaleSqrt } from "d3-scale";
+import { max, min } from "d3-array";
 
 const scatterData = Array.from({ length: 50 }, (_, i) => ({
     x: Math.random() * 100,
@@ -27,15 +25,15 @@ export const ScatterPlot: Component = () => {
 
   const xScale = scaleLinear<number>()
     .range([0, xMax])
-    .domain([0, max(scatterData, (d) => d.x) ?? 100]);
+    .domain([0, max(scatterData, (d: {x: number}) => d.x) ?? 100]);
 
   const yScale = scaleLinear<number>()
     .range([yMax, 0])
-    .domain([0, max(scatterData, (d) => d.y) ?? 100]);
+    .domain([0, max(scatterData, (d: {y: number}) => d.y) ?? 100]);
 
   const sizeScale = scaleSqrt<number>()
     .range([4, 20])
-    .domain([min(scatterData, (d) => d.size) ?? 5, max(scatterData, (d) => d.size) ?? 25]);
+    .domain([min(scatterData, (d: {size: number}) => d.size) ?? 5, max(scatterData, (d: {size: number}) => d.size) ?? 25]);
 
   return (
     <div class="group relative">

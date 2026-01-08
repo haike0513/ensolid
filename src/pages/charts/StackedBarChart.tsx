@@ -1,6 +1,9 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { AxisBottom, AxisLeft, GridRows, Group, scaleBand, scaleLinear, Bar, stack, max, sum } from "@ensolid/visx";
+import { AxisBottom, AxisLeft, GridRows, Group, Bar } from "@ensolid/visx";
+import { scaleBand, scaleLinear } from "d3-scale";
+import { stack } from "d3-shape";
+import { max, sum } from "d3-array";
 
 const stackedBarData = [
     { category: "Q1", productA: 20, productB: 15, productC: 10 },

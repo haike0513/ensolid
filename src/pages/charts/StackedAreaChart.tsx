@@ -1,6 +1,9 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Area, AxisBottom, AxisLeft, GridRows, Group, scaleLinear, stack, curveMonotoneX, extent, max, sum } from "@ensolid/visx";
+import { Area, AxisBottom, AxisLeft, GridRows, Group } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
+import { stack, curveMonotoneX } from "d3-shape";
+import { extent, max, sum } from "d3-array";
 
 const stackedAreaData = Array.from({ length: 20 }, (_, i) => ({
     date: i,
@@ -24,7 +27,7 @@ export const StackedAreaChart: Component = () => {
 
   const xScale = scaleLinear<number>()
     .range([0, xMax])
-    .domain(extent(stackedAreaData, (d) => d.date) as [number, number]);
+    .domain(extent(stackedAreaData, (d: {date: number}) => d.date) as [number, number]);
 
   const yScale = scaleLinear<number>()
     .range([yMax, 0])

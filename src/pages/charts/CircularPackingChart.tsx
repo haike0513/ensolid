@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For, createMemo } from "solid-js";
-import { Group, pack, hierarchy } from "@ensolid/visx";
+import { Group } from "@ensolid/visx";
+import { pack, hierarchy } from "d3-hierarchy";
 
 interface Data {
   name: string;
@@ -41,8 +42,8 @@ export const CircularPackingChart: Component = () => {
 
   const root = createMemo(() => {
     const rootHierarchy = hierarchy(data)
-      .sum((d) => d.value ?? 0)
-      .sort((a, b) => (b.value ?? 0) - (a.value ?? 0));
+      .sum((d: any) => d.value ?? 0)
+      .sort((a: any, b: any) => (b.value ?? 0) - (a.value ?? 0));
 
     return pack<Data>().size([innerWidth, innerHeight]).padding(3)(rootHierarchy);
   });

@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For, createMemo } from "solid-js";
-import { Group, Text, scaleOrdinal } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
+import { scaleOrdinal } from "d3-scale";
 
 // Simple custom implementation of a Force Graph since d3-force might not be directly exported or easy to plug in without full D3.
 // We will use a static layout that LOOKS like a force graph for visual demonstration.

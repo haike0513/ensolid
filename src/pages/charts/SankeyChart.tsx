@@ -1,6 +1,6 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, scaleLinear } from "@ensolid/visx";
+import { Group, Text } from "@ensolid/visx";
 
 const sankeyNodes = [
   { name: "访问", x: 0, color: "#6366f1" },

@@ -1,6 +1,7 @@
 import type { Component } from "solid-js";
 import { For } from "solid-js";
-import { Group, Text, scaleLinear, LinePath } from "@ensolid/visx";
+import { Group, Text, LinePath } from "@ensolid/visx";
+import { scaleLinear } from "d3-scale";
 
 const dimensions = ["价格", "质量", "服务", "速度", "创新"];
 const parallelData = [
