@@ -52,7 +52,7 @@ const makeBundleData = (radius: number) => {
     const clusterLayout = cluster()
         .size([360, radius - 100]); // angle in degrees, radius
         
-    clusterLayout(root);
+    clusterLayout(root as any);
     
     // Now we need links. Let's create random links between leaves for effect
     const leaves = root.leaves();
@@ -133,7 +133,7 @@ export const EdgeBundlingChart: Component = () => {
                                             dx={node.x < 180 ? 8 : -8}
                                             dy=".31em"
                                             text-anchor={node.x < 180 ? "start" : "end"}
-                                            transform={node.x >= 180 ? "rotate(180)" : null}
+                                            transform={node.x >= 180 ? "rotate(180)" : undefined}
                                             font-size="10px"
                                             class="fill-muted-foreground font-medium"
                                         >
