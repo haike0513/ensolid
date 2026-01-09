@@ -90,7 +90,7 @@ export class ClipboardManager {
         return null;
       }
 
-      return {
+      const newEdge: Edge = {
         ...edge,
         id: generateId(),
         source: newSourceId,
@@ -98,6 +98,7 @@ export class ClipboardManager {
         // 清除选择状态
         selected: false,
       };
+      return newEdge;
     }).filter((edge): edge is Edge => edge !== null);
 
     return { nodes: newNodes, edges: newEdges };

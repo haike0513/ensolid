@@ -10,9 +10,9 @@ import {
   onMount,
   splitProps,
   Show,
-  createEffect,
 } from "solid-js";
 import type {
+  Edge,
   EdgeChange,
   FlowProps,
   Node,
@@ -954,9 +954,9 @@ export const Flow: Component<FlowProps> = (props) => {
               }
 
               // 选中粘贴的节点
-              const newSelectedNodes = new Set(pasted.nodes.map((n) => n.id));
+              const newSelectedNodes = new Set<string>(pasted.nodes.map((n) => n.id));
               setSelectedNodes(newSelectedNodes);
-              setSelectedEdges(new Set());
+              setSelectedEdges(new Set<string>());
               local.onSelectionChange?.({
                 nodes: pasted.nodes,
                 edges: [],
@@ -967,8 +967,8 @@ export const Flow: Component<FlowProps> = (props) => {
 
         // Escape 取消选择
         if (event.key === "Escape") {
-          setSelectedNodes(new Set());
-          setSelectedEdges(new Set());
+          setSelectedNodes(new Set<string>());
+          setSelectedEdges(new Set<string>());
           local.onSelectionChange?.({ nodes: [], edges: [] });
         }
       };
@@ -1094,9 +1094,9 @@ export const Flow: Component<FlowProps> = (props) => {
               }
 
               // 选中粘贴的节点
-              const newSelectedNodes = new Set(pasted.nodes.map((n) => n.id));
+              const newSelectedNodes = new Set<string>(pasted.nodes.map((n) => n.id));
               setSelectedNodes(newSelectedNodes);
-              setSelectedEdges(new Set());
+              setSelectedEdges(new Set<string>());
               local.onSelectionChange?.({
                 nodes: pasted.nodes,
                 edges: [],

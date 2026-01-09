@@ -117,10 +117,6 @@ export function calculateSnapPosition(
   let snapX = draggedNode.position.x;
   let snapY = draggedNode.position.y;
   const draggedCenter = getNodeCenter(draggedNode);
-  const draggedLeft = draggedNode.position.x;
-  const draggedRight = draggedNode.position.x + (draggedNode.width ?? 150);
-  const draggedTop = draggedNode.position.y;
-  const draggedBottom = draggedNode.position.y + (draggedNode.height ?? 40);
 
   // 找到最近的对齐线
   let minHorizontalDist = Infinity;

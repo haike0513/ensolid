@@ -368,9 +368,9 @@ export const Edge: Component<EdgeProps> = (props) => {
                           width: "100%",
                           padding: "2px 6px",
                           border: "1px solid #3b82f6",
-                          borderRadius: "4px",
-                          fontSize: "12px",
-                          textAlign: "center",
+                          "border-radius": "4px",
+                          "font-size": "12px",
+                          "text-align": "center",
                           outline: "none",
                         }}
                         class="solidflow-edge-label-input"
