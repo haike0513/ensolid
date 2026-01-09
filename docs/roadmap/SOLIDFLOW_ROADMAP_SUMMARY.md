@@ -2,6 +2,8 @@
 
 本文档详细规划了将 SolidFlow 完善至可替代 ReactFlow 的路线图，包括功能对比、实现计划和优先级。
 
+> 📌 **注意**: 本文档是简化版路线图。更详细的功能对比和实现计划请参考 [SOLIDFLOW_ROADMAP.md](./SOLIDFLOW_ROADMAP.md)
+
 ## 📊 功能对比表
 
 ### ✅ 已实现功能

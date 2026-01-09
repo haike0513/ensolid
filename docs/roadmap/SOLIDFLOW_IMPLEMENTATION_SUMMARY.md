@@ -214,7 +214,8 @@ interface EdgeProps {
 
 - [ReactFlow 官方文档](https://reactflow.dev/)
 - [SolidJS 官方文档](https://www.solidjs.com/)
-- [SOLIDFLOW_ROADMAP.md](./SOLIDFLOW_ROADMAP.md) - 详细路线图
+- [SOLIDFLOW_ROADMAP.md](./SOLIDFLOW_ROADMAP.md) - 完整功能路线图
+- [SOLIDFLOW_ROADMAP_SUMMARY.md](./SOLIDFLOW_ROADMAP_SUMMARY.md) - 简化版路线图
 
 ---
 

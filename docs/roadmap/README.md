@@ -64,6 +64,30 @@
 
 ---
 
+### [SolidFlow 功能路线图](./SOLIDFLOW_ROADMAP.md)
+
+基于 ReactFlow 功能特性的完整路线图，详细规划了 SolidFlow 的功能完善计划。
+
+**主要内容：**
+- ReactFlow vs SolidFlow 功能对比
+- 已实现功能清单
+- 待实现功能详细规划（核心功能、高级功能、性能优化、用户体验增强）
+- 5 个阶段的实施计划
+- 技术实现细节和代码示例
+
+**相关文档：**
+- [路线图总结](./SOLIDFLOW_SUMMARY.md) - 快速了解 SolidFlow 发展规划和当前状态
+- [完整功能路线图](./SOLIDFLOW_ROADMAP.md) - 详细的功能对比和实现计划
+- [简化版路线图](./SOLIDFLOW_ROADMAP_SUMMARY.md) - 快速查看版本
+- [功能实现总结](./SOLIDFLOW_IMPLEMENTATION_SUMMARY.md) - 已完成功能的详细总结
+
+**适合阅读人群：**
+- SolidFlow 开发团队
+- 想要了解 SolidFlow 发展方向的贡献者
+- 计划使用 SolidFlow 的开发者
+
+---
+
 ## 📅 当前阶段
 
 ### 当前季度重点
