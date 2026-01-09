@@ -38,5 +38,7 @@ export { FlowCopyPasteExample } from "./FlowCopyPasteExample";
 export { FlowAlignmentExample } from "./FlowAlignmentExample";
 export { FlowNodeGroupExample } from "./FlowNodeGroupExample";
 export { FlowImportExportExample } from "./FlowImportExportExample";
+export { default as FlowNodeResizeExample } from "./FlowNodeResizeExample";
+export { default as FlowPropertyPanelExample } from "./FlowPropertyPanelExample";
 export { StreamdownExample } from "./StreamdownExample";
 

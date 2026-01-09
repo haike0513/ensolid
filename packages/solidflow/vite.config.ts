@@ -24,6 +24,7 @@ export default defineConfig({
         preserveModulesRoot: 'src',
         entryFileNames: '[name].js',
         chunkFileNames: '[name].js',
+        assetFileNames: 'style.css',
       },
     },
     sourcemap: false,

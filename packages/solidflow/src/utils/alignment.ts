@@ -4,7 +4,7 @@
  */
 
 import type { Node, XYPosition } from "../types";
-import { getNodeCenter } from "./index";
+import { getNodeCenter } from "./general";
 
 /**
  * 对齐辅助线类型

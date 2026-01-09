@@ -1,4 +1,5 @@
 // SolidFlow 包入口文件
+import "./style.css";
 export * from "./components";
 // 导出类型，但排除与组件名称冲突的类型
 export type {

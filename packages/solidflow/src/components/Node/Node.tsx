@@ -1,5 +1,6 @@
 import { type Component, type JSX, splitProps, Show, onMount, onCleanup } from "solid-js";
 import type { Node as NodeType } from "../../types";
+import { NodeProvider } from "./NodeContext";
 
 export interface NodeProps {
   /**
@@ -164,13 +165,15 @@ export const Node: Component<NodeProps> = (props) => {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
     >
-      <Show
-        when={local.renderNode}
-        fallback={<div>{local.node.data?.label ?? local.node.id}</div>}
-      >
-        {local.renderNode?.(local.node)}
-      </Show>
-      {local.children}
+      <NodeProvider value={{ id: local.node.id }}>
+        <Show
+          when={local.renderNode}
+          fallback={<div>{local.node.data?.label ?? local.node.id}</div>}
+        >
+          {local.renderNode?.(local.node)}
+        </Show>
+        {local.children}
+      </NodeProvider>
     </div>
   );
 };

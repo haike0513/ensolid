@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "sideEffects": false,
+  "sideEffects": ["**/*.css"],
   "publishConfig": {
     "access": "public"
   },
@@ -57,7 +57,8 @@
     "./utils": {
       "import": "./dist/utils/index.js",
       "types": "./dist/utils/index.d.ts"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "files": [
     "dist"

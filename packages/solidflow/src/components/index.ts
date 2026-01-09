@@ -9,3 +9,4 @@ export * from './MiniMap';
 export * from './Panel';
 export * from './DefaultNode';
 export * from './FlowProvider';
+export * from './NodeResizeControl';

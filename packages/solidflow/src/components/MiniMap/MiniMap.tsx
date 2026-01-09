@@ -4,12 +4,13 @@
 
 import { type Component, type JSX, splitProps, Show } from "solid-js";
 import type { Node, Edge, Viewport } from "../../types";
+import { useFlowContext } from "../FlowProvider";
 
 export interface MiniMapProps {
   /**
    * 节点数组
    */
-  nodes: Node[];
+  nodes?: Node[];
   /**
    * 边数组
    */
@@ -17,7 +18,7 @@ export interface MiniMapProps {
   /**
    * 视口信息
    */
-  viewport: Viewport;
+  viewport?: Viewport;
   /**
    * 节点颜色
    */
@@ -95,6 +96,17 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
     "containerHeight",
   ]);
 
+
+  let context: ReturnType<typeof useFlowContext> | undefined;
+  try {
+    context = useFlowContext();
+  } catch (e) {
+    // context missing
+  }
+
+  const nodes = () => local.nodes ?? context?.nodes() ?? [];
+  const viewport = () => local.viewport ?? context?.viewport() ?? { x: 0, y: 0, zoom: 1 };
+
   const position = () => local.position ?? "bottom-right";
   const pannable = () => local.pannable ?? true;
   const nodeStrokeWidth = () => local.nodeStrokeWidth ?? 2;
@@ -126,14 +138,14 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
 
   // 计算节点边界
   const getBounds = () => {
-    if (local.nodes.length === 0) {
+    if (nodes().length === 0) {
       return { x: 0, y: 0, width: 100, height: 100 };
     }
 
-    const xs = local.nodes.map((node) => node.position.x);
-    const ys = local.nodes.map((node) => node.position.y);
-    const widths = local.nodes.map((node) => node.width ?? 150);
-    const heights = local.nodes.map((node) => node.height ?? 40);
+    const xs = nodes().map((node) => node.position.x);
+    const ys = nodes().map((node) => node.position.y);
+    const widths = nodes().map((node) => node.width ?? 150);
+    const heights = nodes().map((node) => node.height ?? 40);
 
     const minX = Math.min(...xs);
     const minY = Math.min(...ys);
@@ -152,7 +164,7 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
   const bounds = () => getBounds();
 
   const getViewportRect = () => {
-    const vp = local.viewport;
+    const vp = viewport();
     const width = local.containerWidth ?? 0;
     const height = local.containerHeight ?? 0;
 
@@ -191,7 +203,7 @@ export const MiniMap: Component<MiniMapProps> = (props) => {
           bounds().height
         }`}
       >
-        {local.nodes.map((node) => (
+        {nodes().map((node) => (
           <rect
             x={node.position.x}
             y={node.position.y}
