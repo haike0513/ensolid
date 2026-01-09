@@ -2,7 +2,7 @@
  * Edge 组件 - 流程边/连接线
  */
 
-import { type Component, type JSX, Show, splitProps } from "solid-js";
+import { type Component, type JSX, Show, splitProps, createSignal, onMount, createEffect } from "solid-js";
 import type { Edge as EdgeType, Node, Position, XYPosition } from "../../types";
 import {
   getBezierPath,
@@ -46,6 +46,10 @@ export interface EdgeProps {
    */
   onDoubleClick?: (event: MouseEvent, edge: EdgeType) => void;
   /**
+   * 边标签编辑回调
+   */
+  onLabelEdit?: (edgeId: string, label: string) => void;
+  /**
    * 自定义边渲染
    */
   renderEdge?: (edge: EdgeType, path: string) => JSX.Element;
@@ -61,6 +65,7 @@ export const Edge: Component<EdgeProps> = (props) => {
     "targetPosition",
     "onClick",
     "onDoubleClick",
+    "onLabelEdit",
     "renderEdge",
   ]);
 
@@ -253,21 +258,127 @@ export const Edge: Component<EdgeProps> = (props) => {
               marker-start={getMarkerStart()}
               marker-end={getMarkerEnd()}
             />
-            <Show when={local.edge.label}>
-              <text
-                x={(sourcePos().x + targetPos().x) / 2}
-                y={(sourcePos().y + targetPos().y) / 2}
-                text-anchor="middle"
-                dominant-baseline="middle"
-                fill={local.edge.labelStyle?.color ?? "#000"}
-                style={{
-                  ...local.edge.labelStyle,
-                  "pointer-events": "all", 
-                } as any}
-                class="solidflow-edge-label"
-              >
-                {local.edge.label}
-              </text>
+            <Show when={local.edge.label !== undefined || local.onLabelEdit}>
+              {(() => {
+                const [isEditing, setIsEditing] = createSignal(false);
+                const [labelText, setLabelText] = createSignal(local.edge.label || "");
+                let inputRef: HTMLInputElement | undefined;
+                let foreignObjectRef: SVGForeignObjectElement | undefined;
+
+                const handleDoubleClick = (e: MouseEvent) => {
+                  if (local.onLabelEdit) {
+                    e.stopPropagation();
+                    setIsEditing(true);
+                  }
+                  local.onDoubleClick?.(e, local.edge);
+                };
+
+                const handleBlur = () => {
+                  setIsEditing(false);
+                  if (local.onLabelEdit && labelText() !== local.edge.label) {
+                    local.onLabelEdit(local.edge.id, labelText());
+                  }
+                };
+
+                const handleKeyDown = (e: KeyboardEvent) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleBlur();
+                  } else if (e.key === "Escape") {
+                    e.preventDefault();
+                    setLabelText(local.edge.label || "");
+                    setIsEditing(false);
+                  }
+                };
+
+                // 同步外部 label 变化
+                createEffect(() => {
+                  if (!isEditing() && local.edge.label !== labelText()) {
+                    setLabelText(local.edge.label || "");
+                  }
+                });
+
+                onMount(() => {
+                  if (isEditing() && inputRef) {
+                    inputRef.focus();
+                    inputRef.select();
+                  }
+                });
+
+                const labelX = (sourcePos().x + targetPos().x) / 2;
+                const labelY = (sourcePos().y + targetPos().y) / 2;
+                const labelBgPadding = local.edge.labelBgPadding ?? [4, 2];
+                const labelBgBorderRadius = local.edge.labelBgBorderRadius ?? 4;
+
+                return (
+                  <Show
+                    when={isEditing()}
+                    fallback={
+                      <g
+                        onDblClick={handleDoubleClick}
+                        style={{ cursor: local.onLabelEdit ? "text" : "default" }}
+                      >
+                        <Show when={local.edge.labelShowBg && (local.edge.label || labelText())}>
+                          <rect
+                            x={labelX - (labelText().length * 6 + labelBgPadding[0] * 2) / 2}
+                            y={labelY - 10 - labelBgPadding[1]}
+                            width={labelText().length * 6 + labelBgPadding[0] * 2}
+                            height={20 + labelBgPadding[1] * 2}
+                            rx={labelBgBorderRadius}
+                            fill={local.edge.labelBgStyle?.backgroundColor ?? "white"}
+                            stroke={local.edge.labelBgStyle?.borderColor ?? "transparent"}
+                            stroke-width={local.edge.labelBgStyle?.borderWidth ?? 0}
+                            opacity={local.edge.labelBgStyle?.opacity ?? 0.9}
+                          />
+                        </Show>
+                        <text
+                          x={labelX}
+                          y={labelY}
+                          text-anchor="middle"
+                          dominant-baseline="middle"
+                          fill={local.edge.labelStyle?.color ?? "#000"}
+                          style={{
+                            ...local.edge.labelStyle,
+                            "pointer-events": "all",
+                            cursor: local.onLabelEdit ? "text" : "default",
+                          } as any}
+                          class="solidflow-edge-label"
+                        >
+                          {labelText() || local.edge.label || ""}
+                        </text>
+                      </g>
+                    }
+                  >
+                    <foreignObject
+                      ref={foreignObjectRef}
+                      x={labelX - 50}
+                      y={labelY - 12}
+                      width="100"
+                      height="24"
+                      style={{ "pointer-events": "all" }}
+                    >
+                      <input
+                        ref={inputRef}
+                        type="text"
+                        value={labelText()}
+                        onInput={(e) => setLabelText(e.currentTarget.value)}
+                        onBlur={handleBlur}
+                        onKeyDown={handleKeyDown}
+                        style={{
+                          width: "100%",
+                          padding: "2px 6px",
+                          border: "1px solid #3b82f6",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                          textAlign: "center",
+                          outline: "none",
+                        }}
+                        class="solidflow-edge-label-input"
+                      />
+                    </foreignObject>
+                  </Show>
+                );
+              })()}
             </Show>
           </>
         }

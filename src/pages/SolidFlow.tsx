@@ -9,9 +9,10 @@ import {
   FlowCustomNodeExample,
   FlowInteractiveExample,
   FlowEditorExample,
+  FlowUndoRedoExample,
 } from "../examples";
 
-type FlowExampleType = "basic" | "custom-node" | "interactive" | "editor";
+type FlowExampleType = "basic" | "custom-node" | "interactive" | "editor" | "undo-redo";
 
 interface FlowExampleItem {
   id: FlowExampleType;
@@ -59,6 +60,15 @@ const flowExamples: FlowExampleItem[] = [
     description: "功能完整的流程图编辑器，支持所有高级特性",
     difficulty: "高级",
     features: ["完整编辑", "撤销重做", "导入导出", "快捷键", "工具栏"]
+  },
+  {
+    id: "undo-redo",
+    name: "撤销/重做",
+    component: FlowUndoRedoExample,
+    icon: "↶",
+    description: "展示历史记录管理和撤销/重做功能",
+    difficulty: "中等",
+    features: ["历史记录", "撤销重做", "键盘快捷键", "状态管理"]
   },
 ];
 

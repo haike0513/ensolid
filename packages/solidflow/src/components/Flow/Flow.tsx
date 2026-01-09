@@ -10,6 +10,7 @@ import {
   onMount,
   splitProps,
   Show,
+  createEffect,
 } from "solid-js";
 import type {
   EdgeChange,
@@ -27,6 +28,7 @@ import {
   clampZoom,
   screenToFlowPosition,
   getNodeHandlePosition,
+  HistoryManager,
 } from "../../utils";
 import { Background } from "../Background";
 import { Controls } from "../Controls";
@@ -73,6 +75,9 @@ export const Flow: Component<FlowProps> = (props) => {
     "classList",
     "id",
     "children",
+    "enableHistory",
+    "maxHistorySize",
+    "isValidConnection",
   ]);
 
   // 视口状态
@@ -116,6 +121,86 @@ export const Flow: Component<FlowProps> = (props) => {
   } | null>(null);
 
   let containerRef: HTMLDivElement | undefined;
+
+  // 历史管理器
+  const historyManager = new HistoryManager(local.maxHistorySize ?? 50);
+  const isHistoryEnabled = () => local.enableHistory ?? false;
+  const [isRestoringHistory, setIsRestoringHistory] = createSignal(false);
+
+  // 保存历史状态
+  const saveHistory = () => {
+    if (isHistoryEnabled() && !isRestoringHistory()) {
+      historyManager.push({
+        nodes: local.nodes,
+        edges: local.edges ?? [],
+        viewport: viewport(),
+      });
+    }
+  };
+
+  // 撤销操作
+  const handleUndo = () => {
+    if (!isHistoryEnabled() || !historyManager.canUndo()) return;
+    
+    setIsRestoringHistory(true);
+    const state = historyManager.undo();
+    if (state) {
+      // 更新节点和边
+      if (local.onNodesChange) {
+        local.onNodesChange(
+          state.nodes.map((node) => ({
+            id: node.id,
+            type: "reset",
+            item: node,
+          }))
+        );
+      }
+      if (local.onEdgesChange) {
+        local.onEdgesChange(
+          state.edges.map((edge) => ({
+            id: edge.id,
+            type: "reset",
+            item: edge,
+          }))
+        );
+      }
+      // 更新视口
+      updateViewport(state.viewport);
+    }
+    setIsRestoringHistory(false);
+  };
+
+  // 重做操作
+  const handleRedo = () => {
+    if (!isHistoryEnabled() || !historyManager.canRedo()) return;
+    
+    setIsRestoringHistory(true);
+    const state = historyManager.redo();
+    if (state) {
+      // 更新节点和边
+      if (local.onNodesChange) {
+        local.onNodesChange(
+          state.nodes.map((node) => ({
+            id: node.id,
+            type: "reset",
+            item: node,
+          }))
+        );
+      }
+      if (local.onEdgesChange) {
+        local.onEdgesChange(
+          state.edges.map((edge) => ({
+            id: edge.id,
+            type: "reset",
+            item: edge,
+          }))
+        );
+      }
+      // 更新视口
+      updateViewport(state.viewport);
+    }
+    setIsRestoringHistory(false);
+  };
 
 
   // 处理视口更新
@@ -344,23 +429,28 @@ export const Flow: Component<FlowProps> = (props) => {
       const hovered = hoveredHandle();
       if (hovered && hovered.nodeId !== connectingNodeId()) {
         const handleType = connectingHandleType();
+        let connection: Connection | null = null;
+        
         if (handleType === "source" && hovered.handleType === "target") {
           // 有效的连接：source -> target
-          const connection: Connection = {
+          connection = {
             source: connectingNodeId()!,
             target: hovered.nodeId,
             sourceHandle: connectingHandleId(),
             targetHandle: hovered.handleId,
           };
-          local.onConnect?.(connection);
         } else if (handleType === "target" && hovered.handleType === "source") {
           // 有效的连接：target <- source（反向）
-          const connection: Connection = {
+          connection = {
             source: hovered.nodeId,
             target: connectingNodeId()!,
             sourceHandle: hovered.handleId,
             targetHandle: connectingHandleId(),
           };
+        }
+
+        // 验证连接
+        if (connection && (!local.isValidConnection || local.isValidConnection(connection))) {
           local.onConnect?.(connection);
         }
       } else {
@@ -390,26 +480,31 @@ export const Flow: Component<FlowProps> = (props) => {
             targetHandleType
           ) {
             const handleType = connectingHandleType();
+            let connection: Connection | null = null;
+            
             if (handleType === "source" && targetHandleType === "target") {
               // 有效的连接：source -> target
-              const connection: Connection = {
+              connection = {
                 source: connectingNodeId()!,
                 target: targetNodeId,
                 sourceHandle: connectingHandleId(),
                 targetHandle: targetHandleId,
               };
-              local.onConnect?.(connection);
             } else if (
               handleType === "target" &&
               targetHandleType === "source"
             ) {
               // 有效的连接：target <- source（反向）
-              const connection: Connection = {
+              connection = {
                 source: targetNodeId,
                 target: connectingNodeId()!,
                 sourceHandle: targetHandleId,
                 targetHandle: connectingHandleId(),
               };
+            }
+
+            // 验证连接
+            if (connection && (!local.isValidConnection || local.isValidConnection(connection))) {
               local.onConnect?.(connection);
             }
           }
@@ -422,6 +517,11 @@ export const Flow: Component<FlowProps> = (props) => {
       setConnectingHandleType(null);
       setConnectingPosition(null);
       setHoveredHandle(null);
+      
+      // 连接完成，保存历史
+      if (hovered && hovered.nodeId !== connectingNodeId()) {
+        debouncedSaveHistory();
+      }
     }
 
     if (draggedNodeId()) {
@@ -431,6 +531,9 @@ export const Flow: Component<FlowProps> = (props) => {
         if (node) {
           handleNodeClick(event, node);
         }
+      } else {
+        // 节点拖拽结束，保存历史
+        debouncedSaveHistory();
       }
 
       local.onNodesChange?.([
@@ -599,6 +702,20 @@ export const Flow: Component<FlowProps> = (props) => {
     updateViewport({ zoom: 1, x: 0, y: 0 });
   };
 
+  // 防抖保存历史
+  let historySaveTimer: number | null = null;
+  const debouncedSaveHistory = () => {
+    if (historySaveTimer !== null) {
+      clearTimeout(historySaveTimer);
+    }
+    historySaveTimer = setTimeout(() => {
+      if (isHistoryEnabled() && !isRestoringHistory()) {
+        saveHistory();
+      }
+      historySaveTimer = null;
+    }, 300) as unknown as number;
+  };
+
   // 初始化
   onMount(() => {
     if (containerRef) {
@@ -630,6 +747,106 @@ export const Flow: Component<FlowProps> = (props) => {
         performFitView();
       }
 
+      // 初始化历史记录
+      if (isHistoryEnabled()) {
+        historyManager.push({
+          nodes: local.nodes,
+          edges: local.edges ?? [],
+          viewport: viewport(),
+        });
+      }
+
+      // 处理键盘事件
+      const handleKeyDown = (event: KeyboardEvent) => {
+        // 检查是否在输入框中
+        const target = event.target as HTMLElement;
+        if (
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.isContentEditable
+        ) {
+          return;
+        }
+
+        // 撤销/重做
+        if ((event.ctrlKey || event.metaKey) && !event.shiftKey) {
+          if (event.key === "z" || event.key === "Z") {
+            event.preventDefault();
+            handleUndo();
+            return;
+          }
+          if (event.key === "y" || event.key === "Y") {
+            event.preventDefault();
+            handleRedo();
+            return;
+          }
+        }
+
+        // Shift+Ctrl+Z 重做（Windows/Linux）
+        if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === "z") {
+          event.preventDefault();
+          handleRedo();
+          return;
+        }
+
+        // Delete/Backspace 删除选中元素
+        if (event.key === "Delete" || event.key === "Backspace") {
+          event.preventDefault();
+          const selectedNodesSet = selectedNodes();
+          const selectedEdgesSet = selectedEdges();
+          
+          if (selectedNodesSet.size > 0 || selectedEdgesSet.size > 0) {
+            // 保存历史
+            if (isHistoryEnabled()) {
+              saveHistory();
+            }
+
+            // 删除选中的节点
+            if (selectedNodesSet.size > 0 && local.onNodesChange) {
+              const changes = Array.from(selectedNodesSet).map((id) => ({
+                id,
+                type: "remove" as const,
+              }));
+              local.onNodesChange(changes);
+            }
+
+            // 删除选中的边
+            if (selectedEdgesSet.size > 0 && local.onEdgesChange) {
+              const changes = Array.from(selectedEdgesSet).map((id) => ({
+                id,
+                type: "remove" as const,
+              }));
+              local.onEdgesChange(changes);
+            }
+          }
+        }
+
+        // Ctrl+A 全选
+        if ((event.ctrlKey || event.metaKey) && event.key === "a") {
+          event.preventDefault();
+          const allNodeIds = new Set(local.nodes.map((n) => n.id));
+          const allEdgeIds = new Set((local.edges ?? []).map((e) => e.id));
+          setSelectedNodes(allNodeIds);
+          setSelectedEdges(allEdgeIds);
+          local.onSelectionChange?.({
+            nodes: local.nodes,
+            edges: local.edges ?? [],
+          });
+        }
+
+        // Escape 取消选择
+        if (event.key === "Escape") {
+          setSelectedNodes(new Set());
+          setSelectedEdges(new Set());
+          local.onSelectionChange?.({ nodes: [], edges: [] });
+        }
+      };
+
+      // 添加键盘事件监听
+      containerRef.addEventListener("keydown", handleKeyDown);
+      // 确保容器可以获得焦点
+      containerRef.setAttribute("tabindex", "0");
+
       // Initialize Flow Instance
       const flowInstance = {
         zoomIn: handleZoomIn,
@@ -650,6 +867,10 @@ export const Flow: Component<FlowProps> = (props) => {
           edges: local.edges,
           viewport: viewport(),
         }),
+        undo: handleUndo,
+        redo: handleRedo,
+        canUndo: () => isHistoryEnabled() && historyManager.canUndo(),
+        canRedo: () => isHistoryEnabled() && historyManager.canRedo(),
       };
 
       if (local.onInit) {
@@ -667,6 +888,7 @@ export const Flow: Component<FlowProps> = (props) => {
             handleHandleMouseDown,
             true
           );
+          containerRef.removeEventListener("keydown", handleKeyDown);
         }
         observer.disconnect();
       });
@@ -751,6 +973,19 @@ export const Flow: Component<FlowProps> = (props) => {
                       selected: !selectedEdges().has(ed.id),
                     } as EdgeChange,
                   ]);
+                }}
+                onLabelEdit={(edgeId, label) => {
+                  local.onEdgesChange?.([
+                    {
+                      id: edgeId,
+                      type: "reset",
+                      item: {
+                        ...edge,
+                        label,
+                      },
+                    } as EdgeChange,
+                  ]);
+                  debouncedSaveHistory();
                 }}
               />
             )}

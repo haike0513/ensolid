@@ -550,5 +550,9 @@ export function isNode(item: Node | Edge): item is Node {
  * 判断是否为边
  */
 export function isEdge(item: Node | Edge): item is Edge {
-    return "source" in item && "target" in item;
+  return "source" in item && "target" in item;
 }
+
+// 导出历史管理器
+export { HistoryManager } from "./history";
+export type { HistoryState } from "./history";

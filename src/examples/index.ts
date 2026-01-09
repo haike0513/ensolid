@@ -30,5 +30,8 @@ export { FlowInteractiveExample } from "./FlowInteractiveExample";
 export { FlowEditorExample } from "./FlowEditorExample";
 export { FlowConnectExample } from "./FlowConnectExample";
 export { FlowEdgeTypesExample } from "./FlowEdgeTypesExample";
+export { FlowUndoRedoExample } from "./FlowUndoRedoExample";
+export { FlowEdgeLabelExample } from "./FlowEdgeLabelExample";
+export { FlowEdgeValidationExample } from "./FlowEdgeValidationExample";
 export { StreamdownExample } from "./StreamdownExample";
 

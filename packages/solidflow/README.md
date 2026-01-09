@@ -198,6 +198,10 @@ const newEdges = addEdge(connection, edges);
 - ✅ 连接事件处理（onConnectStart, onConnectEnd, onConnect）
 - ✅ 选择和多选功能
 - ✅ 视图适配（fitView）
+- ✅ 撤销/重做功能（enableHistory）
+- ✅ 键盘快捷键（Delete、Ctrl+A、Ctrl+Z/Y、Escape）
+- ✅ 边标签编辑（双击编辑）
+- ✅ 边验证（isValidConnection）
 
 ## 开发状态
 

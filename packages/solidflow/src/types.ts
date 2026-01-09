@@ -140,6 +140,7 @@ export type OnEdgesDelete = (edges: Edge[]) => void;
 export type OnSelectionChange = (
   params: { nodes: Node[]; edges: Edge[] },
 ) => void;
+export type IsValidConnection = (connection: Connection) => boolean;
 
 export type NodeChange =
   | {
@@ -204,6 +205,10 @@ export interface FlowInstance {
   getViewport: () => Viewport;
   project: (position: XYPosition) => XYPosition;
   toObject: () => { nodes: Node[]; edges: Edge[]; viewport: Viewport };
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
 }
 
 export interface FlowProps {
@@ -245,6 +250,9 @@ export interface FlowProps {
   onDrop?: (event: DragEvent) => void;
   onNodeClick?: (event: MouseEvent, node: Node) => void;
   onPaneClick?: (event: MouseEvent) => void;
+  enableHistory?: boolean;
+  maxHistorySize?: number;
+  isValidConnection?: IsValidConnection;
 }
 
 export interface FitViewOptions {
