@@ -205,10 +205,13 @@ export interface FlowInstance {
   getViewport: () => Viewport;
   project: (position: XYPosition) => XYPosition;
   toObject: () => { nodes: Node[]; edges: Edge[]; viewport: Viewport };
+  fromObject: (data: { nodes: Node[]; edges: Edge[]; viewport?: Viewport }) => void;
   undo: () => void;
   redo: () => void;
   canUndo: () => boolean;
   canRedo: () => boolean;
+  copy: () => void;
+  paste: (offset?: XYPosition) => { nodes: Node[]; edges: Edge[] } | null;
 }
 
 export interface FlowProps {
@@ -253,6 +256,9 @@ export interface FlowProps {
   enableHistory?: boolean;
   maxHistorySize?: number;
   isValidConnection?: IsValidConnection;
+  snapToGrid?: boolean;
+  snapGrid?: [number, number];
+  nodeExtent?: [[number, number], [number, number]];
 }
 
 export interface FitViewOptions {

@@ -29,6 +29,12 @@ import {
   screenToFlowPosition,
   getNodeHandlePosition,
   HistoryManager,
+  ClipboardManager,
+  detectAlignmentLines,
+  calculateSnapPosition,
+  snapToGrid as snapToGridUtil,
+  calculateAbsolutePosition,
+  clampNodePositionToParent,
 } from "../../utils";
 import { Background } from "../Background";
 import { Controls } from "../Controls";
@@ -78,6 +84,9 @@ export const Flow: Component<FlowProps> = (props) => {
     "enableHistory",
     "maxHistorySize",
     "isValidConnection",
+    "snapToGrid",
+    "snapGrid",
+    "nodeExtent",
   ]);
 
   // 视口状态
@@ -120,12 +129,20 @@ export const Flow: Component<FlowProps> = (props) => {
     handleType: "source" | "target";
   } | null>(null);
 
+  // 对齐辅助线状态
+  const [alignmentLines, setAlignmentLines] = createSignal<
+    Array<{ type: "horizontal" | "vertical"; position: number }>
+  >([]);
+
   let containerRef: HTMLDivElement | undefined;
 
   // 历史管理器
   const historyManager = new HistoryManager(local.maxHistorySize ?? 50);
   const isHistoryEnabled = () => local.enableHistory ?? false;
   const [isRestoringHistory, setIsRestoringHistory] = createSignal(false);
+
+  // 剪贴板管理器
+  const clipboardManager = new ClipboardManager();
 
   // 保存历史状态
   const saveHistory = () => {
@@ -378,14 +395,65 @@ export const Flow: Component<FlowProps> = (props) => {
 
         const node = local.nodes.find((n) => n.id === nodeId);
         if (node) {
+          // 计算新位置
+          let newPosition: XYPosition = {
+            x: node.position.x + deltaX,
+            y: node.position.y + deltaY,
+          };
+
+          // 应用网格对齐
+          if (local.snapToGrid) {
+            const gridSize = local.snapGrid?.[0] ?? 20;
+            newPosition = snapToGridUtil(newPosition, gridSize);
+          }
+
+          // 应用节点对齐
+          const otherNodes = local.nodes.filter((n) => n.id !== nodeId);
+          const tempNode = { ...node, position: newPosition };
+          const snapPosition = calculateSnapPosition(tempNode, otherNodes, 5);
+          newPosition = snapPosition;
+
+          // 检测对齐辅助线
+          const lines = detectAlignmentLines(tempNode, otherNodes, 5);
+          setAlignmentLines(
+            lines.map((line) => ({
+              type: line.type,
+              position: line.position,
+            }))
+          );
+
+          // 应用节点边界限制
+          if (local.nodeExtent) {
+            const [[minX, minY], [maxX, maxY]] = local.nodeExtent;
+            const nodeWidth = node.width ?? 150;
+            const nodeHeight = node.height ?? 40;
+            newPosition.x = Math.max(minX, Math.min(maxX - nodeWidth, newPosition.x));
+            newPosition.y = Math.max(minY, Math.min(maxY - nodeHeight, newPosition.y));
+          }
+
+          // 应用父节点边界限制
+          if (node.parentNode) {
+            const parent = local.nodes.find((n) => n.id === node.parentNode);
+            if (parent) {
+              newPosition = clampNodePositionToParent(
+                node,
+                newPosition,
+                parent
+              );
+            }
+          }
+
           local.onNodesChange?.([
             {
               id: nodeId,
               type: "position",
-              position: {
-                x: node.position.x + deltaX,
-                y: node.position.y + deltaY,
-              },
+              position: newPosition,
+              positionAbsolute: node.parentNode
+                ? calculateAbsolutePosition(
+                    { ...node, position: newPosition },
+                    local.nodes
+                  )
+                : undefined,
               dragging: true,
             } as NodeChange,
           ]);
@@ -548,6 +616,7 @@ export const Flow: Component<FlowProps> = (props) => {
     setDraggedNodeId(null);
     setDragStart(null);
     setHasMoved(false);
+    setAlignmentLines([]); // 清除对齐辅助线
   };
 
   // 处理连接开始（从 Handle 触发，通过事件委托）
@@ -834,6 +903,68 @@ export const Flow: Component<FlowProps> = (props) => {
           });
         }
 
+        // Ctrl+C 复制
+        if ((event.ctrlKey || event.metaKey) && event.key === "c") {
+          event.preventDefault();
+          const selectedNodesSet = selectedNodes();
+          if (selectedNodesSet.size > 0) {
+            const nodesToCopy = local.nodes.filter((n) =>
+              selectedNodesSet.has(n.id)
+            );
+            const selectedEdgesSet = selectedEdges();
+            const edgesToCopy = selectedEdgesSet.size > 0
+              ? (local.edges ?? []).filter((e) => selectedEdgesSet.has(e.id))
+              : undefined;
+            clipboardManager.copy(nodesToCopy, edgesToCopy, local.edges);
+          }
+        }
+
+        // Ctrl+V 粘贴
+        if ((event.ctrlKey || event.metaKey) && event.key === "v") {
+          event.preventDefault();
+          if (clipboardManager.hasContent()) {
+            // 保存历史
+            if (isHistoryEnabled()) {
+              saveHistory();
+            }
+
+            // 获取鼠标位置或视口中心作为粘贴位置
+            const pasteOffset = { x: 20, y: 20 };
+            const pasted = clipboardManager.paste(pasteOffset);
+            
+            if (pasted && pasted.nodes.length > 0) {
+              // 添加新节点
+              if (local.onNodesChange) {
+                const nodeChanges = pasted.nodes.map((node) => ({
+                  id: node.id,
+                  type: "add" as const,
+                  item: node,
+                }));
+                local.onNodesChange(nodeChanges);
+              }
+
+              // 添加新边
+              if (pasted.edges.length > 0 && local.onEdgesChange) {
+                const edgeChanges = pasted.edges.map((edge) => ({
+                  id: edge.id,
+                  type: "add" as const,
+                  item: edge,
+                }));
+                local.onEdgesChange(edgeChanges);
+              }
+
+              // 选中粘贴的节点
+              const newSelectedNodes = new Set(pasted.nodes.map((n) => n.id));
+              setSelectedNodes(newSelectedNodes);
+              setSelectedEdges(new Set());
+              local.onSelectionChange?.({
+                nodes: pasted.nodes,
+                edges: [],
+              });
+            }
+          }
+        }
+
         // Escape 取消选择
         if (event.key === "Escape") {
           setSelectedNodes(new Set());
@@ -867,10 +998,115 @@ export const Flow: Component<FlowProps> = (props) => {
           edges: local.edges,
           viewport: viewport(),
         }),
+        fromObject: (data: { nodes: Node[]; edges: Edge[]; viewport?: Viewport }) => {
+          // 保存历史
+          if (isHistoryEnabled()) {
+            saveHistory();
+          }
+
+          // 更新节点
+          if (local.onNodesChange) {
+            // 先删除所有现有节点
+            const removeChanges = local.nodes.map((node) => ({
+              id: node.id,
+              type: "remove" as const,
+            }));
+            local.onNodesChange(removeChanges);
+
+            // 添加新节点
+            const addChanges = data.nodes.map((node) => ({
+              id: node.id,
+              type: "add" as const,
+              item: node,
+            }));
+            local.onNodesChange(addChanges);
+          }
+
+          // 更新边
+          if (local.onEdgesChange) {
+            // 先删除所有现有边
+            const removeChanges = (local.edges ?? []).map((edge) => ({
+              id: edge.id,
+              type: "remove" as const,
+            }));
+            local.onEdgesChange(removeChanges);
+
+            // 添加新边
+            const addChanges = data.edges.map((edge) => ({
+              id: edge.id,
+              type: "add" as const,
+              item: edge,
+            }));
+            local.onEdgesChange(addChanges);
+          }
+
+          // 更新视口
+          if (data.viewport) {
+            updateViewport(data.viewport);
+          }
+        },
         undo: handleUndo,
         redo: handleRedo,
         canUndo: () => isHistoryEnabled() && historyManager.canUndo(),
         canRedo: () => isHistoryEnabled() && historyManager.canRedo(),
+        copy: () => {
+          const selectedNodesSet = selectedNodes();
+          if (selectedNodesSet.size > 0) {
+            const nodesToCopy = local.nodes.filter((n) =>
+              selectedNodesSet.has(n.id)
+            );
+            const selectedEdgesSet = selectedEdges();
+            const edgesToCopy = selectedEdgesSet.size > 0
+              ? (local.edges ?? []).filter((e) => selectedEdgesSet.has(e.id))
+              : undefined;
+            clipboardManager.copy(nodesToCopy, edgesToCopy, local.edges);
+          }
+        },
+        paste: (offset?: XYPosition) => {
+          if (clipboardManager.hasContent()) {
+            // 保存历史
+            if (isHistoryEnabled()) {
+              saveHistory();
+            }
+
+            const pasteOffset = offset ?? { x: 20, y: 20 };
+            const pasted = clipboardManager.paste(pasteOffset);
+            
+            if (pasted && pasted.nodes.length > 0) {
+              // 添加新节点
+              if (local.onNodesChange) {
+                const nodeChanges = pasted.nodes.map((node) => ({
+                  id: node.id,
+                  type: "add" as const,
+                  item: node,
+                }));
+                local.onNodesChange(nodeChanges);
+              }
+
+              // 添加新边
+              if (pasted.edges.length > 0 && local.onEdgesChange) {
+                const edgeChanges = pasted.edges.map((edge) => ({
+                  id: edge.id,
+                  type: "add" as const,
+                  item: edge,
+                }));
+                local.onEdgesChange(edgeChanges);
+              }
+
+              // 选中粘贴的节点
+              const newSelectedNodes = new Set(pasted.nodes.map((n) => n.id));
+              setSelectedNodes(newSelectedNodes);
+              setSelectedEdges(new Set());
+              local.onSelectionChange?.({
+                nodes: pasted.nodes,
+                edges: [],
+              });
+
+              return pasted;
+            }
+          }
+          return null;
+        },
       };
 
       if (local.onInit) {
@@ -1003,12 +1239,34 @@ export const Flow: Component<FlowProps> = (props) => {
           "pointer-events": "none",
         }}
       >
-        <For each={local.nodes}>
+        <For each={(() => {
+          // 按层级排序节点：先渲染父节点，再渲染子节点
+          const sortedNodes = [...local.nodes].sort((a, b) => {
+            // 没有父节点的节点在前
+            if (!a.parentNode && b.parentNode) return -1;
+            if (a.parentNode && !b.parentNode) return 1;
+            // 都有父节点或都没有父节点，保持原顺序
+            return 0;
+          });
+          return sortedNodes;
+        })()}>
           {(node) => {
             const NodeType = getNodeComponent(node);
+            // 计算绝对位置
+            const absolutePosition = node.parentNode
+              ? calculateAbsolutePosition(node, local.nodes)
+              : node.position;
+            
+            // 使用绝对位置创建节点副本
+            const nodeWithAbsolutePosition = {
+              ...node,
+              position: absolutePosition,
+              positionAbsolute: absolutePosition,
+            };
+            
             return (
                 <NodeComponent
-                  node={node}
+                  node={nodeWithAbsolutePosition}
                   selected={selectedNodes().has(node.id)}
                   dragging={draggedNodeId() === node.id}
                   onClick={(e, n) => handleNodeClick(e, n)}
@@ -1030,6 +1288,52 @@ export const Flow: Component<FlowProps> = (props) => {
           }}
         </For>
       </div>
+
+      {/* 对齐辅助线 */}
+      <Show when={alignmentLines().length > 0}>
+        <svg
+          class="absolute inset-0 w-full h-full pointer-events-none z-40"
+          style={{
+            transform: `translate(${currentViewport().x}px, ${
+              currentViewport().y
+            }px) scale(${currentViewport().zoom})`,
+            "transform-origin": "0 0",
+          }}
+        >
+          <For each={alignmentLines()}>
+            {(line) => {
+              const dims = dimensions();
+              if (line.type === "horizontal") {
+                return (
+                  <line
+                    x1={0}
+                    y1={line.position}
+                    x2={dims.width / currentViewport().zoom}
+                    y2={line.position}
+                    stroke="#ff0072"
+                    stroke-width="1"
+                    stroke-dasharray="4,4"
+                    opacity="0.5"
+                  />
+                );
+              } else {
+                return (
+                  <line
+                    x1={line.position}
+                    y1={0}
+                    x2={line.position}
+                    y2={dims.height / currentViewport().zoom}
+                    stroke="#ff0072"
+                    stroke-width="1"
+                    stroke-dasharray="4,4"
+                    opacity="0.5"
+                  />
+                );
+              }
+            }}
+          </For>
+        </svg>
+      </Show>
 
       {/* 临时连接线 */}
       <Show when={connectingNodeId() && connectingPosition()}>

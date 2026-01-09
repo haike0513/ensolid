@@ -200,15 +200,133 @@ interface EdgeProps {
 }
 ```
 
+## ✅ 最新完成的功能
+
+### 5. 复制粘贴功能
+
+**实现内容：**
+- 创建了 `ClipboardManager` 类来管理剪贴板
+- 支持 Ctrl+C 复制选中的节点和边
+- 支持 Ctrl+V 粘贴节点（自动生成新 ID 并偏移位置）
+- 在 `FlowInstance` 中添加了 `copy()` 和 `paste()` 方法
+- 支持复制节点时自动复制相关边
+
+**API 变更：**
+- `FlowInstance` 新增 `copy()` 方法
+- `FlowInstance` 新增 `paste(offset?: XYPosition)` 方法
+
+**使用示例：**
+```tsx
+<Flow
+  nodes={nodes()}
+  edges={edges()}
+  onInit={(instance) => {
+    // 复制选中节点
+    instance.copy();
+    // 粘贴节点
+    instance.paste({ x: 20, y: 20 });
+  }}
+/>
+```
+
+### 6. 节点对齐功能
+
+**实现内容：**
+- 实现了对齐辅助线检测算法
+- 拖拽节点时显示对齐辅助线（红色虚线）
+- 实现了网格对齐（`snapToGrid`）
+- 支持对齐到其他节点的中心、边缘
+- 在 `FlowProps` 中添加了 `snapToGrid` 和 `snapGrid` 配置选项
+
+**API 变更：**
+- `FlowProps` 新增 `snapToGrid?: boolean` 属性
+- `FlowProps` 新增 `snapGrid?: [number, number]` 属性
+
+**使用示例：**
+```tsx
+<Flow
+  nodes={nodes()}
+  edges={edges()}
+  snapToGrid={true}
+  snapGrid={[20, 20]}
+/>
+```
+
+### 7. 节点分组功能
+
+**实现内容：**
+- 实现了 `parentNode` 属性支持
+- 计算嵌套节点的绝对位置（`positionAbsolute`）
+- 实现了父节点边界限制（`extent`）
+- 支持节点在父节点内移动的限制
+- 按层级渲染节点（父节点在前，子节点在后）
+
+**使用示例：**
+```tsx
+const nodes = [
+  {
+    id: "parent",
+    position: { x: 100, y: 100 },
+    data: { label: "父节点" },
+    width: 400,
+    height: 300,
+  },
+  {
+    id: "child",
+    position: { x: 20, y: 20 }, // 相对于父节点
+    data: { label: "子节点" },
+    parentNode: "parent",
+  },
+];
+```
+
+### 8. 导入导出功能
+
+**实现内容：**
+- 实现了 JSON 格式的导入导出
+- 支持版本兼容性检查
+- 提供了 `exportToJSON`、`importFromJSON`、`downloadFlowData`、`readFlowDataFromFile` 工具函数
+- 在 `FlowInstance` 中添加了 `fromObject` 方法
+
+**API 变更：**
+- `FlowInstance` 新增 `fromObject(data)` 方法
+- 新增工具函数：`exportToJSON`、`importFromJSON`、`downloadFlowData`、`readFlowDataFromFile`
+
+**使用示例：**
+```tsx
+import { downloadFlowData, readFlowDataFromFile } from "@ensolid/solidflow";
+
+// 导出
+const data = flowInstance.toObject();
+downloadFlowData(data, "flow.json");
+
+// 导入
+const file = ...; // File 对象
+const data = await readFlowDataFromFile(file);
+flowInstance.fromObject(data);
+```
+
+## 📦 新增文件
+
+### 工具类
+- `packages/solidflow/src/utils/clipboard.ts` - 剪贴板管理器
+- `packages/solidflow/src/utils/alignment.ts` - 对齐工具函数
+- `packages/solidflow/src/utils/parentNode.ts` - 节点分组工具函数
+- `packages/solidflow/src/utils/importExport.ts` - 导入导出工具函数
+
+### 示例文件
+- `src/examples/FlowCopyPasteExample.tsx` - 复制粘贴示例
+- `src/examples/FlowAlignmentExample.tsx` - 节点对齐示例
+- `src/examples/FlowNodeGroupExample.tsx` - 节点分组示例
+- `src/examples/FlowImportExportExample.tsx` - 导入导出示例
+
 ## 🎯 下一步计划
 
 根据路线图，下一步将实现：
 
-1. **复制粘贴节点** - 支持 Ctrl+C/Ctrl+V
-2. **节点对齐** - 对齐辅助线和网格对齐
-3. **节点分组** - 支持嵌套节点
-4. **边中间点编辑** - 支持拖拽边中间的控制点
-5. **导入导出** - JSON 格式的导入导出
+1. **边中间点编辑** - 支持拖拽边中间的控制点
+2. **节点调整大小** - 支持拖拽调整节点大小
+3. **批量操作** - 框选和批量操作
 
 ## 📚 参考资源
 

@@ -556,3 +556,32 @@ export function isEdge(item: Node | Edge): item is Edge {
 // 导出历史管理器
 export { HistoryManager } from "./history";
 export type { HistoryState } from "./history";
+
+// 导出剪贴板管理器
+export { ClipboardManager } from "./clipboard";
+
+// 导出对齐工具
+export {
+  detectAlignmentLines,
+  calculateSnapPosition,
+  snapToGrid,
+} from "./alignment";
+export type { AlignmentLine, AlignmentResult } from "./alignment";
+
+// 导出节点分组工具
+export {
+  calculateAbsolutePosition,
+  isNodeInParentBounds,
+  clampNodePositionToParent,
+  getChildNodes,
+  getDescendantNodes,
+} from "./parentNode";
+
+// 导出导入导出工具
+export {
+  exportToJSON,
+  importFromJSON,
+  downloadFlowData,
+  readFlowDataFromFile,
+} from "./importExport";
+export type { FlowData } from "./importExport";

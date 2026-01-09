@@ -33,5 +33,9 @@ export { FlowEdgeTypesExample } from "./FlowEdgeTypesExample";
 export { FlowUndoRedoExample } from "./FlowUndoRedoExample";
 export { FlowEdgeLabelExample } from "./FlowEdgeLabelExample";
 export { FlowEdgeValidationExample } from "./FlowEdgeValidationExample";
+export { FlowCopyPasteExample } from "./FlowCopyPasteExample";
+export { FlowAlignmentExample } from "./FlowAlignmentExample";
+export { FlowNodeGroupExample } from "./FlowNodeGroupExample";
+export { FlowImportExportExample } from "./FlowImportExportExample";
 export { StreamdownExample } from "./StreamdownExample";
 

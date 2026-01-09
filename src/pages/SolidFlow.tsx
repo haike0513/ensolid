@@ -10,9 +10,13 @@ import {
   FlowInteractiveExample,
   FlowEditorExample,
   FlowUndoRedoExample,
+  FlowCopyPasteExample,
+  FlowAlignmentExample,
+  FlowNodeGroupExample,
+  FlowImportExportExample,
 } from "../examples";
 
-type FlowExampleType = "basic" | "custom-node" | "interactive" | "editor" | "undo-redo";
+type FlowExampleType = "basic" | "custom-node" | "interactive" | "editor" | "undo-redo" | "copy-paste" | "alignment" | "node-group" | "import-export";
 
 interface FlowExampleItem {
   id: FlowExampleType;
@@ -69,6 +73,42 @@ const flowExamples: FlowExampleItem[] = [
     description: "展示历史记录管理和撤销/重做功能",
     difficulty: "中等",
     features: ["历史记录", "撤销重做", "键盘快捷键", "状态管理"]
+  },
+  {
+    id: "copy-paste",
+    name: "复制粘贴",
+    component: FlowCopyPasteExample,
+    icon: "📋",
+    description: "展示节点和边的复制粘贴功能",
+    difficulty: "简单",
+    features: ["复制节点", "粘贴节点", "自动生成ID", "相关边复制"]
+  },
+  {
+    id: "alignment",
+    name: "节点对齐",
+    component: FlowAlignmentExample,
+    icon: "📐",
+    description: "展示节点对齐辅助线和网格对齐功能",
+    difficulty: "中等",
+    features: ["对齐辅助线", "网格对齐", "智能吸附", "视觉反馈"]
+  },
+  {
+    id: "node-group",
+    name: "节点分组",
+    component: FlowNodeGroupExample,
+    icon: "📦",
+    description: "展示节点分组和嵌套节点功能",
+    difficulty: "中等",
+    features: ["父节点", "子节点", "边界限制", "嵌套结构"]
+  },
+  {
+    id: "import-export",
+    name: "导入导出",
+    component: FlowImportExportExample,
+    icon: "💾",
+    description: "展示流程图的导入导出功能",
+    difficulty: "简单",
+    features: ["JSON导出", "JSON导入", "版本兼容", "文件操作"]
   },
 ];
 
