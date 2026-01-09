@@ -7,14 +7,29 @@ import type { Node, NodeComponentProps, TaskContext } from "@ensolid/solidflow";
  */
 export interface PortDefinition {
   label?: string;
-  type?: string; // e.g. "string", "number", "boolean", "any"
+  type?: string; // e.g. "string", "number", "boolean", "object", "array", "any"
+  required?: boolean;
+  defaultValue?: any;
   description?: string;
+}
+
+export interface FormField {
+    name: string;
+    label: string;
+    type: "text" | "number" | "select" | "boolean" | "textarea" | "color";
+    options?: { label: string; value: any }[] | string[];
+    min?: number;
+    max?: number;
+    step?: number;
+    defaultValue?: any;
+    description?: string;
 }
 
 /**
  * 节点定义接口
  * 定义了一个自定义节点的元数据和组件
  */
+
 
 export interface NodeDefinition {
   /**
@@ -43,6 +58,11 @@ export interface NodeDefinition {
   component: Component<NodeComponentProps>;
 
   /**
+   * 节点分类
+   */
+  category?: string;
+
+  /**
    * 默认节点数据
    */
   defaultData?: Record<string, any>;
@@ -68,13 +88,18 @@ export interface NodeDefinition {
   execute?: (context: TaskContext) => Promise<any>;
 
   /**
-   * 属性面板组件（可选，如果不提供则使用默认面板）
+   * 属性面板组件（优先于 schema）
    */
-
   propertyPanel?: Component<{
     node: Node;
     onUpdate: (data: Record<string, any>) => void;
   }>;
+  
+  /**
+   * 属性表单 Schema (用于自动生成 Property Panel)
+   */
+  propertySchema?: FormField[];
+
 
   /**
    * 工具栏按钮配置
