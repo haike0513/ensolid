@@ -4,7 +4,8 @@
 
 import type { Component } from "solid-js";
 import { createSignal, For, Show } from "solid-js";
-import { NodePropertyPanel } from "./NodePropertyPanel";
+
+
 import {
   addEdge,
   applyEdgeChanges,
@@ -12,6 +13,12 @@ import {
   DefaultNode,
   Flow,
   Handle,
+  Background,
+  Controls,
+  MiniMap,
+  Executor,
+  ExecutorPanel,
+  PropertyPanel,
 } from "@ensolid/solidflow";
 import type {
   Connection,
@@ -23,6 +30,32 @@ import type {
   FlowInstance,
 } from "@ensolid/solidflow";
 import { Button } from "@/components/ui/button";
+
+// Executor Tasks
+const tasks = {
+  input: async () => {
+    return { value: "input data", timestamp: Date.now() };
+  },
+  process: async ({ inputs }: any) => {
+    console.log("Processing inputs:", inputs);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    return { processed: true, data: inputs };
+  },
+  decision: async ({ inputs }: any) => {
+    console.log("Making decision based on:", inputs);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return { result: Math.random() > 0.5 ? "yes" : "no" };
+  },
+  output: async ({ inputs }: any) => {
+    console.log("Output received:", inputs);
+    return "Finished";
+  },
+  default: async () => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    return "Done";
+  },
+};
+
 
 // 自定义输入节点
 const InputNode: Component<NodeComponentProps> = (props) => {
@@ -197,6 +230,23 @@ export const FlowEditorExample: Component = () => {
   const [flowInstance, setFlowInstance] = createSignal<FlowInstance | null>(
     null
   );
+  const [executor, setExecutor] = createSignal<Executor | null>(null);
+
+  const handleRun = () => {
+    const exec = new Executor({
+      nodes: nodes(),
+      edges: edges(),
+      tasks: tasks,
+      concurrency: 2,
+    });
+    setExecutor(exec);
+    exec.start().catch((err) => console.error(err));
+  };
+
+  const handleStop = () => {
+    executor()?.stop();
+  };
+
 
   const onInit = (instance: FlowInstance) => {
     setFlowInstance(instance);
@@ -379,7 +429,28 @@ export const FlowEditorExample: Component = () => {
   };
 
   return (
-    <div class="space-y-4 p-6">
+    <div class="space-y-4 p-6 relative">
+      <style>
+        {`
+        .executing-running {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px #bfdbfe, 0 0 10px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s;
+        }
+        .executing-completed {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            transition: all 0.3s;
+        }
+        .executing-failed {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            box-shadow: 0 0 0 2px #fecaca;
+            transition: all 0.3s;
+        }
+        `}
+      </style>
+
       <div class="flex items-center justify-between mb-4">
         <h2 class="text-2xl font-bold">Flow 编辑器完整示例</h2>
         <div class="flex gap-2">
@@ -502,16 +573,19 @@ export const FlowEditorExample: Component = () => {
           onInit={onInit}
           onDragOver={onDragOver}
           onDrop={onDrop}
-        />
-
-        {/* 属性编辑面板 */}
-        <Show when={selectedNodes().length === 1}>
-          <NodePropertyPanel
-            node={selectedNodes()[0]}
-            onClose={() => setSelectedNodeIds(new Set())}
-            onUpdate={updateNodeData}
+        >
+          <Background />
+          <Controls />
+          <MiniMap />
+          <PropertyPanel showDefault />
+          <ExecutorPanel
+            executor={executor()}
+            onRun={handleRun}
+            onStop={handleStop}
+            autoVisualize={true}
           />
-        </Show>
+        </Flow>
+
       </div>
 
       {/* 信息面板 */}

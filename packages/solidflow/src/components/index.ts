@@ -5,6 +5,8 @@ export * from './Edge';
 export * from './Handle';
 export * from './Background';
 export * from './Controls';
+export * from './ExecutorPanel';
+export * from './PropertyPanel';
 export * from './MiniMap';
 export * from './Panel';
 export * from './DefaultNode';

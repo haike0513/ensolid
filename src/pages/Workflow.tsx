@@ -11,18 +11,57 @@ import {
   applyNodeChanges,
   Controls,
   Flow,
+  Executor,
   type Connection,
   type Edge,
   type EdgeChange,
   type Node,
   type NodeChange,
   type FlowInstance,
+  ExecutorPanel,
+  PropertyPanel,
 } from "@ensolid/solidflow";
-import { NodePropertyPanel } from "../examples/NodePropertyPanel";
 import { WorkflowMenu } from "./workflow/components/WorkflowMenu";
 import { WorkflowToolbar } from "./workflow/components/WorkflowToolbar";
 import { pluginRegistry } from "./workflow/plugins";
 import { registerBuiltinNodes } from "./workflow/plugins/builtin";
+
+// Define Tasks for Executor
+const tasks = {
+  // Start/Trigger
+  trigger: async () => {
+    return { timestamp: Date.now(), source: "trigger" };
+  },
+  // Agent
+  agent: async (ctx: any) => {
+    const { node, inputs } = ctx;
+    const role = node.data.role || "Assistant";
+    const model = node.data.model || "GPT-4";
+    console.log(`[Agent ${role}] Processing with ${model}...`, inputs);
+    
+    // Simulate thinking time
+    await new Promise(r => setTimeout(r, 1500));
+    
+    return { 
+        response: `Analysis by ${role} complete.`,
+        model,
+        timestamp: Date.now()
+    };
+  },
+  // Task
+  task: async (ctx: any) => {
+    const { node, inputs } = ctx;
+    console.log(`[Task ${node.data.label}] Executing...`, inputs);
+    await new Promise(r => setTimeout(r, 1000));
+    return { status: "Done", output: "Task Result" };
+  },
+  // Default fallback
+  default: async () => {
+    await new Promise(r => setTimeout(r, 500));
+    return "completed";
+  }
+};
+
 
 // 初始化内置节点插件（在模块加载时注册）
 registerBuiltinNodes();
@@ -75,8 +114,27 @@ export const WorkflowPage: Component = () => {
   const [flowInstance, setFlowInstance] = createSignal<FlowInstance | null>(
     null
   );
+  
+  // Executor State
+  const [executor, setExecutor] = createSignal<Executor | null>(null);
+
+  const handleRun = () => {
+    const exec = new Executor({
+      nodes: nodes,
+      edges: edges(),
+      tasks: tasks,
+      concurrency: 2,
+    });
+    setExecutor(exec);
+    exec.start().catch((err) => console.error("Workflow failed", err));
+  };
+
+  const handleStop = () => {
+    executor()?.stop();
+  };
 
   // Selection State
+
   const [selectedNodeId, setSelectedNodeId] = createSignal<string | null>(null);
 
   // Canvas State
@@ -217,8 +275,29 @@ export const WorkflowPage: Component = () => {
   });
 
   return (
-    <div class="flex h-[calc(100vh-theme(spacing.16))] flex-col bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 dark:from-slate-950 dark:via-blue-950/30 dark:to-slate-950">
+    <div class="flex h-[calc(100vh-theme(spacing.16))] flex-col bg-gradient-to-br from-slate-50 via-blue-50/30 to-slate-50 dark:from-slate-950 dark:via-blue-950/30 dark:to-slate-950 relative">
+      <style>
+        {`
+        .executing-running {
+            border-color: #3b82f6 !important;
+            box-shadow: 0 0 0 2px #bfdbfe, 0 0 10px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s;
+        }
+        .executing-completed {
+            border-color: #22c55e !important;
+            background-color: #f0fdf4 !important;
+            transition: all 0.3s;
+        }
+        .executing-failed {
+            border-color: #ef4444 !important;
+            background-color: #fef2f2 !important;
+            box-shadow: 0 0 0 2px #fecaca;
+            transition: all 0.3s;
+        }
+        `}
+      </style>
       {/* 顶部标题栏 */}
+
       <div class="border-b bg-background/80 backdrop-blur-sm px-6 py-3 flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
@@ -284,20 +363,76 @@ export const WorkflowPage: Component = () => {
             setIsLocked={setIsLocked}
             onNodeDragStart={onDragStart}
           />
-        </Flow>
-        {/* {selectedNode() && <div>Selected Node: {selectedNode().data.label}</div>} */}
+          
+          <ExecutorPanel 
+            executor={executor()} 
+            onRun={handleRun}
+            onStop={handleStop}
+            autoVisualize={true}
+          />
+          
+          <PropertyPanel>
+            {({ node }) => (
+                <div class="space-y-4">
+                     {/* Common: Label */}
+                     <div class="space-y-1">
+                       <label class="block text-xs font-medium text-gray-500">Node Name</label>
+                       <input 
+                         type="text"
+                         value={node.data?.label || ""}
+                         onInput={(e) => updateNodeData(node.id, { label: e.currentTarget.value })}
+                         class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none"
+                         placeholder="Name"
+                       />
+                     </div>
+                     
+                     {/* Agent Fields */}
+                     <Show when={node.type === "agent"}>
+                       <div class="space-y-3 pt-2 border-t border-gray-100">
+                         <div class="space-y-1">
+                           <label class="block text-xs font-medium text-gray-500">Role</label>
+                           <input 
+                             type="text"
+                             value={node.data?.role || ""}
+                             onInput={(e) => updateNodeData(node.id, { role: e.currentTarget.value })}
+                             class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none"
+                             placeholder="e.g. Researcher"
+                           />
+                         </div>
+                         <div class="space-y-1">
+                           <label class="block text-xs font-medium text-gray-500">Model</label>
+                           <select 
+                             value={node.data?.model || "gpt-5-mini"}
+                             onChange={(e) => updateNodeData(node.id, { model: e.currentTarget.value })}
+                             class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none bg-white"
+                           >
+                             <option value="gpt-5-mini">GPT-5 Mini</option>
+                             <option value="gpt-4">GPT-4</option>
+                             <option value="claude-3-opus">Claude 3 Opus</option>
+                           </select>
+                         </div>
+                       </div>
+                     </Show>
 
-        {/* Property Panel Sidebar */}
-        <Show when={selectedNode()}>
-          {(node) => (
-            <NodePropertyPanel
-              node={node()}
-              onClose={onPaneClick}
-              onUpdate={updateNodeData}
-            />
-          )}
-        </Show>
+                     {/* Task Fields */}
+                     <Show when={node.type === "task"}>
+                       <div class="space-y-1 pt-2 border-t border-gray-100">
+                         <label class="block text-xs font-medium text-gray-500">Description</label>
+                         <textarea 
+                           value={node.data?.description || ""}
+                           onInput={(e) => updateNodeData(node.id, { description: e.currentTarget.value })}
+                           class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none min-h-[80px]"
+                           placeholder="Describe the task..."
+                         />
+                       </div>
+                     </Show>
+                </div>
+            )}
+          </PropertyPanel>
+
+        </Flow>
       </div>
     </div>
   );
 };
+
