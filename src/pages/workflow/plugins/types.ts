@@ -1,10 +1,21 @@
 import type { Component, JSX } from "solid-js";
-import type { Node, NodeComponentProps } from "@ensolid/solidflow";
+import type { Node, NodeComponentProps, TaskContext } from "@ensolid/solidflow";
+
+
+/**
+ * 端口定义接口
+ */
+export interface PortDefinition {
+  label?: string;
+  type?: string; // e.g. "string", "number", "boolean", "any"
+  description?: string;
+}
 
 /**
  * 节点定义接口
  * 定义了一个自定义节点的元数据和组件
  */
+
 export interface NodeDefinition {
   /**
    * 节点类型唯一标识符
@@ -42,8 +53,24 @@ export interface NodeDefinition {
   createNodeData?: (type: string) => Record<string, any>;
 
   /**
+   * 输入端口定义 (Schema)
+   */
+  inputs?: Record<string, PortDefinition>;
+
+  /**
+   * 输出端口定义 (Schema)
+   */
+  outputs?: Record<string, PortDefinition>;
+
+  /**
+   * 执行逻辑
+   */
+  execute?: (context: TaskContext) => Promise<any>;
+
+  /**
    * 属性面板组件（可选，如果不提供则使用默认面板）
    */
+
   propertyPanel?: Component<{
     node: Node;
     onUpdate: (data: Record<string, any>) => void;

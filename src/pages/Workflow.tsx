@@ -26,41 +26,25 @@ import { WorkflowToolbar } from "./workflow/components/WorkflowToolbar";
 import { pluginRegistry } from "./workflow/plugins";
 import { registerBuiltinNodes } from "./workflow/plugins/builtin";
 
-// Define Tasks for Executor
-const tasks = {
-  // Start/Trigger
-  trigger: async () => {
-    return { timestamp: Date.now(), source: "trigger" };
-  },
-  // Agent
-  agent: async (ctx: any) => {
-    const { node, inputs } = ctx;
-    const role = node.data.role || "Assistant";
-    const model = node.data.model || "GPT-4";
-    console.log(`[Agent ${role}] Processing with ${model}...`, inputs);
+// Helper to extract tasks from plugin registry
+const getTasksFromRegistry = () => {
+    const registryTasks: Record<string, any> = {};
+    const nodeTypes = pluginRegistry.getNodeTypes();
     
-    // Simulate thinking time
-    await new Promise(r => setTimeout(r, 1500));
+    for (const [type, def] of nodeTypes) {
+        if (def.execute) {
+            registryTasks[type] = def.execute;
+        }
+    }
     
-    return { 
-        response: `Analysis by ${role} complete.`,
-        model,
-        timestamp: Date.now()
-    };
-  },
-  // Task
-  task: async (ctx: any) => {
-    const { node, inputs } = ctx;
-    console.log(`[Task ${node.data.label}] Executing...`, inputs);
-    await new Promise(r => setTimeout(r, 1000));
-    return { status: "Done", output: "Task Result" };
-  },
-  // Default fallback
-  default: async () => {
-    await new Promise(r => setTimeout(r, 500));
-    return "completed";
-  }
+    // Add default fallback if not present
+    if (!registryTasks['default']) {
+        registryTasks['default'] = async () => "Simple Node Executed";
+    }
+    
+    return registryTasks;
 };
+
 
 
 // 初始化内置节点插件（在模块加载时注册）
@@ -119,6 +103,9 @@ export const WorkflowPage: Component = () => {
   const [executor, setExecutor] = createSignal<Executor | null>(null);
 
   const handleRun = () => {
+    const tasks = getTasksFromRegistry();
+    console.log("Starting execution with tasks:", Object.keys(tasks));
+    
     const exec = new Executor({
       nodes: nodes,
       edges: edges(),
@@ -128,6 +115,7 @@ export const WorkflowPage: Component = () => {
     setExecutor(exec);
     exec.start().catch((err) => console.error("Workflow failed", err));
   };
+
 
   const handleStop = () => {
     executor()?.stop();

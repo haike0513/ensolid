@@ -20,9 +20,26 @@ export function registerBuiltinNodes() {
           description: "AI Agent node",
           icon: "🤖",
           component: AgentNode,
-          defaultData: { label: "New Agent", role: "Assistant" },
+
+
           createNodeData: () => ({ label: "New Agent", role: "Assistant" }),
+          inputs: {
+            input: { label: "Input", type: "string" }
+          },
+          outputs: {
+            output: { label: "Output", type: "string" }
+          },
+          execute: async (ctx) => {
+            const { node, inputs } = ctx;
+            const role = node.data.role || "Assistant";
+            console.log(`[Plugin:Agent] ${role} thinking...`, inputs);
+            await new Promise(r => setTimeout(r, 1500));
+            return { 
+                response: `[${role}] Processed: ${JSON.stringify(inputs)}` 
+            };
+          },
           toolbar: {
+
             title: "Agent Node",
             icon: (
               <svg
@@ -57,7 +74,19 @@ export function registerBuiltinNodes() {
             label: "New Task",
             description: "Task description...",
           }),
+          inputs: {
+             input: { label: "Input", type: "any" }
+          },
+          outputs: {
+             output: { label: "Output", type: "any" }
+          },
+          execute: async (ctx) => {
+              console.log(`[Plugin:Task] Executing ${ctx.node.data.label}...`);
+              await new Promise(r => setTimeout(r, 1000));
+              return { status: "success", result: "Task Completed" };
+          },
           toolbar: {
+
             title: "Task Node",
             icon: (
               <svg
@@ -87,9 +116,21 @@ export function registerBuiltinNodes() {
           description: "Tool node",
           icon: "🛠️",
           component: ToolNode,
+
           defaultData: { label: "New Tool", description: "Tool..." },
           createNodeData: () => ({ label: "New Tool", description: "Tool..." }),
+          inputs: { 
+             params: { label: "Params", type: "object" } 
+          },
+          outputs: { 
+             result: { label: "Result", type: "any" } 
+          },
+          execute: async () => {
+              await new Promise(r => setTimeout(r, 800));
+              return { toolResult: "Mock Tool Output" };
+          },
           toolbar: {
+
             title: "Tool Node",
             icon: (
               <svg
@@ -114,9 +155,17 @@ export function registerBuiltinNodes() {
           description: "Trigger/Start node",
           icon: "🚀",
           component: TriggerNode,
+
           defaultData: { label: "Start" },
           createNodeData: () => ({ label: "Start" }),
+          outputs: {
+             trigger: { label: "Trigger", type: "signal" }
+          },
+          execute: async () => {
+              return { timestamp: Date.now() };
+          },
           toolbar: {
+
             title: "Trigger Node",
             icon: (
               <svg
