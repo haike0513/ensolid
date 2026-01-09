@@ -1,12 +1,12 @@
 
-import { Component, createSignal } from 'solid-js';
+import { createSignal, type Component } from 'solid-js';
 import {
   Flow,
   Background,
   Controls,
   MiniMap,
-  NodeChange,
-  EdgeChange,
+  type NodeChange,
+  type EdgeChange,
   applyNodeChanges,
   applyEdgeChanges,
   Executor,

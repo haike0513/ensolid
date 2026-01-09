@@ -42,6 +42,8 @@ import { MiniMap } from "../MiniMap";
 import { Node as NodeComponent } from "../Node";
 import { Edge as EdgeComponent } from "../Edge";
 import { DefaultNode } from "../DefaultNode";
+import { FlowProviderContext, type FlowProviderContextValue } from "../FlowProvider/FlowProvider";
+
 
 export const Flow: Component<FlowProps> = (props) => {
   const [local, others] = splitProps(props, [
@@ -1140,8 +1142,34 @@ export const Flow: Component<FlowProps> = (props) => {
 
   const currentViewport = () => viewport();
 
+  const contextValue: FlowProviderContextValue = {
+    nodes: () => local.nodes,
+    edges: () => local.edges ?? [],
+    viewport: viewport,
+    onNodesChange: (changes) => local.onNodesChange?.(changes),
+    onEdgesChange: (changes) => local.onEdgesChange?.(changes),
+    onConnect: (connection) => local.onConnect?.(connection),
+    updateViewport,
+    setNodes: (newNodes: Node[]) => {
+        local.onNodesChange?.(newNodes.map(node => ({
+            id: node.id,
+            type: 'reset',
+            item: node
+        })));
+    },
+    setEdges: (newEdges: Edge[]) => {
+        local.onEdgesChange?.(newEdges.map(edge => ({
+            id: edge.id,
+            type: 'reset',
+            item: edge
+        })));
+    },
+  };
+
   return (
+    <FlowProviderContext.Provider value={contextValue}>
     <div
+
       {...others}
       ref={containerRef}
       id={local.id}
@@ -1418,5 +1446,7 @@ export const Flow: Component<FlowProps> = (props) => {
       />
       {local.children}
     </div>
+    </FlowProviderContext.Provider>
   );
 };
+

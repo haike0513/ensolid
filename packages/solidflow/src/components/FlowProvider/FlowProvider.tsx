@@ -27,7 +27,7 @@ export interface FlowProviderContextValue {
     setEdges: (edges: Edge[]) => void;
 }
 
-const FlowProviderContext = createContext<FlowProviderContextValue>();
+export const FlowProviderContext = createContext<FlowProviderContextValue>();
 
 export const useFlowContext = () => {
     const context = useContext(FlowProviderContext);

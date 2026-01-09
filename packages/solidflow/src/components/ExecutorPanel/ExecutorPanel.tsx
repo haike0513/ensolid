@@ -1,5 +1,5 @@
 
-import { Component, createSignal, createEffect, onCleanup, For, Show } from "solid-js";
+import { createSignal, createEffect, onCleanup, For, Show, type Component } from "solid-js";
 import { Panel } from "../Panel";
 import { useReactFlow } from "../../hooks/useReactFlow";
 import type { Executor } from "../../executor/Executor";

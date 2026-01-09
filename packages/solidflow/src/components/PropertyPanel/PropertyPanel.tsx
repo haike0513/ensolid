@@ -1,5 +1,5 @@
 
-import { Component, createSignal, createEffect, Show, JSX } from 'solid-js';
+import { createSignal, createEffect, Show, type Component, type JSX } from 'solid-js';
 import { useReactFlow } from '../../hooks/useReactFlow';
 import { Panel } from '../Panel';
 import type { Node } from '../../types';
