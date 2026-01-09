@@ -26,6 +26,7 @@ export { ToolbarExample } from "./ToolbarExample";
 export { NavigationMenuExample } from "./NavigationMenuExample";
 export { FlowExample } from "./FlowExample";
 export { FlowCustomNodeExample } from "./FlowCustomNodeExample";
+export { FlowWaypointExample } from "./FlowWaypointExample";
 export { FlowInteractiveExample } from "./FlowInteractiveExample";
 export { FlowEditorExample } from "./FlowEditorExample";
 export { FlowConnectExample } from "./FlowConnectExample";

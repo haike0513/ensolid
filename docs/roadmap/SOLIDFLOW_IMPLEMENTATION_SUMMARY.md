@@ -313,20 +313,61 @@ flowInstance.fromObject(data);
 - `packages/solidflow/src/utils/alignment.ts` - 对齐工具函数
 - `packages/solidflow/src/utils/parentNode.ts` - 节点分组工具函数
 - `packages/solidflow/src/utils/importExport.ts` - 导入导出工具函数
+- `packages/solidflow/src/utils/index.ts` - 更新了路径计算函数以支持 waypoints
 
 ### 示例文件
 - `src/examples/FlowCopyPasteExample.tsx` - 复制粘贴示例
 - `src/examples/FlowAlignmentExample.tsx` - 节点对齐示例
 - `src/examples/FlowNodeGroupExample.tsx` - 节点分组示例
 - `src/examples/FlowImportExportExample.tsx` - 导入导出示例
+- `src/examples/FlowWaypointExample.tsx` - 边中间点编辑示例
+
+### 9. 边中间点编辑功能
+
+**实现内容：**
+- 在 `Edge` 类型中添加了 `waypoints` 属性支持
+- 更新了路径计算函数，支持 waypoints（straight、bezier、smoothstep）
+- 实现了 waypoint 控制点的渲染（选中边时显示）
+- 实现了 waypoint 拖拽功能，支持调整边路径
+- 在 `EdgeChange` 中添加了 `waypoint` 类型
+- 更新了 `applyEdgeChanges` 函数，支持 waypoint 更新
+- 创建了示例文件 `FlowWaypointExample.tsx`
+
+**API 变更：**
+- `Edge` 接口新增 `waypoints?: XYPosition[]` 属性
+- `EdgeChange` 新增 `waypoint` 类型
+- `EdgeProps` 新增 `onWaypointChange?: (edgeId: string, waypoints: XYPosition[]) => void` 属性
+- `EdgeProps` 新增 `viewport?: { x: number; y: number; zoom: number }` 属性（用于坐标转换）
+
+**使用示例：**
+```tsx
+const [edges, setEdges] = createSignal<Edge[]>([
+  {
+    id: "e1-2",
+    source: "1",
+    target: "2",
+    type: "default",
+    waypoints: [
+      { x: 250, y: 150 },
+      { x: 300, y: 200 },
+    ],
+  },
+]);
+
+<Flow
+  edges={edges()}
+  onEdgesChange={(changes) => {
+    setEdges((prev) => applyEdgeChanges(changes, prev));
+  }}
+/>
+```
 
 ## 🎯 下一步计划
 
 根据路线图，下一步将实现：
 
-1. **边中间点编辑** - 支持拖拽边中间的控制点
-2. **节点调整大小** - 支持拖拽调整节点大小
-3. **批量操作** - 框选和批量操作
+1. **节点调整大小** - 支持拖拽调整节点大小
+2. **批量操作** - 框选和批量操作
 
 ## 📚 参考资源
 

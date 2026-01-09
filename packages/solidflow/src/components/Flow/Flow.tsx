@@ -1179,6 +1179,7 @@ export const Flow: Component<FlowProps> = (props) => {
                 sourceNode={local.nodes.find((n) => n.id === edge.source)}
                 targetNode={local.nodes.find((n) => n.id === edge.target)}
                 selected={selectedEdges().has(edge.id)}
+                viewport={viewport()}
                 onClick={(e, ed) => {
                   if (!(local.elementsSelectable ?? true)) {
                     return;
@@ -1219,6 +1220,16 @@ export const Flow: Component<FlowProps> = (props) => {
                         ...edge,
                         label,
                       },
+                    } as EdgeChange,
+                  ]);
+                  debouncedSaveHistory();
+                }}
+                onWaypointChange={(edgeId: string, waypoints: XYPosition[]) => {
+                  local.onEdgesChange?.([
+                    {
+                      id: edgeId,
+                      type: "waypoint",
+                      waypoints,
                     } as EdgeChange,
                   ]);
                   debouncedSaveHistory();

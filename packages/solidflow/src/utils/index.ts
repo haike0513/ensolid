@@ -196,7 +196,12 @@ export function getNodeHandlePosition(
 export function getStraightPath(
     sourcePos: XYPosition,
     targetPos: XYPosition,
+    waypoints?: XYPosition[],
 ): string {
+    if (waypoints && waypoints.length > 0) {
+        const points = [sourcePos, ...waypoints, targetPos];
+        return `M ${points[0].x} ${points[0].y} ${points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')}`;
+    }
     return `M ${sourcePos.x} ${sourcePos.y} L ${targetPos.x} ${targetPos.y}`;
 }
 
@@ -208,7 +213,27 @@ export function getSimpleBezierPath(
     targetPos: XYPosition,
     sourcePosition: Position = "right",
     targetPosition: Position = "left",
+    waypoints?: XYPosition[],
 ): string {
+    // 如果有waypoints，使用分段贝塞尔曲线
+    if (waypoints && waypoints.length > 0) {
+        const points = [sourcePos, ...waypoints, targetPos];
+        let path = `M ${points[0].x} ${points[0].y}`;
+        
+        for (let i = 0; i < points.length - 1; i++) {
+            const current = points[i];
+            const next = points[i + 1];
+            const dx = next.x - current.x;
+            const cp1x = current.x + dx * 0.25;
+            const cp1y = current.y;
+            const cp2x = current.x + dx * 0.75;
+            const cp2y = next.y;
+            path += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${next.x} ${next.y}`;
+        }
+        
+        return path;
+    }
+    
     const offset = 50;
     let sourceX = sourcePos.x;
     let sourceY = sourcePos.y;
@@ -263,7 +288,42 @@ export function getBezierPath(
     targetPos: XYPosition,
     sourcePosition: Position = "right",
     targetPosition: Position = "left",
+    waypoints?: XYPosition[],
 ): string {
+    // 如果有waypoints，使用分段贝塞尔曲线
+    if (waypoints && waypoints.length > 0) {
+        const points = [sourcePos, ...waypoints, targetPos];
+        let path = `M ${points[0].x} ${points[0].y}`;
+        
+        for (let i = 0; i < points.length - 1; i++) {
+            const current = points[i];
+            const next = points[i + 1];
+            const offset = 50;
+            let cp1x = current.x;
+            let cp1y = current.y;
+            let cp2x = next.x;
+            let cp2y = next.y;
+            
+            // 根据方向调整控制点
+            const dx = next.x - current.x;
+            const dy = next.y - current.y;
+            
+            if (Math.abs(dx) > Math.abs(dy)) {
+                // 水平方向为主
+                cp1x = current.x + offset;
+                cp2x = next.x - offset;
+            } else {
+                // 垂直方向为主
+                cp1y = current.y + (dy > 0 ? offset : -offset);
+                cp2y = next.y + (dy > 0 ? -offset : offset);
+            }
+            
+            path += ` C ${cp1x} ${cp1y} ${cp2x} ${cp2y} ${next.x} ${next.y}`;
+        }
+        
+        return path;
+    }
+    
     const offset = 50;
     let sourceX = sourcePos.x;
     let sourceY = sourcePos.y;
@@ -312,7 +372,14 @@ export function getSmoothStepPath(
     targetPos: XYPosition,
     sourcePosition: Position = "right",
     targetPosition: Position = "left",
+    waypoints?: XYPosition[],
 ): string {
+    // 如果有waypoints，直接连接所有点
+    if (waypoints && waypoints.length > 0) {
+        const points = [sourcePos, ...waypoints, targetPos];
+        return `M ${points[0].x} ${points[0].y} ${points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')}`;
+    }
+    
     const offset = 25;
     let sourceX = sourcePos.x;
     let sourceY = sourcePos.y;
@@ -489,6 +556,16 @@ export function applyEdgeChanges(
             case "reset": {
                 if (index !== -1 && change.item) {
                     newEdges[index] = change.item;
+                }
+                break;
+            }
+            case "waypoint": {
+                if (index !== -1) {
+                    const edge = newEdges[index];
+                    newEdges[index] = {
+                        ...edge,
+                        waypoints: change.waypoints,
+                    };
                 }
                 break;
             }

@@ -66,6 +66,10 @@ export interface Edge<T = any> {
   zIndex?: number;
   ariaLabel?: string;
   selected?: boolean;
+  /**
+   * 边的中间点（waypoints），用于自定义边路径
+   */
+  waypoints?: XYPosition[];
 }
 
 export type EdgeMarkerType = string | {
@@ -194,6 +198,11 @@ export type EdgeChange =
     id: EdgeId;
     type: "reset";
     item: Edge;
+  }
+  | {
+    id: EdgeId;
+    type: "waypoint";
+    waypoints: XYPosition[];
   };
 
 export interface FlowInstance {

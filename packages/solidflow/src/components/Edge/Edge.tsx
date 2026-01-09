@@ -2,7 +2,7 @@
  * Edge 组件 - 流程边/连接线
  */
 
-import { type Component, type JSX, Show, splitProps, createSignal, onMount, createEffect } from "solid-js";
+import { type Component, type JSX, Show, splitProps, createSignal, onMount, createEffect, For, onCleanup } from "solid-js";
 import type { Edge as EdgeType, Node, Position, XYPosition } from "../../types";
 import {
   getBezierPath,
@@ -50,6 +50,14 @@ export interface EdgeProps {
    */
   onLabelEdit?: (edgeId: string, label: string) => void;
   /**
+   * 边中间点更新回调
+   */
+  onWaypointChange?: (edgeId: string, waypoints: XYPosition[]) => void;
+  /**
+   * 视口信息（用于坐标转换）
+   */
+  viewport?: { x: number; y: number; zoom: number };
+  /**
    * 自定义边渲染
    */
   renderEdge?: (edge: EdgeType, path: string) => JSX.Element;
@@ -66,6 +74,8 @@ export const Edge: Component<EdgeProps> = (props) => {
     "onClick",
     "onDoubleClick",
     "onLabelEdit",
+    "onWaypointChange",
+    "viewport",
     "renderEdge",
   ]);
 
@@ -133,10 +143,11 @@ export const Edge: Component<EdgeProps> = (props) => {
       : "left";
 
     const edgeType = local.edge.type ?? "default";
+    const waypoints = local.edge.waypoints;
 
     switch (edgeType) {
       case "straight":
-        return getStraightPath(sourcePos, targetPos);
+        return getStraightPath(sourcePos, targetPos, waypoints);
       case "step":
       case "smoothstep":
         return getSmoothStepPath(
@@ -144,6 +155,7 @@ export const Edge: Component<EdgeProps> = (props) => {
           targetPos,
           sourcePosition,
           targetPosition,
+          waypoints,
         );
       case "bezier":
         return getBezierPath(
@@ -151,6 +163,7 @@ export const Edge: Component<EdgeProps> = (props) => {
           targetPos,
           sourcePosition,
           targetPosition,
+          waypoints,
         );
       case "simplebezier":
       case "default":
@@ -160,6 +173,7 @@ export const Edge: Component<EdgeProps> = (props) => {
           targetPos,
           sourcePosition,
           targetPosition,
+          waypoints,
         );
     }
   };
@@ -379,6 +393,87 @@ export const Edge: Component<EdgeProps> = (props) => {
                   </Show>
                 );
               })()}
+            </Show>
+            {/* Waypoint 控制点 */}
+            <Show when={local.edge.selected && local.edge.waypoints && local.edge.waypoints.length > 0 && local.onWaypointChange}>
+              <For each={local.edge.waypoints}>
+                {(waypoint, index) => {
+                  const [isDragging, setIsDragging] = createSignal(false);
+                  const [dragStart, setDragStart] = createSignal<{ start: XYPosition; initial: XYPosition } | null>(null);
+                  const [currentPos, setCurrentPos] = createSignal<XYPosition>(waypoint);
+
+                  // 同步外部waypoint变化
+                  createEffect(() => {
+                    if (!isDragging()) {
+                      setCurrentPos(waypoint);
+                    }
+                  });
+
+                  const handleWaypointMouseDown = (e: MouseEvent) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    setIsDragging(true);
+                    setDragStart({
+                      start: { x: e.clientX, y: e.clientY },
+                      initial: waypoint,
+                    });
+                  };
+
+                  const handleWaypointMouseMove = (e: MouseEvent) => {
+                    if (isDragging() && dragStart()) {
+                      // 考虑viewport的缩放
+                      const zoom = local.viewport?.zoom ?? 1;
+                      const deltaX = (e.clientX - dragStart()!.start.x) / zoom;
+                      const deltaY = (e.clientY - dragStart()!.start.y) / zoom;
+                      const newPos: XYPosition = {
+                        x: dragStart()!.initial.x + deltaX,
+                        y: dragStart()!.initial.y + deltaY,
+                      };
+                      setCurrentPos(newPos);
+                    }
+                  };
+
+                  const handleWaypointMouseUp = () => {
+                    if (isDragging() && dragStart()) {
+                      const newWaypoints = [...(local.edge.waypoints || [])];
+                      newWaypoints[index()] = currentPos();
+                      local.onWaypointChange?.(local.edge.id, newWaypoints);
+                      setIsDragging(false);
+                      setDragStart(null);
+                    }
+                  };
+
+                  // 监听全局鼠标事件
+                  createEffect(() => {
+                    if (isDragging()) {
+                      document.addEventListener("mousemove", handleWaypointMouseMove);
+                      document.addEventListener("mouseup", handleWaypointMouseUp);
+                      onCleanup(() => {
+                        document.removeEventListener("mousemove", handleWaypointMouseMove);
+                        document.removeEventListener("mouseup", handleWaypointMouseUp);
+                      });
+                    }
+                  });
+
+                  return (
+                    <g>
+                      <circle
+                        cx={currentPos().x}
+                        cy={currentPos().y}
+                        r={6}
+                        fill="#3b82f6"
+                        stroke="white"
+                        stroke-width={2}
+                        style={{
+                          cursor: "move",
+                          "pointer-events": "all",
+                        } as any}
+                        onMouseDown={handleWaypointMouseDown}
+                      />
+                    </g>
+                  );
+                }}
+              </For>
             </Show>
           </>
         }

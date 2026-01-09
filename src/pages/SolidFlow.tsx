@@ -14,9 +14,10 @@ import {
   FlowAlignmentExample,
   FlowNodeGroupExample,
   FlowImportExportExample,
+  FlowWaypointExample,
 } from "../examples";
 
-type FlowExampleType = "basic" | "custom-node" | "interactive" | "editor" | "undo-redo" | "copy-paste" | "alignment" | "node-group" | "import-export";
+type FlowExampleType = "basic" | "custom-node" | "interactive" | "editor" | "undo-redo" | "copy-paste" | "alignment" | "node-group" | "import-export" | "waypoint";
 
 interface FlowExampleItem {
   id: FlowExampleType;
@@ -109,6 +110,15 @@ const flowExamples: FlowExampleItem[] = [
     description: "展示流程图的导入导出功能",
     difficulty: "简单",
     features: ["JSON导出", "JSON导入", "版本兼容", "文件操作"]
+  },
+  {
+    id: "waypoint",
+    name: "边中间点编辑",
+    component: FlowWaypointExample,
+    icon: "📍",
+    description: "展示边中间点编辑功能，支持拖拽调整边路径",
+    difficulty: "中等",
+    features: ["中间点编辑", "路径调整", "拖拽控制点", "多中间点支持"]
   },
 ];
 
