@@ -6,10 +6,15 @@
   "bin": {
     "ensolid": "./dist/index.js"
   },
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsup src/index.ts --format esm --clean --dts",
     "dev": "tsup src/index.ts --format esm --watch --clean",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "publish": "pnpm build && pnpm publish"
   },
   "keywords": [
     "solidjs",
