@@ -38,6 +38,9 @@ importers:
       '@ensolid/streamdown':
         specifier: workspace:*
         version: link:packages/streamdown
+      '@ensolid/utils':
+        specifier: workspace:*
+        version: link:packages/utils
       '@ensolid/visx':
         specifier: workspace:*
         version: link:packages/visx
@@ -306,6 +309,28 @@ importers:
       vite-plugin-solid:
         specifier: ^2.9.0
         version: 2.11.10(solid-js@1.9.10)(vite@6.4.1(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2))
+
+  packages/utils:
+    dependencies:
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      solid-js:
+        specifier: ^1.9.9
+        version: 1.9.10
+    devDependencies:
+      typescript:
+        specifier: ~5.8.3
+        version: 5.8.3
+      vite:
+        specifier: ^7.1.7
+        version: 7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2)
+      vite-plugin-dts:
+        specifier: ^4.5.4
+        version: 4.5.4(@types/node@25.0.3)(rollup@4.54.0)(typescript@5.8.3)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2))
+      vite-plugin-solid:
+        specifier: ^2.11.8
+        version: 2.11.10(solid-js@1.9.10)(vite@7.3.0(@types/node@25.0.3)(jiti@2.6.1)(lightningcss@1.30.2))
 
   packages/visx:
     dependencies:

@@ -39,6 +39,7 @@
     "@ensolid/remend": "workspace:*",
     "@ensolid/solidflow": "workspace:*",
     "@ensolid/streamdown": "workspace:*",
+    "@ensolid/utils": "workspace:*",
     "@ensolid/visx": "workspace:*",
     "@solidjs/router": "^0.15.4",
     "@tailwindcss/vite": "^4.1.18",
