@@ -19,6 +19,8 @@
     "dev:remend": "pnpm --filter @ensolid/remend dev",
     "build:streamdown": "pnpm --filter @ensolid/streamdown build",
     "dev:streamdown": "pnpm --filter @ensolid/streamdown dev",
+    "build:cli": "pnpm --filter @ensolid/cli build",
+    "dev:cli": "pnpm --filter @ensolid/cli dev",
     "publish": "pnpm -r --filter './packages/*' publish",
     "publish:baseui": "pnpm --filter @ensolid/baseui publish",
     "publish:remend": "pnpm --filter @ensolid/remend publish",
