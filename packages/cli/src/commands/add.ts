@@ -4,25 +4,15 @@ import path from "path";
 import fs from "fs-extra";
 import chalk from "chalk";
 import ora from "ora";
-import { fileURLToPath } from "url";
+import fetch from "node-fetch";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// In development, we can find the source relative to the CLI package
-// In production, we'd fetch from a URL.
-const getSourceDir = () => {
-  // Try to find the root of the monorepo
-  let current = __dirname;
-  while (current !== "/" && !fs.existsSync(path.join(current, "pnpm-workspace.yaml"))) {
-    current = path.dirname(current);
-  }
-  
-  const sourcePath = path.join(current, "src/components/ui");
-  if (fs.existsSync(sourcePath)) {
-    return sourcePath;
-  }
-  return null;
+// Helper to convert GitHub tree URL to raw URL base
+// Input: https://github.com/haike0513/ensolid/tree/main/src/components/ui
+// Output: https://raw.githubusercontent.com/haike0513/ensolid/main/src/components/ui
+const getRawUrlBase = (githubUrl: string) => {
+  return githubUrl
+    .replace("github.com", "raw.githubusercontent.com")
+    .replace("/tree/", "/");
 };
 
 export const add = new Command()
@@ -39,20 +29,21 @@ export const add = new Command()
 
     const config = await fs.readJSON(configPath);
     const targetDir = path.resolve(process.cwd(), config.aliases.ui || "src/components/ui");
-
-    const sourceDir = getSourceDir();
-    if (!sourceDir) {
-        console.log(chalk.red("Error: Could not find component sources."));
-        return;
-    }
+    const registry = config.registry || "https://github.com/haike0513/ensolid/tree/main/src/components/ui";
+    
+    const rawBaseUrl = getRawUrlBase(registry);
+    console.log(chalk.blue(`Using registry: ${registry}`));
 
     // 2. If no components specified, prompt user
     let selectedComponents = components;
     if (!selectedComponents || selectedComponents.length === 0) {
-      const files = await fs.readdir(sourceDir);
-      const availableComponents = files
-        .filter(f => f.endsWith(".tsx") && f !== "index.tsx")
-        .map(f => f.replace(".tsx", ""));
+      // For now, we manually list available components since fetching directory structure from GitHub requires API
+      // In a real implementation, you'd fetch a registry.json file first.
+      const availableComponents = [
+        "button", "card", "dialog", "checkbox", "switch", "tabs", "accordion",
+        "input", "label", "separator", "alert-dialog", "popover", "dropdown-menu",
+        "tooltip", "select", "slider", "progress", "toggle", "avatar"
+      ];
 
       const response = await prompts({
         type: "multiselect",
@@ -67,8 +58,8 @@ export const add = new Command()
       return;
     }
 
-    // 3. Copy components
-    const spinner = ora("Adding components...").start();
+    // 3. Download components
+    const spinner = ora("Downloading components...").start();
 
     try {
       if (!fs.existsSync(targetDir)) {
@@ -76,34 +67,42 @@ export const add = new Command()
       }
 
       for (const component of selectedComponents) {
-        const sourcePath = path.resolve(sourceDir, `${component}.tsx`);
+        const fileUrl = `${rawBaseUrl}/${component}.tsx`;
         const destPath = path.resolve(targetDir, `${component}.tsx`);
 
-        if (fs.existsSync(sourcePath)) {
-          let content = await fs.readFile(sourcePath, "utf-8");
-          
-          // Basic dependency handling: if it imports from ./utils, we might need to adjust alias
-          // In shadcn, they replace imports with configured aliases.
-          // For now, let's just copy.
-          
+        spinner.text = `Downloading ${chalk.blue(component)}...`;
+        
+        const response = await fetch(fileUrl);
+        if (response.ok) {
+          const content = await response.text();
           await fs.writeFile(destPath, content);
           spinner.succeed(`Added ${chalk.blue(component)}`);
+          spinner.start(); // Restart for next component
         } else {
-          spinner.fail(`Component ${chalk.red(component)} not found at ${sourcePath}`);
+          spinner.fail(`Failed to download ${chalk.red(component)} from ${fileUrl} (Status: ${response.status})`);
+          spinner.start();
         }
       }
 
-      // Also copy utils.ts if it doesn't exist
-      const utilsSource = path.resolve(sourceDir, "utils.ts");
+      // Also handle utils.ts if it's missing
       const utilsDest = path.resolve(process.cwd(), config.aliases.utils);
-      if (fs.existsSync(utilsSource) && !fs.existsSync(utilsDest)) {
-          await fs.ensureDir(path.dirname(utilsDest));
-          await fs.copy(utilsSource, utilsDest);
-          console.log(chalk.green(`\nCreated utils file at ${config.aliases.utils}`));
+      if (!fs.existsSync(utilsDest)) {
+          spinner.text = "Downloading utils.ts...";
+          const utilsUrl = `${rawBaseUrl}/utils.ts`;
+          const response = await fetch(utilsUrl);
+          if (response.ok) {
+              const content = await response.text();
+              await fs.ensureDir(path.dirname(utilsDest));
+              await fs.writeFile(utilsDest, content);
+              spinner.succeed(`Created utils file at ${config.aliases.utils}`);
+          }
       }
+
+      spinner.stop();
+      console.log(chalk.green("\nDone! Components have been added to your project."));
 
     } catch (error) {
       spinner.stop();
-      console.error(chalk.red("Error adding components:"), error);
+      console.error(chalk.red("Error fetching components:"), error);
     }
   });

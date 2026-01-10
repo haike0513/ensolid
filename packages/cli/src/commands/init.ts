@@ -27,6 +27,12 @@ export const init = new Command()
         message: "Where is your utils file?",
         initial: "src/lib/utils.ts",
       },
+      {
+        type: "text",
+        name: "registry",
+        message: "Which registry would you like to use?",
+        initial: "https://github.com/haike0513/ensolid/tree/main/src/components/ui",
+      },
     ]);
 
     const config = {
@@ -40,6 +46,7 @@ export const init = new Command()
         baseColor: "slate",
         cssVariables: true,
       },
+      registry: response.registry,
       aliases: {
         components: response.components,
         utils: response.utils,
