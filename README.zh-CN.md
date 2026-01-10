@@ -83,36 +83,36 @@ pnpm preview
 ```
 ensolid/
 ├── packages/                    # Monorepo 包目录
+│   ├── cli/                    # shadcn 风格的 CLI 工具
 │   ├── radix/                  # Radix UI Primitives 移植
-│   │   ├── src/
-│   │   │   ├── components/    # 所有 Radix 组件
-│   │   │   └── index.ts
-│   │   ├── package.json
-│   │   └── tsconfig.json
 │   ├── baseui/                 # BaseUI 组件库
-│   └── solidflow/              # SolidFlow 组件库
+│   ├── solidflow/              # SolidFlow (React Flow 移植)
+│   ├── aisolid/                # SolidJS 的 AI SDK
+│   ├── fiber/                  # SolidJS 的 Three.js (R3F 移植)
+│   ├── streamdown/             # AI 驱动的流式 Markdown
+│   ├── visx/                   # Airbnb Visx 移植
+│   ├── remend/                 # Markdown 工具
+│   └── utils/                  # 通用工具库
 ├── components/
-│   └── ui/                     # shadcn/ui 风格组件
-│       ├── button.tsx
-│       ├── card.tsx
-│       ├── dialog.tsx
-│       └── ...                 # 更多组件
-├── src/                        # 源代码目录
-│   ├── examples/               # 组件示例
-│   │   ├── ButtonExample.tsx
-│   │   └── ...
-│   ├── App.tsx                 # 主应用组件
-│   └── index.tsx
-├── public/                     # 静态资源
-├── package.json                # 项目配置
-└── vite.config.ts              # Vite 配置
+│   └── ui/                     # shadcn/ui 风格组件（由 CLI 管理）
+├── src/                        # 示例应用 & 游乐场
+├── docs/                       # 项目文档
+└── package.json                # 根目录配置
 ```
 
-## 📦 已移植的组件库
+## 📦 组件库与包
 
-本项目包含三个主要的组件库包：
+### 1. @ensolid/cli 🚀
 
-### 1. @ensolid/radix
+一个类似于 shadcn/ui CLI 的命令行工具，用于初始化项目和添加组件。
+
+**快速开始：**
+```bash
+npx @ensolid/cli@latest init
+npx @ensolid/cli@latest add button
+```
+
+### 2. @ensolid/radix
 
 基于 [Radix UI Primitives](https://www.radix-ui.com/primitives) 移植的 SolidJS 版本，提供无样式、可访问的基础组件。
 
@@ -125,42 +125,13 @@ ensolid/
 
 #### 已移植组件（25个）
 
-**基础组件**
-- ✅ Separator - 分隔线
-- ✅ Label - 标签
-- ✅ AspectRatio - 宽高比
-- ✅ VisuallyHidden - 视觉隐藏（辅助功能）
+- **基础**: Separator, Label, AspectRatio, VisuallyHidden
+- **表单**: Checkbox, Switch, RadioGroup, Select, Slider, Toggle, ToggleGroup
+- **布局**: Tabs, Accordion, Collapsible, ScrollArea
+- **弹出层**: Dialog, AlertDialog, Popover, DropdownMenu, Tooltip, HoverCard, ContextMenu, Menubar
+- **其他**: Progress, Avatar
 
-**表单组件**
-- ✅ Checkbox - 复选框
-- ✅ Switch - 开关
-- ✅ RadioGroup - 单选组
-- ✅ Select - 选择器
-- ✅ Slider - 滑块
-- ✅ Toggle - 切换按钮
-- ✅ ToggleGroup - 切换组
-
-**布局组件**
-- ✅ Tabs - 标签页
-- ✅ Accordion - 手风琴
-- ✅ Collapsible - 可折叠
-- ✅ ScrollArea - 滚动区域
-
-**弹出层组件**
-- ✅ Dialog - 对话框
-- ✅ AlertDialog - 警告对话框
-- ✅ Popover - 弹出框
-- ✅ DropdownMenu - 下拉菜单
-- ✅ Tooltip - 工具提示
-- ✅ HoverCard - 悬停卡片
-- ✅ ContextMenu - 上下文菜单
-- ✅ Menubar - 菜单栏
-
-**其他组件**
-- ✅ Progress - 进度条
-- ✅ Avatar - 头像
-
-### 2. @ensolid/baseui
+### 3. @ensolid/baseui
 
 基于 [BaseUI](https://baseui.org/) 移植的 SolidJS 版本，提供企业级 UI 组件库。
 
@@ -169,132 +140,118 @@ ensolid/
 - ✅ Material Design 风格
 - ✅ 完整的主题系统支持
 - ✅ 企业级组件（表格、分页、步进器等）
-- ✅ 完整的 TypeScript 类型定义
 
-#### 主要组件类别
-
-- **基础组件**: Box, Paper, Container, Stack, Grid, Typography, Divider
-- **表单组件**: Button, Input, Textarea, Checkbox, Radio, Switch, Select, Slider, NumberInput
-- **布局组件**: Tabs, Accordion, Collapsible, Drawer, Modal, Dialog
-- **数据展示**: Table, TablePagination, List, Card, Avatar, Badge, Chip, Skeleton
-- **反馈组件**: Alert, AlertDialog, Snackbar, Progress, Rating
-- **导航组件**: Breadcrumbs, Menu, Pagination, Stepper
-- **其他组件**: Tooltip, Popover, Popper, Portal, FocusTrap, ClickAwayListener
-
-### 3. @ensolid/solidflow
+### 4. @ensolid/solidflow
 
 基于 [React Flow](https://reactflow.dev/) 移植的 SolidJS 版本，提供流程图和节点编辑器功能。
 
-**特点：**
-- ✅ 高性能的节点图渲染
-- ✅ 支持自定义节点和边
-- ✅ 交互式拖拽和缩放
-- ✅ 完整的类型定义
-- ✅ 支持复杂的工作流编辑
+### 5. @ensolid/aisolid
 
-#### 核心组件
+SolidJS 的 AI SDK，移植自 [Vercel AI SDK](https://github.com/vercel/ai)。支持 `useChat`、`useCompletion` 和 `useAssistant`。
 
-- **Flow** - 主流程图组件
-- **Node** - 节点组件
-- **Edge** - 边组件
-- **Handle** - 连接点组件
-- **Background** - 背景网格组件
+### 6. @ensolid/fiber
 
-### 4. components/ui
+基于 [@react-three/fiber](https://github.com/pmndrs/react-three-fiber) 移植的 SolidJS 版本，用于 Three.js 渲染。
 
-基于 `@ensolid/radix` 实现的 shadcn/ui 风格组件库，提供开箱即用的样式化组件。
+### 7. 其他包
+- **@ensolid/streamdown**: AI 驱动的流式 Markdown 渲染器。
+- **@ensolid/visx**: Airbnb [visx](https://github.com/airbnb/visx) 可视化库的 SolidJS 移植版。
+- **@ensolid/utils**: 生态系统中使用的通用工具函数。
 
-**特点：**
-- ✅ 基于 Tailwind CSS 的现代设计
-- ✅ 完全可定制的样式
-- ✅ 与 shadcn/ui 设计规范一致
-- ✅ 开箱即用的美观界面
+---
 
-#### 可用组件（26个）
+## 🚀 快速开始
 
-所有 Radix 组件都有对应的 shadcn/ui 风格包装，包括：
-- **基础组件**: Button, Card, Label, Separator, AspectRatio
-- **表单组件**: Checkbox, Switch, RadioGroup, Select, Slider, Toggle, ToggleGroup
-- **布局组件**: Tabs, Accordion, Collapsible, ScrollArea
-- **弹出层组件**: Dialog, AlertDialog, Popover, DropdownMenu, Tooltip, HoverCard, ContextMenu, Menubar
-- **其他组件**: Progress, Avatar
+### 使用 CLI (推荐)
 
-## 🎯 使用示例
+要在您自己的项目中使用 Ensolid 组件：
 
-### 使用 Radix 基础组件
+1. **初始化 Ensolid:**
+   ```bash
+   npx @ensolid/cli@latest init
+   ```
+
+2. **添加组件:**
+   ```bash
+   npx @ensolid/cli@latest add button
+   ```
+
+### 快速开发设置 (针对贡献者)
+
+1. **克隆并安装:**
+   ```bash
+   git clone https://github.com/haike0513/ensolid.git
+   pnpm install
+   ```
+
+2. **运行游乐场:**
+   ```bash
+   pnpm dev
+   ```
+
+## 📦 使用示例
+
+### 使用 CLI 添加组件
+
+CLI 允许您将组件添加到 `src/components/ui` 目录：
+
+```bash
+npx @ensolid/cli add dialog
+```
+
+然后在您的代码中使用：
 
 ```tsx
-import { Button, Dialog } from "@ensolid/radix";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 function App() {
   return (
     <Dialog>
-      <Dialog.Trigger>打开对话框</Dialog.Trigger>
-      <Dialog.Content>
-        <Dialog.Title>标题</Dialog.Title>
-        <Dialog.Description>描述</Dialog.Description>
-      </Dialog.Content>
+      <DialogTrigger>打开</DialogTrigger>
+      <DialogContent>你好 Ensolid!</DialogContent>
     </Dialog>
   );
 }
 ```
 
-### 使用 shadcn/ui 风格组件
+### 直接使用包
 
 ```tsx
-import { Button, Dialog } from "@/components/ui";
+import { Checkbox } from "@ensolid/radix";
 
 function App() {
-  return (
-    <Dialog>
-      <Dialog.Trigger asChild>
-        <Button>打开对话框</Button>
-      </Dialog.Trigger>
-      <Dialog.Content>
-        <Dialog.Header>
-          <Dialog.Title>标题</Dialog.Title>
-          <Dialog.Description>描述</Dialog.Description>
-        </Dialog.Header>
-      </Dialog.Content>
-    </Dialog>
-  );
+  return <Checkbox />;
 }
 ```
 
-### ⚠️ 关于 asChild 属性的重要说明
-
-**`asChild` 属性使用注意事项**:
+### ⚠️ 关于 `asChild` 属性的重要说明
 
 1. **仅 Radix 基础组件的 Trigger 支持 `asChild`**
-   - `asChild` 是 Radix UI 的特殊属性，用于将组件的功能传递给子元素
-   - 只有 Radix 基础组件的 Trigger 子组件（如 `Dialog.Trigger`、`Popover.Trigger`、`DropdownMenu.Trigger` 等）支持此属性
-   - 普通的 UI 组件（如 `Button`、`Card` 等）**不支持** `asChild` 属性
+   - `asChild` 用于将组件功能传递给子元素。
+   - 只有 Radix 基础组件的 Trigger 子组件（如 `Dialog.Trigger`、`Popover.Trigger` 等）支持此属性。
+   - 普通 UI 组件（如 `Button`、`Card` 等）**不支持** `asChild` 属性。
 
 2. **正确使用方式**:
    ```tsx
-   // ✅ 正确 - Radix 组件的 Trigger 支持 asChild
+   // ✅ 正确
    <Dialog.Trigger asChild>
      <Button>打开对话框</Button>
    </Dialog.Trigger>
-   
-   // ❌ 错误 - Button 组件不支持 asChild
-   <Button asChild>
-     <A href="/page">链接</A>
-   </Button>
    ```
 
-3. **替代方案**:
-   ```tsx
-   // ✅ 正确 - 使用包装方式
-   <A href="/page">
-     <Button>链接</Button>
-   </A>
-   ```
+---
 
-4. **常见错误**:
-   - 错误: `Property 'asChild' does not exist on type 'IntrinsicAttributes & ButtonProps'`
-   - 原因: 在普通 UI 组件上使用了 `asChild` 属性
-   - 解决: 移除 `asChild` 属性，改用包装方式或直接使用组件
+## 🔄 移植工作流程
+
+本项目使用标准化的移植流程，详见 [agents.md](./agents.md)。
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+MIT
 
 详细说明和解决方案请参考 [agents.md](./agents.md) 中的"错误 9: asChild 属性使用错误"章节。
 
