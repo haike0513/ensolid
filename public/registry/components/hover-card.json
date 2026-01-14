@@ -1,11 +1,8 @@
 {
   "name": "hover-card",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A card that appears on hover",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "hover-card.tsx"
-  ]
+  "files": ["hover-card.tsx"]
 }

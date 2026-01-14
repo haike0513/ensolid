@@ -1,8 +1,8 @@
 {
-  "name": "alert",
+  "name": "table",
   "type": "components:ui",
-  "description": "An alert component for displaying messages",
+  "description": "A responsive table component",
   "dependencies": ["clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": ["alert.tsx"]
+  "files": ["table.tsx"]
 }

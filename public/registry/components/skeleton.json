@@ -1,8 +1,8 @@
 {
-  "name": "alert",
+  "name": "skeleton",
   "type": "components:ui",
-  "description": "An alert component for displaying messages",
+  "description": "A loading placeholder component",
   "dependencies": ["clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": ["alert.tsx"]
+  "files": ["skeleton.tsx"]
 }

@@ -4,31 +4,24 @@ import * as ProgressPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface ProgressProps extends ProgressPrimitive.ProgressProps {
-    children?: JSX.Element;
+  value?: number;
 }
 
 export const Progress: Component<ProgressProps> = (props) => {
-    const [local, others] = splitProps(props, [
-        "value",
-        "max",
-        "showValue",
-        "class",
-        "children",
-    ]);
+  const [local, others] = splitProps(props, ["class", "value"]);
 
-    return (
-        <ProgressPrimitive.Progress
-            class={cn(
-                "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
-                local.class,
-            )}
-            value={local.value}
-            max={local.max}
-            showValue={local.showValue}
-            {...others}
-        >
-            {local.children}
-        </ProgressPrimitive.Progress>
-    );
+  return (
+    <ProgressPrimitive.Progress
+      class={cn(
+        "relative h-4 w-full overflow-hidden rounded-full bg-secondary",
+        local.class
+      )}
+      {...others}
+    >
+      <ProgressPrimitive.ProgressIndicator
+        class="h-full w-full flex-1 bg-primary transition-all"
+        style={{ transform: `translateX(-${100 - (local.value ?? 0)}%)` }}
+      />
+    </ProgressPrimitive.Progress>
+  );
 };
-

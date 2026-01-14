@@ -1,11 +1,8 @@
 {
   "name": "scroll-area",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A custom scrollable area with styled scrollbars",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "scroll-area.tsx"
-  ]
+  "files": ["scroll-area.tsx"]
 }

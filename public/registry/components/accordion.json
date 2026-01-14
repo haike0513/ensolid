@@ -1,11 +1,8 @@
 {
   "name": "accordion",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A vertically stacked set of interactive headings",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "accordion.tsx"
-  ]
+  "files": ["accordion.tsx"]
 }

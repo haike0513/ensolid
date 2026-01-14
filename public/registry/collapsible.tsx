@@ -3,56 +3,50 @@ import { splitProps } from "solid-js";
 import * as CollapsiblePrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
+// Collapsible Root
 export interface CollapsibleProps extends CollapsiblePrimitive.CollapsibleProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 const CollapsibleBase: Component<CollapsibleProps> = (props) => {
-    return <CollapsiblePrimitive.Collapsible {...props} />;
+  return <CollapsiblePrimitive.Collapsible {...props} />;
 };
 
 export const Collapsible = Object.assign(CollapsibleBase, {
-    Trigger: null as any,
-    Content: null as any,
+  Trigger: null as any,
+  Content: null as any,
 });
 
+// Collapsible Trigger
 export interface CollapsibleTriggerProps extends CollapsiblePrimitive.CollapsibleTriggerProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const CollapsibleTrigger: Component<CollapsibleTriggerProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children", "asChild", "onClick"]);
-
-    return (
-        <CollapsiblePrimitive.CollapsibleTrigger
-            class={cn("", local.class)}
-            {...others}
-        >
-            {local.children}
-        </CollapsiblePrimitive.CollapsibleTrigger>
-    );
+  return <CollapsiblePrimitive.CollapsibleTrigger {...props} />;
 };
 
+// Collapsible Content
 export interface CollapsibleContentProps extends CollapsiblePrimitive.CollapsibleContentProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const CollapsibleContent: Component<CollapsibleContentProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children"] as const);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <CollapsiblePrimitive.CollapsibleContent
-            class={cn(
-                "overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
-                local.class,
-            )}
-            {...others}
-        >
-            {local.children}
-        </CollapsiblePrimitive.CollapsibleContent>
-    );
+  return (
+    <CollapsiblePrimitive.CollapsibleContent
+      class={cn(
+        "overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down",
+        local.class
+      )}
+      {...others}
+    >
+      {local.children}
+    </CollapsiblePrimitive.CollapsibleContent>
+  );
 };
 
+// Assign sub-components
 Collapsible.Trigger = CollapsibleTrigger;
 Collapsible.Content = CollapsibleContent;
-

@@ -5,9 +5,11 @@ import { cn } from "./utils";
 export interface ButtonProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
   size?: "default" | "sm" | "lg" | "icon";
+  asChild?: boolean;
 }
 
 const buttonVariants = {
+  base: "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   variant: {
     default: "bg-primary text-primary-foreground hover:bg-primary/90",
     destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
@@ -24,20 +26,30 @@ const buttonVariants = {
   },
 };
 
+export function buttonVariantClasses(
+  variant: ButtonProps["variant"] = "default",
+  size: ButtonProps["size"] = "default"
+) {
+  return cn(
+    buttonVariants.base,
+    buttonVariants.variant[variant],
+    buttonVariants.size[size]
+  );
+}
+
 export const Button: Component<ButtonProps> = (props) => {
   const [local, others] = splitProps(props, [
     "variant",
     "size",
     "class",
     "children",
+    "asChild",
   ]);
 
   return (
     <button
       class={cn(
-        "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-        buttonVariants.variant[local.variant ?? "default"],
-        buttonVariants.size[local.size ?? "default"],
+        buttonVariantClasses(local.variant, local.size),
         local.class
       )}
       {...others}
@@ -47,3 +59,4 @@ export const Button: Component<ButtonProps> = (props) => {
   );
 };
 
+export { buttonVariants };

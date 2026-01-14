@@ -1,11 +1,8 @@
 {
   "name": "collapsible",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A collapsible component for expandable content",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "collapsible.tsx"
-  ]
+  "files": ["collapsible.tsx"]
 }

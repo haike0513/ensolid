@@ -1,8 +1,8 @@
 {
   "name": "alert-dialog",
   "type": "components:ui",
-  "description": "A modal dialog that interrupts the user with important content",
-  "dependencies": ["@ensolid/radix"],
+  "description": "A modal dialog for important confirmations",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": ["button"],
   "files": ["alert-dialog.tsx"]
 }

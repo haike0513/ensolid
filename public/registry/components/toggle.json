@@ -1,11 +1,8 @@
 {
   "name": "toggle",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A two-state toggle button",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "toggle.tsx"
-  ]
+  "files": ["toggle.tsx"]
 }

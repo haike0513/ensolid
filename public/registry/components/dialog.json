@@ -1,11 +1,8 @@
 {
   "name": "dialog",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A modal dialog component",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "dialog.tsx"
-  ]
+  "files": ["dialog.tsx"]
 }

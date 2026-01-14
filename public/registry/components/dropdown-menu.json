@@ -1,11 +1,8 @@
 {
   "name": "dropdown-menu",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A menu triggered by a button",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "dropdown-menu.tsx"
-  ]
+  "files": ["dropdown-menu.tsx"]
 }

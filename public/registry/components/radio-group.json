@@ -1,0 +1,8 @@
+{
+  "name": "radio-group",
+  "type": "components:ui",
+  "description": "A set of checkable buttons where only one can be checked",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
+  "registryDependencies": [],
+  "files": ["radio-group.tsx"]
+}

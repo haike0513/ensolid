@@ -1,11 +1,8 @@
 {
   "name": "separator",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A visual separator between content sections",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "separator.tsx"
-  ]
+  "files": ["separator.tsx"]
 }

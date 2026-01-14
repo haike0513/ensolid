@@ -3,6 +3,7 @@ import { splitProps } from "solid-js";
 import * as TabsPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
+// Tabs Root
 export interface TabsProps extends TabsPrimitive.TabsProps {
   children?: JSX.Element;
 }
@@ -17,6 +18,7 @@ export const Tabs = Object.assign(TabsBase, {
   Content: null as any,
 });
 
+// Tabs List
 export interface TabsListProps extends TabsPrimitive.TabsListProps {
   children?: JSX.Element;
 }
@@ -37,6 +39,7 @@ export const TabsList: Component<TabsListProps> = (props) => {
   );
 };
 
+// Tabs Trigger
 export interface TabsTriggerProps extends TabsPrimitive.TabsTriggerProps {
   children?: JSX.Element;
 }
@@ -57,6 +60,7 @@ export const TabsTrigger: Component<TabsTriggerProps> = (props) => {
   );
 };
 
+// Tabs Content
 export interface TabsContentProps extends TabsPrimitive.TabsContentProps {
   children?: JSX.Element;
 }
@@ -77,8 +81,7 @@ export const TabsContent: Component<TabsContentProps> = (props) => {
   );
 };
 
-// 导出子组件
+// Assign sub-components
 Tabs.List = TabsList;
 Tabs.Trigger = TabsTrigger;
 Tabs.Content = TabsContent;
-

@@ -3,7 +3,7 @@
     "name": "accordion",
     "type": "components:ui",
     "description": "A vertically stacked set of interactive headings that reveal content",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["accordion.tsx"]
   },
@@ -11,7 +11,7 @@
     "name": "alert-dialog",
     "type": "components:ui",
     "description": "A modal dialog that interrupts the user with important content",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": ["button"],
     "files": ["alert-dialog.tsx"]
   },
@@ -19,7 +19,7 @@
     "name": "alert",
     "type": "components:ui",
     "description": "Displays a callout for user attention",
-    "dependencies": [],
+    "dependencies": ["clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["alert.tsx"]
   },
@@ -27,7 +27,7 @@
     "name": "aspect-ratio",
     "type": "components:ui",
     "description": "Displays content within a desired ratio",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["aspect-ratio.tsx"]
   },
@@ -35,7 +35,7 @@
     "name": "avatar",
     "type": "components:ui",
     "description": "An image element with a fallback for representing the user",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["avatar.tsx"]
   },
@@ -43,15 +43,15 @@
     "name": "badge",
     "type": "components:ui",
     "description": "Displays a badge or a component that looks like a badge",
-    "dependencies": [],
+    "dependencies": ["clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["badge.tsx"]
   },
   {
     "name": "button",
     "type": "components:ui",
-    "description": "Displays a button or a component that looks like a button",
-    "dependencies": [],
+    "description": "Displays a button with multiple variants and sizes",
+    "dependencies": ["clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["button.tsx"]
   },
@@ -59,7 +59,7 @@
     "name": "card",
     "type": "components:ui",
     "description": "Displays a card with header, content, and footer",
-    "dependencies": [],
+    "dependencies": ["clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["card.tsx"]
   },
@@ -67,7 +67,7 @@
     "name": "checkbox",
     "type": "components:ui",
     "description": "A control that allows the user to toggle between checked and not checked",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["checkbox.tsx"]
   },
@@ -75,7 +75,7 @@
     "name": "collapsible",
     "type": "components:ui",
     "description": "An interactive component which expands/collapses a panel",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["collapsible.tsx"]
   },
@@ -83,7 +83,7 @@
     "name": "context-menu",
     "type": "components:ui",
     "description": "Displays a menu to the user triggered by right-click",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["context-menu.tsx"]
   },
@@ -91,7 +91,7 @@
     "name": "dialog",
     "type": "components:ui",
     "description": "A window overlaid on the primary window, rendering content underneath inert",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["dialog.tsx"]
   },
@@ -99,7 +99,7 @@
     "name": "dropdown-menu",
     "type": "components:ui",
     "description": "Displays a menu triggered by a button",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["dropdown-menu.tsx"]
   },
@@ -107,7 +107,7 @@
     "name": "hover-card",
     "type": "components:ui",
     "description": "For sighted users to preview content available behind a link",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["hover-card.tsx"]
   },
@@ -115,7 +115,7 @@
     "name": "input",
     "type": "components:ui",
     "description": "Displays a form input field",
-    "dependencies": [],
+    "dependencies": ["clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["input.tsx"]
   },
@@ -123,7 +123,7 @@
     "name": "label",
     "type": "components:ui",
     "description": "Renders an accessible label for forms",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["label.tsx"]
   },
@@ -131,7 +131,7 @@
     "name": "menubar",
     "type": "components:ui",
     "description": "A visually persistent menu common in desktop applications",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["menubar.tsx"]
   },
@@ -139,7 +139,7 @@
     "name": "navigation-menu",
     "type": "components:ui",
     "description": "A collection of links for navigating websites",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["navigation-menu.tsx"]
   },
@@ -147,7 +147,7 @@
     "name": "popover",
     "type": "components:ui",
     "description": "Displays rich content in a portal triggered by a button",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["popover.tsx"]
   },
@@ -155,15 +155,23 @@
     "name": "progress",
     "type": "components:ui",
     "description": "Displays an indicator showing the completion progress of a task",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["progress.tsx"]
+  },
+  {
+    "name": "radio-group",
+    "type": "components:ui",
+    "description": "A set of checkable buttons where only one can be checked",
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
+    "registryDependencies": [],
+    "files": ["radio-group.tsx"]
   },
   {
     "name": "scroll-area",
     "type": "components:ui",
     "description": "Augments native scroll functionality for custom, cross-browser styling",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["scroll-area.tsx"]
   },
@@ -171,7 +179,7 @@
     "name": "select",
     "type": "components:ui",
     "description": "Displays a list of options for the user to pick from",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["select.tsx"]
   },
@@ -179,15 +187,23 @@
     "name": "separator",
     "type": "components:ui",
     "description": "Visually or semantically separates content",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["separator.tsx"]
+  },
+  {
+    "name": "skeleton",
+    "type": "components:ui",
+    "description": "A loading placeholder component",
+    "dependencies": ["clsx", "tailwind-merge"],
+    "registryDependencies": [],
+    "files": ["skeleton.tsx"]
   },
   {
     "name": "slider",
     "type": "components:ui",
     "description": "An input for selecting a value from a range",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["slider.tsx"]
   },
@@ -195,15 +211,23 @@
     "name": "switch",
     "type": "components:ui",
     "description": "A control that allows the user to toggle between on and off",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["switch.tsx"]
+  },
+  {
+    "name": "table",
+    "type": "components:ui",
+    "description": "A responsive table component",
+    "dependencies": ["clsx", "tailwind-merge"],
+    "registryDependencies": [],
+    "files": ["table.tsx"]
   },
   {
     "name": "tabs",
     "type": "components:ui",
     "description": "A set of layered sections of content known as tab panels",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["tabs.tsx"]
   },
@@ -211,7 +235,7 @@
     "name": "textarea",
     "type": "components:ui",
     "description": "Displays a form textarea",
-    "dependencies": [],
+    "dependencies": ["clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["textarea.tsx"]
   },
@@ -219,7 +243,7 @@
     "name": "toggle-group",
     "type": "components:ui",
     "description": "A set of two-state buttons that can be toggled on or off",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": ["toggle"],
     "files": ["toggle-group.tsx"]
   },
@@ -227,7 +251,7 @@
     "name": "toggle",
     "type": "components:ui",
     "description": "A two-state button that can be either on or off",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["toggle.tsx"]
   },
@@ -235,7 +259,7 @@
     "name": "toolbar",
     "type": "components:ui",
     "description": "A container for grouping a set of controls",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["toolbar.tsx"]
   },
@@ -243,7 +267,7 @@
     "name": "tooltip",
     "type": "components:ui",
     "description": "A popup that displays information related to an element",
-    "dependencies": ["@ensolid/radix"],
+    "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
     "registryDependencies": [],
     "files": ["tooltip.tsx"]
   }

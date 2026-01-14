@@ -1,9 +1,8 @@
 {
   "name": "card",
   "type": "components:ui",
-  "dependencies": [],
+  "description": "A card container with header, content and footer sections",
+  "dependencies": ["clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "card.tsx"
-  ]
+  "files": ["card.tsx"]
 }

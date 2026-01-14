@@ -1,11 +1,8 @@
 {
   "name": "label",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A label component for form inputs",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "label.tsx"
-  ]
+  "files": ["label.tsx"]
 }

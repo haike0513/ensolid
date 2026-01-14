@@ -4,20 +4,18 @@ import * as AspectRatioPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
 export interface AspectRatioProps extends AspectRatioPrimitive.AspectRatioProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const AspectRatio: Component<AspectRatioProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children", "ratio"]);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <AspectRatioPrimitive.AspectRatio
-            class={cn("", local.class)}
-            ratio={local.ratio}
-            {...others}
-        >
-            {local.children}
-        </AspectRatioPrimitive.AspectRatio>
-    );
+  return (
+    <AspectRatioPrimitive.AspectRatio
+      class={cn(local.class)}
+      {...others}
+    >
+      {local.children}
+    </AspectRatioPrimitive.AspectRatio>
+  );
 };
-

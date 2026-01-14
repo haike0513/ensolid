@@ -1,9 +1,8 @@
 {
   "name": "textarea",
   "type": "components:ui",
-  "dependencies": [],
+  "description": "A textarea component for longer text input",
+  "dependencies": ["clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "textarea.tsx"
-  ]
+  "files": ["textarea.tsx"]
 }

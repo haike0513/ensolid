@@ -1,11 +1,8 @@
 {
   "name": "slider",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A slider component for selecting values",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "slider.tsx"
-  ]
+  "files": ["slider.tsx"]
 }

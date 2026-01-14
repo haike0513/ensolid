@@ -1,11 +1,8 @@
 {
   "name": "progress",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A progress bar component",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "progress.tsx"
-  ]
+  "files": ["progress.tsx"]
 }

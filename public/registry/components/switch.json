@@ -1,11 +1,8 @@
 {
   "name": "switch",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A toggle switch component",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "switch.tsx"
-  ]
+  "files": ["switch.tsx"]
 }

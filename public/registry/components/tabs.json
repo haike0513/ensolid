@@ -1,11 +1,8 @@
 {
   "name": "tabs",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A tabs component for organizing content",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "tabs.tsx"
-  ]
+  "files": ["tabs.tsx"]
 }

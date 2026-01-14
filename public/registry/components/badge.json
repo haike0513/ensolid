@@ -1,9 +1,8 @@
 {
   "name": "badge",
   "type": "components:ui",
-  "dependencies": [],
+  "description": "A badge component with multiple variants",
+  "dependencies": ["clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "badge.tsx"
-  ]
+  "files": ["badge.tsx"]
 }

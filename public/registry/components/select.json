@@ -1,11 +1,8 @@
 {
   "name": "select",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "A select dropdown component",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "select.tsx"
-  ]
+  "files": ["select.tsx"]
 }

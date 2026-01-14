@@ -30,7 +30,10 @@ export const CardHeader: Component<CardHeaderProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <div class={cn("flex flex-col space-y-1.5 p-6", local.class)} {...others}>
+    <div
+      class={cn("flex flex-col space-y-1.5 p-6", local.class)}
+      {...others}
+    >
       {local.children}
     </div>
   );
@@ -64,7 +67,10 @@ export const CardDescription: Component<CardDescriptionProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <p class={cn("text-sm text-muted-foreground", local.class)} {...others}>
+    <p
+      class={cn("text-sm text-muted-foreground", local.class)}
+      {...others}
+    >
       {local.children}
     </p>
   );
@@ -92,16 +98,11 @@ export const CardFooter: Component<CardFooterProps> = (props) => {
   const [local, others] = splitProps(props, ["class", "children"]);
 
   return (
-    <div class={cn("flex items-center p-6 pt-0", local.class)} {...others}>
+    <div
+      class={cn("flex items-center p-6 pt-0", local.class)}
+      {...others}
+    >
       {local.children}
     </div>
   );
 };
-
-// 导出子组件
-(Card as any).Header = CardHeader;
-(Card as any).Title = CardTitle;
-(Card as any).Description = CardDescription;
-(Card as any).Content = CardContent;
-(Card as any).Footer = CardFooter;
-

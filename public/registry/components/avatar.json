@@ -1,11 +1,8 @@
 {
   "name": "avatar",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
+  "description": "An avatar component for displaying user images",
+  "dependencies": ["@ensolid/radix", "clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "avatar.tsx"
-  ]
+  "files": ["avatar.tsx"]
 }

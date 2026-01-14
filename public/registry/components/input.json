@@ -1,9 +1,8 @@
 {
   "name": "input",
   "type": "components:ui",
-  "dependencies": [],
+  "description": "An input component for forms",
+  "dependencies": ["clsx", "tailwind-merge"],
   "registryDependencies": [],
-  "files": [
-    "input.tsx"
-  ]
+  "files": ["input.tsx"]
 }
