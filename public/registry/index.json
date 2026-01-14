@@ -1,188 +1,250 @@
 [
   {
     "name": "accordion",
-    "files": [
-      "accordion.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A vertically stacked set of interactive headings that reveal content",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["accordion.tsx"]
   },
   {
     "name": "alert-dialog",
-    "files": [
-      "alert-dialog.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A modal dialog that interrupts the user with important content",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": ["button"],
+    "files": ["alert-dialog.tsx"]
   },
   {
     "name": "alert",
-    "files": [
-      "alert.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a callout for user attention",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": ["alert.tsx"]
   },
   {
     "name": "aspect-ratio",
-    "files": [
-      "aspect-ratio.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays content within a desired ratio",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["aspect-ratio.tsx"]
   },
   {
     "name": "avatar",
-    "files": [
-      "avatar.tsx"
-    ]
+    "type": "components:ui",
+    "description": "An image element with a fallback for representing the user",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["avatar.tsx"]
   },
   {
     "name": "badge",
-    "files": [
-      "badge.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a badge or a component that looks like a badge",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": ["badge.tsx"]
   },
   {
     "name": "button",
-    "files": [
-      "button.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a button or a component that looks like a button",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": ["button.tsx"]
   },
   {
     "name": "card",
-    "files": [
-      "card.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a card with header, content, and footer",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": ["card.tsx"]
   },
   {
     "name": "checkbox",
-    "files": [
-      "checkbox.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A control that allows the user to toggle between checked and not checked",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["checkbox.tsx"]
   },
   {
     "name": "collapsible",
-    "files": [
-      "collapsible.tsx"
-    ]
+    "type": "components:ui",
+    "description": "An interactive component which expands/collapses a panel",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["collapsible.tsx"]
   },
   {
     "name": "context-menu",
-    "files": [
-      "context-menu.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a menu to the user triggered by right-click",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["context-menu.tsx"]
   },
   {
     "name": "dialog",
-    "files": [
-      "dialog.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A window overlaid on the primary window, rendering content underneath inert",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["dialog.tsx"]
   },
   {
     "name": "dropdown-menu",
-    "files": [
-      "dropdown-menu.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a menu triggered by a button",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["dropdown-menu.tsx"]
   },
   {
     "name": "hover-card",
-    "files": [
-      "hover-card.tsx"
-    ]
+    "type": "components:ui",
+    "description": "For sighted users to preview content available behind a link",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["hover-card.tsx"]
   },
   {
     "name": "input",
-    "files": [
-      "input.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a form input field",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": ["input.tsx"]
   },
   {
     "name": "label",
-    "files": [
-      "label.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Renders an accessible label for forms",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["label.tsx"]
   },
   {
     "name": "menubar",
-    "files": [
-      "menubar.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A visually persistent menu common in desktop applications",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["menubar.tsx"]
   },
   {
     "name": "navigation-menu",
-    "files": [
-      "navigation-menu.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A collection of links for navigating websites",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["navigation-menu.tsx"]
   },
   {
     "name": "popover",
-    "files": [
-      "popover.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays rich content in a portal triggered by a button",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["popover.tsx"]
   },
   {
     "name": "progress",
-    "files": [
-      "progress.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays an indicator showing the completion progress of a task",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["progress.tsx"]
   },
   {
     "name": "scroll-area",
-    "files": [
-      "scroll-area.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Augments native scroll functionality for custom, cross-browser styling",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["scroll-area.tsx"]
   },
   {
     "name": "select",
-    "files": [
-      "select.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a list of options for the user to pick from",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["select.tsx"]
   },
   {
     "name": "separator",
-    "files": [
-      "separator.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Visually or semantically separates content",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["separator.tsx"]
   },
   {
     "name": "slider",
-    "files": [
-      "slider.tsx"
-    ]
+    "type": "components:ui",
+    "description": "An input for selecting a value from a range",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["slider.tsx"]
   },
   {
     "name": "switch",
-    "files": [
-      "switch.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A control that allows the user to toggle between on and off",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["switch.tsx"]
   },
   {
     "name": "tabs",
-    "files": [
-      "tabs.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A set of layered sections of content known as tab panels",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["tabs.tsx"]
   },
   {
     "name": "textarea",
-    "files": [
-      "textarea.tsx"
-    ]
+    "type": "components:ui",
+    "description": "Displays a form textarea",
+    "dependencies": [],
+    "registryDependencies": [],
+    "files": ["textarea.tsx"]
   },
   {
     "name": "toggle-group",
-    "files": [
-      "toggle-group.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A set of two-state buttons that can be toggled on or off",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": ["toggle"],
+    "files": ["toggle-group.tsx"]
   },
   {
     "name": "toggle",
-    "files": [
-      "toggle.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A two-state button that can be either on or off",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["toggle.tsx"]
   },
   {
     "name": "toolbar",
-    "files": [
-      "toolbar.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A container for grouping a set of controls",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["toolbar.tsx"]
   },
   {
     "name": "tooltip",
-    "files": [
-      "tooltip.tsx"
-    ]
+    "type": "components:ui",
+    "description": "A popup that displays information related to an element",
+    "dependencies": ["@ensolid/radix"],
+    "registryDependencies": [],
+    "files": ["tooltip.tsx"]
   }
 ]

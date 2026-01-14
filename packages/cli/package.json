@@ -1,29 +1,50 @@
 {
   "name": "@ensolid/cli",
   "version": "0.0.1",
-  "description": "Ensolid CLI for managing components",
+  "description": "CLI for adding beautiful, accessible SolidJS components to your projects. Inspired by shadcn/ui.",
   "type": "module",
   "bin": {
     "ensolid": "./dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/haike0513/ensolid.git",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://ensolid.dev",
+  "bugs": {
+    "url": "https://github.com/haike0513/ensolid/issues"
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm --clean --dts",
     "dev": "tsup src/index.ts --format esm --watch --clean",
     "lint": "eslint src",
-    "publish": "pnpm build && pnpm publish"
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [
     "solidjs",
+    "solid",
     "shadcn",
+    "shadcn-ui",
     "cli",
-    "ui"
+    "ui",
+    "components",
+    "tailwindcss",
+    "radix"
   ],
-  "author": "",
+  "author": "haike0513",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "chalk": "^5.3.0",
     "commander": "^11.1.0",

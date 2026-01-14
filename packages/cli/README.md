@@ -1,50 +1,137 @@
-# @ensolid/cli 🚀
+# @ensolid/cli
 
-A command-line interface for managing Ensolid components in your SolidJS projects. Inspired by the shadcn/ui CLI.
+A CLI for adding beautiful, accessible SolidJS components to your projects. Inspired by [shadcn/ui](https://ui.shadcn.com/).
 
-## Installation
+## Features
 
-You can run the CLI directly using `npx`:
+- 🚀 **Easy Setup** - Initialize your project with a single command
+- 📦 **Component Installation** - Add individual components on demand
+- 🔄 **Dependency Resolution** - Automatically handles component dependencies
+- 📝 **TypeScript Support** - Full TypeScript support with type definitions
+- 🎨 **Customizable** - Components are copied to your project for full customization
+- 🔍 **Diff Tracking** - Check for updates against the registry
+
+## Quick Start
+
+### Initialize Your Project
 
 ```bash
-npx @ensolid/cli@latest init
+npx @ensolid/cli init
 ```
 
-Or install it as a dev dependency:
+This will:
+- Detect your project configuration
+- Create an `ensolid.json` config file
+- Set up CSS variables for theming
+- Install required dependencies (`clsx`, `tailwind-merge`)
+- Create the `cn` utility function
+
+### Add Components
+
+Add individual components:
 
 ```bash
-pnpm add -D @ensolid/cli
+npx @ensolid/cli add button
+```
+
+Add multiple components at once:
+
+```bash
+npx @ensolid/cli add button card dialog
+```
+
+Add all available components:
+
+```bash
+npx @ensolid/cli add --all
+```
+
+### List Available Components
+
+```bash
+npx @ensolid/cli list
+```
+
+Show only installed components:
+
+```bash
+npx @ensolid/cli list --installed
+```
+
+### Check for Updates
+
+```bash
+npx @ensolid/cli diff
+```
+
+Check a specific component:
+
+```bash
+npx @ensolid/cli diff button
 ```
 
 ## Commands
 
 ### `init`
 
-Initialize your project and create an `ensolid.json` configuration file. This will also help you set up path aliases and target directories.
+Initialize a new project or update configuration.
 
 ```bash
-npx ensolid init
+npx @ensolid/cli init [options]
 ```
+
+Options:
+- `-y, --yes` - Skip confirmation prompts
+- `-d, --defaults` - Use default configuration
+- `-f, --force` - Force overwrite existing configuration
+- `-c, --cwd <cwd>` - Working directory (defaults to current)
 
 ### `add`
 
-Add components to your project. This will download the component files from the Ensolid registry and place them in your configured UI directory.
+Add components to your project.
 
 ```bash
-# Add specific components
-npx ensolid add button dialog
-
-# Run without arguments to see a list of available components
-npx ensolid add
+npx @ensolid/cli add [components...] [options]
 ```
+
+Options:
+- `-y, --yes` - Skip confirmation prompts
+- `-o, --overwrite` - Overwrite existing files
+- `-a, --all` - Add all available components
+- `-p, --path <path>` - Custom path to add components
+- `-c, --cwd <cwd>` - Working directory (defaults to current)
+
+### `list`
+
+List available components.
+
+```bash
+npx @ensolid/cli list [options]
+```
+
+Options:
+- `-i, --installed` - Show only installed components
+- `-a, --available` - Show only available (not installed) components
+- `-c, --cwd <cwd>` - Working directory (defaults to current)
+
+### `diff`
+
+Check for updates against the registry.
+
+```bash
+npx @ensolid/cli diff [component] [options]
+```
+
+Options:
+- `-c, --cwd <cwd>` - Working directory (defaults to current)
 
 ## Configuration
 
-The CLI uses an `ensolid.json` file in your project root to manage settings:
+The CLI stores configuration in `ensolid.json`:
 
 ```json
 {
-  "$schema": "https://ensolid.com/schema.json",
+  "$schema": "https://ensolid.dev/schema.json",
   "style": "default",
   "rsc": false,
   "tsx": true,
@@ -54,25 +141,92 @@ The CLI uses an `ensolid.json` file in your project root to manage settings:
     "baseColor": "slate",
     "cssVariables": true
   },
-  "registry": "https://github.com/haike0513/ensolid/tree/main/src/components/ui",
+  "registry": "https://raw.githubusercontent.com/haike0513/ensolid/main/public/registry",
   "aliases": {
-    "components": "src/components",
-    "utils": "src/lib/utils.ts",
-    "ui": "src/components/ui"
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
   }
 }
 ```
 
-### Custom Registries
+### Configuration Options
 
-You can point the CLI to any compatible registry by changing the `registry` field in `ensolid.json`. This allows you to use `ensolid` CLI with your own custom component collection.
+| Option | Description |
+|--------|-------------|
+| `style` | The style preset to use |
+| `rsc` | Enable React Server Components (unused in SolidJS) |
+| `tsx` | Whether to use TypeScript |
+| `tailwind.config` | Path to Tailwind config file |
+| `tailwind.css` | Path to global CSS file |
+| `tailwind.baseColor` | Base color theme |
+| `tailwind.cssVariables` | Use CSS variables for theming |
+| `registry` | URL to the component registry |
+| `aliases.components` | Import alias for components |
+| `aliases.utils` | Import alias for utils |
+| `aliases.ui` | Import alias for UI components |
+| `aliases.lib` | Import alias for lib |
+| `aliases.hooks` | Import alias for hooks |
 
-## Features
+## Custom Registry
 
-- ✅ **Project Setup**: Seamlessly integrates with your existing SolidJS & Tailwind CSS project.
-- ✅ **On-demand Components**: Only add the components you need to keep your codebase clean.
-- ✅ **Path Aliases**: Intelligent handling of path aliases for imports.
-- ✅ **Registry Integration**: Fetches the latest component versions directly from the official repository.
+You can host your own component registry. The registry should have the following structure:
+
+```
+registry/
+├── index.json          # List of all components
+├── components/
+│   ├── button.json     # Component metadata
+│   ├── card.json
+│   └── ...
+├── button.tsx          # Component source files
+├── card.tsx
+└── ...
+```
+
+### Registry Index (`index.json`)
+
+```json
+[
+  {
+    "name": "button",
+    "type": "components:ui",
+    "files": ["button.tsx"],
+    "dependencies": [],
+    "registryDependencies": []
+  }
+]
+```
+
+### Component Metadata (`components/button.json`)
+
+```json
+{
+  "name": "button",
+  "type": "components:ui",
+  "dependencies": ["@kobalte/core"],
+  "registryDependencies": [],
+  "files": ["button.tsx"]
+}
+```
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build
+pnpm build
+
+# Development with watch mode
+pnpm dev
+
+# Test locally
+node dist/index.js init
+```
 
 ## License
 

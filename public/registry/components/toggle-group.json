@@ -1,11 +1,8 @@
 {
   "name": "toggle-group",
   "type": "components:ui",
-  "dependencies": [
-    "@ensolid/radix"
-  ],
-  "registryDependencies": [],
-  "files": [
-    "toggle-group.tsx"
-  ]
+  "description": "A set of two-state buttons that can be toggled on or off",
+  "dependencies": ["@ensolid/radix"],
+  "registryDependencies": ["toggle"],
+  "files": ["toggle-group.tsx"]
 }

@@ -4,11 +4,17 @@ import path from "path";
 import fs from "fs-extra";
 import chalk from "chalk";
 import ora from "ora";
-import fetch from "node-fetch";
 import { execa } from "execa";
 import { getConfig } from "../utils/get-config";
-import { getRegistryIndex, getRegistryItem, getRawUrlBase } from "../utils/registry";
-import { getPackageManager } from "../utils/get-package-manager";
+import { 
+  getRegistryIndex, 
+  getRegistryItemWithContent, 
+  resolveRegistryDependencies,
+  type RegistryItemWithContent 
+} from "../utils/registry";
+import { getPackageManager, getInstallCommand, getDevFlag } from "../utils/get-package-manager";
+import { transformImportPaths } from "../utils/transformers";
+import type { Config, RegistryItem } from "../types";
 
 export const add = new Command()
   .name("add")
@@ -16,13 +22,15 @@ export const add = new Command()
   .argument("[components...]", "the components to add")
   .option("-y, --yes", "skip confirmation prompt.", false)
   .option("-o, --overwrite", "overwrite existing files.", false)
+  .option("-a, --all", "add all available components.", false)
+  .option("-p, --path <path>", "the path to add the component to.")
   .option("-c, --cwd <cwd>", "the working directory. defaults to current directory.", process.cwd())
-  .action(async (components: string[], options: any) => {
+  .action(async (components: string[], options) => {
     try {
       const cwd = path.resolve(options.cwd);
 
       if (!fs.existsSync(cwd)) {
-        console.error(`The path ${cwd} does not exist.`);
+        console.error(chalk.red(`The path ${cwd} does not exist.`));
         process.exit(1);
       }
 
@@ -31,26 +39,46 @@ export const add = new Command()
         console.log(
           chalk.red(
             `Configuration not found. Please run ${chalk.bold(
-              "init"
+              "npx @ensolid/cli init"
             )} to create a ensolid.json file.`
           )
         );
         process.exit(1);
       }
 
+      const spinner = ora("Fetching registry...").start();
       const registryUrl = config.registry;
-      const registryIndex = await getRegistryIndex(registryUrl);
+      
+      let registryIndex;
+      try {
+        registryIndex = await getRegistryIndex(registryUrl);
+        spinner.succeed(`Found ${registryIndex.length} components`);
+      } catch (error) {
+        spinner.fail("Failed to fetch registry");
+        console.error(chalk.red((error as Error).message));
+        process.exit(1);
+      }
 
       let selectedComponents = components;
+
+      // Add all components
+      if (options.all) {
+        selectedComponents = registryIndex.map((entry) => entry.name);
+      }
+
+      // Interactive component selection
       if (!selectedComponents || selectedComponents.length === 0) {
         const response = await prompts({
-          type: "multiselect",
+          type: "autocompleteMultiselect",
           name: "components",
           message: "Which components would you like to add?",
+          hint: "Space to select, Enter to confirm",
           choices: registryIndex.map((entry) => ({
             title: entry.name,
             value: entry.name,
+            description: entry.description,
           })),
+          instructions: false,
         });
         selectedComponents = response.components;
       }
@@ -60,108 +88,198 @@ export const add = new Command()
         process.exit(0);
       }
 
-      const spinner = ora(`Resolving dependencies...`).start();
+      // Validate selected components
+      const invalidComponents = selectedComponents.filter(
+        (name) => !registryIndex.some((entry) => entry.name === name)
+      );
 
-      const registryItems: any[] = [];
-      const resolvedComponents = new Set<string>();
-
-      async function resolveDependencies(componentNames: string[]) {
-        for (const name of componentNames) {
-          if (resolvedComponents.has(name)) continue;
-          resolvedComponents.add(name);
-
-          const item = await getRegistryItem(registryUrl, name);
-          registryItems.push(item);
-
-          if (item.registryDependencies) {
-            await resolveDependencies(item.registryDependencies);
-          }
-        }
+      if (invalidComponents.length > 0) {
+        console.log(
+          chalk.yellow(
+            `Warning: The following components were not found: ${invalidComponents.join(", ")}`
+          )
+        );
+        selectedComponents = selectedComponents.filter(
+          (name) => !invalidComponents.includes(name)
+        );
       }
 
-      await resolveDependencies(selectedComponents);
+      spinner.start("Resolving dependencies...");
 
+      // Resolve all dependencies
+      const allItems = await resolveRegistryDependencies(registryUrl, selectedComponents);
+      const componentNames = allItems.map((item) => item.name);
+      
+      spinner.succeed(`Resolved ${allItems.length} component(s): ${componentNames.join(", ")}`);
+
+      // Collect all npm dependencies
       const dependencies = new Set<string>();
-      registryItems.forEach((item) => {
-        item.dependencies?.forEach((dep: string) => dependencies.add(dep));
+      const devDependencies = new Set<string>();
+      
+      allItems.forEach((item) => {
+        item.dependencies?.forEach((dep) => dependencies.add(dep));
+        item.devDependencies?.forEach((dep) => devDependencies.add(dep));
       });
 
-      spinner.succeed();
-
-      // 2. Install dependencies
-      if (dependencies.size > 0) {
+      // Install npm dependencies
+      if (dependencies.size > 0 || devDependencies.size > 0) {
         const packageManager = await getPackageManager(cwd);
-        spinner.start(`Installing dependencies...`);
-        await execa(
-          packageManager,
-          [
-            packageManager === "yarn" ? "add" : "install",
-            ...Array.from(dependencies),
-          ],
-          {
+        const installCmd = getInstallCommand(packageManager);
+        const devFlag = getDevFlag(packageManager);
+
+        if (dependencies.size > 0) {
+          spinner.start(`Installing ${dependencies.size} dependencies...`);
+          try {
+            await execa(packageManager, [installCmd, ...Array.from(dependencies)], { cwd });
+            spinner.succeed("Dependencies installed");
+          } catch (error) {
+            spinner.fail("Failed to install dependencies");
+            console.log(chalk.dim(`You can install them manually:`));
+            console.log(chalk.dim(`  ${packageManager} ${installCmd} ${Array.from(dependencies).join(" ")}`));
+          }
+        }
+
+        if (devDependencies.size > 0) {
+          spinner.start(`Installing ${devDependencies.size} dev dependencies...`);
+          try {
+            await execa(packageManager, [installCmd, devFlag, ...Array.from(devDependencies)], { cwd });
+            spinner.succeed("Dev dependencies installed");
+          } catch (error) {
+            spinner.fail("Failed to install dev dependencies");
+            console.log(chalk.dim(`You can install them manually:`));
+            console.log(chalk.dim(`  ${packageManager} ${installCmd} ${devFlag} ${Array.from(devDependencies).join(" ")}`));
+          }
+        }
+      }
+
+      // Download and write files
+      spinner.start("Adding components...");
+      const addedFiles: string[] = [];
+      const skippedFiles: string[] = [];
+
+      for (const item of allItems) {
+        try {
+          const itemWithContent = await getRegistryItemWithContent(registryUrl, item.name);
+          const results = await writeComponentFiles(
+            itemWithContent,
+            config,
             cwd,
-          }
-        );
-        spinner.succeed();
+            options.overwrite,
+            options.yes,
+            options.path
+          );
+          addedFiles.push(...results.added);
+          skippedFiles.push(...results.skipped);
+        } catch (error) {
+          spinner.warn(`Failed to add ${item.name}: ${(error as Error).message}`);
+        }
       }
 
-      // 3. Download files
-      for (const item of registryItems) {
-        spinner.start(`Adding ${item.name}...`);
-        
-        let targetDir = path.resolve(
-          cwd,
-          config.aliases.components || "src/components"
-        );
+      spinner.succeed("Components added");
 
-        if (item.type === "components:ui" && config.aliases.ui) {
-          targetDir = path.resolve(cwd, config.aliases.ui);
-        }
-
-        if (!fs.existsSync(targetDir)) {
-          await fs.ensureDir(targetDir);
-        }
-
-        const rawBaseUrl = getRawUrlBase(registryUrl);
-
-        for (const file of item.files) {
-          // If file is just a filename, it's easy.
-          // If it's a path like "ui/button.tsx", we might want to preserve structure or flat it.
-          // Shadcn/ui usually flattens into the target dir if it's a simple component.
-          const fileName = path.basename(file);
-          const targetPath = path.resolve(targetDir, fileName);
-
-          if (fs.existsSync(targetPath) && !options.overwrite) {
-            const response = await prompts({
-              type: "confirm",
-              name: "overwrite",
-              message: `File ${fileName} already exists. Overwrite?`,
-              initial: false,
-            });
-
-            if (!response.overwrite) {
-              continue;
-            }
-          }
-
-          // Fetch the actual file content
-          // The registry item 'files' should probably point to a relative path from the registry root
-          const fileUrl = `${rawBaseUrl}/${file}`;
-          const response = await fetch(fileUrl);
-          if (!response.ok) {
-            spinner.fail(`Failed to fetch ${file} from ${fileUrl}`);
-            continue;
-          }
-
-          const content = await response.text();
-          await fs.writeFile(targetPath, content);
-        }
-        spinner.succeed(`Added ${item.name}`);
+      // Summary
+      console.log("");
+      if (addedFiles.length > 0) {
+        console.log(chalk.green(`✓ Added ${addedFiles.length} file(s):`));
+        addedFiles.forEach((file) => console.log(chalk.dim(`  - ${file}`)));
       }
+      if (skippedFiles.length > 0) {
+        console.log(chalk.yellow(`⊘ Skipped ${skippedFiles.length} file(s):`));
+        skippedFiles.forEach((file) => console.log(chalk.dim(`  - ${file}`)));
+      }
+      console.log("");
 
-      console.log(chalk.green("\nSuccess! Components added."));
     } catch (error) {
-      console.error(chalk.red(error));
+      console.error(chalk.red("An error occurred:"), (error as Error).message);
       process.exit(1);
     }
   });
+
+async function writeComponentFiles(
+  item: RegistryItemWithContent,
+  config: Config,
+  cwd: string,
+  overwrite: boolean,
+  skipPrompts: boolean,
+  customPath?: string
+): Promise<{ added: string[]; skipped: string[] }> {
+  const added: string[] = [];
+  const skipped: string[] = [];
+
+  // Determine target directory
+  let targetDir: string;
+  
+  if (customPath) {
+    targetDir = path.resolve(cwd, customPath);
+  } else if (item.type === "components:ui" && config.aliases.ui) {
+    targetDir = resolveAliasToPath(config.aliases.ui, cwd);
+  } else {
+    targetDir = resolveAliasToPath(config.aliases.components, cwd);
+  }
+
+  await fs.ensureDir(targetDir);
+
+  for (const [filePath, content] of item.content) {
+    const fileName = path.basename(filePath);
+    
+    // Convert .tsx to .jsx if not using TypeScript
+    const finalFileName = !config.tsx && fileName.endsWith(".tsx")
+      ? fileName.replace(".tsx", ".jsx")
+      : fileName;
+    
+    const targetPath = path.resolve(targetDir, finalFileName);
+    const relativePath = path.relative(cwd, targetPath);
+
+    // Check if file exists
+    if (fs.existsSync(targetPath) && !overwrite) {
+      if (skipPrompts) {
+        skipped.push(relativePath);
+        continue;
+      }
+
+      const response = await prompts({
+        type: "confirm",
+        name: "overwrite",
+        message: `File ${chalk.bold(relativePath)} already exists. Overwrite?`,
+        initial: false,
+      });
+
+      if (!response.overwrite) {
+        skipped.push(relativePath);
+        continue;
+      }
+    }
+
+    // Transform import paths
+    let transformedContent = transformImportPaths(content, config);
+    
+    // TODO: Add TypeScript to JavaScript transformation if needed
+    // if (!config.tsx) {
+    //   transformedContent = transformTsToJs(transformedContent);
+    // }
+
+    await fs.writeFile(targetPath, transformedContent);
+    added.push(relativePath);
+  }
+
+  return { added, skipped };
+}
+
+/**
+ * Resolve an alias path to an actual file system path
+ */
+function resolveAliasToPath(aliasPath: string, cwd: string): string {
+  const patterns = [
+    { prefix: "@/", base: "src" },
+    { prefix: "~/", base: "src" },
+    { prefix: "$/", base: "src" },
+  ];
+
+  for (const pattern of patterns) {
+    if (aliasPath.startsWith(pattern.prefix)) {
+      return path.resolve(cwd, pattern.base, aliasPath.slice(pattern.prefix.length));
+    }
+  }
+
+  return path.resolve(cwd, aliasPath);
+}
