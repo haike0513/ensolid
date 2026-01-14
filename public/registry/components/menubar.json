@@ -1,0 +1,11 @@
+{
+  "name": "menubar",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "menubar.tsx"
+  ]
+}

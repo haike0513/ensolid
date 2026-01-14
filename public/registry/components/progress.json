@@ -1,0 +1,11 @@
+{
+  "name": "progress",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "progress.tsx"
+  ]
+}

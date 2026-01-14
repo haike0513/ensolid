@@ -1,0 +1,9 @@
+{
+  "name": "input",
+  "type": "components:ui",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    "input.tsx"
+  ]
+}

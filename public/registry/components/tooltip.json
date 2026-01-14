@@ -1,0 +1,11 @@
+{
+  "name": "tooltip",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "tooltip.tsx"
+  ]
+}

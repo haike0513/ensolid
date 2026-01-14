@@ -1,0 +1,9 @@
+{
+  "name": "alert",
+  "type": "components:ui",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    "alert.tsx"
+  ]
+}

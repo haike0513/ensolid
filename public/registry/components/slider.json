@@ -1,0 +1,11 @@
+{
+  "name": "slider",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "slider.tsx"
+  ]
+}

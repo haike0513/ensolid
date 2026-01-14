@@ -1,0 +1,9 @@
+{
+  "name": "card",
+  "type": "components:ui",
+  "dependencies": [],
+  "registryDependencies": [],
+  "files": [
+    "card.tsx"
+  ]
+}

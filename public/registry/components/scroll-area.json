@@ -1,0 +1,11 @@
+{
+  "name": "scroll-area",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "scroll-area.tsx"
+  ]
+}

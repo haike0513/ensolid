@@ -1,0 +1,11 @@
+{
+  "name": "context-menu",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "context-menu.tsx"
+  ]
+}

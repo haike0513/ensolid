@@ -29,7 +29,8 @@
     "publish:visx": "pnpm --filter @ensolid/visx publish",
     "publish:streamdown": "pnpm --filter @ensolid/streamdown publish",
     "publish:solidflow": "pnpm --filter @ensolid/solidflow publish",
-    "publish:aisolid": "pnpm --filter @ensolid/aisolid publish"
+    "publish:aisolid": "pnpm --filter @ensolid/aisolid publish",
+    "generate:registry": "node scripts/registry/generate.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.1",
@@ -58,6 +59,7 @@
     "d3-scale-chromatic": "^3.1.0",
     "d3-shape": "^3.2.0",
     "d3-time-format": "^4.1.0",
+    "fs-extra": "^11.3.3",
     "solid-js": "^1.9.9",
     "tailwindcss": "^4.1.18",
     "three": "^0.170.0",

@@ -1,0 +1,188 @@
+[
+  {
+    "name": "accordion",
+    "files": [
+      "accordion.tsx"
+    ]
+  },
+  {
+    "name": "alert-dialog",
+    "files": [
+      "alert-dialog.tsx"
+    ]
+  },
+  {
+    "name": "alert",
+    "files": [
+      "alert.tsx"
+    ]
+  },
+  {
+    "name": "aspect-ratio",
+    "files": [
+      "aspect-ratio.tsx"
+    ]
+  },
+  {
+    "name": "avatar",
+    "files": [
+      "avatar.tsx"
+    ]
+  },
+  {
+    "name": "badge",
+    "files": [
+      "badge.tsx"
+    ]
+  },
+  {
+    "name": "button",
+    "files": [
+      "button.tsx"
+    ]
+  },
+  {
+    "name": "card",
+    "files": [
+      "card.tsx"
+    ]
+  },
+  {
+    "name": "checkbox",
+    "files": [
+      "checkbox.tsx"
+    ]
+  },
+  {
+    "name": "collapsible",
+    "files": [
+      "collapsible.tsx"
+    ]
+  },
+  {
+    "name": "context-menu",
+    "files": [
+      "context-menu.tsx"
+    ]
+  },
+  {
+    "name": "dialog",
+    "files": [
+      "dialog.tsx"
+    ]
+  },
+  {
+    "name": "dropdown-menu",
+    "files": [
+      "dropdown-menu.tsx"
+    ]
+  },
+  {
+    "name": "hover-card",
+    "files": [
+      "hover-card.tsx"
+    ]
+  },
+  {
+    "name": "input",
+    "files": [
+      "input.tsx"
+    ]
+  },
+  {
+    "name": "label",
+    "files": [
+      "label.tsx"
+    ]
+  },
+  {
+    "name": "menubar",
+    "files": [
+      "menubar.tsx"
+    ]
+  },
+  {
+    "name": "navigation-menu",
+    "files": [
+      "navigation-menu.tsx"
+    ]
+  },
+  {
+    "name": "popover",
+    "files": [
+      "popover.tsx"
+    ]
+  },
+  {
+    "name": "progress",
+    "files": [
+      "progress.tsx"
+    ]
+  },
+  {
+    "name": "scroll-area",
+    "files": [
+      "scroll-area.tsx"
+    ]
+  },
+  {
+    "name": "select",
+    "files": [
+      "select.tsx"
+    ]
+  },
+  {
+    "name": "separator",
+    "files": [
+      "separator.tsx"
+    ]
+  },
+  {
+    "name": "slider",
+    "files": [
+      "slider.tsx"
+    ]
+  },
+  {
+    "name": "switch",
+    "files": [
+      "switch.tsx"
+    ]
+  },
+  {
+    "name": "tabs",
+    "files": [
+      "tabs.tsx"
+    ]
+  },
+  {
+    "name": "textarea",
+    "files": [
+      "textarea.tsx"
+    ]
+  },
+  {
+    "name": "toggle-group",
+    "files": [
+      "toggle-group.tsx"
+    ]
+  },
+  {
+    "name": "toggle",
+    "files": [
+      "toggle.tsx"
+    ]
+  },
+  {
+    "name": "toolbar",
+    "files": [
+      "toolbar.tsx"
+    ]
+  },
+  {
+    "name": "tooltip",
+    "files": [
+      "tooltip.tsx"
+    ]
+  }
+]

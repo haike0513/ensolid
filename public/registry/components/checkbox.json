@@ -1,0 +1,11 @@
+{
+  "name": "checkbox",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "checkbox.tsx"
+  ]
+}

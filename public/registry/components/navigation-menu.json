@@ -1,0 +1,11 @@
+{
+  "name": "navigation-menu",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "navigation-menu.tsx"
+  ]
+}

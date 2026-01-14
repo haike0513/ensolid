@@ -1,0 +1,11 @@
+{
+  "name": "select",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "select.tsx"
+  ]
+}

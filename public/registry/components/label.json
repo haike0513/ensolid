@@ -1,0 +1,11 @@
+{
+  "name": "label",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "label.tsx"
+  ]
+}

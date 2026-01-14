@@ -1,0 +1,11 @@
+{
+  "name": "alert-dialog",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "alert-dialog.tsx"
+  ]
+}

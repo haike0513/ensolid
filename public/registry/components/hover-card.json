@@ -1,0 +1,11 @@
+{
+  "name": "hover-card",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "hover-card.tsx"
+  ]
+}

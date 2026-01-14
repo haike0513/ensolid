@@ -1,0 +1,11 @@
+{
+  "name": "aspect-ratio",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "aspect-ratio.tsx"
+  ]
+}

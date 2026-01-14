@@ -1,0 +1,11 @@
+{
+  "name": "toggle-group",
+  "type": "components:ui",
+  "dependencies": [
+    "@ensolid/radix"
+  ],
+  "registryDependencies": [],
+  "files": [
+    "toggle-group.tsx"
+  ]
+}
