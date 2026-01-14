@@ -3,11 +3,36 @@ import prompts from "prompts";
 import path from "path";
 import fs from "fs-extra";
 import chalk from "chalk";
+import { configSchema } from "../types";
 
 export const init = new Command()
   .name("init")
   .description("Initialize your project and install dependencies")
-  .action(async () => {
+  .option("-y, --yes", "skip confirmation prompt.", false)
+  .option("-c, --cwd <cwd>", "the working directory. defaults to current directory.", process.cwd())
+  .action(async (options: any) => {
+    const cwd = path.resolve(options.cwd);
+
+    if (!fs.existsSync(cwd)) {
+      console.error(`The path ${cwd} does not exist.`);
+      process.exit(1);
+    }
+
+    const configPath = path.resolve(cwd, "ensolid.json");
+
+    if (fs.existsSync(configPath) && !options.yes) {
+      const response = await prompts({
+        type: "confirm",
+        name: "overwrite",
+        message: "ensolid.json already exists. Overwrite?",
+        initial: false,
+      });
+
+      if (!response.overwrite) {
+        process.exit(0);
+      }
+    }
+
     const response = await prompts([
       {
         type: "text",
@@ -54,9 +79,16 @@ export const init = new Command()
       },
     };
 
-    const targetPath = path.resolve(process.cwd(), "ensolid.json");
-    await fs.writeJSON(targetPath, config, { spaces: 2 });
+    try {
+      // Validate config
+      configSchema.parse(config);
 
-    console.log(chalk.green("\nSuccess! Project initialized."));
-    console.log("Configuration saved to ensolid.json");
+      await fs.writeJSON(configPath, config, { spaces: 2 });
+
+      console.log(chalk.green("\nSuccess! Project initialized."));
+      console.log("Configuration saved to ensolid.json");
+    } catch (error) {
+      console.error(chalk.red("Failed to initialize project:"), error);
+      process.exit(1);
+    }
   });

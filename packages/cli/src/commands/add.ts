@@ -5,104 +5,163 @@ import fs from "fs-extra";
 import chalk from "chalk";
 import ora from "ora";
 import fetch from "node-fetch";
-
-// Helper to convert GitHub tree URL to raw URL base
-// Input: https://github.com/haike0513/ensolid/tree/main/src/components/ui
-// Output: https://raw.githubusercontent.com/haike0513/ensolid/main/src/components/ui
-const getRawUrlBase = (githubUrl: string) => {
-  return githubUrl
-    .replace("github.com", "raw.githubusercontent.com")
-    .replace("/tree/", "/");
-};
+import { execa } from "execa";
+import { getConfig } from "../utils/get-config";
+import { getRegistryIndex, getRegistryItem, getRawUrlBase } from "../utils/registry";
+import { getPackageManager } from "../utils/get-package-manager";
 
 export const add = new Command()
   .name("add")
   .description("Add a component to your project")
   .argument("[components...]", "the components to add")
-  .action(async (components) => {
-    // 1. Check if ensolid.json exists
-    const configPath = path.resolve(process.cwd(), "ensolid.json");
-    if (!fs.existsSync(configPath)) {
-      console.log(chalk.red("Error: ensolid.json not found. Please run 'ensolid init' first."));
-      return;
-    }
-
-    const config = await fs.readJSON(configPath);
-    const targetDir = path.resolve(process.cwd(), config.aliases.ui || "src/components/ui");
-    const registry = config.registry || "https://github.com/haike0513/ensolid/tree/main/src/components/ui";
-    
-    const rawBaseUrl = getRawUrlBase(registry);
-    console.log(chalk.blue(`Using registry: ${registry}`));
-
-    // 2. If no components specified, prompt user
-    let selectedComponents = components;
-    if (!selectedComponents || selectedComponents.length === 0) {
-      // For now, we manually list available components since fetching directory structure from GitHub requires API
-      // In a real implementation, you'd fetch a registry.json file first.
-      const availableComponents = [
-        "button", "card", "dialog", "checkbox", "switch", "tabs", "accordion",
-        "input", "label", "separator", "alert-dialog", "popover", "dropdown-menu",
-        "tooltip", "select", "slider", "progress", "toggle", "avatar"
-      ];
-
-      const response = await prompts({
-        type: "multiselect",
-        name: "components",
-        message: "Which components would you like to add?",
-        choices: availableComponents.map(c => ({ title: c, value: c })),
-      });
-      selectedComponents = response.components;
-    }
-
-    if (!selectedComponents || selectedComponents.length === 0) {
-      return;
-    }
-
-    // 3. Download components
-    const spinner = ora("Downloading components...").start();
-
+  .option("-y, --yes", "skip confirmation prompt.", false)
+  .option("-o, --overwrite", "overwrite existing files.", false)
+  .option("-c, --cwd <cwd>", "the working directory. defaults to current directory.", process.cwd())
+  .action(async (components: string[], options: any) => {
     try {
-      if (!fs.existsSync(targetDir)) {
-        await fs.ensureDir(targetDir);
+      const cwd = path.resolve(options.cwd);
+
+      if (!fs.existsSync(cwd)) {
+        console.error(`The path ${cwd} does not exist.`);
+        process.exit(1);
       }
 
-      for (const component of selectedComponents) {
-        const fileUrl = `${rawBaseUrl}/${component}.tsx`;
-        const destPath = path.resolve(targetDir, `${component}.tsx`);
+      const config = await getConfig(cwd);
+      if (!config) {
+        console.log(
+          chalk.red(
+            `Configuration not found. Please run ${chalk.bold(
+              "init"
+            )} to create a ensolid.json file.`
+          )
+        );
+        process.exit(1);
+      }
 
-        spinner.text = `Downloading ${chalk.blue(component)}...`;
-        
-        const response = await fetch(fileUrl);
-        if (response.ok) {
-          const content = await response.text();
-          await fs.writeFile(destPath, content);
-          spinner.succeed(`Added ${chalk.blue(component)}`);
-          spinner.start(); // Restart for next component
-        } else {
-          spinner.fail(`Failed to download ${chalk.red(component)} from ${fileUrl} (Status: ${response.status})`);
-          spinner.start();
+      const registryUrl = config.registry;
+      const registryIndex = await getRegistryIndex(registryUrl);
+
+      let selectedComponents = components;
+      if (!selectedComponents || selectedComponents.length === 0) {
+        const response = await prompts({
+          type: "multiselect",
+          name: "components",
+          message: "Which components would you like to add?",
+          choices: registryIndex.map((entry) => ({
+            title: entry.name,
+            value: entry.name,
+          })),
+        });
+        selectedComponents = response.components;
+      }
+
+      if (!selectedComponents || selectedComponents.length === 0) {
+        console.log(chalk.cyan("No components selected. Exiting."));
+        process.exit(0);
+      }
+
+      const spinner = ora(`Resolving dependencies...`).start();
+
+      const registryItems: any[] = [];
+      const resolvedComponents = new Set<string>();
+
+      async function resolveDependencies(componentNames: string[]) {
+        for (const name of componentNames) {
+          if (resolvedComponents.has(name)) continue;
+          resolvedComponents.add(name);
+
+          const item = await getRegistryItem(registryUrl, name);
+          registryItems.push(item);
+
+          if (item.registryDependencies) {
+            await resolveDependencies(item.registryDependencies);
+          }
         }
       }
 
-      // Also handle utils.ts if it's missing
-      const utilsDest = path.resolve(process.cwd(), config.aliases.utils);
-      if (!fs.existsSync(utilsDest)) {
-          spinner.text = "Downloading utils.ts...";
-          const utilsUrl = `${rawBaseUrl}/utils.ts`;
-          const response = await fetch(utilsUrl);
-          if (response.ok) {
-              const content = await response.text();
-              await fs.ensureDir(path.dirname(utilsDest));
-              await fs.writeFile(utilsDest, content);
-              spinner.succeed(`Created utils file at ${config.aliases.utils}`);
+      await resolveDependencies(selectedComponents);
+
+      const dependencies = new Set<string>();
+      registryItems.forEach((item) => {
+        item.dependencies?.forEach((dep: string) => dependencies.add(dep));
+      });
+
+      spinner.succeed();
+
+      // 2. Install dependencies
+      if (dependencies.size > 0) {
+        const packageManager = await getPackageManager(cwd);
+        spinner.start(`Installing dependencies...`);
+        await execa(
+          packageManager,
+          [
+            packageManager === "yarn" ? "add" : "install",
+            ...Array.from(dependencies),
+          ],
+          {
+            cwd,
           }
+        );
+        spinner.succeed();
       }
 
-      spinner.stop();
-      console.log(chalk.green("\nDone! Components have been added to your project."));
+      // 3. Download files
+      for (const item of registryItems) {
+        spinner.start(`Adding ${item.name}...`);
+        
+        let targetDir = path.resolve(
+          cwd,
+          config.aliases.components || "src/components"
+        );
 
+        if (item.type === "components:ui" && config.aliases.ui) {
+          targetDir = path.resolve(cwd, config.aliases.ui);
+        }
+
+        if (!fs.existsSync(targetDir)) {
+          await fs.ensureDir(targetDir);
+        }
+
+        const rawBaseUrl = getRawUrlBase(registryUrl);
+
+        for (const file of item.files) {
+          // If file is just a filename, it's easy.
+          // If it's a path like "ui/button.tsx", we might want to preserve structure or flat it.
+          // Shadcn/ui usually flattens into the target dir if it's a simple component.
+          const fileName = path.basename(file);
+          const targetPath = path.resolve(targetDir, fileName);
+
+          if (fs.existsSync(targetPath) && !options.overwrite) {
+            const response = await prompts({
+              type: "confirm",
+              name: "overwrite",
+              message: `File ${fileName} already exists. Overwrite?`,
+              initial: false,
+            });
+
+            if (!response.overwrite) {
+              continue;
+            }
+          }
+
+          // Fetch the actual file content
+          // The registry item 'files' should probably point to a relative path from the registry root
+          const fileUrl = `${rawBaseUrl}/${file}`;
+          const response = await fetch(fileUrl);
+          if (!response.ok) {
+            spinner.fail(`Failed to fetch ${file} from ${fileUrl}`);
+            continue;
+          }
+
+          const content = await response.text();
+          await fs.writeFile(targetPath, content);
+        }
+        spinner.succeed(`Added ${item.name}`);
+      }
+
+      console.log(chalk.green("\nSuccess! Components added."));
     } catch (error) {
-      spinner.stop();
-      console.error(chalk.red("Error fetching components:"), error);
+      console.error(chalk.red(error));
+      process.exit(1);
     }
   });

@@ -54,6 +54,7 @@ The CLI uses an `ensolid.json` file in your project root to manage settings:
     "baseColor": "slate",
     "cssVariables": true
   },
+  "registry": "https://github.com/haike0513/ensolid/tree/main/src/components/ui",
   "aliases": {
     "components": "src/components",
     "utils": "src/lib/utils.ts",
@@ -61,6 +62,10 @@ The CLI uses an `ensolid.json` file in your project root to manage settings:
   }
 }
 ```
+
+### Custom Registries
+
+You can point the CLI to any compatible registry by changing the `registry` field in `ensolid.json`. This allows you to use `ensolid` CLI with your own custom component collection.
 
 ## Features
 
