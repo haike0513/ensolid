@@ -41,6 +41,12 @@ export const DocsPage: Component = () => {
       category: "组件库"
     },
     { 
+      id: "cli", 
+      title: "@ensolid/cli",
+      icon: "⌨️",
+      category: "工具"
+    },
+    { 
       id: "ui-components", 
       title: "UI 组件",
       icon: "🎯",
@@ -316,7 +322,7 @@ export const DocsPage: Component = () => {
                           <span class="text-2xl">📚</span>
                           <span>包含的库</span>
                         </h3>
-                        <div class="grid gap-5 md:grid-cols-3">
+                        <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
                           <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-background to-muted/30 border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1">
                             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                             <div class="relative">
@@ -358,6 +364,23 @@ export const DocsPage: Component = () => {
                               <h4 class="text-lg font-semibold mb-2">@ensolid/solidflow</h4>
                               <p class="text-sm text-muted-foreground leading-relaxed">
                                 基于 React Flow 移植，提供流程图和节点编辑器功能
+                              </p>
+                              <div class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:gap-2 transition-all duration-300">
+                                <span>了解更多</span>
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <div onClick={() => setActiveSection("cli")} class="cursor-pointer group relative overflow-hidden rounded-xl bg-gradient-to-br from-background to-muted/30 border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1">
+                            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-blue-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                            <div class="relative">
+                              <div class="text-3xl mb-3">⌨️</div>
+                              <h4 class="text-lg font-semibold mb-2">@ensolid/cli</h4>
+                              <p class="text-sm text-muted-foreground leading-relaxed">
+                                命令行工具，快速添加组件到你的项目中
                               </p>
                               <div class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:gap-2 transition-all duration-300">
                                 <span>了解更多</span>
@@ -744,6 +767,308 @@ function App() {
                   </article>
                 )}
 
+                {/* @ensolid/cli */}
+                {activeSection() === "cli" && (
+                  <article class="space-y-8 animate-fade-in">
+                    <header class="pb-6 border-b border-border/50">
+                      <div class="flex items-center gap-3 mb-4">
+                        <div class="text-4xl">⌨️</div>
+                        <h2 class="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+                          @ensolid/cli
+                        </h2>
+                      </div>
+                      <p class="text-lg text-muted-foreground">
+                        命令行工具，快速添加组件到你的项目
+                      </p>
+                    </header>
+
+                    <section class="space-y-8">
+                      <div class="p-6 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20">
+                        <p class="text-base leading-relaxed">
+                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/cli</code> 是一个命令行工具，
+                          灵感来自{" "}
+                          <a
+                            href="https://ui.shadcn.com/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="text-primary hover:underline font-medium"
+                          >
+                            shadcn/ui
+                          </a>
+                          ，让你可以轻松地将美观、可访问的 SolidJS 组件添加到你的项目中。
+                        </p>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold mb-4">核心特点</h3>
+                        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                          <FeatureCard
+                            icon="🚀"
+                            title="快速初始化"
+                            desc="一键初始化项目配置，自动检测框架"
+                          />
+                          <FeatureCard
+                            icon="📦"
+                            title="按需添加"
+                            desc="只添加你需要的组件，而不是整个库"
+                          />
+                          <FeatureCard
+                            icon="🔄"
+                            title="依赖解析"
+                            desc="自动解析和安装组件依赖"
+                          />
+                          <FeatureCard
+                            icon="📝"
+                            title="完全控制"
+                            desc="组件代码直接复制到项目中，可自由修改"
+                          />
+                          <FeatureCard
+                            icon="🔍"
+                            title="差异检查"
+                            desc="检查本地组件与注册表的更新差异"
+                          />
+                          <FeatureCard
+                            icon="📋"
+                            title="组件列表"
+                            desc="查看所有可用组件及安装状态"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                          <span>🚀</span>
+                          <span>快速开始</span>
+                        </h3>
+                        
+                        <div class="space-y-6">
+                          <div>
+                            <h4 class="text-lg font-semibold mb-3">1. 初始化项目</h4>
+                            <p class="mb-3 text-muted-foreground">在你的 SolidJS 项目中运行：</p>
+                            <CodeBlock code="npx @ensolid/cli init" language="bash" />
+                            <p class="mt-3 text-sm text-muted-foreground">
+                              这将自动检测你的项目配置，并创建 <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">ensolid.json</code> 配置文件。
+                            </p>
+                          </div>
+
+                          <div>
+                            <h4 class="text-lg font-semibold mb-3">2. 添加组件</h4>
+                            <p class="mb-3 text-muted-foreground">添加你需要的组件：</p>
+                            <CodeBlock code="npx @ensolid/cli add button" language="bash" />
+                            <p class="mt-3 text-sm text-muted-foreground">组件将被添加到你配置的目录中。</p>
+                          </div>
+
+                          <div>
+                            <h4 class="text-lg font-semibold mb-3">3. 使用组件</h4>
+                            <CodeBlock code={`import { Button } from "@/components/ui/button";
+
+function App() {
+  return (
+    <Button variant="default">
+      点击我
+    </Button>
+  );
+}`} language="typescript" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                          <span>📖</span>
+                          <span>命令详解</span>
+                        </h3>
+
+                        <div class="space-y-6">
+                          {/* init 命令 */}
+                          <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
+                            <div class="flex items-center gap-2 mb-3">
+                              <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">init</code>
+                              <span class="text-sm text-muted-foreground">初始化项目配置</span>
+                            </div>
+                            <CodeBlock code={`npx @ensolid/cli init [options]
+
+# 选项
+-y, --yes        跳过确认提示
+-d, --defaults   使用默认配置
+-f, --force      强制覆盖现有配置
+-c, --cwd <cwd>  指定工作目录`} language="bash" />
+                            <p class="mt-3 text-sm text-muted-foreground">
+                              初始化时会自动检测项目类型、TypeScript 配置、路径别名等，并创建必要的目录和文件。
+                            </p>
+                          </div>
+
+                          {/* add 命令 */}
+                          <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
+                            <div class="flex items-center gap-2 mb-3">
+                              <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">add</code>
+                              <span class="text-sm text-muted-foreground">添加组件到项目</span>
+                            </div>
+                            <CodeBlock code={`npx @ensolid/cli add [components...] [options]
+
+# 添加单个组件
+npx @ensolid/cli add button
+
+# 添加多个组件
+npx @ensolid/cli add button card dialog
+
+# 添加所有组件
+npx @ensolid/cli add --all
+
+# 选项
+-y, --yes          跳过确认提示
+-o, --overwrite    覆盖已存在的文件
+-a, --all          添加所有可用组件
+-p, --path <path>  指定组件安装路径`} language="bash" />
+                            <div class="mt-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-start gap-2">
+                              <div class="text-lg">💡</div>
+                              <p class="text-sm text-muted-foreground">
+                                添加组件时会自动解析依赖关系，安装必要的 npm 包，并转换导入路径以匹配你的项目配置。
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* list 命令 */}
+                          <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
+                            <div class="flex items-center gap-2 mb-3">
+                              <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">list</code>
+                              <span class="text-sm text-muted-foreground">列出可用组件</span>
+                            </div>
+                            <CodeBlock code={`npx @ensolid/cli list [options]
+
+# 查看所有组件
+npx @ensolid/cli list
+
+# 只显示已安装的组件
+npx @ensolid/cli list --installed
+
+# 只显示未安装的组件
+npx @ensolid/cli list --available`} language="bash" />
+                          </div>
+
+                          {/* diff 命令 */}
+                          <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
+                            <div class="flex items-center gap-2 mb-3">
+                              <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">diff</code>
+                              <span class="text-sm text-muted-foreground">检查组件更新</span>
+                            </div>
+                            <CodeBlock code={`npx @ensolid/cli diff [component]
+
+# 检查所有组件的更新
+npx @ensolid/cli diff
+
+# 检查特定组件的更新
+npx @ensolid/cli diff button`} language="bash" />
+                            <p class="mt-3 text-sm text-muted-foreground">
+                              差异检查会比较本地组件与注册表版本，帮助你了解哪些组件有更新可用。
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                          <span>⚙️</span>
+                          <span>配置文件</span>
+                        </h3>
+                        <p class="mb-4 text-muted-foreground">
+                          初始化后会在项目根目录创建 <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">ensolid.json</code> 配置文件：
+                        </p>
+                        <CodeBlock code={`{
+  "$schema": "https://ensolid.dev/schema.json",
+  "style": "default",
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "src/index.css",
+    "baseColor": "slate",
+    "cssVariables": true
+  },
+  "registry": "https://raw.githubusercontent.com/haike0513/ensolid/main/public/registry",
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils",
+    "ui": "@/components/ui",
+    "lib": "@/lib",
+    "hooks": "@/hooks"
+  }
+}`} language="json" />
+                        
+                        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+                          <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
+                            <div class="font-semibold text-sm mb-2 text-primary">tailwind</div>
+                            <div class="text-xs text-muted-foreground">Tailwind CSS 相关配置，包括配置文件路径、CSS 文件、基础颜色等</div>
+                          </div>
+                          <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
+                            <div class="font-semibold text-sm mb-2 text-primary">aliases</div>
+                            <div class="text-xs text-muted-foreground">路径别名配置，用于转换组件中的导入路径</div>
+                          </div>
+                          <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
+                            <div class="font-semibold text-sm mb-2 text-primary">registry</div>
+                            <div class="text-xs text-muted-foreground">组件注册表 URL，可以使用自定义注册表</div>
+                          </div>
+                          <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
+                            <div class="font-semibold text-sm mb-2 text-primary">tsx</div>
+                            <div class="text-xs text-muted-foreground">是否使用 TypeScript，影响组件文件扩展名</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                          <span>📦</span>
+                          <span>可用组件</span>
+                        </h3>
+                        <p class="mb-4 text-muted-foreground">
+                          当前注册表包含 30+ 个组件，涵盖常见的 UI 需求：
+                        </p>
+                        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Button</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Dialog</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Card</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Dropdown Menu</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Tabs</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Accordion</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">Tooltip</span>
+                          </div>
+                          <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
+                            <span class="text-sm font-medium">更多...</span>
+                          </div>
+                        </div>
+                        <p class="mt-4 text-sm text-muted-foreground">
+                          运行 <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">npx @ensolid/cli list</code> 查看完整列表。
+                        </p>
+                      </div>
+
+                      <div class="p-6 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20">
+                        <div class="flex items-start gap-3">
+                          <div class="text-2xl">🎉</div>
+                          <div>
+                            <h4 class="font-semibold text-base mb-2">立即开始</h4>
+                            <p class="text-sm text-muted-foreground mb-3">
+                              在你的 SolidJS 项目中运行以下命令开始使用：
+                            </p>
+                            <CodeBlock code="npx @ensolid/cli init && npx @ensolid/cli add button" language="bash" />
+                          </div>
+                        </div>
+                      </div>
+                    </section>
+                  </article>
+                )}
+
                 {/* UI 组件 */}
                 {activeSection() === "ui-components" && (
                   <article class="space-y-8 animate-fade-in">
@@ -844,7 +1169,10 @@ function App() {
 ├── packages/                    # Monorepo 包目录
 │   ├── radix/                  # Radix UI Primitives 移植
 │   ├── baseui/                 # BaseUI 组件库
-│   └── solidflow/              # SolidFlow 组件库
+│   ├── solidflow/              # SolidFlow 组件库
+│   └── cli/                    # CLI 命令行工具
+├── public/
+│   └── registry/               # 组件注册表
 ├── src/                        # 源代码目录
 │   ├── components/
 │   │   └── ui/                 # shadcn/ui 风格组件

@@ -1,6 +1,6 @@
 {
   "name": "@ensolid/cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CLI for adding beautiful, accessible SolidJS components to your projects. Inspired by shadcn/ui.",
   "type": "module",
   "bin": {
