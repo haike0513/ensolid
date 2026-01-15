@@ -42,7 +42,8 @@
     "directory": "packages/streamdown"
   },
   "scripts": {
-    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
     "dev": "vite build --watch"
   },
   "author": "Hayden Bleasel <hayden.bleasel@vercel.com>",

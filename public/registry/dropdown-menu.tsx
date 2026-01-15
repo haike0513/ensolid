@@ -3,7 +3,7 @@ import { splitProps } from "solid-js";
 import * as DropdownMenuPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
-// DropdownMenu Root
+// DropdownMenu Props
 export interface DropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuProps {
   children?: JSX.Element;
 }
@@ -11,22 +11,6 @@ export interface DropdownMenuProps extends DropdownMenuPrimitive.DropdownMenuPro
 const DropdownMenuBase: Component<DropdownMenuProps> = (props) => {
   return <DropdownMenuPrimitive.DropdownMenu {...props} />;
 };
-
-export const DropdownMenu = Object.assign(DropdownMenuBase, {
-  Trigger: null as any,
-  Content: null as any,
-  Item: null as any,
-  CheckboxItem: null as any,
-  RadioItem: null as any,
-  Label: null as any,
-  Separator: null as any,
-  Shortcut: null as any,
-  Group: null as any,
-  Sub: null as any,
-  SubTrigger: null as any,
-  SubContent: null as any,
-  RadioGroup: null as any,
-});
 
 // DropdownMenu Trigger
 export interface DropdownMenuTriggerProps extends DropdownMenuPrimitive.DropdownMenuTriggerProps {
@@ -275,17 +259,35 @@ export const DropdownMenuShortcut: Component<DropdownMenuShortcutProps> = (props
   );
 };
 
-// Assign sub-components
-DropdownMenu.Trigger = DropdownMenuTrigger;
-DropdownMenu.Content = DropdownMenuContent;
-DropdownMenu.Item = DropdownMenuItem;
-DropdownMenu.CheckboxItem = DropdownMenuCheckboxItem;
-DropdownMenu.RadioItem = DropdownMenuRadioItem;
-DropdownMenu.Label = DropdownMenuLabel;
-DropdownMenu.Separator = DropdownMenuSeparator;
-DropdownMenu.Shortcut = DropdownMenuShortcut;
-DropdownMenu.Group = DropdownMenuGroup;
-DropdownMenu.Sub = DropdownMenuSub;
-DropdownMenu.SubTrigger = DropdownMenuSubTrigger;
-DropdownMenu.SubContent = DropdownMenuSubContent;
-DropdownMenu.RadioGroup = DropdownMenuRadioGroup;
+// DropdownMenu Compound Component Type
+export interface DropdownMenuComponent extends Component<DropdownMenuProps> {
+  Trigger: typeof DropdownMenuTrigger;
+  Content: typeof DropdownMenuContent;
+  Item: typeof DropdownMenuItem;
+  CheckboxItem: typeof DropdownMenuCheckboxItem;
+  RadioItem: typeof DropdownMenuRadioItem;
+  Label: typeof DropdownMenuLabel;
+  Separator: typeof DropdownMenuSeparator;
+  Shortcut: typeof DropdownMenuShortcut;
+  Group: typeof DropdownMenuGroup;
+  Sub: typeof DropdownMenuSub;
+  SubTrigger: typeof DropdownMenuSubTrigger;
+  SubContent: typeof DropdownMenuSubContent;
+  RadioGroup: typeof DropdownMenuRadioGroup;
+}
+
+export const DropdownMenu = Object.assign(DropdownMenuBase, {
+  Trigger: DropdownMenuTrigger,
+  Content: DropdownMenuContent,
+  Item: DropdownMenuItem,
+  CheckboxItem: DropdownMenuCheckboxItem,
+  RadioItem: DropdownMenuRadioItem,
+  Label: DropdownMenuLabel,
+  Separator: DropdownMenuSeparator,
+  Shortcut: DropdownMenuShortcut,
+  Group: DropdownMenuGroup,
+  Sub: DropdownMenuSub,
+  SubTrigger: DropdownMenuSubTrigger,
+  SubContent: DropdownMenuSubContent,
+  RadioGroup: DropdownMenuRadioGroup,
+}) as DropdownMenuComponent;

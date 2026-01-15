@@ -166,7 +166,8 @@ export const add = new Command()
             cwd,
             options.overwrite,
             options.yes,
-            options.path
+            options.path,
+            spinner
           );
           addedFiles.push(...results.added);
           skippedFiles.push(...results.skipped);
@@ -201,7 +202,8 @@ async function writeComponentFiles(
   cwd: string,
   overwrite: boolean,
   skipPrompts: boolean,
-  customPath?: string
+  customPath?: string,
+  spinner?: any
 ): Promise<{ added: string[]; skipped: string[] }> {
   const added: string[] = [];
   const skipped: string[] = [];
@@ -237,12 +239,20 @@ async function writeComponentFiles(
         continue;
       }
 
+      if (spinner) {
+        spinner.stop();
+      }
+
       const response = await prompts({
         type: "confirm",
         name: "overwrite",
         message: `File ${chalk.bold(relativePath)} already exists. Overwrite?`,
         initial: false,
       });
+
+      if (spinner) {
+        spinner.start();
+      }
 
       if (!response.overwrite) {
         skipped.push(relativePath);

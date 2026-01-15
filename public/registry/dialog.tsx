@@ -3,150 +3,150 @@ import { splitProps } from "solid-js";
 import * as DialogPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
+// Dialog Props
 export interface DialogProps extends DialogPrimitive.DialogProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 const DialogBase: Component<DialogProps> = (props) => {
-    return <DialogPrimitive.Dialog {...props} />;
+  return <DialogPrimitive.Dialog {...props} />;
 };
 
-export const Dialog = Object.assign(DialogBase, {
-    Trigger: null as any,
-    Content: null as any,
-    Header: null as any,
-    Title: null as any,
-    Description: null as any,
-    Close: null as any,
-});
-
+// Dialog Trigger
 export interface DialogTriggerProps extends DialogPrimitive.DialogTriggerProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const DialogTrigger: Component<DialogTriggerProps> = (props) => {
-    const [local, others] = splitProps(props, [
-        "class",
-        "children",
-        "asChild",
-        "onClick",
-    ]);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <DialogPrimitive.DialogTrigger
-            class={cn("", local.class)}
-            {...others}
-        >
-            {local.children}
-        </DialogPrimitive.DialogTrigger>
-    );
+  return (
+    <DialogPrimitive.DialogTrigger
+      class={cn("", local.class)}
+      {...others}
+    >
+      {local.children}
+    </DialogPrimitive.DialogTrigger>
+  );
 };
 
+// Dialog Content
 export interface DialogContentProps extends DialogPrimitive.DialogContentProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const DialogContent: Component<DialogContentProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children"] as const);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <DialogPrimitive.DialogContent
-            class={cn(
-                "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
-                local.class,
-            )}
-            {...others}
-        >
-            {local.children}
-        </DialogPrimitive.DialogContent>
-    );
+  return (
+    <DialogPrimitive.DialogContent
+      class={cn(
+        "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg",
+        local.class
+      )}
+      {...others}
+    >
+      {local.children}
+    </DialogPrimitive.DialogContent>
+  );
 };
 
+// Dialog Header
 export interface DialogHeaderProps extends JSX.HTMLAttributes<HTMLDivElement> {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const DialogHeader: Component<DialogHeaderProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children"]);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <div
-            class={cn(
-                "flex flex-col space-y-1.5 text-center sm:text-left",
-                local.class,
-            )}
-            {...others}
-        >
-            {local.children}
-        </div>
-    );
+  return (
+    <div
+      class={cn(
+        "flex flex-col space-y-1.5 text-center sm:text-left",
+        local.class
+      )}
+      {...others}
+    >
+      {local.children}
+    </div>
+  );
 };
 
+// Dialog Title
 export interface DialogTitleProps extends DialogPrimitive.DialogTitleProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const DialogTitle: Component<DialogTitleProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children"] as const);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <DialogPrimitive.DialogTitle
-            class={cn(
-                "text-lg font-semibold leading-none tracking-tight",
-                local.class,
-            )}
-            {...others}
-        >
-            {local.children}
-        </DialogPrimitive.DialogTitle>
-    );
+  return (
+    <DialogPrimitive.DialogTitle
+      class={cn(
+        "text-lg font-semibold leading-none tracking-tight",
+        local.class
+      )}
+      {...others}
+    >
+      {local.children}
+    </DialogPrimitive.DialogTitle>
+  );
 };
 
-export interface DialogDescriptionProps
-    extends DialogPrimitive.DialogDescriptionProps {
-    children?: JSX.Element;
+// Dialog Description
+export interface DialogDescriptionProps extends DialogPrimitive.DialogDescriptionProps {
+  children?: JSX.Element;
 }
 
 export const DialogDescription: Component<DialogDescriptionProps> = (props) => {
-    const [local, others] = splitProps(props, ["class", "children"] as const);
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <DialogPrimitive.DialogDescription
-            class={cn("text-sm text-muted-foreground", local.class)}
-            {...others}
-        >
-            {local.children}
-        </DialogPrimitive.DialogDescription>
-    );
+  return (
+    <DialogPrimitive.DialogDescription
+      class={cn("text-sm text-muted-foreground", local.class)}
+      {...others}
+    >
+      {local.children}
+    </DialogPrimitive.DialogDescription>
+  );
 };
 
+// Dialog Close
 export interface DialogCloseProps extends DialogPrimitive.DialogCloseProps {
-    children?: JSX.Element;
+  children?: JSX.Element;
 }
 
 export const DialogClose: Component<DialogCloseProps> = (props) => {
-    const [local, others] = splitProps(
-        props,
-        ["class", "children", "onClick"] as const,
-    );
+  const [local, others] = splitProps(props, ["class", "children"]);
 
-    return (
-        <DialogPrimitive.DialogClose
-            class={cn(
-                "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
-                local.class,
-            )}
-            {...others}
-        >
-            {local.children}
-        </DialogPrimitive.DialogClose>
-    );
+  return (
+    <DialogPrimitive.DialogClose
+      class={cn(
+        "absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground",
+        local.class
+      )}
+      {...others}
+    >
+      {local.children}
+    </DialogPrimitive.DialogClose>
+  );
 };
 
-// 导出子组件
-Dialog.Trigger = DialogTrigger;
-Dialog.Content = DialogContent;
-Dialog.Header = DialogHeader;
-Dialog.Title = DialogTitle;
-Dialog.Description = DialogDescription;
-Dialog.Close = DialogClose;
+// Compound Component Type
+export interface DialogComponent extends Component<DialogProps> {
+  Trigger: typeof DialogTrigger;
+  Content: typeof DialogContent;
+  Header: typeof DialogHeader;
+  Title: typeof DialogTitle;
+  Description: typeof DialogDescription;
+  Close: typeof DialogClose;
+}
+
+export const Dialog = Object.assign(DialogBase, {
+  Trigger: DialogTrigger,
+  Content: DialogContent,
+  Header: DialogHeader,
+  Title: DialogTitle,
+  Description: DialogDescription,
+  Close: DialogClose,
+}) as DialogComponent;

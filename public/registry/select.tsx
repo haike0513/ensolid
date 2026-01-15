@@ -3,7 +3,7 @@ import { splitProps } from "solid-js";
 import * as SelectPrimitive from "@ensolid/radix";
 import { cn } from "./utils";
 
-// Select Root
+// Select Props
 export interface SelectProps extends SelectPrimitive.SelectProps {
   children?: JSX.Element;
 }
@@ -11,18 +11,6 @@ export interface SelectProps extends SelectPrimitive.SelectProps {
 const SelectBase: Component<SelectProps> = (props) => {
   return <SelectPrimitive.Select {...props} />;
 };
-
-export const Select = Object.assign(SelectBase, {
-  Group: null as any,
-  Value: null as any,
-  Trigger: null as any,
-  Content: null as any,
-  Label: null as any,
-  Item: null as any,
-  Separator: null as any,
-  ScrollUpButton: null as any,
-  ScrollDownButton: null as any,
-});
 
 // Select Group
 export const SelectGroup = SelectPrimitive.SelectGroup;
@@ -64,6 +52,70 @@ export const SelectTrigger: Component<SelectTriggerProps> = (props) => {
         </svg>
       </SelectPrimitive.SelectIcon>
     </SelectPrimitive.SelectTrigger>
+  );
+};
+
+// Select Scroll Up Button
+export interface SelectScrollUpButtonProps extends JSX.HTMLAttributes<HTMLDivElement> {
+  children?: JSX.Element;
+}
+
+export const SelectScrollUpButton: Component<SelectScrollUpButtonProps> = (props) => {
+  const [local, others] = splitProps(props, ["class", "children"]);
+  return (
+    <SelectPrimitive.SelectScrollUpButton
+      class={cn("flex cursor-default items-center justify-center py-1", local.class)}
+      {...others}
+    >
+      {local.children ?? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <path d="m18 15-6-6-6 6" />
+        </svg>
+      )}
+    </SelectPrimitive.SelectScrollUpButton>
+  );
+};
+
+// Select Scroll Down Button
+export interface SelectScrollDownButtonProps extends JSX.HTMLAttributes<HTMLDivElement> {
+  children?: JSX.Element;
+}
+
+export const SelectScrollDownButton: Component<SelectScrollDownButtonProps> = (props) => {
+  const [local, others] = splitProps(props, ["class", "children"]);
+  return (
+    <SelectPrimitive.SelectScrollDownButton
+      class={cn("flex cursor-default items-center justify-center py-1", local.class)}
+      {...others}
+    >
+      {local.children ?? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="h-4 w-4"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      )}
+    </SelectPrimitive.SelectScrollDownButton>
   );
 };
 
@@ -173,53 +225,27 @@ export const SelectSeparator: Component<SelectSeparatorProps> = (props) => {
   );
 };
 
-// Select ScrollUpButton
-export const SelectScrollUpButton: Component = () => (
-  <SelectPrimitive.SelectScrollUpButton class="flex cursor-default items-center justify-center py-1">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="h-4 w-4"
-    >
-      <path d="m18 15-6-6-6 6" />
-    </svg>
-  </SelectPrimitive.SelectScrollUpButton>
-);
+// Compound Component
+export interface SelectComponent extends Component<SelectProps> {
+  Group: typeof SelectGroup;
+  Value: typeof SelectValue;
+  Trigger: typeof SelectTrigger;
+  Content: typeof SelectContent;
+  Label: typeof SelectLabel;
+  Item: typeof SelectItem;
+  Separator: typeof SelectSeparator;
+  ScrollUpButton: typeof SelectScrollUpButton;
+  ScrollDownButton: typeof SelectScrollDownButton;
+}
 
-// Select ScrollDownButton
-export const SelectScrollDownButton: Component = () => (
-  <SelectPrimitive.SelectScrollDownButton class="flex cursor-default items-center justify-center py-1">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      class="h-4 w-4"
-    >
-      <path d="m6 9 6 6 6-6" />
-    </svg>
-  </SelectPrimitive.SelectScrollDownButton>
-);
-
-// Assign sub-components
-Select.Group = SelectGroup;
-Select.Value = SelectValue;
-Select.Trigger = SelectTrigger;
-Select.Content = SelectContent;
-Select.Label = SelectLabel;
-Select.Item = SelectItem;
-Select.Separator = SelectSeparator;
-Select.ScrollUpButton = SelectScrollUpButton;
-Select.ScrollDownButton = SelectScrollDownButton;
+export const Select = Object.assign(SelectBase, {
+  Group: SelectGroup,
+  Value: SelectValue,
+  Trigger: SelectTrigger,
+  Content: SelectContent,
+  Label: SelectLabel,
+  Item: SelectItem,
+  Separator: SelectSeparator,
+  ScrollUpButton: SelectScrollUpButton,
+  ScrollDownButton: SelectScrollDownButton,
+}) as SelectComponent;

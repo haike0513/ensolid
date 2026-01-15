@@ -39,7 +39,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "vite build",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc --noEmit && vite build",
     "dev": "vite build --watch"
   },
   "dependencies": {
