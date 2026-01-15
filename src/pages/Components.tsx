@@ -346,7 +346,7 @@ export const ComponentsPage: Component = () => {
             <div>
               <div class="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20">
                 <span class="text-xl">📦</span>
-                <span class="text-xs font-medium text-primary">Component Library</span>
+                <span class="text-xs font-medium text-primary">{t().componentsPage.badge}</span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight mb-2 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
                 {t().componentsPage.title}

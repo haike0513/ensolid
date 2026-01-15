@@ -653,7 +653,7 @@ export const ChartsPage: Component = () => {
               <div class="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/10 to-pink-500/10 backdrop-blur-sm border border-purple-500/20">
                 <span class="text-xl">📊</span>
                 <span class="text-xs font-medium bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                  Data Visualization
+                  {t().chartsPage.badge}
                 </span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight mb-2 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">

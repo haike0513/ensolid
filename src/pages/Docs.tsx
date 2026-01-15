@@ -493,14 +493,14 @@ pnpm build:solidflow`} language="bash" />
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        无样式、可访问的基础组件库
+                        {t().docs.content.radix.description}
                       </p>
                     </header>
 
                     <section class="space-y-8">
                       <div class="p-6 rounded-xl bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-blue-500/20">
                         <p class="text-base leading-relaxed">
-                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/radix</code> 是基于{" "}
+                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/radix</code> {t().docs.content.radix.intro.split('{radixLink}')[0]}
                           <a
                             href="https://www.radix-ui.com/primitives"
                             target="_blank"
@@ -508,30 +508,30 @@ pnpm build:solidflow`} language="bash" />
                             class="text-primary hover:underline font-medium"
                           >
                             Radix UI Primitives
-                          </a>{" "}
-                          移植的 SolidJS 版本，提供无样式、可访问的基础组件。
+                          </a>
+                          {t().docs.content.radix.intro.split('{radixLink}')[1]}
                         </p>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">安装</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.radix.installation}</h3>
                         <CodeBlock code="pnpm add @ensolid/radix" language="bash" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">基本使用</h3>
-                        <p class="mb-4 text-muted-foreground">导入组件：</p>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.radix.usage}</h3>
+                        <p class="mb-4 text-muted-foreground">{t().docs.content.radix.importTitle}</p>
                         <CodeBlock code={`import { Dialog, Button } from "@ensolid/radix";`} language="typescript" />
-                        <p class="mb-4 mt-6 text-muted-foreground">使用示例：</p>
+                        <p class="mb-4 mt-6 text-muted-foreground">{t().docs.content.radix.exampleTitle}</p>
                         <CodeBlock code={`import { Dialog } from "@ensolid/radix";
 
 function App() {
   return (
     <Dialog>
-      <Dialog.Trigger>打开对话框</Dialog.Trigger>
+      <Dialog.Trigger>{t().docs.content.radix.dialogTrigger}</Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Title>标题</Dialog.Title>
-        <Dialog.Description>描述</Dialog.Description>
+        <Dialog.Title>{t().docs.content.radix.dialogTitle}</Dialog.Title>
+        <Dialog.Description>{t().docs.content.radix.dialogDescription}</Dialog.Description>
       </Dialog.Content>
     </Dialog>
   );
@@ -539,48 +539,48 @@ function App() {
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">核心特点</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.radix.featuresTitle}</h3>
                         <div class="grid gap-4 sm:grid-cols-2">
                           <FeatureCard
                             icon="♿"
-                            title="可访问性"
-                            desc="完整的 ARIA 属性支持，符合 WAI-ARIA 规范"
+                            title={t().docs.content.radix.features.accessibility.title}
+                            desc={t().docs.content.radix.features.accessibility.desc}
                           />
                           <FeatureCard
                             icon="🎨"
-                            title="无样式设计"
-                            desc="完全可定制，不包含任何默认样式"
+                            title={t().docs.content.radix.features.unstyled.title}
+                            desc={t().docs.content.radix.features.unstyled.desc}
                           />
                           <FeatureCard
                             icon="🎯"
-                            title="双模式支持"
-                            desc="同时支持受控和非受控模式"
+                            title={t().docs.content.radix.features.dualMode.title}
+                            desc={t().docs.content.radix.features.dualMode.desc}
                           />
                           <FeatureCard
                             icon="📘"
-                            title="类型安全"
-                            desc="完整的 TypeScript 类型定义"
+                            title={t().docs.content.radix.features.typeSafe.title}
+                            desc={t().docs.content.radix.features.typeSafe.desc}
                           />
                         </div>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-6">可用组件</h3>
+                        <h3 class="text-2xl font-bold mb-6">{t().docs.content.radix.componentsTitle}</h3>
                         <div class="grid gap-3 sm:grid-cols-2">
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
-                            <div class="font-semibold text-sm mb-2 text-primary">基础组件</div>
+                            <div class="font-semibold text-sm mb-2 text-primary">{t().docs.content.radix.categories.base}</div>
                             <div class="text-sm text-muted-foreground">Separator, Label, AspectRatio</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
-                            <div class="font-semibold text-sm mb-2 text-primary">表单组件</div>
+                            <div class="font-semibold text-sm mb-2 text-primary">{t().docs.content.radix.categories.form}</div>
                             <div class="text-sm text-muted-foreground">Checkbox, Switch, RadioGroup, Select, Slider, Toggle</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
-                            <div class="font-semibold text-sm mb-2 text-primary">布局组件</div>
+                            <div class="font-semibold text-sm mb-2 text-primary">{t().docs.content.radix.categories.layout}</div>
                             <div class="text-sm text-muted-foreground">Tabs, Accordion, Collapsible, ScrollArea</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
-                            <div class="font-semibold text-sm mb-2 text-primary">弹出层组件</div>
+                            <div class="font-semibold text-sm mb-2 text-primary">{t().docs.content.radix.categories.overlay}</div>
                             <div class="text-sm text-muted-foreground">Dialog, AlertDialog, Popover, DropdownMenu, Tooltip</div>
                           </div>
                         </div>
@@ -600,14 +600,14 @@ function App() {
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        企业级 UI 组件库
+                        {t().docs.content.baseui.description}
                       </p>
                     </header>
 
                     <section class="space-y-8">
                       <div class="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
                         <p class="text-base leading-relaxed">
-                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/baseui</code> 是基于{" "}
+                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/baseui</code> {t().docs.content.baseui.intro.split('{baseuiLink}')[0]}
                           <a
                             href="https://baseui.org/"
                             target="_blank"
@@ -615,25 +615,25 @@ function App() {
                             class="text-primary hover:underline font-medium"
                           >
                             BaseUI
-                          </a>{" "}
-                          移植的 SolidJS 版本，提供企业级 UI 组件库。
+                          </a>
+                          {t().docs.content.baseui.intro.split('{baseuiLink}')[1]}
                         </p>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">安装</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.baseui.installation}</h3>
                         <CodeBlock code="pnpm add @ensolid/baseui" language="bash" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">基本使用</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.baseui.usage}</h3>
                         <CodeBlock code={`import { Button, Card, CardContent } from "@ensolid/baseui";
 
 function App() {
   return (
     <Card>
       <CardContent>
-        <Button variant="contained">点击我</Button>
+        <Button variant="contained">${t().docs.content.baseui.clickMe}</Button>
       </CardContent>
     </Card>
   );
@@ -641,37 +641,37 @@ function App() {
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">核心特点</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.baseui.featuresTitle}</h3>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                           <FeatureCard
                             icon="🎁"
-                            title="丰富组件"
-                            desc="提供 59+ 个企业级组件"
+                            title={t().docs.content.baseui.features.rich.title}
+                            desc={t().docs.content.baseui.features.rich.desc}
                           />
                           <FeatureCard
                             icon="🎨"
-                            title="Material Design"
-                            desc="遵循 Material Design 设计规范"
+                            title={t().docs.content.baseui.features.material.title}
+                            desc={t().docs.content.baseui.features.material.desc}
                           />
                           <FeatureCard
                             icon="🎯"
-                            title="主题系统"
-                            desc="完整的主题定制支持"
+                            title={t().docs.content.baseui.features.theme.title}
+                            desc={t().docs.content.baseui.features.theme.desc}
                           />
                           <FeatureCard
                             icon="📊"
-                            title="企业组件"
-                            desc="表格、分页、步进器等"
+                            title={t().docs.content.baseui.features.enterprise.title}
+                            desc={t().docs.content.baseui.features.enterprise.desc}
                           />
                           <FeatureCard
                             icon="📘"
-                            title="类型支持"
-                            desc="完整的 TypeScript 定义"
+                            title={t().docs.content.baseui.features.typeSafe.title}
+                            desc={t().docs.content.baseui.features.typeSafe.desc}
                           />
                           <FeatureCard
                             icon="⚡"
-                            title="高性能"
-                            desc="优化的渲染性能"
+                            title={t().docs.content.baseui.features.performance.title}
+                            desc={t().docs.content.baseui.features.performance.desc}
                           />
                         </div>
                       </div>
@@ -690,14 +690,14 @@ function App() {
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        强大的流程图和节点编辑器
+                        {t().docs.content.solidflow.description}
                       </p>
                     </header>
 
                     <section class="space-y-8">
                       <div class="p-6 rounded-xl bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/20">
                         <p class="text-base leading-relaxed">
-                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/solidflow</code> 是基于{" "}
+                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/solidflow</code> {t().docs.content.solidflow.intro.split('{reactflowLink}')[0]}
                           <a
                             href="https://reactflow.dev/"
                             target="_blank"
@@ -705,25 +705,25 @@ function App() {
                             class="text-primary hover:underline font-medium"
                           >
                             React Flow
-                          </a>{" "}
-                          移植的 SolidJS 版本，提供流程图和节点编辑器功能。
+                          </a>
+                          {t().docs.content.solidflow.intro.split('{reactflowLink}')[1]}
                         </p>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">安装</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.solidflow.installation}</h3>
                         <CodeBlock code="pnpm add @ensolid/solidflow" language="bash" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">基本使用</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.solidflow.usage}</h3>
                         <CodeBlock code={`import { createSignal } from "solid-js";
 import { Flow, Node, Edge } from "@ensolid/solidflow";
 
 function App() {
   const [nodes, setNodes] = createSignal([
-    { id: "1", position: { x: 0, y: 0 }, data: { label: "节点 1" } },
-    { id: "2", position: { x: 200, y: 100 }, data: { label: "节点 2" } },
+    { id: "1", position: { x: 0, y: 0 }, data: { label: "${t().docs.content.solidflow.nodeLabel} 1" } },
+    { id: "2", position: { x: 200, y: 100 }, data: { label: "${t().docs.content.solidflow.nodeLabel} 2" } },
   ]);
   
   const [edges, setEdges] = createSignal([
@@ -740,27 +740,27 @@ function App() {
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">核心特点</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.solidflow.featuresTitle}</h3>
                         <div class="grid gap-4 sm:grid-cols-2">
                           <FeatureCard
                             icon="⚡"
-                            title="高性能渲染"
-                            desc="优化的节点图渲染引擎"
+                            title={t().docs.content.solidflow.features.performance.title}
+                            desc={t().docs.content.solidflow.features.performance.desc}
                           />
                           <FeatureCard
                             icon="🎨"
-                            title="自定义节点"
-                            desc="支持完全自定义节点和边"
+                            title={t().docs.content.solidflow.features.custom.title}
+                            desc={t().docs.content.solidflow.features.custom.desc}
                           />
                           <FeatureCard
                             icon="🖱️"
-                            title="交互式操作"
-                            desc="支持拖拽、缩放等交互"
+                            title={t().docs.content.solidflow.features.interactive.title}
+                            desc={t().docs.content.solidflow.features.interactive.desc}
                           />
                           <FeatureCard
                             icon="🔧"
-                            title="工作流编辑"
-                            desc="适合构建复杂的工作流编辑器"
+                            title={t().docs.content.solidflow.features.workflow.title}
+                            desc={t().docs.content.solidflow.features.workflow.desc}
                           />
                         </div>
                       </div>
@@ -779,15 +779,14 @@ function App() {
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        命令行工具，快速添加组件到你的项目
+                        {t().docs.content.cli.description}
                       </p>
                     </header>
 
                     <section class="space-y-8">
                       <div class="p-6 rounded-xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/20">
                         <p class="text-base leading-relaxed">
-                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/cli</code> 是一个命令行工具，
-                          灵感来自{" "}
+                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/cli</code> {t().docs.content.cli.intro.split('{shadcnLink}')[0]}
                           <a
                             href="https://ui.shadcn.com/"
                             target="_blank"
@@ -796,42 +795,42 @@ function App() {
                           >
                             shadcn/ui
                           </a>
-                          ，让你可以轻松地将美观、可访问的 SolidJS 组件添加到你的项目中。
+                          {t().docs.content.cli.intro.split('{shadcnLink}')[1]}
                         </p>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">核心特点</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.cli.featuresTitle}</h3>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                           <FeatureCard
                             icon="🚀"
-                            title="快速初始化"
-                            desc="一键初始化项目配置，自动检测框架"
+                            title={t().docs.content.cli.features.init.title}
+                            desc={t().docs.content.cli.features.init.desc}
                           />
                           <FeatureCard
                             icon="📦"
-                            title="按需添加"
-                            desc="只添加你需要的组件，而不是整个库"
+                            title={t().docs.content.cli.features.add.title}
+                            desc={t().docs.content.cli.features.add.desc}
                           />
                           <FeatureCard
                             icon="🔄"
-                            title="依赖解析"
-                            desc="自动解析和安装组件依赖"
+                            title={t().docs.content.cli.features.deps.title}
+                            desc={t().docs.content.cli.features.deps.desc}
                           />
                           <FeatureCard
                             icon="📝"
-                            title="完全控制"
-                            desc="组件代码直接复制到项目中，可自由修改"
+                            title={t().docs.content.cli.features.control.title}
+                            desc={t().docs.content.cli.features.control.desc}
                           />
                           <FeatureCard
                             icon="🔍"
-                            title="差异检查"
-                            desc="检查本地组件与注册表的更新差异"
+                            title={t().docs.content.cli.features.diff.title}
+                            desc={t().docs.content.cli.features.diff.desc}
                           />
                           <FeatureCard
                             icon="📋"
-                            title="组件列表"
-                            desc="查看所有可用组件及安装状态"
+                            title={t().docs.content.cli.features.list.title}
+                            desc={t().docs.content.cli.features.list.desc}
                           />
                         </div>
                       </div>
@@ -839,34 +838,34 @@ function App() {
                       <div>
                         <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
                           <span>🚀</span>
-                          <span>快速开始</span>
+                          <span>{t().docs.content.cli.quickStart}</span>
                         </h3>
                         
                         <div class="space-y-6">
                           <div>
-                            <h4 class="text-lg font-semibold mb-3">1. 初始化项目</h4>
-                            <p class="mb-3 text-muted-foreground">在你的 SolidJS 项目中运行：</p>
+                            <h4 class="text-lg font-semibold mb-3">{t().docs.content.cli.initTitle}</h4>
+                            <p class="mb-3 text-muted-foreground">{t().docs.content.cli.initDesc}</p>
                             <CodeBlock code="npx @ensolid/cli init" language="bash" />
                             <p class="mt-3 text-sm text-muted-foreground">
-                              这将自动检测你的项目配置，并创建 <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">ensolid.json</code> 配置文件。
+                              {t().docs.content.cli.initTip.replace('{config}', '')} <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">ensolid.json</code> {t().docs.content.cli.initTip.includes('配置文件') ? '配置文件。' : ''}
                             </p>
                           </div>
 
                           <div>
-                            <h4 class="text-lg font-semibold mb-3">2. 添加组件</h4>
-                            <p class="mb-3 text-muted-foreground">添加你需要的组件：</p>
+                            <h4 class="text-lg font-semibold mb-3">{t().docs.content.cli.addTitle}</h4>
+                            <p class="mb-3 text-muted-foreground">{t().docs.content.cli.addDesc}</p>
                             <CodeBlock code="npx @ensolid/cli add button" language="bash" />
-                            <p class="mt-3 text-sm text-muted-foreground">组件将被添加到你配置的目录中。</p>
+                            <p class="mt-3 text-sm text-muted-foreground">{t().docs.content.cli.addTip}</p>
                           </div>
 
                           <div>
-                            <h4 class="text-lg font-semibold mb-3">3. 使用组件</h4>
+                            <h4 class="text-lg font-semibold mb-3">{t().docs.content.cli.useTitle}</h4>
                             <CodeBlock code={`import { Button } from "@/components/ui/button";
 
 function App() {
   return (
     <Button variant="default">
-      点击我
+      ${t().docs.content.baseui.clickMe}
     </Button>
   );
 }`} language="typescript" />
@@ -877,7 +876,7 @@ function App() {
                       <div>
                         <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
                           <span>📖</span>
-                          <span>命令详解</span>
+                          <span>{t().docs.content.cli.commandDetail}</span>
                         </h3>
 
                         <div class="space-y-6">
@@ -885,17 +884,17 @@ function App() {
                           <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
                             <div class="flex items-center gap-2 mb-3">
                               <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">init</code>
-                              <span class="text-sm text-muted-foreground">初始化项目配置</span>
+                              <span class="text-sm text-muted-foreground">{t().docs.content.cli.initCommand.desc}</span>
                             </div>
                             <CodeBlock code={`npx @ensolid/cli init [options]
 
-# 选项
--y, --yes        跳过确认提示
--d, --defaults   使用默认配置
--f, --force      强制覆盖现有配置
--c, --cwd <cwd>  指定工作目录`} language="bash" />
+# ${t().docs.content.cli.initCommand.options}
+-y, --yes        ${t().docs.content.cli.initCommand.yes}
+-d, --defaults   ${t().docs.content.cli.initCommand.defaults}
+-f, --force      ${t().docs.content.cli.initCommand.force}
+-c, --cwd <cwd>  ${t().docs.content.cli.initCommand.cwd}`} language="bash" />
                             <p class="mt-3 text-sm text-muted-foreground">
-                              初始化时会自动检测项目类型、TypeScript 配置、路径别名等，并创建必要的目录和文件。
+                              {t().docs.content.cli.initCommand.tip}
                             </p>
                           </div>
 
@@ -903,28 +902,28 @@ function App() {
                           <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
                             <div class="flex items-center gap-2 mb-3">
                               <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">add</code>
-                              <span class="text-sm text-muted-foreground">添加组件到项目</span>
+                              <span class="text-sm text-muted-foreground">{t().docs.content.cli.addCommand.desc}</span>
                             </div>
                             <CodeBlock code={`npx @ensolid/cli add [components...] [options]
 
-# 添加单个组件
+# ${t().docs.content.cli.addCommand.single}
 npx @ensolid/cli add button
 
-# 添加多个组件
+# ${t().docs.content.cli.addCommand.multiple}
 npx @ensolid/cli add button card dialog
 
-# 添加所有组件
+# ${t().docs.content.cli.addCommand.all}
 npx @ensolid/cli add --all
 
-# 选项
--y, --yes          跳过确认提示
--o, --overwrite    覆盖已存在的文件
--a, --all          添加所有可用组件
--p, --path <path>  指定组件安装路径`} language="bash" />
+# ${t().docs.content.cli.addCommand.options}
+-y, --yes          ${t().docs.content.cli.addCommand.yes}
+-o, --overwrite    ${t().docs.content.cli.addCommand.overwrite}
+-a, --all          ${t().docs.content.cli.addCommand.allOpt}
+-p, --path <path>  ${t().docs.content.cli.addCommand.path}`} language="bash" />
                             <div class="mt-4 p-3 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-start gap-2">
                               <div class="text-lg">💡</div>
                               <p class="text-sm text-muted-foreground">
-                                添加组件时会自动解析依赖关系，安装必要的 npm 包，并转换导入路径以匹配你的项目配置。
+                                {t().docs.content.cli.addCommand.tip}
                               </p>
                             </div>
                           </div>
@@ -933,17 +932,17 @@ npx @ensolid/cli add --all
                           <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
                             <div class="flex items-center gap-2 mb-3">
                               <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">list</code>
-                              <span class="text-sm text-muted-foreground">列出可用组件</span>
+                              <span class="text-sm text-muted-foreground">{t().docs.content.cli.listCommand.desc}</span>
                             </div>
                             <CodeBlock code={`npx @ensolid/cli list [options]
 
-# 查看所有组件
+# ${t().docs.content.cli.listCommand.all}
 npx @ensolid/cli list
 
-# 只显示已安装的组件
+# ${t().docs.content.cli.listCommand.installed}
 npx @ensolid/cli list --installed
 
-# 只显示未安装的组件
+# ${t().docs.content.cli.listCommand.available}
 npx @ensolid/cli list --available`} language="bash" />
                           </div>
 
@@ -951,17 +950,17 @@ npx @ensolid/cli list --available`} language="bash" />
                           <div class="p-5 rounded-xl bg-muted/30 border border-border/50">
                             <div class="flex items-center gap-2 mb-3">
                               <code class="px-3 py-1.5 rounded bg-primary/10 text-primary font-mono text-sm font-bold">diff</code>
-                              <span class="text-sm text-muted-foreground">检查组件更新</span>
+                              <span class="text-sm text-muted-foreground">{t().docs.content.cli.diffCommand.desc}</span>
                             </div>
                             <CodeBlock code={`npx @ensolid/cli diff [component]
 
-# 检查所有组件的更新
+# ${t().docs.content.cli.diffCommand.all}
 npx @ensolid/cli diff
 
-# 检查特定组件的更新
+# ${t().docs.content.cli.diffCommand.single}
 npx @ensolid/cli diff button`} language="bash" />
                             <p class="mt-3 text-sm text-muted-foreground">
-                              差异检查会比较本地组件与注册表版本，帮助你了解哪些组件有更新可用。
+                              {t().docs.content.cli.diffCommand.tip}
                             </p>
                           </div>
                         </div>
@@ -970,10 +969,10 @@ npx @ensolid/cli diff button`} language="bash" />
                       <div>
                         <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
                           <span>⚙️</span>
-                          <span>配置文件</span>
+                          <span>{t().docs.content.cli.configFile}</span>
                         </h3>
                         <p class="mb-4 text-muted-foreground">
-                          初始化后会在项目根目录创建 <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">ensolid.json</code> 配置文件：
+                          {t().docs.content.cli.configDesc.replace('{config}', '')} <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">ensolid.json</code> {t().docs.content.cli.configDesc.includes('配置文件') ? '配置文件：' : ':'}
                         </p>
                         <CodeBlock code={`{
   "$schema": "https://ensolid.dev/schema.json",
@@ -998,19 +997,19 @@ npx @ensolid/cli diff button`} language="bash" />
                         <div class="mt-6 grid gap-3 sm:grid-cols-2">
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="font-semibold text-sm mb-2 text-primary">tailwind</div>
-                            <div class="text-xs text-muted-foreground">Tailwind CSS 相关配置，包括配置文件路径、CSS 文件、基础颜色等</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.cli.configFields.tailwind}</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="font-semibold text-sm mb-2 text-primary">aliases</div>
-                            <div class="text-xs text-muted-foreground">路径别名配置，用于转换组件中的导入路径</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.cli.configFields.aliases}</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="font-semibold text-sm mb-2 text-primary">registry</div>
-                            <div class="text-xs text-muted-foreground">组件注册表 URL，可以使用自定义注册表</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.cli.configFields.registry}</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="font-semibold text-sm mb-2 text-primary">tsx</div>
-                            <div class="text-xs text-muted-foreground">是否使用 TypeScript，影响组件文件扩展名</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.cli.configFields.tsx}</div>
                           </div>
                         </div>
                       </div>
@@ -1018,10 +1017,10 @@ npx @ensolid/cli diff button`} language="bash" />
                       <div>
                         <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
                           <span>📦</span>
-                          <span>可用组件</span>
+                          <span>{t().docs.content.cli.availableComponents}</span>
                         </h3>
                         <p class="mb-4 text-muted-foreground">
-                          当前注册表包含 30+ 个组件，涵盖常见的 UI 需求：
+                          {t().docs.content.cli.availableDesc}
                         </p>
                         <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                           <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
@@ -1046,11 +1045,11 @@ npx @ensolid/cli diff button`} language="bash" />
                             <span class="text-sm font-medium">Tooltip</span>
                           </div>
                           <div class="p-3 rounded-lg bg-muted/30 border border-border/50 text-center">
-                            <span class="text-sm font-medium">更多...</span>
+                            <span class="text-sm font-medium">{t().docs.content.cli.more}</span>
                           </div>
                         </div>
                         <p class="mt-4 text-sm text-muted-foreground">
-                          运行 <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">npx @ensolid/cli list</code> 查看完整列表。
+                          {t().docs.content.cli.listTip.replace('{listCmd}', '')} <code class="px-1.5 py-0.5 rounded bg-muted text-primary text-xs">npx @ensolid/cli list</code> {t().docs.content.cli.listTip.includes('查看完整列表') ? '查看完整列表。' : ''}
                         </p>
                       </div>
 
@@ -1058,9 +1057,9 @@ npx @ensolid/cli diff button`} language="bash" />
                         <div class="flex items-start gap-3">
                           <div class="text-2xl">🎉</div>
                           <div>
-                            <h4 class="font-semibold text-base mb-2">立即开始</h4>
+                            <h4 class="font-semibold text-base mb-2">{t().docs.content.cli.ready}</h4>
                             <p class="text-sm text-muted-foreground mb-3">
-                              在你的 SolidJS 项目中运行以下命令开始使用：
+                              {t().docs.content.cli.readyDesc}
                             </p>
                             <CodeBlock code="npx @ensolid/cli init && npx @ensolid/cli add button" language="bash" />
                           </div>
@@ -1077,53 +1076,53 @@ npx @ensolid/cli diff button`} language="bash" />
                       <div class="flex items-center gap-3 mb-4">
                         <div class="text-4xl">🎯</div>
                         <h2 class="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          UI 组件
+                          {t().docs.sections.uiComponents.title}
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        shadcn/ui 风格的样式化组件
+                        {t().docs.content.uiComponents.description}
                       </p>
                     </header>
 
                     <section class="space-y-8">
                       <div class="p-6 rounded-xl bg-gradient-to-br from-primary/10 to-blue-500/10 border border-primary/20">
                         <p class="text-base leading-relaxed">
-                          本项目还提供了基于 <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/radix</code> 实现的
-                          shadcn/ui 风格组件库，提供开箱即用的样式化组件。
+                          {t().docs.content.uiComponents.intro.split('{radixPkg}')[0]}
+                          <code class="px-2 py-1 rounded bg-background/80 text-primary font-mono text-sm">@ensolid/radix</code>
+                          {t().docs.content.uiComponents.intro.split('{radixPkg}')[1]}
                         </p>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">核心特点</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.uiComponents.featuresTitle}</h3>
                         <div class="grid gap-4 sm:grid-cols-2">
                           <FeatureCard
                             icon="🎨"
-                            title="现代设计"
-                            desc="基于 Tailwind CSS 的现代设计系统"
+                            title={t().docs.content.uiComponents.features.modern.title}
+                            desc={t().docs.content.uiComponents.features.modern.desc}
                           />
                           <FeatureCard
                             icon="🎯"
-                            title="完全可定制"
-                            desc="支持完全自定义样式和主题"
+                            title={t().docs.content.uiComponents.features.custom.title}
+                            desc={t().docs.content.uiComponents.features.custom.desc}
                           />
                           <FeatureCard
                             icon="✨"
-                            title="设计规范"
-                            desc="与 shadcn/ui 设计规范保持一致"
+                            title={t().docs.content.uiComponents.features.spec.title}
+                            desc={t().docs.content.uiComponents.features.spec.desc}
                           />
                           <FeatureCard
                             icon="🚀"
-                            title="开箱即用"
-                            desc="无需配置，直接使用美观界面"
+                            title={t().docs.content.uiComponents.features.ready.title}
+                            desc={t().docs.content.uiComponents.features.ready.desc}
                           />
                         </div>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">使用方式</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.uiComponents.usage}</h3>
                         <p class="mb-4 text-muted-foreground">
-                          这些组件位于 <code class="px-2 py-1 rounded bg-muted text-primary text-sm">src/components/ui/</code> 目录下，
-                          可以直接复制到你的项目中使用。
+                          {t().docs.content.uiComponents.usageDesc.replace('{dir}', '')} <code class="px-2 py-1 rounded bg-muted text-primary text-sm">src/components/ui/</code> {t().docs.content.uiComponents.usageDesc.includes('目录下') ? '目录下，可以直接复制到你的项目中使用。' : ''}
                         </p>
                         <CodeBlock code={`import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
@@ -1132,12 +1131,12 @@ function App() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>打开对话框</Button>
+        <Button>{t().docs.content.radix.dialogTrigger}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>标题</DialogTitle>
-          <DialogDescription>描述</DialogDescription>
+          <DialogTitle>${t().docs.content.radix.dialogTitle}</DialogTitle>
+          <DialogDescription>${t().docs.content.radix.dialogDescription}</DialogDescription>
         </DialogHeader>
       </DialogContent>
     </Dialog>
@@ -1155,81 +1154,67 @@ function App() {
                       <div class="flex items-center gap-3 mb-4">
                         <div class="text-4xl">💻</div>
                         <h2 class="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          开发指南
+                          {t().docs.sections.development.title}
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        贡献代码和添加新组件
+                        {t().docs.content.development.description}
                       </p>
                     </header>
 
                     <section class="space-y-8">
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">项目结构</h3>
-                        <CodeBlock code={`ensolid/
-├── packages/                    # Monorepo 包目录
-│   ├── radix/                  # Radix UI Primitives 移植
-│   ├── baseui/                 # BaseUI 组件库
-│   ├── solidflow/              # SolidFlow 组件库
-│   └── cli/                    # CLI 命令行工具
-├── public/
-│   └── registry/               # 组件注册表
-├── src/                        # 源代码目录
-│   ├── components/
-│   │   └── ui/                 # shadcn/ui 风格组件
-│   ├── examples/               # 组件示例
-│   └── pages/                  # 页面组件
-├── package.json
-└── vite.config.ts`} language="text" />
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.development.structure}</h3>
+                        <CodeBlock code={t().docs.content.development.structureCode} language="text" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">开发命令</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.development.commands}</h3>
                         <div class="space-y-3">
                           <div class="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border/50">
                             <code class="px-3 py-1.5 rounded bg-background text-primary font-mono text-sm">pnpm dev</code>
-                            <span class="text-sm text-muted-foreground">启动开发服务器</span>
+                            <span class="text-sm text-muted-foreground">{t().docs.content.development.dev}</span>
                           </div>
                           <div class="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border/50">
                             <code class="px-3 py-1.5 rounded bg-background text-primary font-mono text-sm">pnpm build</code>
-                            <span class="text-sm text-muted-foreground">构建所有包</span>
+                            <span class="text-sm text-muted-foreground">{t().docs.content.development.build}</span>
                           </div>
                           <div class="flex items-center gap-3 p-3 rounded-lg bg-muted/30 border border-border/50">
                             <code class="px-3 py-1.5 rounded bg-background text-primary font-mono text-sm">pnpm build:radix</code>
-                            <span class="text-sm text-muted-foreground">构建 @ensolid/radix</span>
+                            <span class="text-sm text-muted-foreground">{t().docs.content.development.buildRadix}</span>
                           </div>
                         </div>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">添加新组件</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.development.addComponent}</h3>
                         <div class="space-y-3">
                           <div class="flex gap-3 p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">1</div>
                             <div>
-                              <div class="font-medium mb-1">在对应的包目录下创建组件文件</div>
-                              <div class="text-sm text-muted-foreground">选择合适的包目录创建新组件</div>
+                              <div class="font-medium mb-1">{t().docs.content.development.steps.step1.title}</div>
+                              <div class="text-sm text-muted-foreground">{t().docs.content.development.steps.step1.desc}</div>
                             </div>
                           </div>
                           <div class="flex gap-3 p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">2</div>
                             <div>
-                              <div class="font-medium mb-1">在 src/index.ts 中导出组件</div>
-                              <div class="text-sm text-muted-foreground">确保组件可以被外部使用</div>
+                              <div class="font-medium mb-1">{t().docs.content.development.steps.step2.title}</div>
+                              <div class="text-sm text-muted-foreground">{t().docs.content.development.steps.step2.desc}</div>
                             </div>
                           </div>
                           <div class="flex gap-3 p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">3</div>
                             <div>
-                              <div class="font-medium mb-1">创建样式化包装（如需要）</div>
-                              <div class="text-sm text-muted-foreground">在 src/components/ui/ 添加样式</div>
+                              <div class="font-medium mb-1">{t().docs.content.development.steps.step3.title}</div>
+                              <div class="text-sm text-muted-foreground">{t().docs.content.development.steps.step3.desc}</div>
                             </div>
                           </div>
                           <div class="flex gap-3 p-4 rounded-lg bg-muted/30 border border-border/50">
                             <div class="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold text-primary">4</div>
                             <div>
-                              <div class="font-medium mb-1">在 src/examples/ 创建示例</div>
-                              <div class="text-sm text-muted-foreground">提供使用示例和文档</div>
+                              <div class="font-medium mb-1">{t().docs.content.development.steps.step4.title}</div>
+                              <div class="text-sm text-muted-foreground">{t().docs.content.development.steps.step4.desc}</div>
                             </div>
                           </div>
                         </div>
@@ -1239,30 +1224,30 @@ function App() {
                         <div class="flex items-start gap-3">
                           <div class="text-2xl">⚠️</div>
                           <div>
-                            <h4 class="font-semibold text-base mb-2">重要提示</h4>
+                            <h4 class="font-semibold text-base mb-2">{t().docs.content.development.important}</h4>
                             <p class="text-sm text-muted-foreground mb-3">
-                              本项目使用 AI 完成移植工作，存在以下情况：
+                              {t().docs.content.development.aiNote}
                             </p>
                             <ul class="space-y-2 text-sm">
                               <li class="flex items-start gap-2">
                                 <span class="text-yellow-500">•</span>
-                                <span class="text-muted-foreground">代码可能不够完善，存在潜在问题</span>
+                                <span class="text-muted-foreground">{t().docs.content.development.aiIssues.incomplete}</span>
                               </li>
                               <li class="flex items-start gap-2">
                                 <span class="text-yellow-500">•</span>
-                                <span class="text-muted-foreground">功能可能未完全测试</span>
+                                <span class="text-muted-foreground">{t().docs.content.development.aiIssues.untested}</span>
                               </li>
                               <li class="flex items-start gap-2">
                                 <span class="text-yellow-500">•</span>
-                                <span class="text-muted-foreground">API 可能与原库存在差异</span>
+                                <span class="text-muted-foreground">{t().docs.content.development.aiIssues.apiDiff}</span>
                               </li>
                               <li class="flex items-start gap-2">
                                 <span class="text-yellow-500">•</span>
-                                <span class="text-muted-foreground">性能优化可能不足</span>
+                                <span class="text-muted-foreground">{t().docs.content.development.aiIssues.perf}</span>
                               </li>
                             </ul>
                             <p class="text-sm text-muted-foreground mt-3">
-                              请谨慎使用，建议在生产环境使用前进行充分测试。
+                              {t().docs.content.development.caution}
                             </p>
                           </div>
                         </div>

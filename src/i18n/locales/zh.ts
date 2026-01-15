@@ -53,6 +53,7 @@ export const zh = {
     },
     componentsPage: {
         title: "组件展示",
+        badge: "组件库",
         subtitle: "探索 {total} 个高质量 UI 组件，涵盖 {categories} 个分类",
         searchPlaceholder: "搜索组件",
         searchBoxPlaceholder: "输入组件名称...",
@@ -530,6 +531,182 @@ export const zh = {
                 buildProject: "构建项目",
                 buildAll: "构建所有包：",
                 buildSingle: "构建单个包：",
+            },
+            radix: {
+                description: "无样式、可访问的基础组件库",
+                intro: "是基于 {radixLink} 移植的 SolidJS 版本，提供无样式、可访问的基础组件。",
+                installation: "安装",
+                usage: "基本使用",
+                importTitle: "导入组件：",
+                exampleTitle: "使用示例：",
+                dialogTrigger: "打开对话框",
+                dialogTitle: "标题",
+                dialogDescription: "描述",
+                featuresTitle: "核心特点",
+                features: {
+                    accessibility: { title: "可访问性", desc: "完整的 ARIA 属性支持，符合 WAI-ARIA 规范" },
+                    unstyled: { title: "无样式设计", desc: "完全可定制，不包含任何默认样式" },
+                    dualMode: { title: "双模式支持", desc: "同时支持受控和非受控模式" },
+                    typeSafe: { title: "类型安全", desc: "完整的 TypeScript 类型定义" },
+                },
+                componentsTitle: "可用组件",
+                categories: {
+                    base: "基础组件",
+                    form: "表单组件",
+                    layout: "布局组件",
+                    overlay: "弹出层组件",
+                }
+            },
+            baseui: {
+                description: "企业级 UI 组件库",
+                intro: "是基于 {baseuiLink} 移植的 SolidJS 版本，提供企业级 UI 组件库。",
+                installation: "安装",
+                usage: "基本使用",
+                clickMe: "点击我",
+                featuresTitle: "核心特点",
+                features: {
+                    rich: { title: "丰富组件", desc: "提供 59+ 个企业级组件" },
+                    material: { title: "Material Design", desc: "遵循 Material Design 设计规范" },
+                    theme: { title: "主题系统", desc: "完整的主题定制支持" },
+                    enterprise: { title: "企业组件", desc: "表格、分页、步进器等" },
+                    typeSafe: { title: "类型支持", desc: "完整的 TypeScript 定义" },
+                    performance: { title: "高性能", desc: "优化的渲染性能" },
+                }
+            },
+            solidflow: {
+                description: "强大的流程图和节点编辑器",
+                intro: "是基于 {reactflowLink} 移植的 SolidJS 版本，提供流程图和节点编辑器功能。",
+                installation: "安装",
+                usage: "基本使用",
+                nodeLabel: "节点",
+                featuresTitle: "核心特点",
+                features: {
+                    performance: { title: "高性能渲染", desc: "优化的节点图渲染引擎" },
+                    custom: { title: "自定义节点", desc: "支持完全自定义节点和边" },
+                    interactive: { title: "交互式操作", desc: "支持拖拽、缩放等交互" },
+                    workflow: { title: "工作流编辑", desc: "适合构建复杂的工作流编辑器" },
+                }
+            },
+            cli: {
+                description: "命令行工具，快速添加组件到你的项目",
+                intro: "是一个命令行工具，灵感来自 {shadcnLink}，让你可以轻松地将美观、可访问的 SolidJS 组件添加到你的项目中。",
+                featuresTitle: "核心特点",
+                features: {
+                    init: { title: "快速初始化", desc: "一键初始化项目配置，自动检测框架" },
+                    add: { title: "按需添加", desc: "只添加你需要的组件，而不是整个库" },
+                    deps: { title: "依赖解析", desc: "自动解析和安装组件依赖" },
+                    control: { title: "完全控制", desc: "组件代码直接复制到项目中，可自由修改" },
+                    diff: { title: "差异检查", desc: "检查本地组件与注册表的更新差异" },
+                    list: { title: "组件列表", desc: "查看所有可用组件及安装状态" },
+                },
+                quickStart: "快速开始",
+                initTitle: "1. 初始化项目",
+                initDesc: "在你的 SolidJS 项目中运行：",
+                initTip: "这将自动检测你的项目配置，并创建 {config} 配置文件。",
+                addTitle: "2. 添加组件",
+                addDesc: "添加你需要的组件：",
+                addTip: "组件将被添加到你配置的目录中。",
+                useTitle: "3. 使用组件",
+                commandDetail: "命令详解",
+                initCommand: {
+                    desc: "初始化项目配置",
+                    options: "选项",
+                    yes: "跳过确认提示",
+                    defaults: "使用默认配置",
+                    force: "强制覆盖现有配置",
+                    cwd: "指定工作目录",
+                    tip: "初始化时会自动检测项目类型、TypeScript 配置、路径别名等，并创建必要的目录和文件。",
+                },
+                addCommand: {
+                    desc: "添加组件到项目",
+                    single: "添加单个组件",
+                    multiple: "添加多个组件",
+                    all: "添加所有组件",
+                    options: "选项",
+                    yes: "跳过确认提示",
+                    overwrite: "覆盖已存在的文件",
+                    allOpt: "添加所有可用组件",
+                    path: "指定组件安装路径",
+                    tip: "添加组件时会自动解析依赖关系，安装必要的 npm 包，并转换导入路径以匹配你的项目配置。",
+                },
+                listCommand: {
+                    desc: "列出可用组件",
+                    all: "查看所有组件",
+                    installed: "只显示已安装的组件",
+                    available: "只显示未安装的组件",
+                },
+                diffCommand: {
+                    desc: "检查组件更新",
+                    all: "检查所有组件的更新",
+                    single: "检查特定组件的更新",
+                    tip: "差异检查会比较本地组件与注册表版本，帮助你了解哪些组件有更新可用。",
+                },
+                configFile: "配置文件",
+                configDesc: "初始化后会在项目根目录创建 {config} 配置文件：",
+                configFields: {
+                    tailwind: "Tailwind CSS 相关配置，包括配置文件路径、CSS 文件、基础颜色等",
+                    aliases: "路径别名配置，用于转换组件中的导入路径",
+                    registry: "组件注册表 URL，可以使用自定义注册表",
+                    tsx: "是否使用 TypeScript，影响组件文件扩展名",
+                },
+                availableComponents: "可用组件",
+                availableDesc: "当前注册表包含 30+ 个组件，涵盖常见的 UI 需求：",
+                more: "更多...",
+                listTip: "运行 {listCmd} 查看完整列表。",
+                ready: "立即开始",
+                readyDesc: "在你的 SolidJS 项目中运行以下命令开始使用：",
+            },
+            uiComponents: {
+                description: "shadcn/ui 风格的样式化组件",
+                intro: "本项目还提供了基于 {radixPkg} 实现的 shadcn/ui 风格组件库，提供开箱即用的样式化组件。",
+                featuresTitle: "核心特点",
+                features: {
+                    modern: { title: "现代设计", desc: "基于 Tailwind CSS 的现代设计系统" },
+                    custom: { title: "完全可定制", desc: "支持完全自定义样式和主题" },
+                    spec: { title: "设计规范", desc: "与 shadcn/ui 设计规范保持一致" },
+                    ready: { title: "开箱即用", desc: "无需配置，直接使用美观界面" },
+                },
+                usage: "使用方式",
+                usageDesc: "这些组件位于 {dir} 目录下，可以直接复制到你的项目中使用。",
+            },
+            development: {
+                description: "贡献代码和添加新组件",
+                structure: "项目结构",
+                commands: "开发命令",
+                dev: "启动开发服务器",
+                build: "构建所有包",
+                buildRadix: "构建 @ensolid/radix",
+                addComponent: "添加新组件",
+                steps: {
+                    step1: { title: "在对应的包目录下创建组件文件", desc: "选择合适的包目录创建新组件" },
+                    step2: { title: "在 src/index.ts 中导出组件", desc: "确保组件可以被外部使用" },
+                    step3: { title: "创建样式化包装（如需要）", desc: "在 src/components/ui/ 添加样式" },
+                    step4: { title: "在 src/examples/ 创建示例", desc: "提供使用示例和文档" },
+                },
+                important: "重要提示",
+                aiNote: "本项目使用 AI 完成移植工作，存在以下情况：",
+                aiIssues: {
+                    incomplete: "代码可能不够完善，存在潜在问题",
+                    untested: "功能可能未完全测试",
+                    apiDiff: "API 可能与原库存在差异",
+                    perf: "性能优化可能不足",
+                },
+                caution: "请谨慎使用，建议在生产环境使用前进行充分测试。",
+                structureCode: `ensolid/
+├── packages/                    # Monorepo 包目录
+│   ├── radix/                  # Radix UI Primitives 移植
+│   ├── baseui/                 # BaseUI 组件库
+│   ├── solidflow/              # SolidFlow 组件库
+│   └── cli/                    # CLI 命令行工具
+├── public/
+│   └── registry/               # 组件注册表
+├── src/                        # 源代码目录
+│   ├── components/
+│   │   └── ui/                 # shadcn/ui 风格组件
+│   ├── examples/               # 组件示例
+│   └── pages/                  # 页面组件
+├── package.json
+└── vite.config.ts`
             }
         }
     },
@@ -583,6 +760,7 @@ export const zh = {
     },
     chartsPage: {
         title: "图表画廊",
+        badge: "数据可视化",
         subtitle: "探索 {total} 个数据可视化图表，涵盖 {categories} 个分类",
         categoryTitle: "图表分类",
         backToList: "返回列表",

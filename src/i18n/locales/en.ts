@@ -53,6 +53,7 @@ export const en = {
   },
   componentsPage: {
     title: "Component Showcase",
+    badge: "Component Library",
     subtitle: "Explore {total} high-quality UI components across {categories} categories",
     searchPlaceholder: "Search Components",
     searchBoxPlaceholder: "Enter component name...",
@@ -530,6 +531,182 @@ export const en = {
         buildProject: "Build Project",
         buildAll: "Build all packages:",
         buildSingle: "Build single package:",
+      },
+      radix: {
+        description: "Unstyled, accessible base component library",
+        intro: "is the SolidJS version ported from {radixLink}, providing unstyled, accessible foundation components.",
+        installation: "Installation",
+        usage: "Basic Usage",
+        importTitle: "Import components:",
+        exampleTitle: "Usage example:",
+        dialogTrigger: "Open Dialog",
+        dialogTitle: "Title",
+        dialogDescription: "Description",
+        featuresTitle: "Key Features",
+        features: {
+          accessibility: { title: "Accessibility", desc: "Complete ARIA attribute support, compliant with WAI-ARIA" },
+          unstyled: { title: "Unstyled", desc: "Completely customizable, no default styles included" },
+          dualMode: { title: "Dual Mode", desc: "Supports both controlled and uncontrolled modes" },
+          typeSafe: { title: "Type Safe", desc: "Complete TypeScript type definitions" },
+        },
+        componentsTitle: "Available Components",
+        categories: {
+          base: "Base Components",
+          form: "Form Components",
+          layout: "Layout Components",
+          overlay: "Overlay Components",
+        }
+      },
+      baseui: {
+        description: "Enterprise-grade UI component library",
+        intro: "is the SolidJS version ported from {baseuiLink}, providing an enterprise-grade UI component library.",
+        installation: "Installation",
+        usage: "Basic Usage",
+        clickMe: "Click Me",
+        featuresTitle: "Key Features",
+        features: {
+          rich: { title: "Rich Components", desc: "Provides 59+ enterprise-grade components" },
+          material: { title: "Material Design", desc: "Follows Material Design specifications" },
+          theme: { title: "Theme System", desc: "Full theme customization support" },
+          enterprise: { title: "Enterprise Components", desc: "Tables, pagination, steppers, etc." },
+          typeSafe: { title: "Type Support", desc: "Complete TypeScript definitions" },
+          performance: { title: "High Performance", desc: "Optimized rendering performance" },
+        }
+      },
+      solidflow: {
+        description: "Powerful flow diagram and node editor",
+        intro: "is the SolidJS version ported from {reactflowLink}, providing flow diagram and node editor functionality.",
+        installation: "Installation",
+        usage: "Basic Usage",
+        nodeLabel: "Node",
+        featuresTitle: "Key Features",
+        features: {
+          performance: { title: "High Performance", desc: "Optimized node graph rendering engine" },
+          custom: { title: "Custom Nodes", desc: "Supports fully custom nodes and edges" },
+          interactive: { title: "Interactive", desc: "Supports drag, zoom, and other interactions" },
+          workflow: { title: "Workflow Editing", desc: "Suitable for building complex workflow editors" },
+        }
+      },
+      cli: {
+        description: "Command-line tool for quickly adding components to your project",
+        intro: "is a command-line tool inspired by {shadcnLink}, allowing you to easily add beautiful, accessible SolidJS components to your project.",
+        featuresTitle: "Key Features",
+        features: {
+          init: { title: "Quick Init", desc: "Initialize project config with one click, auto-detect framework" },
+          add: { title: "Add on Demand", desc: "Add only the components you need, not the whole library" },
+          deps: { title: "Dependency Resolution", desc: "Auto-resolve and install component dependencies" },
+          control: { title: "Full Control", desc: "Component code copied directly to project, freely modifiable" },
+          diff: { title: "Diff Checking", desc: "Check update differences between local components and registry" },
+          list: { title: "Component List", desc: "View all available components and installation status" },
+        },
+        quickStart: "Quick Start",
+        initTitle: "1. Initialize Project",
+        initDesc: "Run in your SolidJS project:",
+        initTip: "This will auto-detect your project config and create an {config} file.",
+        addTitle: "2. Add Component",
+        addDesc: "Add the components you need:",
+        addTip: "Components will be added to your configured directory.",
+        useTitle: "3. Use Component",
+        commandDetail: "Command Details",
+        initCommand: {
+          desc: "Initialize project configuration",
+          options: "Options",
+          yes: "Skip confirmation prompts",
+          defaults: "Use default configuration",
+          force: "Force overwrite existing config",
+          cwd: "Specify working directory",
+          tip: "Initialization auto-detects project type, TypeScript config, path aliases, etc.",
+        },
+        addCommand: {
+          desc: "Add components to project",
+          single: "Add single component",
+          multiple: "Add multiple components",
+          all: "Add all components",
+          options: "Options",
+          yes: "Skip confirmation prompts",
+          overwrite: "Overwrite existing files",
+          allOpt: "Add all available components",
+          path: "Specify installation path",
+          tip: "Adding components auto-resolves dependencies, installs npm packages, and transforms import paths.",
+        },
+        listCommand: {
+          desc: "List available components",
+          all: "View all components",
+          installed: "Only show installed components",
+          available: "Only show available components",
+        },
+        diffCommand: {
+          desc: "Check component updates",
+          all: "Check updates for all components",
+          single: "Check update for specific component",
+          tip: "Diff checking compares local components with registry versions for updates.",
+        },
+        configFile: "Configuration File",
+        configDesc: "After initialization, an {config} file will be created in the project root:",
+        configFields: {
+          tailwind: "Tailwind CSS config, including config path, CSS file, base colors, etc.",
+          aliases: "Path alias config, used for transforming import paths in components.",
+          registry: "Component registry URL, custom registries can be used.",
+          tsx: "Whether to use TypeScript, affects component file extensions.",
+        },
+        availableComponents: "Available Components",
+        availableDesc: "The current registry contains 30+ components, covering common UI needs:",
+        more: "More...",
+        listTip: "Run {listCmd} to see the full list.",
+        ready: "Get Started",
+        readyDesc: "Run the following command in your SolidJS project:",
+      },
+      uiComponents: {
+        description: "shadcn/ui style styled components",
+        intro: "This project also provides a shadcn/ui style component library built with {radixPkg} implementing out-of-the-box styled components.",
+        featuresTitle: "Key Features",
+        features: {
+          modern: { title: "Modern Design", desc: "Modern design system based on Tailwind CSS" },
+          custom: { title: "Fully Customizable", desc: "Supports full customization of styles and themes" },
+          spec: { title: "Design Specs", desc: "Consistent with shadcn/ui design specifications" },
+          ready: { title: "Ready to Use", desc: "No configuration needed, use beautiful UI directly" },
+        },
+        usage: "Usage",
+        usageDesc: "These components are located in the {dir} directory and can be copied directly to your project.",
+      },
+      development: {
+        description: "Contribute code and add new components",
+        structure: "Project Structure",
+        commands: "Development Commands",
+        dev: "Start development server",
+        build: "Build all packages",
+        buildRadix: "Build @ensolid/radix",
+        addComponent: "Add New Component",
+        steps: {
+          step1: { title: "Create component file", desc: "Create a new component in the appropriate package directory" },
+          step2: { title: "Export from index.ts", desc: "Ensure component can be used externally" },
+          step3: { title: "Create styled wrapper", desc: "Add styles in src/components/ui/ (if needed)" },
+          step4: { title: "Create examples", desc: "Provide usage examples and documentation" },
+        },
+        important: "Important Note",
+        aiNote: "This project uses AI for porting, resulting in:",
+        aiIssues: {
+          incomplete: "Code might be incomplete with potential issues",
+          untested: "Features might not be fully tested",
+          apiDiff: "APIs might differ from original libraries",
+          perf: "Performance optimization might be insufficient",
+        },
+        caution: "Please use with caution; thorough testing before production use is recommended.",
+        structureCode: `ensolid/
+├── packages/                    # Monorepo packages
+│   ├── radix/                  # Radix UI Primitives port
+│   ├── baseui/                 # BaseUI component library
+│   ├── solidflow/              # SolidFlow component library
+│   └── cli/                    # CLI tool
+├── public/
+│   └── registry/               # Component registry
+├── src/                        # Source code
+│   ├── components/
+│   │   └── ui/                 # shadcn/ui style components
+│   ├── examples/               # Component examples
+│   └── pages/                  # Page components
+├── package.json
+└── vite.config.ts`
       }
     }
   },
@@ -583,6 +760,7 @@ export const en = {
   },
   chartsPage: {
     title: "Chart Gallery",
+    badge: "Data Visualization",
     subtitle: "Explore {total} data visualization charts across {categories} categories",
     categoryTitle: "Chart Categories",
     backToList: "Back to List",
