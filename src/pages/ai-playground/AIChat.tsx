@@ -57,6 +57,7 @@ import {
 } from "@/components/ai-elements/model-selector";
 import { MessageResponse } from "@/components/ai-elements/message";
 import { Suggestion, Suggestions } from "@/components/ai-elements/suggestion";
+import { useI18n } from "@/i18n";
 
 // 图标组件
 const CheckIcon = (props: { size?: number; class?: string }) => (
@@ -191,16 +192,7 @@ const models = [
   },
 ];
 
-const suggestions = [
-  "AI 的最新趋势是什么？",
-  "机器学习是如何工作的？",
-  "解释一下量子计算",
-  "React 开发的最佳实践",
-  "告诉我 TypeScript 的好处",
-  "如何优化数据库查询？",
-  "SQL 和 NoSQL 有什么区别？",
-  "解释一下云计算基础知识",
-];
+
 
 export interface AIChatProps {
   /**
@@ -269,6 +261,7 @@ const PromptInputSubmitWithController: Component<{
 };
 
 export const AIChat: Component<AIChatProps> = (props) => {
+  const { t } = useI18n();
   // 创建 GatewayChatTransport
   // 如果提供了 modelId 则使用它，否则使用默认的模型 ID
   console.log("registry", registry);
@@ -393,8 +386,8 @@ export const AIChat: Component<AIChatProps> = (props) => {
             when={hasMessages()}
             fallback={
               <ConversationEmptyState
-                title="欢迎使用 AI 助手"
-                description="我可以帮助您解答问题、提供建议或进行对话。请在下方输入您的问题，或选择一个建议开始。"
+                title={t().aiPlayground.aichat.welcomeTitle}
+                description={t().aiPlayground.aichat.welcomeDesc}
                 icon={<WelcomeIcon />}
               />
             }
@@ -424,7 +417,7 @@ export const AIChat: Component<AIChatProps> = (props) => {
                           <MessageActions>
                             <MessageAction
                               onClick={() => regenerate()}
-                              label="重试"
+                              label={t().aiPlayground.aichat.actions.retry}
                               size="icon-sm"
                             >
                               <RefreshCcwIcon size={12} />
@@ -433,7 +426,7 @@ export const AIChat: Component<AIChatProps> = (props) => {
                               onClick={() =>
                                 navigator.clipboard.writeText(textContent)
                               }
-                              label="复制"
+                              label={t().aiPlayground.aichat.actions.copy}
                               size="icon-sm"
                             >
                               <CopyIcon size={12} />
@@ -457,10 +450,10 @@ export const AIChat: Component<AIChatProps> = (props) => {
         <Show when={!hasMessages()}>
           <div class="mx-auto max-w-3xl px-4 pt-4">
             <div class="mb-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-              建议问题
+              {t().aiPlayground.aichat.suggestionsTitle}
             </div>
             <Suggestions>
-              <For each={suggestions}>
+              <For each={Object.values(t().aiPlayground.aichat.suggestions)}>
                 {(suggestion) => (
                   <Suggestion
                     suggestion={suggestion}
@@ -494,7 +487,7 @@ export const AIChat: Component<AIChatProps> = (props) => {
                 <PromptInputBody>
                   <PromptInputTextarea
                     placeholder={
-                      hasMessages() ? "继续对话..." : "输入您的问题或想法..."
+                      hasMessages() ? t().aiPlayground.aichat.placeholder.continue : t().aiPlayground.aichat.placeholder.initial
                     }
                     onChange={(event) =>
                       setText((event.target as HTMLTextAreaElement).value)
@@ -514,19 +507,19 @@ export const AIChat: Component<AIChatProps> = (props) => {
                       onClick={() => setUseMicrophone(!useMicrophone())}
                       variant={useMicrophone() ? "default" : "ghost"}
                       size="icon"
-                      title="语音输入"
+                      title={t().aiPlayground.aichat.tools.microphone}
                     >
                       <MicIcon size={16} />
-                      <span class="sr-only">麦克风</span>
+                      <span class="sr-only">{t().aiPlayground.aichat.tools.microphone}</span>
                     </PromptInputButton>
                     <PromptInputButton
                       onClick={() => setUseWebSearch(!useWebSearch())}
                       variant={useWebSearch() ? "default" : "ghost"}
                       size="icon"
-                      title="网络搜索"
+                      title={t().aiPlayground.aichat.tools.search}
                     >
                       <GlobeIcon size={16} />
-                      <span class="sr-only">搜索</span>
+                      <span class="sr-only">{t().aiPlayground.aichat.tools.search}</span>
                     </PromptInputButton>
                     <ModelSelector
                       onOpenChange={setModelSelectorOpen}
@@ -545,9 +538,9 @@ export const AIChat: Component<AIChatProps> = (props) => {
                         </Show>
                       </ModelSelectorTrigger>
                       <ModelSelectorContent>
-                        <ModelSelectorInput placeholder="搜索模型..." />
+                        <ModelSelectorInput placeholder={t().aiPlayground.aichat.modelSelector.placeholder} />
                         <ModelSelectorList>
-                          <ModelSelectorEmpty>未找到模型。</ModelSelectorEmpty>
+                          <ModelSelectorEmpty>{t().aiPlayground.aichat.modelSelector.empty}</ModelSelectorEmpty>
                           <For each={["OpenAI", "Anthropic", "Google"]}>
                             {(chef) => (
                               <div>

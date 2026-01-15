@@ -28,7 +28,7 @@ import { pluginRegistry } from "./workflow/plugins";
 import { registerBuiltinNodes } from "./workflow/plugins/builtin";
 
 // Helper to extract tasks from plugin registry
-const getTasksFromRegistry = () => {
+const getTasksFromRegistry = (t: any) => {
     const registryTasks: Record<string, any> = {};
     const nodeTypes = pluginRegistry.getNodeTypes();
     
@@ -40,7 +40,7 @@ const getTasksFromRegistry = () => {
     
     // Add default fallback if not present
     if (!registryTasks['default']) {
-        registryTasks['default'] = async () => "Simple Node Executed";
+        registryTasks['default'] = async () => t().workflowPage.defaultNodeExecuted;
     }
     
     return registryTasks;
@@ -61,29 +61,35 @@ export const WorkflowPage: Component = () => {
       id: "trigger-1",
       type: "trigger",
       position: { x: 50, y: 300 },
-      data: { label: "Start" },
+      data: { label: t().workflowPage.initialNodes.start },
     },
     {
       id: "agent-researcher",
       type: "agent",
       position: { x: 250, y: 200 },
-      data: { label: "Market Researcher", role: "Researcher", model: "GPT-4" },
+      data: { 
+        label: t().workflowPage.initialNodes.researcher, 
+        role: t().workflowPage.initialNodes.researcherRole, 
+        model: "GPT-4" 
+      },
     },
     {
       id: "task-analyze",
       type: "task",
       position: { x: 550, y: 200 },
       data: {
-        label: "Analyze Trends",
-        description:
-          "Analyze the latest market trends based on the research data.",
+        label: t().workflowPage.initialNodes.analyze,
+        description: t().workflowPage.initialNodes.analyzeDesc,
       },
     },
     {
       id: "start-2",
       type: "agent",
       position: { x: 250, y: 450 },
-      data: { label: "Copywriter", role: "Writer" },
+      data: { 
+        label: t().workflowPage.initialNodes.copywriter, 
+        role: t().workflowPage.initialNodes.copywriterRole 
+      },
     },
   ]);
 
@@ -105,7 +111,7 @@ export const WorkflowPage: Component = () => {
   const [executor, setExecutor] = createSignal<Executor | null>(null);
 
   const handleRun = () => {
-    const tasks = getTasksFromRegistry();
+    const tasks = getTasksFromRegistry(t);
     console.log("Starting execution with tasks:", Object.keys(tasks));
     
     const exec = new Executor({

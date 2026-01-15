@@ -206,7 +206,7 @@ export const PlaygroundChatbot: Component<PlaygroundChatbotProps> = (props) => {
                         )}
                       >
                         <div class="text-xs font-medium mb-1 opacity-70">
-                          {message.role === "user" ? "你" : "AI"}
+                          {message.role === "user" ? t().aiPlayground.chat.roleUser : t().aiPlayground.chat.roleAI}
                         </div>
                         <div class="text-sm whitespace-pre-wrap">
                           {textContent}
@@ -236,7 +236,7 @@ export const PlaygroundChatbot: Component<PlaygroundChatbotProps> = (props) => {
         {/* 错误提示 */}
         <Show when={error()}>
           <div class="px-4 py-2 bg-destructive/10 text-destructive text-sm border-t">
-            <strong>错误：</strong> {error()?.message}
+            <strong>{t().aiPlayground.chat.error}</strong> {error()?.message}
           </div>
         </Show>
 

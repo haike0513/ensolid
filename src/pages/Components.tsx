@@ -421,7 +421,7 @@ export const ComponentsPage: Component = () => {
                 <div class="flex items-center justify-between mb-3">
                   <div class="flex items-center gap-2">
                     <span class="text-lg">📋</span>
-                    <span class="text-sm font-semibold">组件列表</span>
+                    <span class="text-sm font-semibold">{t().componentsPage.listTitle}</span>
                   </div>
                   <span class="text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
                     {filteredExamples().length}

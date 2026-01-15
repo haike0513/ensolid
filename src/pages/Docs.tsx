@@ -270,50 +270,50 @@ export const DocsPage: Component = () => {
                     <section class="space-y-6">
                       <div class="p-6 rounded-xl bg-gradient-to-br from-primary/10 via-blue-500/5 to-purple-500/10 border border-primary/20">
                         <p class="text-base leading-relaxed text-foreground/90">
-                          <strong class="text-primary">Ensolid</strong> 是一个用于完善 SolidJS 生态相关 UI 与工具库的项目。
-                          本项目致力于将 React 生态系统中优秀的库和 UI 组件移植到 SolidJS 生态中，
-                          以丰富 SolidJS 的生态系统，为开发者提供更多可用的工具和组件。
+                          <strong class="text-primary">Ensolid</strong> {t().docs.content.overview.intro1}
+                          <br />
+                          {t().docs.content.overview.intro2}
                         </p>
                         <p class="text-base leading-relaxed text-foreground/90 mt-4">
-                          本项目采用 <strong>Monorepo 架构</strong>，包含多个独立的组件库包，每个包都可以独立使用和发布。
+                          {t().docs.content.overview.intro3}
                         </p>
                       </div>
 
                       <div>
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
                           <span class="text-2xl">✨</span>
-                          <span>项目特点</span>
+                          <span>{t().docs.content.overview.featuresTitle}</span>
                         </h3>
                         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                           <FeatureCard
                             icon="📘"
-                            title="TypeScript 支持"
-                            desc="完整的 TypeScript 类型定义，提供更好的开发体验"
+                            title={t().docs.content.overview.features.typescript.title}
+                            desc={t().docs.content.overview.features.typescript.desc}
                           />
                           <FeatureCard
                             icon="🚀"
-                            title="SSR 兼容"
-                            desc="完美支持服务端渲染，提升首屏加载性能"
+                            title={t().docs.content.overview.features.ssr.title}
+                            desc={t().docs.content.overview.features.ssr.desc}
                           />
                           <FeatureCard
                             icon="🌳"
-                            title="Tree Shaking"
-                            desc="支持按需加载，优化打包体积"
+                            title={t().docs.content.overview.features.treeShaking.title}
+                            desc={t().docs.content.overview.features.treeShaking.desc}
                           />
                           <FeatureCard
                             icon="📦"
-                            title="Monorepo 架构"
-                            desc="统一管理，独立发布，提升开发效率"
+                            title={t().docs.content.overview.features.monorepo.title}
+                            desc={t().docs.content.overview.features.monorepo.desc}
                           />
                           <FeatureCard
                             icon="🎯"
-                            title="高度可定制"
-                            desc="灵活的配置选项，满足各种场景需求"
+                            title={t().docs.content.overview.features.customizable.title}
+                            desc={t().docs.content.overview.features.customizable.desc}
                           />
                           <FeatureCard
                             icon="⚡"
-                            title="高性能"
-                            desc="基于 SolidJS 的响应式系统，极致性能"
+                            title={t().docs.content.overview.features.performance.title}
+                            desc={t().docs.content.overview.features.performance.desc}
                           />
                         </div>
                       </div>
@@ -321,7 +321,7 @@ export const DocsPage: Component = () => {
                       <div>
                         <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
                           <span class="text-2xl">📚</span>
-                          <span>包含的库</span>
+                          <span>{t().docs.content.overview.librariesTitle}</span>
                         </h3>
                         <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
                           <div class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-background to-muted/30 border border-border/50 p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-xl hover:-translate-y-1">
@@ -330,10 +330,10 @@ export const DocsPage: Component = () => {
                               <div class="text-3xl mb-3">🎨</div>
                               <h4 class="text-lg font-semibold mb-2">@ensolid/radix</h4>
                               <p class="text-sm text-muted-foreground leading-relaxed">
-                                基于 Radix UI Primitives 移植，提供无样式、可访问的基础组件
+                                {t().docs.content.overview.radixDesc}
                               </p>
                               <div class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:gap-2 transition-all duration-300">
-                                <span>了解更多</span>
+                                <span>{t().docs.content.overview.learnMore}</span>
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -347,10 +347,10 @@ export const DocsPage: Component = () => {
                               <div class="text-3xl mb-3">🧱</div>
                               <h4 class="text-lg font-semibold mb-2">@ensolid/baseui</h4>
                               <p class="text-sm text-muted-foreground leading-relaxed">
-                                基于 BaseUI 移植，提供企业级 UI 组件库
+                                {t().docs.content.overview.baseuiDesc}
                               </p>
                               <div class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:gap-2 transition-all duration-300">
-                                <span>了解更多</span>
+                                <span>{t().docs.content.overview.learnMore}</span>
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -364,10 +364,10 @@ export const DocsPage: Component = () => {
                               <div class="text-3xl mb-3">🌊</div>
                               <h4 class="text-lg font-semibold mb-2">@ensolid/solidflow</h4>
                               <p class="text-sm text-muted-foreground leading-relaxed">
-                                基于 React Flow 移植，提供流程图和节点编辑器功能
+                                {t().docs.content.overview.solidflowDesc}
                               </p>
                               <div class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:gap-2 transition-all duration-300">
-                                <span>了解更多</span>
+                                <span>{t().docs.content.overview.learnMore}</span>
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -381,10 +381,10 @@ export const DocsPage: Component = () => {
                               <div class="text-3xl mb-3">⌨️</div>
                               <h4 class="text-lg font-semibold mb-2">@ensolid/cli</h4>
                               <p class="text-sm text-muted-foreground leading-relaxed">
-                                命令行工具，快速添加组件到你的项目中
+                                {t().docs.content.overview.cliDesc}
                               </p>
                               <div class="mt-4 inline-flex items-center gap-1 text-xs font-medium text-primary group-hover:gap-2 transition-all duration-300">
-                                <span>了解更多</span>
+                                <span>{t().docs.content.overview.learnMore}</span>
                                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                 </svg>
@@ -404,11 +404,11 @@ export const DocsPage: Component = () => {
                       <div class="flex items-center gap-3 mb-4">
                         <div class="text-4xl">⚙️</div>
                         <h2 class="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          安装指南
+                          {t().docs.sections.installation.title}
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        快速设置开发环境，开始使用 Ensolid
+                        {t().docs.sections.installation.description}
                       </p>
                     </header>
 
@@ -416,64 +416,64 @@ export const DocsPage: Component = () => {
                       <div>
                         <h3 class="text-2xl font-bold mb-4 flex items-center gap-2">
                           <span>📋</span>
-                          <span>环境要求</span>
+                          <span>{t().docs.content.installation.requirementsTitle}</span>
                         </h3>
                         <div class="grid gap-3 sm:grid-cols-3">
                           <div class="p-4 rounded-lg bg-muted/50 border border-border/50">
                             <div class="text-2xl mb-2">📗</div>
                             <div class="font-semibold text-sm mb-1">Node.js</div>
-                            <div class="text-xs text-muted-foreground">版本 18 或更高</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.installation.requirements.node}</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/50 border border-border/50">
                             <div class="text-2xl mb-2">📦</div>
                             <div class="font-semibold text-sm mb-1">pnpm</div>
-                            <div class="text-xs text-muted-foreground">版本 8 或更高（推荐）</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.installation.requirements.pnpm}</div>
                           </div>
                           <div class="p-4 rounded-lg bg-muted/50 border border-border/50">
                             <div class="text-2xl mb-2">⚛️</div>
                             <div class="font-semibold text-sm mb-1">SolidJS</div>
-                            <div class="text-xs text-muted-foreground">版本 1.9 或更高</div>
+                            <div class="text-xs text-muted-foreground">{t().docs.content.installation.requirements.solid}</div>
                           </div>
                         </div>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">安装 pnpm</h3>
-                        <p class="mb-4 text-muted-foreground">如果还没有安装 pnpm，可以通过以下方式安装：</p>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.installation.installPnpm}</h3>
+                        <p class="mb-4 text-muted-foreground">{t().docs.content.installation.installPnpmDesc}</p>
                         <CodeBlock code="npm install -g pnpm" language="bash" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">克隆项目</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.installation.cloneProject}</h3>
                         <CodeBlock code={`git clone https://github.com/your-org/ensolid.git
 cd ensolid`} language="bash" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">安装依赖</h3>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.installation.installDeps}</h3>
                         <CodeBlock code="pnpm install" language="bash" />
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">开发模式</h3>
-                        <p class="mb-4 text-muted-foreground">启动开发服务器：</p>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.installation.devMode}</h3>
+                        <p class="mb-4 text-muted-foreground">{t().docs.content.installation.startDevDesc}</p>
                         <CodeBlock code="pnpm dev" language="bash" />
                         <div class="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-start gap-3">
                           <div class="text-xl">💡</div>
                           <div>
-                            <p class="text-sm font-medium mb-1">提示</p>
+                            <p class="text-sm font-medium mb-1">{t().docs.content.installation.tip}</p>
                             <p class="text-xs text-muted-foreground">
-                              开发服务器将在 <code class="px-2 py-0.5 rounded bg-muted text-primary text-xs">http://localhost:5173</code> 启动
+                              {t().docs.content.installation.devServerTip} <code class="px-2 py-0.5 rounded bg-muted text-primary text-xs">http://localhost:5173</code>
                             </p>
                           </div>
                         </div>
                       </div>
 
                       <div>
-                        <h3 class="text-2xl font-bold mb-4">构建项目</h3>
-                        <p class="mb-4 text-muted-foreground">构建所有包：</p>
+                        <h3 class="text-2xl font-bold mb-4">{t().docs.content.installation.buildProject}</h3>
+                        <p class="mb-4 text-muted-foreground">{t().docs.content.installation.buildAll}</p>
                         <CodeBlock code="pnpm build" language="bash" />
-                        <p class="mb-4 mt-6 text-muted-foreground">构建单个包：</p>
+                        <p class="mb-4 mt-6 text-muted-foreground">{t().docs.content.installation.buildSingle}</p>
                         <CodeBlock code={`pnpm build:radix
 pnpm build:baseui
 pnpm build:solidflow`} language="bash" />

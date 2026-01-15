@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { useI18n } from "../i18n";
 
 // 太阳图标
 const SunIcon: Component<{ class?: string }> = (props) => (
@@ -69,12 +70,13 @@ const SystemIcon: Component<{ class?: string }> = (props) => (
 );
 
 export const ThemeToggle: Component = () => {
+  const { t } = useI18n();
   const { theme, resolvedTheme, setTheme } = useTheme();
 
   const themeOptions: { value: Theme; label: string; icon: Component<{ class?: string }> }[] = [
-    { value: "light", label: "亮色模式", icon: SunIcon },
-    { value: "dark", label: "暗色模式", icon: MoonIcon },
-    { value: "system", label: "跟随系统", icon: SystemIcon },
+    { value: "light", label: t().common.lightMode, icon: SunIcon },
+    { value: "dark", label: t().common.darkMode, icon: MoonIcon },
+    { value: "system", label: t().common.systemMode, icon: SystemIcon },
   ];
 
   return (
@@ -84,7 +86,7 @@ export const ThemeToggle: Component = () => {
           variant="ghost"
           size="icon"
           class="relative h-9 w-9 group overflow-hidden"
-          aria-label="切换主题"
+          aria-label={t().common.selectTheme}
         >
           {/* 背景光效 */}
           <div class="absolute inset-0 bg-gradient-to-br from-yellow-500/10 via-transparent to-blue-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -149,6 +151,7 @@ export const ThemeToggle: Component = () => {
 
 // 简单的切换按钮（不带下拉菜单）
 export const ThemeToggleSimple: Component = () => {
+  const { t } = useI18n();
   const { resolvedTheme, toggleTheme } = useTheme();
 
   return (
@@ -156,7 +159,7 @@ export const ThemeToggleSimple: Component = () => {
       variant="ghost"
       size="icon"
       class="relative h-9 w-9 group overflow-hidden"
-      aria-label="切换主题"
+      aria-label={t().common.selectTheme}
       onClick={toggleTheme}
     >
       {/* 背景光效 */}

@@ -19,7 +19,7 @@ export const FiberPage: Component = () => {
               <div class="inline-flex items-center gap-2 mb-2 px-3 py-1 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 backdrop-blur-sm border border-purple-500/30">
                 <span class="text-xl">🎨</span>
                 <span class="text-xs font-medium bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
-                  3D Graphics
+                  {t().fiberPage.badge}
                 </span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">

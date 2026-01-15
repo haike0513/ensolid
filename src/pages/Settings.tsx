@@ -66,7 +66,7 @@ export const SettingsPage: Component = () => {
           <div class="inline-flex items-center gap-2 mb-3 px-3 py-1 rounded-full bg-gradient-to-r from-slate-500/10 to-gray-500/10 backdrop-blur-sm border border-slate-500/20">
             <span class="text-xl">⚙️</span>
             <span class="text-xs font-medium bg-gradient-to-r from-slate-600 to-gray-600 bg-clip-text text-transparent">
-              Configuration
+              {t().settings.badge}
             </span>
           </div>
           <h1 class="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 bg-clip-text text-transparent">
