@@ -32,6 +32,51 @@ export const zh = {
         toolbar: "Toolbar",
         navigationMenu: "NavigationMenu",
     },
+    componentsPage: {
+        title: "组件展示",
+        subtitle: "探索 {total} 个高质量 UI 组件，涵盖 {categories} 个分类",
+        searchPlaceholder: "搜索组件",
+        searchBoxPlaceholder: "输入组件名称...",
+        listTitle: "组件列表",
+        categoriesTitle: "组件分类",
+        allCategories: "全部",
+        categories: {
+            base: "基础组件",
+            form: "表单控件",
+            feedback: "反馈提示",
+            navigation: "导航组件",
+            data: "数据展示",
+            layout: "布局组件",
+        },
+        descriptions: {
+            button: "触发操作的按钮组件",
+            card: "卡片容器组件",
+            dialog: "对话框组件",
+            checkbox: "复选框组件",
+            switch: "开关切换组件",
+            tabs: "标签页组件",
+            accordion: "手风琴折叠面板",
+            separator: "分隔线组件",
+            alertDialog: "用于显示重要信息的警告对话框",
+            popover: "弹出层组件",
+            dropdownMenu: "下拉菜单组件",
+            tooltip: "工具提示组件",
+            select: "选择器组件",
+            slider: "滑块组件",
+            progress: "进度条组件",
+            toggle: "切换按钮组件",
+            avatar: "头像组件",
+            collapsible: "可折叠容器组件",
+            contextMenu: "右键上下文菜单组件",
+            hoverCard: "悬停显示内容的卡片组件",
+            scrollArea: "带自定义滚动条的滚动区域组件",
+            toggleGroup: "切换按钮组组件",
+            aspectRatio: "固定宽高比的容器组件",
+            menubar: "菜单栏组件",
+            toolbar: "工具栏组件",
+            navigationMenu: "导航菜单组件",
+        }
+    },
     button: {
         title: "Button 组件示例",
         variants: "变体 (Variants)",
@@ -248,6 +293,27 @@ export const zh = {
             browseComponents: "浏览组件",
             viewDocs: "查看文档",
         },
+        trustIndicators: {
+            openSource: "开源项目",
+            typescript: "TypeScript",
+            highPerformance: "高性能",
+        },
+        labels: {
+            features: "功能特性",
+            libraries: "核心组件库",
+            techStack: "技术栈",
+            updates: "持续更新中，敬请期待更多组件",
+        },
+        tags: {
+            modern: "现代化",
+            performance: "高性能",
+            extensible: "可扩展",
+        },
+        footerCTA: {
+            free: "免费开源",
+            updated: "持续更新",
+            community: "社区支持",
+        }
     },
     aiPlayground: {
         title: "AI Playground",
@@ -259,6 +325,23 @@ export const zh = {
             submit: "提交",
             processing: "处理中...",
             stop: "停止",
+        },
+        tabs: {
+            aichat: "AI Chat",
+            chat: "聊天对话",
+            completion: "文本补全",
+            generate: "文本生成",
+            settings: "设置",
+        },
+        completion: {
+            title: "文本补全",
+            description: "输入提示文本，AI 将为您补全内容",
+            placeholder: "输入提示...",
+        },
+        generateText: {
+            title: "文本生成",
+            description: "使用 generateText API 生成文本内容（支持 registry 格式的模型 ID）",
+            placeholder: "输入提示文本，例如：写一个 4 人份的素食千层戏食谱。",
         },
         aichat: {
             title: "AI Chat",
@@ -302,4 +385,238 @@ export const zh = {
             required: "API Key 是必需的",
         },
     },
+    docs: {
+        title: "技术文档",
+        subtitle: "完整的项目使用指南和库集成说明，帮助你快速上手 Ensolid 生态系统",
+        quickStart: "快速开始",
+        projectOverview: "项目概述",
+        currentReading: "当前阅读",
+        needHelp: "需要帮助？",
+        helpDesc: "查看我们的 GitHub 仓库或加入社区",
+        visitGithub: "访问 GitHub",
+        categories: {
+            start: "开始",
+            components: "组件库",
+            tools: "工具",
+            guides: "指南"
+        },
+        sections: {
+            overview: {
+                title: "项目概述",
+                description: "了解 Ensolid 项目的核心理念和架构设计"
+            },
+            installation: {
+                title: "安装指南",
+                description: "快速设置开发环境，开始使用 Ensolid"
+            },
+            radix: {
+                title: "@ensolid/radix",
+                description: "无样式、可访问的基础组件库"
+            },
+            baseui: {
+                title: "@ensolid/baseui",
+                description: "高性能的 Material Design 风格组件库"
+            },
+            solidflow: {
+                title: "@ensolid/solidflow",
+                description: "高性能流程图和节点编辑器"
+            },
+            cli: {
+                title: "@ensolid/cli",
+                description: "命令行工具，快速添加组件到项目中"
+            },
+            uiComponents: {
+                title: "UI 组件",
+                description: "基于 Radix UI 构建的高质量 UI 组件示例"
+            },
+            development: {
+                title: "开发指南",
+                description: "深入了解项目架构，参与项目开发"
+            }
+        }
+    },
+    settings: {
+        title: "设置",
+        subtitle: "管理您的应用配置和偏好设置",
+        configuration: "配置",
+        appearance: {
+            title: "外观设置",
+            description: "主题和显示选项",
+            content: "自定义应用的外观和主题设置"
+        },
+        notifications: {
+            title: "通知设置",
+            description: "管理通知偏好",
+            content: "控制应用通知和提醒方式"
+        },
+        privacy: {
+            title: "隐私设置",
+            description: "数据和隐私控制",
+            content: "管理您的数据隐私和安全选项"
+        },
+        advanced: {
+            title: "高级设置",
+            description: "开发者选项",
+            content: "高级功能和开发者工具配置"
+        }
+    },
+    blocks: {
+        title: "功能模块",
+        subtitle: "展示各种功能模块和特性组件",
+        streamdown: {
+            title: "Streamdown",
+            description: "流式 Markdown 渲染器 - 支持实时渲染和语法高亮",
+        },
+        fiber: {
+            title: "Fiber Scene",
+            description: "3D 渲染场景 - 基于 Three.js 的 SolidJS 渲染器",
+        },
+        features: {
+            performance: {
+                title: "高性能渲染",
+                description: "所有组件都经过优化，提供流畅的用户体验和卓越的性能表现",
+            },
+            integration: {
+                title: "易于集成",
+                description: "简洁的 API 设计，轻松集成到你的 SolidJS 项目中",
+            }
+        }
+    },
+    chartsPage: {
+        title: "图表画廊",
+        subtitle: "探索 {total} 个数据可视化图表，涵盖 {categories} 个分类",
+        categoryTitle: "图表分类",
+        backToList: "返回列表",
+        categories: {
+            base: {
+                name: "基础图表",
+                description: "最常用的数据展示形式，适用于大多数场景",
+            },
+            comparison: {
+                name: "数据对比",
+                description: "用于多维度数据对比和分类展示",
+            },
+            distribution: {
+                name: "数据分布",
+                description: "展示数据的分布情况、离散程度和相关性",
+            },
+            trend: {
+                name: "趋势分析",
+                description: "展示数据的累积变化和趋势走向",
+            },
+            special: {
+                name: "特殊图表",
+                description: "独特的可视化形式，适用于特定场景",
+            },
+            relation: {
+                name: "关系图表",
+                description: "展示数据间的关联和流转关系",
+            }
+        }
+    },
+    fiberPage: {
+        title: "Fiber 3D 场景",
+        subtitle: "基于 Three.js 的 SolidJS 3D 渲染器",
+        engine: "渲染引擎",
+        framework: "框架",
+        controls: {
+            rotate: "拖拽旋转",
+            zoom: "滚轮缩放"
+        }
+    },
+    workflowPage: {
+        title: "工作流编辑器",
+        subtitle: "拖拽节点构建 AI 工作流",
+        stats: {
+            nodes: "节点",
+            edges: "连接"
+        },
+        propertyPanel: {
+            title: "属性设置",
+            nodeName: "节点名称",
+            role: "角色",
+            model: "模型",
+            description: "描述",
+            placeholder: {
+                name: "名称",
+                role: "例如：研究员",
+                description: "描述任务..."
+            }
+        },
+        errors: {
+            invalidFile: "无效的工作流文件格式",
+            parseError: "解析 JSON 文件错误"
+        }
+    },
+    solidFlowPage: {
+        title: "流程图编辑器",
+        subtitle: "高性能的 SolidJS 流程图组件库，支持复杂的工作流编辑",
+        features: {
+            title: "核心特性",
+            items: [
+                "高性能渲染引擎",
+                "丰富的交互功能",
+                "完全可定制化",
+                "TypeScript 支持"
+            ]
+        },
+        exampleList: "示例列表",
+        difficulties: {
+            easy: "简单",
+            medium: "中等",
+            advanced: "高级"
+        },
+        examples: {
+            basic: {
+                name: "基础示例",
+                description: "展示 SolidFlow 的基础用法和核心功能",
+                features: ["节点渲染", "边连接", "基础交互"]
+            },
+            customNode: {
+                name: "自定义节点",
+                description: "创建和使用自定义样式的节点组件",
+                features: ["自定义样式", "节点类型", "动态渲染"]
+            },
+            interactive: {
+                name: "交互式示例",
+                description: "支持拖拽、缩放、选择等丰富交互功能",
+                features: ["拖拽节点", "画布缩放", "节点选择", "连线交互"]
+            },
+            editor: {
+                name: "完整编辑器",
+                description: "功能完整的流程图编辑器，支持所有高级特性",
+                features: ["完整编辑", "撤销重做", "导入导出", "快捷键", "工具栏"]
+            },
+            undoRedo: {
+                name: "撤销/重做",
+                description: "展示历史记录管理和撤销/重做功能",
+                features: ["历史记录", "撤销重做", "键盘快捷键", "状态管理"]
+            },
+            copyPaste: {
+                name: "复制粘贴",
+                description: "展示节点和边的复制粘贴功能",
+                features: ["复制节点", "粘贴节点", "自动生成ID", "相关边复制"]
+            },
+            alignment: {
+                name: "节点对齐",
+                description: "展示节点对齐辅助线和网格对齐功能",
+                features: ["对齐辅助线", "网格对齐", "智能吸附", "视觉反馈"]
+            },
+            nodeGroup: {
+                name: "节点分组",
+                description: "展示节点分组和嵌套节点功能",
+                features: ["父节点", "子节点", "边界限制", "嵌套结构"]
+            },
+            importExport: {
+                name: "导入导出",
+                description: "展示流程图的导入导出功能",
+                features: ["JSON导出", "JSON导入", "版本兼容", "文件操作"]
+            },
+            waypoint: {
+                name: "边中间点编辑",
+                description: "展示边中间点编辑功能，支持拖拽调整边路径",
+                features: ["中间点编辑", "路径调整", "拖拽控制点", "多中间点支持"]
+            }
+        }
+    }
 };

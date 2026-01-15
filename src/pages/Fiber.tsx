@@ -1,8 +1,10 @@
 import type { Component } from 'solid-js';
 import { Canvas } from '@ensolid/fiber';
 import { FiberScene } from './fiber/Scene.fiber';
+import { useI18n } from "../i18n";
 
 export const FiberPage: Component = () => {
+  const { t } = useI18n();
   return (
     <div class="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
       {/* 背景装饰 */}
@@ -21,19 +23,19 @@ export const FiberPage: Component = () => {
                 </span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight bg-gradient-to-r from-purple-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">
-                Fiber 3D 场景
+                {t().fiberPage.title}
               </h1>
               <p class="text-sm text-gray-400 mt-1">
-                基于 Three.js 的 SolidJS 3D 渲染器
+                {t().fiberPage.subtitle}
               </p>
             </div>
             <div class="flex gap-4 text-sm">
               <div class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
-                <div class="text-gray-400 text-xs mb-1">渲染引擎</div>
+                <div class="text-gray-400 text-xs mb-1">{t().fiberPage.engine}</div>
                 <div class="text-white font-medium">Three.js</div>
               </div>
               <div class="px-4 py-2 rounded-lg bg-white/5 border border-white/10 backdrop-blur-sm">
-                <div class="text-gray-400 text-xs mb-1">框架</div>
+                <div class="text-gray-400 text-xs mb-1">{t().fiberPage.framework}</div>
                 <div class="text-white font-medium">SolidJS</div>
               </div>
             </div>
@@ -66,12 +68,12 @@ export const FiberPage: Component = () => {
         <div class="flex gap-4 px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10">
           <div class="flex items-center gap-2 text-sm">
             <div class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></div>
-            <span class="text-gray-300">拖拽旋转</span>
+            <span class="text-gray-300">{t().fiberPage.controls.rotate}</span>
           </div>
           <div class="w-px h-4 bg-white/20"></div>
           <div class="flex items-center gap-2 text-sm">
             <div class="w-2 h-2 rounded-full bg-blue-400 animate-pulse" style={{ "animation-delay": "0.5s" }}></div>
-            <span class="text-gray-300">滚轮缩放</span>
+            <span class="text-gray-300">{t().fiberPage.controls.zoom}</span>
           </div>
         </div>
       </div>

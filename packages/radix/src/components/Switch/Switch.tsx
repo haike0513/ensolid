@@ -74,3 +74,7 @@ export const Switch: Component<SwitchProps> = (props) => {
   );
 };
 
+export const SwitchThumb: Component<JSX.HTMLAttributes<HTMLSpanElement>> = (props) => {
+  return <span {...props} />;
+};
+

@@ -309,9 +309,9 @@ export const HomePage: Component = () => {
             {/* 信任指标 */}
             <div class="mt-16 flex flex-wrap items-center justify-center gap-8 animate-reveal-up" style={{ "animation-delay": "0.5s" }}>
               {[
-                { icon: "⭐", text: "开源项目", color: "text-yellow-500" },
-                { icon: "✓", text: "TypeScript", color: "text-green-500" },
-                { icon: "⚡", text: "高性能", color: "text-blue-500" },
+                { icon: "⭐", text: t().home.trustIndicators.openSource, color: "text-yellow-500" },
+                { icon: "✓", text: t().home.trustIndicators.typescript, color: "text-green-500" },
+                { icon: "⚡", text: t().home.trustIndicators.highPerformance, color: "text-blue-500" },
               ].map((item) => (
                 <div class="flex items-center gap-2 text-sm text-muted-foreground">
                   <span class={item.color}>{item.icon}</span>
@@ -345,7 +345,7 @@ export const HomePage: Component = () => {
           <div class="text-center mb-16">
             <div class="inline-flex items-center gap-2 mb-4 px-5 py-2.5 rounded-full glass-card animate-reveal-up">
               <span class="text-xl">✨</span>
-              <span class="text-sm font-semibold text-primary">Features</span>
+              <span class="text-sm font-semibold text-primary">{t().home.labels.features}</span>
             </div>
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent animate-reveal-up" style={{ "animation-delay": "0.1s" }}>
               {t().home.advantages.title}
@@ -369,7 +369,7 @@ export const HomePage: Component = () => {
           <div class="text-center mb-16">
             <div class="inline-flex items-center gap-2 mb-4 px-5 py-2.5 rounded-full glass-card animate-reveal-up">
               <span class="text-xl">📦</span>
-              <span class="text-sm font-semibold text-blue-500">Libraries</span>
+              <span class="text-sm font-semibold text-blue-500">{t().home.labels.libraries}</span>
             </div>
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground via-blue-500 to-foreground bg-clip-text text-transparent animate-reveal-up" style={{ "animation-delay": "0.1s" }}>
               {t().home.libraries.title}
@@ -386,7 +386,7 @@ export const HomePage: Component = () => {
           <div class="mt-16 text-center animate-reveal-up" style={{ "animation-delay": "0.5s" }}>
             <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full glass-card">
               <span class="text-primary">⚡</span>
-              <span class="text-sm font-medium text-foreground/70 dark:text-foreground/80">持续更新中，敬请期待更多组件</span>
+              <span class="text-sm font-medium text-foreground/70 dark:text-foreground/80">{t().home.labels.updates}</span>
             </div>
           </div>
         </div>
@@ -402,7 +402,7 @@ export const HomePage: Component = () => {
           <div class="text-center mb-16">
             <div class="inline-flex items-center gap-2 mb-4 px-5 py-2.5 rounded-full glass-card animate-reveal-up">
               <span class="text-xl">🛠️</span>
-              <span class="text-sm font-semibold text-primary">Technology Stack</span>
+              <span class="text-sm font-semibold text-primary">{t().home.labels.techStack}</span>
             </div>
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent animate-reveal-up" style={{ "animation-delay": "0.1s" }}>
               {t().home.techStack.title}
@@ -417,7 +417,7 @@ export const HomePage: Component = () => {
           </div>
 
           <div class="mt-16 flex flex-wrap items-center justify-center gap-4 animate-reveal-up" style={{ "animation-delay": "0.6s" }}>
-            {["现代化", "高性能", "可扩展"].map((tag, i) => (
+            {[t().home.tags.modern, t().home.tags.performance, t().home.tags.extensible].map((tag, i) => (
               <div class="group flex items-center gap-2.5 px-5 py-2.5 rounded-full glass-card transition-all duration-300 hover:scale-105">
                 <div class={`w-3 h-3 rounded-full bg-gradient-to-r ${i === 0 ? 'from-blue-500 to-cyan-500' : i === 1 ? 'from-purple-500 to-pink-500' : 'from-orange-500 to-amber-500'} transition-transform duration-300 group-hover:scale-125`} />
                 <span class="text-sm font-medium text-foreground/70 dark:text-foreground/80 group-hover:text-foreground transition-colors">{tag}</span>
@@ -480,9 +480,9 @@ export const HomePage: Component = () => {
 
                 <div class="mt-12 flex flex-wrap items-center justify-center gap-6 text-sm text-foreground/70 dark:text-foreground/80">
                   {[
-                    { color: "text-green-500", text: "免费开源" },
-                    { color: "text-blue-500", text: "持续更新" },
-                    { color: "text-purple-500", text: "社区支持" },
+                    { color: "text-green-500", text: t().home.footerCTA.free },
+                    { color: "text-blue-500", text: t().home.footerCTA.updated },
+                    { color: "text-purple-500", text: t().home.footerCTA.community },
                   ].map((item) => (
                     <div class="flex items-center gap-2">
                       <span class={item.color}>✓</span>

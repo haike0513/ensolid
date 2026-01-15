@@ -128,11 +128,15 @@ const PopoverBase: Component<PopoverProps> = (props) => {
 export interface PopoverComponent extends Component<PopoverProps> {
   Trigger: Component<PopoverTriggerProps>;
   Content: Component<PopoverContentProps>;
+  Anchor: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Close: Component<JSX.HTMLAttributes<HTMLButtonElement>>;
 }
 
 export const Popover = Object.assign(PopoverBase, {
   Trigger: null as unknown as Component<PopoverTriggerProps>,
   Content: null as unknown as Component<PopoverContentProps>,
+  Anchor: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Close: null as unknown as Component<JSX.HTMLAttributes<HTMLButtonElement>>,
 }) as PopoverComponent;
 
 export interface PopoverTriggerProps
@@ -189,6 +193,22 @@ export interface PopoverContentProps
    * 子元素
    */
   children?: JSX.Element;
+  /**
+   * 显示位置
+   */
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  /**
+   * 偏移量
+   */
+  sideOffset?: number;
+  /**
+   * 对齐方式
+   */
+  align?: 'start' | 'center' | 'end';
+  /**
+   * 对齐偏移量
+   */
+  alignOffset?: number;
 }
 
 export const PopoverContent: Component<PopoverContentProps> = (props) => {
@@ -261,5 +281,16 @@ export const PopoverContent: Component<PopoverContentProps> = (props) => {
   );
 };
 
+export interface PopoverAnchorProps extends JSX.HTMLAttributes<HTMLDivElement> {}
+export interface PopoverCloseProps extends JSX.HTMLAttributes<HTMLButtonElement> {}
+
+export const PopoverAnchor: Component<PopoverAnchorProps> = (props) => <div {...props} />;
+export const PopoverClose: Component<PopoverCloseProps> = (props) => {
+  const context = usePopoverContext();
+  return <button type="button" onClick={() => context.setOpen(false)} {...props} />;
+};
+
 Popover.Trigger = PopoverTrigger;
 Popover.Content = PopoverContent;
+Popover.Anchor = PopoverAnchor;
+Popover.Close = PopoverClose;

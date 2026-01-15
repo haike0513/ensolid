@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "strict": true,
+    "skipLibCheck": true,
+    "baseUrl": "../..",
+    "paths": {
+      "@/registry/*": ["./*"],
+      "@ensolid/radix": ["./packages/radix/src"],
+      "@ensolid/baseui": ["./packages/baseui/src"],
+      "@ensolid/solidflow": ["./packages/solidflow/src"],
+      "@ensolid/visx": ["./packages/visx/src"],
+      "@ensolid/fiber": ["./packages/fiber/src"],
+      "@ensolid/aisolid": ["./packages/aisolid/src"]
+    }
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}

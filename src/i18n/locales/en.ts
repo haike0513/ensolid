@@ -32,6 +32,51 @@ export const en = {
     toolbar: "Toolbar",
     navigationMenu: "NavigationMenu",
   },
+  componentsPage: {
+    title: "Component Showcase",
+    subtitle: "Explore {total} high-quality UI components across {categories} categories",
+    searchPlaceholder: "Search Components",
+    searchBoxPlaceholder: "Enter component name...",
+    listTitle: "Component List",
+    categoriesTitle: "Component Categories",
+    allCategories: "All",
+    categories: {
+      base: "Base Components",
+      form: "Form Controls",
+      feedback: "Feedback",
+      navigation: "Navigation",
+      data: "Data Display",
+      layout: "Layout",
+    },
+    descriptions: {
+      button: "Button component for triggering actions",
+      card: "Card container component",
+      dialog: "Dialog component",
+      checkbox: "Checkbox component",
+      switch: "Switch toggle component",
+      tabs: "Tabs component",
+      accordion: "Accordion folding panel",
+      separator: "Separator line component",
+      alertDialog: "Alert dialog for important info",
+      popover: "Popover layer component",
+      dropdownMenu: "Dropdown menu component",
+      tooltip: "Tooltip component",
+      select: "Select component",
+      slider: "Slider component",
+      progress: "Progress bar component",
+      toggle: "Toggle button component",
+      avatar: "Avatar component",
+      collapsible: "Collapsible container",
+      contextMenu: "Context menu component",
+      hoverCard: "Hover card component",
+      scrollArea: "Scroll area component",
+      toggleGroup: "Toggle group component",
+      aspectRatio: "Aspect ratio container",
+      menubar: "Menubar component",
+      toolbar: "Toolbar component",
+      navigationMenu: "Navigation menu component",
+    }
+  },
   button: {
     title: "Button Component Example",
     variants: "Variants",
@@ -248,6 +293,27 @@ export const en = {
       browseComponents: "Browse Components",
       viewDocs: "View Documentation",
     },
+    trustIndicators: {
+      openSource: "Open Source",
+      typescript: "TypeScript",
+      highPerformance: "High Performance",
+    },
+    labels: {
+      features: "Features",
+      libraries: "Libraries",
+      techStack: "Tech Stack",
+      updates: "Continuously updated, stay tuned for more components",
+    },
+    tags: {
+      modern: "Modern",
+      performance: "Performance",
+      extensible: "Extensible",
+    },
+    footerCTA: {
+      free: "Free & Open Source",
+      updated: "Continuously Updated",
+      community: "Community Support",
+    }
   },
   aiPlayground: {
     title: "AI Playground",
@@ -259,6 +325,23 @@ export const en = {
       submit: "Submit",
       processing: "Processing...",
       stop: "Stop",
+    },
+    tabs: {
+      aichat: "AI Chat",
+      chat: "Chat Conversation",
+      completion: "Text Completion",
+      generate: "Text Generation",
+      settings: "Settings",
+    },
+    completion: {
+      title: "Text Completion",
+      description: "Enter prompt text, AI will complete the content for you",
+      placeholder: "Enter prompt...",
+    },
+    generateText: {
+      title: "Text Generation",
+      description: "Generate text content using the generateText API (supports registry format model IDs)",
+      placeholder: "Enter prompt text, e.g.: Write a vegetarian lasagna recipe for 4 people.",
     },
     aichat: {
       title: "AI Chat",
@@ -302,5 +385,239 @@ export const en = {
       required: "API Key is required",
     },
   },
+  docs: {
+    title: "Documentation",
+    subtitle: "Complete project guide and library integration instructions to help you get started quickly with the Ensolid ecosystem",
+    quickStart: "Quick Start",
+    projectOverview: "Project Overview",
+    currentReading: "Current Reading",
+    needHelp: "Need Help?",
+    helpDesc: "Check our GitHub repository or join the community",
+    visitGithub: "Visit GitHub",
+    categories: {
+      start: "Getting Started",
+      components: "Libraries",
+      tools: "Tools",
+      guides: "Guides"
+    },
+    sections: {
+      overview: {
+        title: "Project Overview",
+        description: "Understand the core concepts and architectural design of the Ensolid project"
+      },
+      installation: {
+        title: "Installation Guide",
+        description: "Quickly set up your development environment and start using Ensolid"
+      },
+      radix: {
+        title: "@ensolid/radix",
+        description: "Unstyled, accessible base component library"
+      },
+      baseui: {
+        title: "@ensolid/baseui",
+        description: "High-performance Material Design style component library"
+      },
+      solidflow: {
+        title: "@ensolid/solidflow",
+        description: "High-performance flow diagram and node editor"
+      },
+      cli: {
+        title: "@ensolid/cli",
+        description: "Command-line tool to quickly add components to your project"
+      },
+      uiComponents: {
+        title: "UI Components",
+        description: "High-quality UI component examples built on Radix UI"
+      },
+      development: {
+        title: "Development Guide",
+        description: "In-depth understanding of project architecture and contributing to development"
+      }
+    }
+  },
+  settings: {
+    title: "Settings",
+    subtitle: "Manage your application configuration and preferences",
+    configuration: "Configuration",
+    appearance: {
+      title: "Appearance Settings",
+      description: "Theme and display options",
+      content: "Customize the look and theme settings of the application"
+    },
+    notifications: {
+      title: "Notification Settings",
+      description: "Manage notification preferences",
+      content: "Control how application notifications and alerts work"
+    },
+    privacy: {
+      title: "Privacy Settings",
+      description: "Data and privacy controls",
+      content: "Manage your data privacy and security options"
+    },
+    advanced: {
+      title: "Advanced Settings",
+      description: "Developer options",
+      content: "Advanced features and developer tool configuration"
+    }
+  },
+  blocks: {
+    title: "Feature Blocks",
+    subtitle: "Showcase various functional modules and feature components",
+    streamdown: {
+      title: "Streamdown",
+      description: "Streaming Markdown renderer - supports real-time rendering and syntax highlighting",
+    },
+    fiber: {
+      title: "Fiber Scene",
+      description: "3D rendering scene - SolidJS renderer based on Three.js",
+    },
+    features: {
+      performance: {
+        title: "High Performance",
+        description: "All components are optimized to provide a smooth user experience and excellent performance",
+      },
+      integration: {
+        title: "Easy to Integrate",
+        description: "Simple API design, easy to integrate into your SolidJS project",
+      }
+    }
+  },
+  chartsPage: {
+    title: "Chart Gallery",
+    subtitle: "Explore {total} data visualization charts across {categories} categories",
+    categoryTitle: "Chart Categories",
+    backToList: "Back to List",
+    categories: {
+      base: {
+        name: "Base Charts",
+        description: "Most common data presentation forms, suitable for most scenarios",
+      },
+      comparison: {
+        name: "Data Comparison",
+        description: "Used for multi-dimensional data comparison and categorical display",
+      },
+      distribution: {
+        name: "Data Distribution",
+        description: "Show data distribution, dispersion, and correlation",
+      },
+      trend: {
+        name: "Trend Analysis",
+        description: "Show cumulative change and trend of data",
+      },
+      special: {
+        name: "Special Charts",
+        description: "Unique visualization forms, suitable for specific scenarios",
+      },
+      relation: {
+        name: "Relational Charts",
+        description: "Show associations and flow relationships between data",
+      }
+    }
+  },
+  fiberPage: {
+    title: "Fiber 3D Scene",
+    subtitle: "SolidJS 3D renderer based on Three.js",
+    engine: "Engine",
+    framework: "Framework",
+    controls: {
+      rotate: "Drag to Rotate",
+      zoom: "Scroll to Zoom"
+    }
+  },
+  workflowPage: {
+    title: "Workflow Editor",
+    subtitle: "Drag and drop nodes to build AI workflows",
+    stats: {
+      nodes: "Nodes",
+      edges: "Edges"
+    },
+    propertyPanel: {
+      title: "Property Settings",
+      nodeName: "Node Name",
+      role: "Role",
+      model: "Model",
+      description: "Description",
+      placeholder: {
+        name: "Name",
+        role: "e.g. Researcher",
+        description: "Describe the task..."
+      }
+    },
+    errors: {
+      invalidFile: "Invalid workflow file format",
+      parseError: "Error parsing JSON file"
+    }
+  },
+  solidFlowPage: {
+    title: "Flow Editor",
+    subtitle: "High-performance SolidJS flow chart component library, supporting complex workflow editing",
+    features: {
+      title: "Core Features",
+      items: [
+        "High-performance rendering engine",
+        "Rich interactive features",
+        "Fully customizable",
+        "TypeScript support"
+      ]
+    },
+    exampleList: "Example List",
+    difficulties: {
+      easy: "Easy",
+      medium: "Medium",
+      advanced: "Advanced"
+    },
+    examples: {
+      basic: {
+        name: "Basic Example",
+        description: "Show base usage and core features of SolidFlow",
+        features: ["Node rendering", "Edge connection", "Base interaction"]
+      },
+      customNode: {
+        name: "Custom Node",
+        description: "Create and use custom styled node components",
+        features: ["Custom styling", "Node types", "Dynamic rendering"]
+      },
+      interactive: {
+        name: "Interactive Example",
+        description: "Support rich interactive features like drag, zoom, and select",
+        features: ["Drag nodes", "Canvas zoom", "Node selection", "Connection interaction"]
+      },
+      editor: {
+        name: "Full Editor",
+        description: "Full-featured flow editor supporting all advanced features",
+        features: ["Full editing", "Undo/Redo", "Import/Export", "Shortcuts", "Toolbar"]
+      },
+      undoRedo: {
+        name: "Undo/Redo",
+        description: "Show history management and undo/redo features",
+        features: ["History record", "Undo/Redo", "Keyboard shortcuts", "State management"]
+      },
+      copyPaste: {
+        name: "Copy & Paste",
+        description: "Show copy and paste features for nodes and edges",
+        features: ["Copy nodes", "Paste nodes", "Auto ID generation", "Related edges copy"]
+      },
+      alignment: {
+        name: "Node Alignment",
+        description: "Show alignment guidelines and grid snapping features",
+        features: ["Alignment guidelines", "Grid snapping", "Smart snapping", "Visual feedback"]
+      },
+      nodeGroup: {
+        name: "Node Group",
+        description: "Show node grouping and nested node features",
+        features: ["Parent node", "Child node", "Boundary limit", "Nested structure"]
+      },
+      importExport: {
+        name: "Import/Export",
+        description: "Show import and export features of the flowchart",
+        features: ["JSON Export", "JSON Import", "Version compatibility", "File operations"]
+      },
+      waypoint: {
+        name: "Edge Waypoint Editing",
+        description: "Show edge waypoint editing, support drag to adjust edge path",
+        features: ["Waypoint editing", "Path adjustment", "Drag control points", "Multi-waypoint support"]
+      }
+    }
+  }
 };
 

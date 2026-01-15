@@ -184,6 +184,22 @@ export interface HoverCardContentProps extends JSX.HTMLAttributes<HTMLDivElement
    * 子元素
    */
   children?: JSX.Element;
+  /**
+   * 显示位置
+   */
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  /**
+   * 偏移量
+   */
+  sideOffset?: number;
+  /**
+   * 对齐方式
+   */
+  align?: 'start' | 'center' | 'end';
+  /**
+   * 对齐偏移量
+   */
+  alignOffset?: number;
 }
 
 export const HoverCardContent: Component<HoverCardContentProps> = (props) => {

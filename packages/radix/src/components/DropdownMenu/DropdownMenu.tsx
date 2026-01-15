@@ -131,6 +131,15 @@ export interface DropdownMenuComponent extends Component<DropdownMenuProps> {
   Item: Component<DropdownMenuItemProps>;
   Label: Component<DropdownMenuLabelProps>;
   Separator: Component<DropdownMenuSeparatorProps>;
+  Group: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Sub: Component<DropdownMenuProps>;
+  RadioGroup: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  SubTrigger: Component<DropdownMenuItemProps>;
+  SubContent: Component<DropdownMenuContentProps>;
+  CheckboxItem: Component<DropdownMenuCheckboxItemProps>;
+  RadioItem: Component<DropdownMenuRadioItemProps>;
+  MenuItemIndicator: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Portal: Component<{ children: JSX.Element }>;
 }
 
 export const DropdownMenu = Object.assign(DropdownMenuBase, {
@@ -139,6 +148,15 @@ export const DropdownMenu = Object.assign(DropdownMenuBase, {
   Item: null as unknown as Component<DropdownMenuItemProps>,
   Label: null as unknown as Component<DropdownMenuLabelProps>,
   Separator: null as unknown as Component<DropdownMenuSeparatorProps>,
+  Group: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Sub: null as unknown as Component<DropdownMenuProps>,
+  RadioGroup: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  SubTrigger: null as unknown as Component<DropdownMenuItemProps>,
+  SubContent: null as unknown as Component<DropdownMenuContentProps>,
+  CheckboxItem: null as unknown as Component<DropdownMenuCheckboxItemProps>,
+  RadioItem: null as unknown as Component<DropdownMenuRadioItemProps>,
+  MenuItemIndicator: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Portal: null as unknown as Component<{ children: JSX.Element }>,
 }) as DropdownMenuComponent;
 
 export interface DropdownMenuTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -188,6 +206,22 @@ export interface DropdownMenuContentProps extends JSX.HTMLAttributes<HTMLDivElem
    * 子元素
    */
   children?: JSX.Element;
+  /**
+   * 显示位置
+   */
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  /**
+   * 偏移量
+   */
+  sideOffset?: number;
+  /**
+   * 对齐方式
+   */
+  align?: 'start' | 'center' | 'end';
+  /**
+   * 对齐偏移量
+   */
+  alignOffset?: number;
 }
 
 export const DropdownMenuContent: Component<DropdownMenuContentProps> = (props) => {
@@ -334,9 +368,39 @@ export const DropdownMenuSeparator: Component<DropdownMenuSeparatorProps> = (pro
   );
 };
 
+export interface DropdownMenuCheckboxItemProps extends DropdownMenuItemProps {
+  checked?: boolean;
+}
+
+export interface DropdownMenuSubTriggerProps extends DropdownMenuItemProps {}
+export interface DropdownMenuSubContentProps extends DropdownMenuContentProps {}
+
+export interface DropdownMenuRadioItemProps extends DropdownMenuItemProps {
+  value?: string;
+}
+
+export const DropdownMenuGroup: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const DropdownMenuSub: Component<DropdownMenuProps> = (props) => <div>{props.children}</div>;
+export const DropdownMenuRadioGroup: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const DropdownMenuSubTrigger: Component<DropdownMenuItemProps> = (props) => <DropdownMenuItem {...props} />;
+export const DropdownMenuSubContent: Component<DropdownMenuContentProps> = (props) => <DropdownMenuContent {...props} />;
+export const DropdownMenuCheckboxItem: Component<DropdownMenuCheckboxItemProps> = (props) => <DropdownMenuItem {...props} />;
+export const DropdownMenuRadioItem: Component<DropdownMenuRadioItemProps> = (props) => <DropdownMenuItem {...props} />;
+export const DropdownMenuItemIndicator: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const DropdownMenuPortal: Component<{ children: JSX.Element }> = (props) => <>{props.children}</>;
+
 DropdownMenu.Trigger = DropdownMenuTrigger;
 DropdownMenu.Content = DropdownMenuContent;
 DropdownMenu.Item = DropdownMenuItem;
 DropdownMenu.Label = DropdownMenuLabel;
 DropdownMenu.Separator = DropdownMenuSeparator;
+DropdownMenu.Group = DropdownMenuGroup;
+DropdownMenu.Sub = DropdownMenuSub;
+DropdownMenu.RadioGroup = DropdownMenuRadioGroup;
+DropdownMenu.SubTrigger = DropdownMenuSubTrigger;
+DropdownMenu.SubContent = DropdownMenuSubContent;
+DropdownMenu.CheckboxItem = DropdownMenuCheckboxItem;
+DropdownMenu.RadioItem = DropdownMenuRadioItem;
+DropdownMenu.MenuItemIndicator = DropdownMenuItemIndicator;
+DropdownMenu.Portal = DropdownMenuPortal;
 

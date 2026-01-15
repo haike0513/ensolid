@@ -62,7 +62,7 @@ type ExampleType =
   | "toolbar"
   | "navigation-menu";
 
-type ComponentCategory = "基础组件" | "表单控件" | "反馈提示" | "导航组件" | "数据展示" | "布局组件";
+type ComponentCategory = string;
 
 interface ExampleItem {
   id: ExampleType;
@@ -73,232 +73,232 @@ interface ExampleItem {
   description: string;
 }
 
-const getExamples = (t: () => typeof import("../i18n/locales/zh").zh): ExampleItem[] => [
+const getExamples = (t: any): ExampleItem[] => [
   { 
     id: "button", 
     name: t().components.button, 
     component: ButtonExample,
-    category: "基础组件",
+    category: t().componentsPage.categories.base,
     icon: "🔘",
-    description: "触发操作的按钮组件"
+    description: t().componentsPage.descriptions.button
   },
   { 
     id: "card", 
     name: t().components.card, 
     component: CardExample,
-    category: "数据展示",
+    category: t().componentsPage.categories.data,
     icon: "🃏",
-    description: "卡片容器组件"
+    description: t().componentsPage.descriptions.card
   },
   { 
     id: "dialog", 
     name: t().components.dialog, 
     component: DialogExample,
-    category: "反馈提示",
+    category: t().componentsPage.categories.feedback,
     icon: "💬",
-    description: "对话框组件"
+    description: t().componentsPage.descriptions.dialog
   },
   {
     id: "checkbox",
     name: t().components.checkbox,
     component: CheckboxExample,
-    category: "表单控件",
+    category: t().componentsPage.categories.form,
     icon: "☑️",
-    description: "复选框组件"
+    description: t().componentsPage.descriptions.checkbox
   },
   { 
     id: "switch", 
     name: t().components.switch, 
     component: SwitchExample,
-    category: "表单控件",
+    category: t().componentsPage.categories.form,
     icon: "🎚️",
-    description: "开关切换组件"
+    description: t().componentsPage.descriptions.switch
   },
   { 
     id: "tabs", 
     name: t().components.tabs, 
     component: TabsExample,
-    category: "导航组件",
+    category: t().componentsPage.categories.navigation,
     icon: "📑",
-    description: "标签页组件"
+    description: t().componentsPage.descriptions.tabs
   },
   {
     id: "accordion",
     name: t().components.accordion,
     component: AccordionExample,
-    category: "数据展示",
+    category: t().componentsPage.categories.data,
     icon: "📋",
-    description: "手风琴折叠面板"
+    description: t().componentsPage.descriptions.accordion
   },
   {
     id: "separator",
     name: t().components.separator,
     component: SeparatorExample,
-    category: "布局组件",
+    category: t().componentsPage.categories.layout,
     icon: "➖",
-    description: "分隔线组件"
+    description: t().componentsPage.descriptions.separator
   },
   {
     id: "alert-dialog",
     name: t().components.alertDialog,
     component: AlertDialogExample,
-    category: "反馈提示",
+    category: t().componentsPage.categories.feedback,
     icon: "⚠️",
-    description: "警告对话框"
+    description: t().componentsPage.descriptions.alertDialog
   },
   { 
     id: "popover", 
     name: t().components.popover, 
     component: PopoverExample,
-    category: "反馈提示",
+    category: t().componentsPage.categories.feedback,
     icon: "💭",
-    description: "弹出层组件"
+    description: t().componentsPage.descriptions.popover
   },
   {
     id: "dropdown-menu",
     name: t().components.dropdownMenu,
     component: DropdownMenuExample,
-    category: "导航组件",
+    category: t().componentsPage.categories.navigation,
     icon: "📝",
-    description: "下拉菜单组件"
+    description: t().componentsPage.descriptions.dropdownMenu
   },
   { 
     id: "tooltip", 
     name: t().components.tooltip, 
     component: TooltipExample,
-    category: "反馈提示",
+    category: t().componentsPage.categories.feedback,
     icon: "💡",
-    description: "工具提示组件"
+    description: t().componentsPage.descriptions.tooltip
   },
   { 
     id: "select", 
     name: t().components.select, 
     component: SelectExample,
-    category: "表单控件",
+    category: t().componentsPage.categories.form,
     icon: "🔽",
-    description: "选择器组件"
+    description: t().componentsPage.descriptions.select
   },
   { 
     id: "slider", 
     name: t().components.slider, 
     component: SliderExample,
-    category: "表单控件",
+    category: t().componentsPage.categories.form,
     icon: "🎚️",
-    description: "滑块组件"
+    description: t().componentsPage.descriptions.slider
   },
   {
     id: "progress",
     name: t().components.progress,
     component: ProgressExample,
-    category: "反馈提示",
+    category: t().componentsPage.categories.feedback,
     icon: "📊",
-    description: "进度条组件"
+    description: t().componentsPage.descriptions.progress
   },
   { 
     id: "toggle", 
     name: t().components.toggle, 
     component: ToggleExample,
-    category: "表单控件",
+    category: t().componentsPage.categories.form,
     icon: "🔀",
-    description: "切换按钮组件"
+    description: t().componentsPage.descriptions.toggle
   },
   { 
     id: "avatar", 
     name: t().components.avatar, 
     component: AvatarExample,
-    category: "数据展示",
+    category: t().componentsPage.categories.data,
     icon: "👤",
-    description: "头像组件"
+    description: t().componentsPage.descriptions.avatar
   },
   {
     id: "collapsible",
     name: t().components.collapsible,
     component: CollapsibleExample,
-    category: "数据展示",
+    category: t().componentsPage.categories.data,
     icon: "🔽",
-    description: "可折叠容器"
+    description: t().componentsPage.descriptions.collapsible
   },
   {
     id: "context-menu",
     name: t().components.contextMenu,
     component: ContextMenuExample,
-    category: "导航组件",
+    category: t().componentsPage.categories.navigation,
     icon: "🖱️",
-    description: "右键菜单组件"
+    description: t().componentsPage.descriptions.contextMenu
   },
   {
     id: "hover-card",
     name: t().components.hoverCard,
     component: HoverCardExample,
-    category: "数据展示",
+    category: t().componentsPage.categories.data,
     icon: "🎴",
-    description: "悬停卡片组件"
+    description: t().componentsPage.descriptions.hoverCard
   },
   {
     id: "scroll-area",
     name: t().components.scrollArea,
     component: ScrollAreaExample,
-    category: "布局组件",
+    category: t().componentsPage.categories.layout,
     icon: "📜",
-    description: "滚动区域组件"
+    description: t().componentsPage.descriptions.scrollArea
   },
   {
     id: "toggle-group",
     name: t().components.toggleGroup,
     component: ToggleGroupExample,
-    category: "表单控件",
+    category: t().componentsPage.categories.form,
     icon: "🔘",
-    description: "切换按钮组"
+    description: t().componentsPage.descriptions.toggleGroup
   },
   {
     id: "aspect-ratio",
     name: t().components.aspectRatio,
     component: AspectRatioExample,
-    category: "布局组件",
+    category: t().componentsPage.categories.layout,
     icon: "🖼️",
-    description: "宽高比容器"
+    description: t().componentsPage.descriptions.aspectRatio
   },
   {
     id: "menubar",
     name: t().components.menubar,
     component: MenubarExample,
-    category: "导航组件",
+    category: t().componentsPage.categories.navigation,
     icon: "📋",
-    description: "菜单栏组件"
+    description: t().componentsPage.descriptions.menubar
   },
   {
     id: "toolbar",
     name: t().components.toolbar,
     component: ToolbarExample,
-    category: "导航组件",
+    category: t().componentsPage.categories.navigation,
     icon: "🛠️",
-    description: "工具栏组件"
+    description: t().componentsPage.descriptions.toolbar
   },
   {
     id: "navigation-menu",
     name: t().components.navigationMenu,
     component: NavigationMenuExample,
-    category: "导航组件",
+    category: t().componentsPage.categories.navigation,
     icon: "🧭",
-    description: "导航菜单组件"
+    description: t().componentsPage.descriptions.navigationMenu
   },
 ];
 
 export const ComponentsPage: Component = () => {
+  const { t } = useI18n();
   const [currentExample, setCurrentExample] = createSignal<ExampleType>("button");
   const [searchQuery, setSearchQuery] = createSignal("");
-  const [selectedCategory, setSelectedCategory] = createSignal<ComponentCategory | "全部">("全部");
-  const { t } = useI18n();
+  const [selectedCategory, setSelectedCategory] = createSignal<string>(t().componentsPage.allCategories);
   const examples = () => getExamples(t);
 
-  const categories: Array<ComponentCategory | "全部"> = [
-    "全部",
-    "基础组件",
-    "表单控件",
-    "反馈提示",
-    "导航组件",
-    "数据展示",
-    "布局组件",
+  const categories = () => [
+    t().componentsPage.allCategories,
+    t().componentsPage.categories.base,
+    t().componentsPage.categories.form,
+    t().componentsPage.categories.feedback,
+    t().componentsPage.categories.navigation,
+    t().componentsPage.categories.data,
+    t().componentsPage.categories.layout,
   ];
 
   // 过滤后的组件列表
@@ -306,7 +306,7 @@ export const ComponentsPage: Component = () => {
     let filtered = examples();
     
     // 分类过滤
-    if (selectedCategory() !== "全部") {
+    if (selectedCategory() !== t().componentsPage.allCategories) {
       filtered = filtered.filter((e) => e.category === selectedCategory());
     }
     
@@ -349,10 +349,10 @@ export const ComponentsPage: Component = () => {
                 <span class="text-xs font-medium text-primary">Component Library</span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight mb-2 bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                组件展示
+                {t().componentsPage.title}
               </h1>
               <p class="text-muted-foreground">
-                探索 {stats().total} 个高质量 UI 组件，涵盖 {stats().categories} 个分类
+                {t().componentsPage.subtitle.replace("{total}", stats().total.toString()).replace("{categories}", stats().categories.toString())}
               </p>
             </div>
           </div>
@@ -370,11 +370,11 @@ export const ComponentsPage: Component = () => {
                 <div class="relative bg-card border-2 border-muted rounded-xl p-4 transition-all duration-300 group-hover:border-primary/30">
                   <div class="flex items-center gap-2 mb-2">
                     <span class="text-lg">🔍</span>
-                    <span class="text-sm font-semibold">搜索组件</span>
+                    <span class="text-sm font-semibold">{t().componentsPage.searchPlaceholder}</span>
                   </div>
                   <input
                     type="text"
-                    placeholder="输入组件名称..."
+                    placeholder={t().componentsPage.searchBoxPlaceholder}
                     value={searchQuery()}
                     onInput={(e) => setSearchQuery(e.currentTarget.value)}
                     class="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
@@ -395,10 +395,10 @@ export const ComponentsPage: Component = () => {
               <div class="bg-card border-2 border-muted rounded-xl p-4">
                 <div class="flex items-center gap-2 mb-3">
                   <span class="text-lg">📂</span>
-                  <span class="text-sm font-semibold">组件分类</span>
+                  <span class="text-sm font-semibold">{t().componentsPage.categoriesTitle}</span>
                 </div>
                 <div class="flex flex-wrap gap-2">
-                  <For each={categories}>
+                  <For each={categories()}>
                     {(category) => (
                       <button
                         type="button"

@@ -94,31 +94,31 @@ export const AIPlaygroundPage: Component = () => {
                 <TabsTrigger value="aichat" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
                   <span class="flex items-center gap-2">
                     <span>🤖</span>
-                    <span>AI Chat</span>
+                    <span>{t().aiPlayground.tabs.aichat}</span>
                   </span>
                 </TabsTrigger>
                 <TabsTrigger value="chat" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
                   <span class="flex items-center gap-2">
                     <span>💬</span>
-                    <span>聊天对话</span>
+                    <span>{t().aiPlayground.tabs.chat}</span>
                   </span>
                 </TabsTrigger>
                 <TabsTrigger value="completion" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
                   <span class="flex items-center gap-2">
                     <span>✨</span>
-                    <span>文本补全</span>
+                    <span>{t().aiPlayground.tabs.completion}</span>
                   </span>
                 </TabsTrigger>
                 <TabsTrigger value="generate" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
                   <span class="flex items-center gap-2">
                     <span>🎯</span>
-                    <span>文本生成</span>
+                    <span>{t().aiPlayground.tabs.generate}</span>
                   </span>
                 </TabsTrigger>
                 <TabsTrigger value="settings" class="data-[state=active]:bg-gradient-to-r data-[state=active]:from-violet-600 data-[state=active]:to-fuchsia-600 data-[state=active]:text-white rounded-lg transition-all duration-300">
                   <span class="flex items-center gap-2">
                     <span>⚙️</span>
-                    <span>设置</span>
+                    <span>{t().aiPlayground.tabs.settings}</span>
                   </span>
                 </TabsTrigger>
               </TabsList>
@@ -155,18 +155,18 @@ export const AIPlaygroundPage: Component = () => {
           <TabsContent value="completion" class="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>文本补全</CardTitle>
+                <CardTitle>{t().aiPlayground.completion.title}</CardTitle>
                 <CardDescription>
-                  输入提示文本，AI 将为您补全内容
+                  {t().aiPlayground.completion.description}
                 </CardDescription>
               </CardHeader>
             </Card>
             <Completion
               api="/api/completion"
               id="ai-playground-completion"
-              title="文本补全"
-              description="输入提示文本，AI 将为您补全内容"
-              placeholder="输入提示..."
+              title={t().aiPlayground.completion.title}
+              description={t().aiPlayground.completion.description}
+              placeholder={t().aiPlayground.completion.placeholder}
             />
           </TabsContent>
 
@@ -175,9 +175,9 @@ export const AIPlaygroundPage: Component = () => {
             <TextGeneration
               api="/api/generate-text"
               model="openrouter:meituan/longcat-flash-thinking"
-              title="文本生成"
-              description="使用 generateText API 生成文本内容（支持 registry 格式的模型 ID）"
-              placeholder="输入提示文本，例如：Write a vegetarian lasagna recipe for 4 people."
+              title={t().aiPlayground.generateText.title}
+              description={t().aiPlayground.generateText.description}
+              placeholder={t().aiPlayground.generateText.placeholder}
               onError={(err: Error) => {
                 console.error("Generate text error:", err);
               }}

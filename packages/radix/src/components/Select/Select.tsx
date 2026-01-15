@@ -133,6 +133,15 @@ export interface SelectComponent extends Component<SelectProps> {
   Value: Component<SelectValueProps>;
   Content: Component<SelectContentProps>;
   Item: Component<SelectItemProps>;
+  Group: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Icon: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Viewport: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Label: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  ItemIndicator: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  ItemText: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  Separator: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  ScrollUpButton: Component<JSX.HTMLAttributes<HTMLDivElement>>;
+  ScrollDownButton: Component<JSX.HTMLAttributes<HTMLDivElement>>;
 }
 
 export const Select = Object.assign(SelectBase, {
@@ -140,6 +149,15 @@ export const Select = Object.assign(SelectBase, {
   Value: null as unknown as Component<SelectValueProps>,
   Content: null as unknown as Component<SelectContentProps>,
   Item: null as unknown as Component<SelectItemProps>,
+  Group: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Icon: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Viewport: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Label: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  ItemIndicator: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  ItemText: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  Separator: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  ScrollUpButton: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
+  ScrollDownButton: null as unknown as Component<JSX.HTMLAttributes<HTMLDivElement>>,
 }) as SelectComponent;
 
 export interface SelectTriggerProps extends JSX.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -206,6 +224,10 @@ export interface SelectContentProps extends JSX.HTMLAttributes<HTMLDivElement> {
    * 子元素
    */
   children?: JSX.Element;
+  /**
+   * 显示位置
+   */
+  position?: 'popper' | 'item-aligned';
 }
 
 export const SelectContent: Component<SelectContentProps> = (props) => {
@@ -327,8 +349,31 @@ export const SelectItem: Component<SelectItemProps> = (props) => {
   );
 };
 
+export interface SelectGroupProps extends JSX.HTMLAttributes<HTMLDivElement> {}
+export interface SelectLabelProps extends JSX.HTMLAttributes<HTMLDivElement> {}
+export interface SelectSeparatorProps extends JSX.HTMLAttributes<HTMLDivElement> {}
+
+export const SelectGroup: Component<SelectGroupProps> = (props) => <div {...props} />;
+export const SelectIcon: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectViewport: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectLabel: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectItemIndicator: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectItemText: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectSeparator: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectScrollUpButton: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SelectScrollDownButton: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+
 Select.Trigger = SelectTrigger;
 Select.Value = SelectValue;
 Select.Content = SelectContent;
 Select.Item = SelectItem;
+Select.Group = SelectGroup;
+Select.Icon = SelectIcon;
+Select.Viewport = SelectViewport;
+Select.Label = SelectLabel;
+Select.ItemIndicator = SelectItemIndicator;
+Select.ItemText = SelectItemText;
+Select.Separator = SelectSeparator;
+Select.ScrollUpButton = SelectScrollUpButton;
+Select.ScrollDownButton = SelectScrollDownButton;
 

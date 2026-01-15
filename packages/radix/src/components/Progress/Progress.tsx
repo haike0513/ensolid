@@ -57,3 +57,7 @@ export const Progress: Component<ProgressProps> = (props) => {
   );
 };
 
+export const ProgressIndicator: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
+  return <div {...props} />;
+};
+

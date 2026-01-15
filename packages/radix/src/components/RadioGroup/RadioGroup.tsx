@@ -98,10 +98,12 @@ const RadioGroupBase: Component<RadioGroupProps> = (props) => {
 
 export interface RadioGroupComponent extends Component<RadioGroupProps> {
   Item: Component<RadioGroupItemProps>;
+  Indicator: Component<JSXTypes.HTMLAttributes<HTMLDivElement>>;
 }
 
 export const RadioGroup = Object.assign(RadioGroupBase, {
   Item: null as unknown as Component<RadioGroupItemProps>,
+  Indicator: null as unknown as Component<JSXTypes.HTMLAttributes<HTMLDivElement>>,
 }) as RadioGroupComponent;
 
 export interface RadioGroupItemProps extends JSXTypes.InputHTMLAttributes<HTMLInputElement> {
@@ -146,5 +148,10 @@ export const RadioGroupItem: Component<RadioGroupItemProps> = (props) => {
   );
 };
 
+export const RadioGroupIndicator: Component<JSXTypes.HTMLAttributes<HTMLDivElement>> = (props) => {
+  return <div {...props} />;
+};
+
 RadioGroup.Item = RadioGroupItem;
+RadioGroup.Indicator = RadioGroupIndicator;
 

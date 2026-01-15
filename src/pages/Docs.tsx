@@ -4,59 +4,60 @@
 
 import type { Component } from "solid-js";
 import { createSignal, For, Show } from "solid-js";
-
+import { useI18n } from "@/i18n";
 export const DocsPage: Component = () => {
+  const { t } = useI18n();
   const [activeSection, setActiveSection] = createSignal("overview");
   const [sidebarOpen, setSidebarOpen] = createSignal(false);
 
   const sections = [
     { 
       id: "overview", 
-      title: "项目概述",
+      title: t().docs.sections.overview.title,
       icon: "📖",
-      category: "开始"
+      category: t().docs.categories.start
     },
     { 
       id: "installation", 
-      title: "安装指南",
+      title: t().docs.sections.installation.title,
       icon: "⚙️",
-      category: "开始"
+      category: t().docs.categories.start
     },
     { 
       id: "radix", 
-      title: "@ensolid/radix",
+      title: t().docs.sections.radix.title,
       icon: "🎨",
-      category: "组件库"
+      category: t().docs.categories.components
     },
     { 
       id: "baseui", 
-      title: "@ensolid/baseui",
+      title: t().docs.sections.baseui.title,
       icon: "🧱",
-      category: "组件库"
+      category: t().docs.categories.components
     },
     { 
       id: "solidflow", 
-      title: "@ensolid/solidflow",
+      title: t().docs.sections.solidflow.title,
       icon: "🌊",
-      category: "组件库"
+      category: t().docs.categories.components
     },
     { 
       id: "cli", 
-      title: "@ensolid/cli",
+      title: t().docs.sections.cli.title,
       icon: "⌨️",
-      category: "工具"
+      category: t().docs.categories.tools
     },
     { 
       id: "ui-components", 
-      title: "UI 组件",
+      title: t().docs.sections.uiComponents.title,
       icon: "🎯",
-      category: "指南"
+      category: t().docs.categories.guides
     },
     { 
       id: "development", 
-      title: "开发指南",
+      title: t().docs.sections.development.title,
       icon: "💻",
-      category: "指南"
+      category: t().docs.categories.guides
     },
   ];
 
@@ -80,7 +81,7 @@ export const DocsPage: Component = () => {
         <code class="text-foreground/90">{props.code}</code>
       </pre>
       <button class="absolute top-3 right-3 px-3 py-1.5 rounded-lg bg-background/80 backdrop-blur-sm border border-border/50 text-xs font-medium opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-primary hover:text-primary-foreground hover:border-primary">
-        复制代码
+        复制
       </button>
     </div>
   );
@@ -116,10 +117,10 @@ export const DocsPage: Component = () => {
               <span class="text-sm font-medium text-primary">Documentation</span>
             </div>
             <h1 class="text-5xl lg:text-6xl font-bold tracking-tight mb-6 bg-gradient-to-br from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
-              技术文档
+              {t().docs.title}
             </h1>
             <p class="text-xl text-muted-foreground leading-relaxed mb-8">
-              完整的项目使用指南和库集成说明，帮助你快速上手 Ensolid 生态系统
+              {t().docs.subtitle}
             </p>
             
             {/* 快速链接 */}
@@ -130,7 +131,7 @@ export const DocsPage: Component = () => {
               >
                 <div class="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 <span class="relative flex items-center gap-2">
-                  <span>快速开始</span>
+                  <span>{t().docs.quickStart}</span>
                   <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -141,7 +142,7 @@ export const DocsPage: Component = () => {
                 class="group px-6 py-2.5 rounded-lg border border-border/50 bg-background/50 backdrop-blur-sm font-medium transition-all duration-300 hover:bg-accent hover:border-primary/30 hover:-translate-y-0.5"
               >
                 <span class="flex items-center gap-2">
-                  <span>项目概述</span>
+                  <span>{t().docs.projectOverview}</span>
                 </span>
               </button>
             </div>
@@ -159,7 +160,7 @@ export const DocsPage: Component = () => {
                 <div class="p-4 rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
                   <div class="flex items-center gap-2 mb-2">
                     <div class="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                    <span class="text-sm font-medium text-foreground">当前阅读</span>
+                    <span class="text-sm font-medium text-foreground">{t().docs.currentReading}</span>
                   </div>
                   <p class="text-xs text-muted-foreground">
                     {sections.find(s => s.id === activeSection())?.title}
@@ -217,9 +218,9 @@ export const DocsPage: Component = () => {
                   <div class="flex items-start gap-3">
                     <div class="text-2xl">💡</div>
                     <div>
-                      <h4 class="text-sm font-semibold mb-1">需要帮助？</h4>
+                      <h4 class="text-sm font-semibold mb-1">{t().docs.needHelp}</h4>
                       <p class="text-xs text-muted-foreground mb-2">
-                        查看我们的 GitHub 仓库或加入社区
+                        {t().docs.helpDesc}
                       </p>
                       <a 
                         href="https://github.com/haike0513/ensolid"
@@ -227,7 +228,7 @@ export const DocsPage: Component = () => {
                         rel="noopener noreferrer"
                         class="inline-flex items-center gap-1 text-xs text-primary hover:underline"
                       >
-                        <span>访问 GitHub</span>
+                        <span>{t().docs.visitGithub}</span>
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                         </svg>
@@ -258,11 +259,11 @@ export const DocsPage: Component = () => {
                       <div class="flex items-center gap-3 mb-4">
                         <div class="text-4xl">📖</div>
                         <h2 class="text-4xl font-bold bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-                          项目概述
+                          {t().docs.sections.overview.title}
                         </h2>
                       </div>
                       <p class="text-lg text-muted-foreground">
-                        了解 Ensolid 项目的核心理念和架构设计
+                        {t().docs.sections.overview.description}
                       </p>
                     </header>
 

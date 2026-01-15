@@ -92,3 +92,7 @@ export const Slider: Component<SliderProps> = (props) => {
   );
 };
 
+export const SliderTrack: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SliderRange: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+export const SliderThumb: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => <div {...props} />;
+

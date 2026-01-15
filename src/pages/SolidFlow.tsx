@@ -25,114 +25,119 @@ interface FlowExampleItem {
   component: Component;
   icon: string;
   description: string;
-  difficulty: "简单" | "中等" | "高级";
+  difficulty: string;
   features: string[];
 }
 
-const flowExamples: FlowExampleItem[] = [
+const getFlowExamples = (t: any): FlowExampleItem[] => [
   { 
     id: "basic", 
-    name: "基础示例", 
+    name: t().solidFlowPage.examples.basic.name, 
     component: FlowExample,
     icon: "🎯",
-    description: "展示 SolidFlow 的基础用法和核心功能",
-    difficulty: "简单",
-    features: ["节点渲染", "边连接", "基础交互"]
+    description: t().solidFlowPage.examples.basic.description,
+    difficulty: t().solidFlowPage.difficulties.easy,
+    features: t().solidFlowPage.examples.basic.features
   },
   {
     id: "custom-node",
-    name: "自定义节点",
+    name: t().solidFlowPage.examples.customNode.name,
     component: FlowCustomNodeExample,
     icon: "🎨",
-    description: "创建和使用自定义样式的节点组件",
-    difficulty: "中等",
-    features: ["自定义样式", "节点类型", "动态渲染"]
+    description: t().solidFlowPage.examples.customNode.description,
+    difficulty: t().solidFlowPage.difficulties.medium,
+    features: t().solidFlowPage.examples.customNode.features
   },
   {
     id: "interactive",
-    name: "交互式示例",
+    name: t().solidFlowPage.examples.interactive.name,
     component: FlowInteractiveExample,
     icon: "🎮",
-    description: "支持拖拽、缩放、选择等丰富交互功能",
-    difficulty: "中等",
-    features: ["拖拽节点", "画布缩放", "节点选择", "连线交互"]
+    description: t().solidFlowPage.examples.interactive.description,
+    difficulty: t().solidFlowPage.difficulties.medium,
+    features: t().solidFlowPage.examples.interactive.features
   },
   {
     id: "editor",
-    name: "完整编辑器",
+    name: t().solidFlowPage.examples.editor.name,
     component: FlowEditorExample,
     icon: "✨",
-    description: "功能完整的流程图编辑器，支持所有高级特性",
-    difficulty: "高级",
-    features: ["完整编辑", "撤销重做", "导入导出", "快捷键", "工具栏"]
+    description: t().solidFlowPage.examples.editor.description,
+    difficulty: t().solidFlowPage.difficulties.advanced,
+    features: t().solidFlowPage.examples.editor.features
   },
   {
     id: "undo-redo",
-    name: "撤销/重做",
+    name: t().solidFlowPage.examples.undoRedo.name,
     component: FlowUndoRedoExample,
     icon: "↶",
-    description: "展示历史记录管理和撤销/重做功能",
-    difficulty: "中等",
-    features: ["历史记录", "撤销重做", "键盘快捷键", "状态管理"]
+    description: t().solidFlowPage.examples.undoRedo.description,
+    difficulty: t().solidFlowPage.difficulties.medium,
+    features: t().solidFlowPage.examples.undoRedo.features
   },
   {
     id: "copy-paste",
-    name: "复制粘贴",
+    name: t().solidFlowPage.examples.copyPaste.name,
     component: FlowCopyPasteExample,
     icon: "📋",
-    description: "展示节点和边的复制粘贴功能",
-    difficulty: "简单",
-    features: ["复制节点", "粘贴节点", "自动生成ID", "相关边复制"]
+    description: t().solidFlowPage.examples.copyPaste.description,
+    difficulty: t().solidFlowPage.difficulties.easy,
+    features: t().solidFlowPage.examples.copyPaste.features
   },
   {
     id: "alignment",
-    name: "节点对齐",
+    name: t().solidFlowPage.examples.alignment.name,
     component: FlowAlignmentExample,
     icon: "📐",
-    description: "展示节点对齐辅助线和网格对齐功能",
-    difficulty: "中等",
-    features: ["对齐辅助线", "网格对齐", "智能吸附", "视觉反馈"]
+    description: t().solidFlowPage.examples.alignment.description,
+    difficulty: t().solidFlowPage.difficulties.medium,
+    features: t().solidFlowPage.examples.alignment.features
   },
   {
     id: "node-group",
-    name: "节点分组",
+    name: t().solidFlowPage.examples.nodeGroup.name,
     component: FlowNodeGroupExample,
     icon: "📦",
-    description: "展示节点分组和嵌套节点功能",
-    difficulty: "中等",
-    features: ["父节点", "子节点", "边界限制", "嵌套结构"]
+    description: t().solidFlowPage.examples.nodeGroup.description,
+    difficulty: t().solidFlowPage.difficulties.medium,
+    features: t().solidFlowPage.examples.nodeGroup.features
   },
   {
     id: "import-export",
-    name: "导入导出",
+    name: t().solidFlowPage.examples.importExport.name,
     component: FlowImportExportExample,
     icon: "💾",
-    description: "展示流程图的导入导出功能",
-    difficulty: "简单",
-    features: ["JSON导出", "JSON导入", "版本兼容", "文件操作"]
+    description: t().solidFlowPage.examples.importExport.description,
+    difficulty: t().solidFlowPage.difficulties.easy,
+    features: t().solidFlowPage.examples.importExport.features
   },
   {
     id: "waypoint",
-    name: "边中间点编辑",
+    name: t().solidFlowPage.examples.waypoint.name,
     component: FlowWaypointExample,
     icon: "📍",
-    description: "展示边中间点编辑功能，支持拖拽调整边路径",
-    difficulty: "中等",
-    features: ["中间点编辑", "路径调整", "拖拽控制点", "多中间点支持"]
+    description: t().solidFlowPage.examples.waypoint.description,
+    difficulty: t().solidFlowPage.difficulties.medium,
+    features: t().solidFlowPage.examples.waypoint.features
   },
 ];
 
+import { useI18n } from "../i18n";
+
 export const SolidFlowPage: Component = () => {
+  const { t } = useI18n();
+  const flowExamples = getFlowExamples(t);
   const [currentExample, setCurrentExample] = createSignal<FlowExampleType>("basic");
 
   const currentExampleDetail = createMemo(() => {
-    return flowExamples.find((e) => e.id === currentExample());
+    return flowExamples.find((e: FlowExampleItem) => e.id === currentExample());
   });
 
-  const difficultyColors = {
-    "简单": "from-green-500 to-emerald-500",
-    "中等": "from-yellow-500 to-orange-500",
-    "高级": "from-red-500 to-pink-500",
+  const getDifficultyColor = (difficulty: string) => {
+    if (difficulty === t().solidFlowPage.difficulties.easy) return "from-green-500 to-emerald-500";
+    if (difficulty === t().solidFlowPage.difficulties.medium) return "from-yellow-500 to-orange-500";
+    if (difficulty === t().solidFlowPage.difficulties.advanced) return "from-red-500 to-pink-500";
+    return "from-blue-500 to-cyan-500";
   };
 
   return (
@@ -149,10 +154,10 @@ export const SolidFlowPage: Component = () => {
                 </span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight mb-2 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-clip-text text-transparent">
-                流程图编辑器
+                {t().solidFlowPage.title}
               </h1>
               <p class="text-muted-foreground">
-                高性能的 SolidJS 流程图组件库，支持复杂的工作流编辑
+                {t().solidFlowPage.subtitle}
               </p>
             </div>
           </div>
@@ -170,25 +175,17 @@ export const SolidFlowPage: Component = () => {
                 <div class="relative bg-card border-2 border-muted rounded-xl p-4">
                   <div class="flex items-center gap-2 mb-3">
                     <span class="text-lg">⚡</span>
-                    <span class="text-sm font-semibold">核心特性</span>
+                    <span class="text-sm font-semibold">{t().solidFlowPage.features.title}</span>
                   </div>
                   <div class="space-y-2 text-xs text-muted-foreground">
-                    <div class="flex items-center gap-2">
-                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                      <span>高性能渲染引擎</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
-                      <span>丰富的交互功能</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-                      <span>完全可定制化</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
-                      <span>TypeScript 支持</span>
-                    </div>
+                    <For each={t().solidFlowPage.features.items}>
+                      {(feature) => (
+                        <div class="flex items-center gap-2">
+                          <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                          <span>{feature}</span>
+                        </div>
+                      )}
+                    </For>
                   </div>
                 </div>
               </div>
@@ -197,7 +194,7 @@ export const SolidFlowPage: Component = () => {
               <nav class="bg-card border-2 border-muted rounded-xl p-4">
                 <div class="flex items-center gap-2 mb-3">
                   <span class="text-lg">📚</span>
-                  <span class="text-sm font-semibold">示例列表</span>
+                  <span class="text-sm font-semibold">{t().solidFlowPage.exampleList}</span>
                 </div>
                 <div class="space-y-2">
                   <For each={flowExamples}>
@@ -226,7 +223,7 @@ export const SolidFlowPage: Component = () => {
                               <span class={`px-2 py-0.5 rounded-full text-xs font-medium ${
                                 currentExample() === example.id
                                   ? "bg-white/20 text-white"
-                                  : `bg-gradient-to-r ${difficultyColors[example.difficulty]} bg-clip-text text-transparent`
+                                  : `bg-gradient-to-r ${getDifficultyColor(example.difficulty)} bg-clip-text text-transparent`
                               }`}>
                                 {example.difficulty}
                               </span>
@@ -260,7 +257,7 @@ export const SolidFlowPage: Component = () => {
                           <h2 class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
                             {currentExampleDetail()!.name}
                           </h2>
-                          <span class={`px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${difficultyColors[currentExampleDetail()!.difficulty]} text-white shadow-lg`}>
+                          <span class={`px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r ${getDifficultyColor(currentExampleDetail()!.difficulty)} text-white shadow-lg`}>
                             {currentExampleDetail()!.difficulty}
                           </span>
                         </div>
@@ -285,7 +282,7 @@ export const SolidFlowPage: Component = () => {
                 <div class="p-0">
                   {(() => {
                     const selectedId = currentExample();
-                    const example = flowExamples.find((e) => e.id === selectedId);
+                    const example = flowExamples.find((e: FlowExampleItem) => e.id === selectedId);
                     const Component = example ? example.component : FlowExample;
                     return <Component />;
                   })()}

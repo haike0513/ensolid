@@ -70,10 +70,10 @@ export const SettingsPage: Component = () => {
             </span>
           </div>
           <h1 class="text-4xl font-bold tracking-tight mb-3 bg-gradient-to-r from-slate-700 via-gray-700 to-slate-700 bg-clip-text text-transparent">
-            设置
+            {t().settings.title}
           </h1>
           <p class="text-muted-foreground text-lg">
-            管理您的应用配置和偏好设置
+            {t().settings.subtitle}
           </p>
         </div>
       </div>
@@ -157,12 +157,12 @@ export const SettingsPage: Component = () => {
                     <span class="text-2xl">🎨</span>
                   </div>
                   <div>
-                    <h3 class="text-lg font-bold">外观设置</h3>
-                    <p class="text-xs text-muted-foreground">主题和显示选项</p>
+                    <h3 class="text-lg font-bold">{t().settings.appearance.title}</h3>
+                    <p class="text-xs text-muted-foreground">{t().settings.appearance.description}</p>
                   </div>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  自定义应用的外观和主题设置
+                  {t().settings.appearance.content}
                 </p>
               </div>
             </div>
@@ -176,12 +176,12 @@ export const SettingsPage: Component = () => {
                     <span class="text-2xl">🔔</span>
                   </div>
                   <div>
-                    <h3 class="text-lg font-bold">通知设置</h3>
-                    <p class="text-xs text-muted-foreground">管理通知偏好</p>
+                    <h3 class="text-lg font-bold">{t().settings.notifications.title}</h3>
+                    <p class="text-xs text-muted-foreground">{t().settings.notifications.description}</p>
                   </div>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  控制应用通知和提醒方式
+                  {t().settings.notifications.content}
                 </p>
               </div>
             </div>
@@ -195,12 +195,12 @@ export const SettingsPage: Component = () => {
                     <span class="text-2xl">🔒</span>
                   </div>
                   <div>
-                    <h3 class="text-lg font-bold">隐私设置</h3>
-                    <p class="text-xs text-muted-foreground">数据和隐私控制</p>
+                    <h3 class="text-lg font-bold">{t().settings.privacy.title}</h3>
+                    <p class="text-xs text-muted-foreground">{t().settings.privacy.description}</p>
                   </div>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  管理您的数据隐私和安全选项
+                  {t().settings.privacy.content}
                 </p>
               </div>
             </div>
@@ -214,12 +214,12 @@ export const SettingsPage: Component = () => {
                     <span class="text-2xl">⚡</span>
                   </div>
                   <div>
-                    <h3 class="text-lg font-bold">高级设置</h3>
-                    <p class="text-xs text-muted-foreground">开发者选项</p>
+                    <h3 class="text-lg font-bold">{t().settings.advanced.title}</h3>
+                    <p class="text-xs text-muted-foreground">{t().settings.advanced.description}</p>
                   </div>
                 </div>
                 <p class="text-sm text-muted-foreground">
-                  高级功能和开发者工具配置
+                  {t().settings.advanced.content}
                 </p>
               </div>
             </div>

@@ -65,13 +65,7 @@ import { ChordDiagram } from "./charts/ChordDiagram";
 import { ForceDirectedGraph } from "./charts/ForceDirectedGraph";
 import { EdgeBundlingChart } from "./charts/EdgeBundlingChart";
 
-type ChartCategory =
-  | "基础图表"
-  | "数据对比"
-  | "数据分布"
-  | "趋势分析"
-  | "特殊图表"
-  | "关系图表";
+type ChartCategory = "base" | "comparison" | "distribution" | "trend" | "special" | "relation";
 
 interface ChartItem {
   id: string;
@@ -91,52 +85,52 @@ interface CategoryInfo {
   borderGradient: string;
 }
 
-const categories: CategoryInfo[] = [
+const getCategories = (t: any): CategoryInfo[] => [
   {
-    id: "基础图表",
-    name: "基础图表",
+    id: "base",
+    name: t().chartsPage.categories.base.name,
     icon: "📊",
-    description: "最常用的数据展示形式，适用于大多数场景",
+    description: t().chartsPage.categories.base.description,
     gradient: "from-blue-500 to-cyan-500",
     borderGradient: "from-blue-500/20 to-cyan-500/20",
   },
   {
-    id: "数据对比",
-    name: "数据对比",
+    id: "comparison",
+    name: t().chartsPage.categories.comparison.name,
     icon: "📈",
-    description: "用于多维度数据对比和分类展示",
+    description: t().chartsPage.categories.comparison.description,
     gradient: "from-teal-500 to-emerald-500",
     borderGradient: "from-teal-500/20 to-emerald-500/20",
   },
   {
-    id: "数据分布",
-    name: "数据分布",
+    id: "distribution",
+    name: t().chartsPage.categories.distribution.name,
     icon: "🔬",
-    description: "展示数据的分布情况、离散程度和相关性",
+    description: t().chartsPage.categories.distribution.description,
     gradient: "from-orange-500 to-amber-500",
     borderGradient: "from-orange-500/20 to-amber-500/20",
   },
   {
-    id: "趋势分析",
-    name: "趋势分析",
+    id: "trend",
+    name: t().chartsPage.categories.trend.name,
     icon: "📉",
-    description: "展示数据的累积变化和趋势走向",
+    description: t().chartsPage.categories.trend.description,
     gradient: "from-violet-500 to-purple-500",
     borderGradient: "from-violet-500/20 to-purple-500/20",
   },
   {
-    id: "特殊图表",
-    name: "特殊图表",
+    id: "special",
+    name: t().chartsPage.categories.special.name,
     icon: "✨",
-    description: "独特的可视化形式，适用于特定场景",
+    description: t().chartsPage.categories.special.description,
     gradient: "from-pink-500 to-rose-500",
     borderGradient: "from-pink-500/20 to-rose-500/20",
   },
   {
-    id: "关系图表",
-    name: "关系图表",
+    id: "relation",
+    name: t().chartsPage.categories.relation.name,
     icon: "🔗",
-    description: "展示数据间的关联和流转关系",
+    description: t().chartsPage.categories.relation.description,
     gradient: "from-indigo-500 to-blue-500",
     borderGradient: "from-indigo-500/20 to-blue-500/20",
   },
@@ -148,7 +142,7 @@ const chartItems: ChartItem[] = [
     id: "bar",
     name: "柱状图",
     component: BarChart,
-    category: "基础图表",
+    category: "base",
     icon: "📊",
     description: "展示分类数据对比",
   },
@@ -156,7 +150,7 @@ const chartItems: ChartItem[] = [
     id: "line",
     name: "折线图",
     component: LineChart,
-    category: "基础图表",
+    category: "base",
     icon: "📈",
     description: "展示数据趋势变化",
   },
@@ -164,7 +158,7 @@ const chartItems: ChartItem[] = [
     id: "area",
     name: "面积图",
     component: AreaChart,
-    category: "基础图表",
+    category: "base",
     icon: "📐",
     description: "强调数据量的累积",
   },
@@ -172,7 +166,7 @@ const chartItems: ChartItem[] = [
     id: "pie",
     name: "饼图",
     component: PieChart,
-    category: "基础图表",
+    category: "base",
     icon: "🥧",
     description: "展示占比关系",
   },
@@ -180,7 +174,7 @@ const chartItems: ChartItem[] = [
     id: "donut",
     name: "环形图",
     component: DonutChart,
-    category: "基础图表",
+    category: "base",
     icon: "🍩",
     description: "中心带空白的饼图",
   },
@@ -188,7 +182,7 @@ const chartItems: ChartItem[] = [
     id: "horizontal-bar",
     name: "横向柱状图",
     component: HorizontalBarChart,
-    category: "基础图表",
+    category: "base",
     icon: "📊",
     description: "横向排名展示",
   },
@@ -196,7 +190,7 @@ const chartItems: ChartItem[] = [
     id: "pictorial-bar",
     name: "象形柱图",
     component: PictorialBarChart,
-    category: "基础图表",
+    category: "base",
     icon: "🎨",
     description: "创意形象化展示",
   },
@@ -205,7 +199,7 @@ const chartItems: ChartItem[] = [
     id: "stacked-bar",
     name: "堆叠柱状图",
     component: StackedBarChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "📊",
     description: "多维度数据堆叠对比",
   },
@@ -213,7 +207,7 @@ const chartItems: ChartItem[] = [
     id: "multi-line",
     name: "多折线图",
     component: MultiLineChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "📉",
     description: "多系列趋势对比",
   },
@@ -221,7 +215,7 @@ const chartItems: ChartItem[] = [
     id: "radar",
     name: "雷达图",
     component: RadarChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🎯",
     description: "多维度能力对比",
   },
@@ -229,7 +223,7 @@ const chartItems: ChartItem[] = [
     id: "radial-bar",
     name: "径向柱状图",
     component: RadialBarChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🌀",
     description: "环形柱状对比",
   },
@@ -237,7 +231,7 @@ const chartItems: ChartItem[] = [
     id: "negative-bar",
     name: "正负条形图",
     component: NegativeBarChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "⚖️",
     description: "正负数据对比",
   },
@@ -245,7 +239,7 @@ const chartItems: ChartItem[] = [
     id: "polar-bar",
     name: "极坐标柱状图",
     component: PolarBarChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🎡",
     description: "环形数据对比",
   },
@@ -253,7 +247,7 @@ const chartItems: ChartItem[] = [
     id: "parallel",
     name: "平行坐标图",
     component: ParallelChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "📏",
     description: "多维度数据分析",
   },
@@ -262,7 +256,7 @@ const chartItems: ChartItem[] = [
     id: "histogram",
     name: "直方图",
     component: Histogram,
-    category: "数据分布",
+    category: "distribution",
     icon: "📊",
     description: "展示数据分布频率",
   },
@@ -270,7 +264,7 @@ const chartItems: ChartItem[] = [
     id: "box-plot",
     name: "箱线图",
     component: BoxPlot,
-    category: "数据分布",
+    category: "distribution",
     icon: "📦",
     description: "展示数据离散程度",
   },
@@ -278,7 +272,7 @@ const chartItems: ChartItem[] = [
     id: "scatter",
     name: "散点图",
     component: ScatterPlot,
-    category: "数据分布",
+    category: "distribution",
     icon: "⚪",
     description: "展示数据相关性",
   },
@@ -286,7 +280,7 @@ const chartItems: ChartItem[] = [
     id: "bubble",
     name: "气泡图",
     component: BubbleChart,
-    category: "数据分布",
+    category: "distribution",
     icon: "🫧",
     description: "三维数据展示",
   },
@@ -294,7 +288,7 @@ const chartItems: ChartItem[] = [
     id: "heatmap",
     name: "热力图",
     component: Heatmap,
-    category: "数据分布",
+    category: "distribution",
     icon: "🔥",
     description: "矩阵数据密度展示",
   },
@@ -302,7 +296,7 @@ const chartItems: ChartItem[] = [
     id: "treemap",
     name: "矩形树图",
     component: TreemapChart,
-    category: "数据分布",
+    category: "distribution",
     icon: "🗂️",
     description: "层级占比分析",
   },
@@ -311,7 +305,7 @@ const chartItems: ChartItem[] = [
     id: "stacked-area",
     name: "堆叠面积图",
     component: StackedAreaChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "📐",
     description: "多系列累积趋势",
   },
@@ -319,7 +313,7 @@ const chartItems: ChartItem[] = [
     id: "step-line",
     name: "阶梯图",
     component: StepLineChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "📶",
     description: "阶跃数据变化",
   },
@@ -327,7 +321,7 @@ const chartItems: ChartItem[] = [
     id: "candlestick",
     name: "K线图",
     component: CandlestickChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "📈",
     description: "金融数据走势",
   },
@@ -335,7 +329,7 @@ const chartItems: ChartItem[] = [
     id: "waterfall",
     name: "瀑布图",
     component: WaterfallChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "📉",
     description: "增减变化分析",
   },
@@ -343,7 +337,7 @@ const chartItems: ChartItem[] = [
     id: "theme-river",
     name: "主题河流图",
     component: ThemeRiverChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "🌊",
     description: "事件流趋势分析",
   },
@@ -351,7 +345,7 @@ const chartItems: ChartItem[] = [
     id: "gantt",
     name: "甘特图",
     component: GanttChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "📅",
     description: "项目进度管理",
   },
@@ -360,7 +354,7 @@ const chartItems: ChartItem[] = [
     id: "funnel",
     name: "漏斗图",
     component: FunnelChart,
-    category: "特殊图表",
+    category: "special",
     icon: "🔻",
     description: "转化率分析",
   },
@@ -368,7 +362,7 @@ const chartItems: ChartItem[] = [
     id: "gauge",
     name: "仪表盘",
     component: GaugeChart,
-    category: "特殊图表",
+    category: "special",
     icon: "⏱️",
     description: "完成度展示",
   },
@@ -376,7 +370,7 @@ const chartItems: ChartItem[] = [
     id: "sunburst",
     name: "旭日图",
     component: SunburstChart,
-    category: "特殊图表",
+    category: "special",
     icon: "☀️",
     description: "多层级结构展示",
   },
@@ -384,7 +378,7 @@ const chartItems: ChartItem[] = [
     id: "liquid",
     name: "水球图",
     component: LiquidChart,
-    category: "特殊图表",
+    category: "special",
     icon: "💧",
     description: "完成进度展示",
   },
@@ -392,7 +386,7 @@ const chartItems: ChartItem[] = [
     id: "wordcloud",
     name: "词云图",
     component: WordCloudChart,
-    category: "特殊图表",
+    category: "special",
     icon: "☁️",
     description: "关键词分析",
   },
@@ -400,7 +394,7 @@ const chartItems: ChartItem[] = [
     id: "calendar",
     name: "日历图",
     component: CalendarChart,
-    category: "特殊图表",
+    category: "special",
     icon: "📅",
     description: "时间维度数据分布",
   },
@@ -409,7 +403,7 @@ const chartItems: ChartItem[] = [
     id: "sankey",
     name: "桑基图",
     component: SankeyChart,
-    category: "关系图表",
+    category: "relation",
     icon: "🔀",
     description: "流量分布分析",
   },
@@ -417,7 +411,7 @@ const chartItems: ChartItem[] = [
     id: "tree",
     name: "树图",
     component: TreeChart,
-    category: "关系图表",
+    category: "relation",
     icon: "🌲",
     description: "层级结构展示",
   },
@@ -425,7 +419,7 @@ const chartItems: ChartItem[] = [
     id: "graph",
     name: "关系图",
     component: GraphChart,
-    category: "关系图表",
+    category: "relation",
     icon: "🕸️",
     description: "节点链接关系",
   },
@@ -434,7 +428,7 @@ const chartItems: ChartItem[] = [
     id: "nightingale",
     name: "南丁格尔玫瑰图",
     component: NightingaleChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🌹",
     description: "极坐标半径对比",
   },
@@ -442,7 +436,7 @@ const chartItems: ChartItem[] = [
     id: "mixed",
     name: "折柱混合图",
     component: MixedChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "📉",
     description: "多维度双轴分析",
   },
@@ -450,7 +444,7 @@ const chartItems: ChartItem[] = [
     id: "dynamic-line",
     name: "动态折线图",
     component: DynamicLineChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "⚡",
     description: "实时数据监控",
   },
@@ -458,7 +452,7 @@ const chartItems: ChartItem[] = [
     id: "punch-card",
     name: "打卡图",
     component: PunchCardChart,
-    category: "数据分布",
+    category: "distribution",
     icon: "🎫",
     description: "时间段活跃度分布",
   },
@@ -466,7 +460,7 @@ const chartItems: ChartItem[] = [
     id: "lollipop",
     name: "棒棒糖图",
     component: LollipopChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🍭",
     description: "类别数据对比",
   },
@@ -474,7 +468,7 @@ const chartItems: ChartItem[] = [
     id: "circular-packing",
     name: "圆形打包图",
     component: CircularPackingChart,
-    category: "关系图表",
+    category: "relation",
     icon: "🫧",
     description: "层级数据包含关系",
   },
@@ -482,7 +476,7 @@ const chartItems: ChartItem[] = [
     id: "radial-tree",
     name: "径向树图",
     component: RadialTreeChart,
-    category: "关系图表",
+    category: "relation",
     icon: "🕸️",
     description: "辐射状层级结构",
   },
@@ -490,7 +484,7 @@ const chartItems: ChartItem[] = [
     id: "bullet",
     name: "子弹图",
     component: BulletChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "📏",
     description: "目标达成情况对比",
   },
@@ -498,7 +492,7 @@ const chartItems: ChartItem[] = [
     id: "grouped-bar",
     name: "分组柱状图",
     component: GroupedBarChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "📊",
     description: "多维度并列对比",
   },
@@ -506,7 +500,7 @@ const chartItems: ChartItem[] = [
     id: "stream",
     name: "河流图",
     component: StreamGraph,
-    category: "趋势分析",
+    category: "trend",
     icon: "🌊",
     description: "流动趋势变化",
   },
@@ -514,7 +508,7 @@ const chartItems: ChartItem[] = [
     id: "slope",
     name: "斜率图",
     component: SlopeChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "📈",
     description: "前后对比分析",
   },
@@ -522,7 +516,7 @@ const chartItems: ChartItem[] = [
     id: "ridgeline",
     name: "山脊图",
     component: RidgelineChart,
-    category: "数据分布",
+    category: "distribution",
     icon: "🏔️",
     description: "多层级分布趋势",
   },
@@ -530,7 +524,7 @@ const chartItems: ChartItem[] = [
     id: "marimekko",
     name: "马赛克图",
     component: MarimekkoChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🧱",
     description: "不等宽堆叠柱状图",
   },
@@ -538,7 +532,7 @@ const chartItems: ChartItem[] = [
     id: "dumbbell",
     name: "哑铃图",
     component: DumbbellChart,
-    category: "数据对比",
+    category: "comparison",
     icon: "🏋️",
     description: "前后对比分析",
   },
@@ -546,7 +540,7 @@ const chartItems: ChartItem[] = [
     id: "bump",
     name: "凹凸图",
     component: BumpChart,
-    category: "趋势分析",
+    category: "trend",
     icon: "🎢",
     description: "排名变化展示",
   },
@@ -554,7 +548,7 @@ const chartItems: ChartItem[] = [
     id: "violin",
     name: "小提琴图",
     component: ViolinPlot,
-    category: "数据分布",
+    category: "distribution",
     icon: "🎻",
     description: "数据分布密度",
   },
@@ -562,7 +556,7 @@ const chartItems: ChartItem[] = [
     id: "spiral",
     name: "螺旋图",
     component: SpiralChart,
-    category: "特殊图表",
+    category: "special",
     icon: "🌀",
     description: "周期性数据展示",
   },
@@ -570,7 +564,7 @@ const chartItems: ChartItem[] = [
     id: "waffle",
     name: "华夫饼图",
     component: WaffleChart,
-    category: "数据分布",
+    category: "distribution",
     icon: "🧇",
     description: "百分比构成展示",
   },
@@ -578,7 +572,7 @@ const chartItems: ChartItem[] = [
     id: "ternary",
     name: "三元图",
     component: TernaryPlot,
-    category: "关系图表",
+    category: "relation",
     icon: "🔺",
     description: "三维占比分析",
   },
@@ -586,7 +580,7 @@ const chartItems: ChartItem[] = [
     id: "arc",
     name: "弧线图",
     component: ArcDiagram,
-    category: "关系图表",
+    category: "relation",
     icon: "🌈",
     description: "线性关系展示",
   },
@@ -594,7 +588,7 @@ const chartItems: ChartItem[] = [
     id: "chord",
     name: "弦图",
     component: ChordDiagram,
-    category: "关系图表",
+    category: "relation",
     icon: "🕸️",
     description: "复杂关系流转",
   },
@@ -602,7 +596,7 @@ const chartItems: ChartItem[] = [
     id: "force",
     name: "力导向图",
     component: ForceDirectedGraph,
-    category: "关系图表",
+    category: "relation",
     icon: "⚡",
     description: "动态网络结构",
   },
@@ -610,15 +604,19 @@ const chartItems: ChartItem[] = [
     id: "edge-bundling",
     name: "边缘捆绑图",
     component: EdgeBundlingChart,
-    category: "关系图表",
+    category: "relation",
     icon: "🧶",
     description: "层级关系连接",
   },
 ];
 
+import { useI18n } from "../i18n";
+
 export const ChartsPage: Component = () => {
+  const { t } = useI18n();
+  const categories = getCategories(t);
   const [selectedCategory, setSelectedCategory] =
-    createSignal<ChartCategory>("基础图表");
+    createSignal<ChartCategory>("base");
   const [selectedChart, setSelectedChart] = createSignal<string | null>(null);
 
   // 当前分类信息
@@ -658,11 +656,10 @@ export const ChartsPage: Component = () => {
                 </span>
               </div>
               <h1 class="text-3xl font-bold tracking-tight mb-2 bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 bg-clip-text text-transparent">
-                图表画廊
+                {t().chartsPage.title}
               </h1>
               <p class="text-muted-foreground">
-                探索 {stats().total} 个数据可视化图表，涵盖 {stats().categories}{" "}
-                个分类
+                {t().chartsPage.subtitle.replace("{total}", stats().total.toString()).replace("{categories}", stats().categories.toString())}
               </p>
             </div>
           </div>
@@ -678,7 +675,7 @@ export const ChartsPage: Component = () => {
               <div class="bg-card border-2 border-muted rounded-xl p-4">
                 <div class="flex items-center gap-2 mb-3">
                   <span class="text-lg">📂</span>
-                  <span class="text-sm font-semibold">图表分类</span>
+                  <span class="text-sm font-semibold">{t().chartsPage.categoryTitle}</span>
                 </div>
                 <div class="space-y-2">
                   <For each={categories}>
@@ -769,19 +766,19 @@ export const ChartsPage: Component = () => {
                             {currentChartDetail()!.name}
                           </h2>
                           <span class="px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-                            {currentChartDetail()!.category}
+                            {categories.find(c => c.id === currentChartDetail()!.category)?.name}
                           </span>
                         </div>
                         <p class="text-sm text-muted-foreground">
                           {currentChartDetail()!.description}
                         </p>
                       </div>
-                      <button
+                        <button
                         type="button"
                         onClick={() => setSelectedChart(null)}
                         class="px-3 py-1.5 text-sm bg-muted hover:bg-muted/80 rounded-lg transition-colors"
                       >
-                        返回列表
+                        {t().chartsPage.backToList}
                       </button>
                     </div>
                   </div>

@@ -37,5 +37,5 @@
       "@ensolid/aisolid": ["./packages/aisolid/src"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "public/registry"]
 }

@@ -1,0 +1,7 @@
+{
+  "name": "registry",
+  "private": true,
+  "dependencies": {
+    "solid-js": "^1.9.9"
+  }
+}

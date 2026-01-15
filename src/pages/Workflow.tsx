@@ -23,6 +23,7 @@ import {
 } from "@ensolid/solidflow";
 import { WorkflowMenu } from "./workflow/components/WorkflowMenu";
 import { WorkflowToolbar } from "./workflow/components/WorkflowToolbar";
+import { useI18n } from "@/i18n";
 import { pluginRegistry } from "./workflow/plugins";
 import { registerBuiltinNodes } from "./workflow/plugins/builtin";
 
@@ -53,6 +54,7 @@ registerBuiltinNodes();
 // --- Main Page ---
 
 export const WorkflowPage: Component = () => {
+  const { t } = useI18n();
 
   const [nodes, setNodes] = createStore<Node[]>([
     {
@@ -246,10 +248,10 @@ export const WorkflowPage: Component = () => {
           setNodes(data.nodes);
           setEdges(data.edges);
         } else {
-          alert("Invalid workflow file format");
+          alert(t().workflowPage.errors.invalidFile);
         }
       } catch (error) {
-        alert("Error parsing JSON file");
+        alert(t().workflowPage.errors.parseError);
       }
     };
     reader.readAsText(file);
@@ -293,18 +295,18 @@ export const WorkflowPage: Component = () => {
           </div>
           <div>
             <h1 class="text-xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              工作流编辑器
+              {t().workflowPage.title}
             </h1>
-            <p class="text-xs text-muted-foreground">拖拽节点构建 AI 工作流</p>
+            <p class="text-xs text-muted-foreground">{t().workflowPage.subtitle}</p>
           </div>
         </div>
         <div class="flex items-center gap-2">
           <div class="px-3 py-1.5 rounded-lg bg-muted/50 text-xs">
-            <span class="text-muted-foreground">节点: </span>
+            <span class="text-muted-foreground">{t().workflowPage.stats.nodes}: </span>
             <span class="font-semibold text-foreground">{nodes.length}</span>
           </div>
           <div class="px-3 py-1.5 rounded-lg bg-muted/50 text-xs">
-            <span class="text-muted-foreground">连接: </span>
+            <span class="text-muted-foreground">{t().workflowPage.stats.edges}: </span>
             <span class="font-semibold text-foreground">{edges().length}</span>
           </div>
         </div>
@@ -364,13 +366,13 @@ export const WorkflowPage: Component = () => {
                 <div class="space-y-4">
                      {/* Common: Label */}
                      <div class="space-y-1">
-                       <label class="block text-xs font-medium text-gray-500">Node Name</label>
+                       <label class="block text-xs font-medium text-gray-500">{t().workflowPage.propertyPanel.nodeName}</label>
                        <input 
                          type="text"
                          value={node.data?.label || ""}
                          onInput={(e) => updateNodeData(node.id, { label: e.currentTarget.value })}
                          class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none"
-                         placeholder="Name"
+                         placeholder={t().workflowPage.propertyPanel.placeholder.name}
                        />
                      </div>
                      
@@ -378,17 +380,17 @@ export const WorkflowPage: Component = () => {
                      <Show when={node.type === "agent"}>
                        <div class="space-y-3 pt-2 border-t border-gray-100">
                          <div class="space-y-1">
-                           <label class="block text-xs font-medium text-gray-500">Role</label>
+                           <label class="block text-xs font-medium text-gray-500">{t().workflowPage.propertyPanel.role}</label>
                            <input 
                              type="text"
                              value={node.data?.role || ""}
                              onInput={(e) => updateNodeData(node.id, { role: e.currentTarget.value })}
                              class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none"
-                             placeholder="e.g. Researcher"
+                             placeholder={t().workflowPage.propertyPanel.placeholder.role}
                            />
                          </div>
                          <div class="space-y-1">
-                           <label class="block text-xs font-medium text-gray-500">Model</label>
+                           <label class="block text-xs font-medium text-gray-500">{t().workflowPage.propertyPanel.model}</label>
                            <select 
                              value={node.data?.model || "gpt-5-mini"}
                              onChange={(e) => updateNodeData(node.id, { model: e.currentTarget.value })}
@@ -405,12 +407,12 @@ export const WorkflowPage: Component = () => {
                      {/* Task Fields */}
                      <Show when={node.type === "task"}>
                        <div class="space-y-1 pt-2 border-t border-gray-100">
-                         <label class="block text-xs font-medium text-gray-500">Description</label>
+                         <label class="block text-xs font-medium text-gray-500">{t().workflowPage.propertyPanel.description}</label>
                          <textarea 
                            value={node.data?.description || ""}
                            onInput={(e) => updateNodeData(node.id, { description: e.currentTarget.value })}
                            class="w-full text-sm border rounded px-2 py-1.5 focus:border-blue-500 outline-none min-h-[80px]"
-                           placeholder="Describe the task..."
+                           placeholder={t().workflowPage.propertyPanel.placeholder.description}
                          />
                        </div>
                      </Show>

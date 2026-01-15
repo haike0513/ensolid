@@ -12,6 +12,22 @@ interface TooltipContextValue {
 
 const TooltipContext = createContext<TooltipContextValue>();
 
+export interface TooltipProviderProps {
+  /**
+   * 延迟显示时间（毫秒）
+   * @default 700
+   */
+  delayDuration?: number;
+  /**
+   * 子元素
+   */
+  children?: JSX.Element;
+}
+
+export const TooltipProvider: Component<TooltipProviderProps> = (props) => {
+  return <>{props.children}</>;
+};
+
 export const useTooltipContext = () => {
   const context = useContext(TooltipContext);
   if (!context) {
@@ -155,6 +171,22 @@ export interface TooltipContentProps extends JSX.HTMLAttributes<HTMLDivElement> 
    * 子元素
    */
   children?: JSX.Element;
+  /**
+   * 显示位置
+   */
+  side?: 'top' | 'right' | 'bottom' | 'left';
+  /**
+   * 偏移量
+   */
+  sideOffset?: number;
+  /**
+   * 对齐方式
+   */
+  align?: 'start' | 'center' | 'end';
+  /**
+   * 对齐偏移量
+   */
+  alignOffset?: number;
 }
 
 export const TooltipContent: Component<TooltipContentProps> = (props) => {

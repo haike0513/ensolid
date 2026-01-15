@@ -76,3 +76,7 @@ export const Checkbox: Component<CheckboxProps> = (props) => {
         />
     );
 };
+
+export const CheckboxIndicator: Component<JSX.HTMLAttributes<HTMLDivElement>> = (props) => {
+    return <div {...props} />;
+};
