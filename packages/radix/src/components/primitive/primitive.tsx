@@ -33,7 +33,7 @@ type Primitives = { [E in (typeof NODES)[number]]: (props: PrimitivePropsWithRef
 
 const Primitive = NODES.reduce((primitive, node) => {
   const Node = (props: PrimitivePropsWithRef<typeof node>) => {
-    const [local, others] = splitProps(props, ['asChild']);
+    const [_local, others] = splitProps(props, ['asChild']);
 
     if (typeof window !== 'undefined') {
       (window as any)[Symbol.for('radix-ui')] = true;
